@@ -1,0 +1,242 @@
+package view;
+
+import java.awt.BorderLayout;
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.border.EmptyBorder;
+import business.Session;
+import listeners.WizardFrameListener;
+import view.components.FinalStepFormContainer;
+import view.components.StepOneFormContainer;
+import view.components.StepTwoFormContainer;
+import java.awt.Color;
+import java.awt.Dimension;
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
+
+import java.util.ArrayList;
+import javax.swing.UIManager;
+import java.awt.GraphicsDevice;
+import javax.swing.JScrollPane;
+import javax.swing.ScrollPaneConstants;
+import java.awt.MouseInfo;
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.io.File;
+import java.awt.GridLayout;
+import javax.swing.border.MatteBorder;
+import javax.swing.JTextPane;
+
+public class PdscWizardFrame extends JFrame {
+	
+	private static JScrollPane s;
+	private static JButton continueBtn;
+	private static JButton backBtn;
+	private static JPanel contentPane;								/* contentPane */
+	private static JPanel rightPanel;								/* rightPanel it's inside contentPane */
+	private static JPanel rightPanel_center_lv1;					/* rightPanel_center_lv1 it's inside rightPanel */
+	private static JPanel rightPanel_bottom_lv1;					/* rightPanel_bottom_lv1 it's inside rightPanel_center_lv1 */	
+	private static JPanel leftPanel; 								/* contains actual step frame , it's inside contentPane*/						
+	private static JPanel stepBarPanel;								/* stepBarPanel it's inside contentPane */								
+	private static ArrayList<JPanel> steps; 						/* contains all steps panel */
+	private static int step_number = 0;								/* current step number */						
+	private static JTextPane descriptionPane;						/* description label */
+	private static WizardFrameListener listener;
+	
+
+
+	//--------------------------------------------------------------------------constructor()
+	public PdscWizardFrame() {
+		steps = new ArrayList();
+		steps.add(new StepOneFormContainer());
+		steps.add(new StepTwoFormContainer());
+		steps.add(new FinalStepFormContainer());
+		
+		/* frame initial setup */
+		setBackground(Color.WHITE);
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 1026, 598);
+		
+			/* contentPane initial setup */
+			contentPane = new JPanel();
+			contentPane.setBackground(Color.WHITE);
+			contentPane.setBorder(new EmptyBorder(0, 0, 0, 0));
+				BorderLayout b = new BorderLayout(0, 0);
+				b.setHgap(0);
+				b.setVgap(0);
+			contentPane.setLayout(b);
+			setContentPane(contentPane); 
+		
+			/* generate all component */
+			generateStepBar();
+			placeComponent();
+			
+			/* place all all component into contentPane */
+			contentPane.add(s, BorderLayout.WEST);  
+			contentPane.add(rightPanel, BorderLayout.CENTER);
+			contentPane.add(stepBarPanel, BorderLayout.SOUTH);
+			contentPane.revalidate();
+			contentPane.repaint();
+			
+		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+		this.setVisible(true);
+		Session.setWizardFrame(this);
+		setListeners();
+		
+	}
+	
+	//--------------------------------------------------------------------------next()
+	public void next() {
+		if(step_number < steps.size()-1) { 
+			step_number += 1;
+		}
+		UpdateComponent();
+
+	}
+	
+	//--------------------------------------------------------------------------back()
+	public void back() {
+		if(step_number > 0) { 
+			step_number -= 1;
+		}
+		UpdateComponent();
+	}
+	
+	//--------------------------------------------------------------------------placeComponent()
+	private void placeComponent() {
+		
+		/* leftPanel initial setup */
+		leftPanel = new JPanel();			
+		leftPanel.setBackground(Color.WHITE);
+		leftPanel.setBorder(new EmptyBorder(0, 0, 0, 0));
+		leftPanel.add(steps.get(step_number));
+		s = new JScrollPane(leftPanel);
+		s.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		s.setBorder(new EmptyBorder(0, 0, 0, 0));
+		
+		/* rightPanel initial setup */
+		rightPanel = new JPanel();
+		rightPanel.setBackground(Color.DARK_GRAY);
+		rightPanel.setSize(new Dimension(420,590));
+		rightPanel.setLayout(new BorderLayout(0, 0));
+		
+			/* rightPanel_center initial setup */
+			rightPanel_center_lv1 = new JPanel();
+			rightPanel_center_lv1.setBackground(Color.DARK_GRAY);
+			
+		/* placement of stepBar and rightpanel_center into rightPanel */
+		rightPanel.add(rightPanel_center_lv1, BorderLayout.CENTER);
+		rightPanel_center_lv1.setLayout(new BorderLayout(0, 0));
+		
+			/* setting up rightpanel_bottom_lv1 */
+			rightPanel_bottom_lv1 = new JPanel();
+			rightPanel_bottom_lv1.setBorder(new MatteBorder(1, 0, 0, 0, (Color) new Color(255, 255, 255)));
+			rightPanel_bottom_lv1.setBackground(Color.DARK_GRAY);
+			rightPanel_center_lv1.add(rightPanel_bottom_lv1, BorderLayout.SOUTH);
+			rightPanel_bottom_lv1.setLayout(new GridLayout(0, 5));
+		
+				/* generating void panel */
+				for(int i = 0; i < 3; i++) {
+					JPanel panel_1 = new JPanel();
+					panel_1.setBackground(Color.DARK_GRAY);
+					panel_1.setBorder(new EmptyBorder(0, 0, 0, 0));
+					rightPanel_bottom_lv1.add(panel_1);
+				}
+			
+				/* setting up backBtn */
+				backBtn = new JButton("back");
+				backBtn.setForeground(Color.DARK_GRAY);
+				backBtn.setBackground(Color.WHITE);
+			
+				/* setting up continueBtn */
+				continueBtn = new JButton("Continue");
+				continueBtn.setForeground(Color.DARK_GRAY);
+				continueBtn.setBackground(Color.WHITE);
+			
+			rightPanel_bottom_lv1.add(backBtn);
+			rightPanel_bottom_lv1.add(continueBtn);
+		
+		descriptionPane = new JTextPane();
+		descriptionPane.setForeground(Color.WHITE);
+		descriptionPane.setBackground(Color.DARK_GRAY);
+		rightPanel_center_lv1.add(descriptionPane, BorderLayout.CENTER);
+		Session.setWizardFrame(this);
+		
+	}
+	
+	
+	//--------------------------------------------------------------------------generateStepBar()
+	private void generateStepBar() {
+		stepBarPanel = new JPanel();
+		stepBarPanel.setBackground(UIManager.getColor(Color.WHITE));
+		stepBarPanel.setMinimumSize(new Dimension(10, 200));
+		stepBarPanel.setLayout(new GridLayout(1,steps.size()));
+		for (int i = 0 ; i < steps.size(); i++) {
+			JPanel panel = new JPanel();
+			if(i <= step_number) {
+				panel.setBackground(new Color(30, 144, 255));
+			}
+			else {
+				panel.setBackground(UIManager.getColor(Color.WHITE));
+			}
+			stepBarPanel.add(panel);
+		}
+	}
+	
+	
+	//--------------------------------------------------------------------------UpdateComponent()
+	private void UpdateComponent() {
+		contentPane.removeAll();
+			generateStepBar();
+			placeComponent();
+		contentPane.add(s, BorderLayout.WEST);  
+		contentPane.add(rightPanel, BorderLayout.CENTER);
+		contentPane.add(stepBarPanel, BorderLayout.SOUTH);
+		contentPane.revalidate();
+		contentPane.repaint();	
+		Session.setWizardFrame(this);
+		setListeners();
+	}
+	
+	
+	//--------------------------------------------------------------------------printDescription()
+	public void printDescription(String text) {
+		descriptionPane.setText("");
+		descriptionPane.setText(text);
+	}
+	
+	//--------------------------------------------------------------------------showNewFileFrame()
+	public File showNewFileFrame() {
+		JFileChooser fileChooser = new JFileChooser();
+			fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+		if(Session.getCurrentWorkingFile() != null) {fileChooser.setCurrentDirectory(Session.getCurrentWorkingFile());} 	
+		int val = fileChooser.showSaveDialog(this);
+		if(val == JFileChooser.APPROVE_OPTION) {
+			File destinationPath = fileChooser.getSelectedFile();
+			return destinationPath;
+		}
+		else if(val == JFileChooser.ERROR_OPTION) {
+			JOptionPane.showMessageDialog(this, "Some error occurred", "Error", JOptionPane.ERROR_MESSAGE);
+			return null;
+		}
+		else if(val == JFileChooser.CANCEL_OPTION) {}
+		return null;
+	}
+	
+	//--------------------------------------------------------------------------setListeners()
+	private void setListeners() {
+		listener = new WizardFrameListener();
+		continueBtn.addActionListener(listener);
+		continueBtn.setActionCommand("continue");
+		backBtn.addActionListener(listener);
+		backBtn.setActionCommand("back");
+	}
+
+	public static ArrayList<JPanel> getSteps() {
+		return steps;
+	}
+	
+	
+	
+}
