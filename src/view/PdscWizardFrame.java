@@ -2,14 +2,18 @@ package view;
 
 import java.awt.BorderLayout;
 import javax.swing.JFrame;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollBar;
 import javax.swing.border.EmptyBorder;
 import business.Session;
 import listeners.WizardFrameListener;
 import view.components.FinalStepFormContainer;
 import view.components.StepOneFormContainer;
 import view.components.StepTwoFormContainer;
+import view.components.TagListPanelComponent;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import javax.swing.JButton;
@@ -27,10 +31,13 @@ import java.io.File;
 import java.awt.GridLayout;
 import javax.swing.border.MatteBorder;
 import javax.swing.JTextPane;
+import javax.swing.JList;
+import java.awt.Font;
 
 public class PdscWizardFrame extends JFrame {
 	
-	private static JScrollPane s;
+	private static JScrollPane leftScrollPane;
+	private static JScrollPane tagListScrollPane;
 	private static JButton continueBtn;
 	private static JButton backBtn;
 	private static JPanel contentPane;								/* contentPane */
@@ -43,6 +50,8 @@ public class PdscWizardFrame extends JFrame {
 	private static int step_number = 0;								/* current step number */						
 	private static JTextPane descriptionPane;						/* description label */
 	private static WizardFrameListener listener;
+	private JPanel tagListPanel;
+	private JList tagList;
 	
 
 
@@ -73,7 +82,7 @@ public class PdscWizardFrame extends JFrame {
 			placeComponent();
 			
 			/* place all all component into contentPane */
-			contentPane.add(s, BorderLayout.WEST);  
+			contentPane.add(leftScrollPane, BorderLayout.WEST);  
 			contentPane.add(rightPanel, BorderLayout.CENTER);
 			contentPane.add(stepBarPanel, BorderLayout.SOUTH);
 			contentPane.revalidate();
@@ -111,9 +120,9 @@ public class PdscWizardFrame extends JFrame {
 		leftPanel.setBackground(Color.WHITE);
 		leftPanel.setBorder(new EmptyBorder(0, 0, 0, 0));
 		leftPanel.add(steps.get(step_number));
-		s = new JScrollPane(leftPanel);
-		s.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-		s.setBorder(new EmptyBorder(0, 0, 0, 0));
+		leftScrollPane = new JScrollPane(leftPanel);
+		leftScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		leftScrollPane.setBorder(new EmptyBorder(0, 0, 0, 0));
 		
 		/* rightPanel initial setup */
 		rightPanel = new JPanel();
@@ -125,7 +134,14 @@ public class PdscWizardFrame extends JFrame {
 			rightPanel_center_lv1 = new JPanel();
 			rightPanel_center_lv1.setBackground(Color.DARK_GRAY);
 			
-		/* placement of stepBar and rightpanel_center into rightPanel */
+			/* setting up tag list Panel */
+			tagListScrollPane = new JScrollPane(new TagListPanelComponent());
+			
+			/* hide scrollbar into leftScrollPane, tagListScrollPane */
+			hideScrollBar();
+			
+		/* placement of stepBar, rightpanel_center, tagListPanel into rightPanel */
+		rightPanel.add(tagListScrollPane, BorderLayout.EAST);
 		rightPanel.add(rightPanel_center_lv1, BorderLayout.CENTER);
 		rightPanel_center_lv1.setLayout(new BorderLayout(0, 0));
 		
@@ -190,7 +206,7 @@ public class PdscWizardFrame extends JFrame {
 		contentPane.removeAll();
 			generateStepBar();
 			placeComponent();
-		contentPane.add(s, BorderLayout.WEST);  
+		contentPane.add(leftScrollPane, BorderLayout.WEST);  
 		contentPane.add(rightPanel, BorderLayout.CENTER);
 		contentPane.add(stepBarPanel, BorderLayout.SOUTH);
 		contentPane.revalidate();
@@ -232,11 +248,35 @@ public class PdscWizardFrame extends JFrame {
 		backBtn.addActionListener(listener);
 		backBtn.setActionCommand("back");
 	}
-
+	
+	//--------------------------------------------------------------------------getSteps()
 	public static ArrayList<JPanel> getSteps() {
 		return steps;
 	}
 	
-	
+	//--------------------------------------------------------------------------setListeners()
+	private void hideScrollBar() {
+        JScrollBar scrollBar = new JScrollBar(JScrollBar.VERTICAL) {
+
+            @Override
+            public boolean isVisible() {
+                return true;
+            }
+        }; 
+        tagListScrollPane.setVerticalScrollBar(scrollBar);
+        tagListScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        tagListScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
+        
+        JScrollBar scrollBar1 = new JScrollBar(JScrollBar.VERTICAL) {
+
+            @Override
+            public boolean isVisible() {
+                return true;
+            }
+        }; 
+        leftScrollPane.setVerticalScrollBar(scrollBar1);
+        leftScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        leftScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
+	}
 	
 }
