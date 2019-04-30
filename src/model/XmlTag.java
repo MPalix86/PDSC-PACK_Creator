@@ -1,9 +1,6 @@
-package model.xmlComponents;
+package model;
 
 import java.util.ArrayList;
-
-import model.Response;
-import model.Response.ResponseBuilder;
 
 public class XmlTag {
 	private String name;
@@ -11,6 +8,8 @@ public class XmlTag {
 	private ArrayList<XmlAttribute> attrArr;
 	private String description;
 	private boolean required;
+	private  ArrayList<XmlTag> children;
+
 	
 	private XmlTag (XmlTagBuilder builder) {
 		this.name = builder.name;
@@ -18,6 +17,10 @@ public class XmlTag {
 		this.attrArr = builder.attrArr;
 		this.description = builder.description;
 		this.required = builder.required;
+	}
+	
+	public XmlTag () {
+
 	}
 	
 	
@@ -31,6 +34,18 @@ public class XmlTag {
 	
 	public ArrayList<XmlAttribute> getAttrArr() {
 		return this.attrArr;
+	}
+	
+	public ArrayList<XmlTag> getChildren() {
+		return this.children;
+	}
+	
+	
+	public void addChild(XmlTag child) {
+		if( children == null) {
+			children = new ArrayList<XmlTag>();
+		}
+		this.children.add(child);
 	}
 	
 	public void setName(String name) {

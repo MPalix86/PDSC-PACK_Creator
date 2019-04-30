@@ -12,8 +12,8 @@ import java.awt.Dimension;
 import javax.swing.UIManager;
 
 import listeners.StepOneFormFocusListener;
-import model.xmlComponents.XmlAttribute;
-import model.xmlComponents.XmlTag;
+import model.XmlAttribute;
+import model.XmlTag;
 import view.PdscWizardFrame;
 
 import javax.swing.SwingConstants;
@@ -164,13 +164,13 @@ public class StepOneFormContainer extends JPanel {
 	public static ArrayList<XmlTag> getTagArr() { 
 		ArrayList<XmlTag> tagArr = new ArrayList();
 		XmlTag pack = new XmlTag.XmlTagBuilder("package", true , null).build();
-		pack.addAttr(new XmlAttribute("schemaVersion", schemaVersion.getText(),  true));
-		pack.addAttr(new XmlAttribute("xmlnsxs", xmlns.getText(), true));
-		pack.addAttr(new XmlAttribute("xsnoNamespaceSchemaLocation", noNamespaceSchemaLocation.getText(),true));
-		pack.addAttr(new XmlAttribute("Dcore",dcore.getText(), false));
-		pack.addAttr(new XmlAttribute("Dvendor", dvendor.getText(), false));
-		pack.addAttr(new XmlAttribute("Dname", dname.getText(), false));
-		pack.addAttr(new XmlAttribute("Tcompiler", tcompiler.getText(), false));
+		pack.addAttr(new XmlAttribute("schemaVersion", schemaVersion.getText(), String.class,  true));
+		pack.addAttr(new XmlAttribute("xmlnsxs", xmlns.getText(), String.class,true));
+		pack.addAttr(new XmlAttribute("xsnoNamespaceSchemaLocation", noNamespaceSchemaLocation.getText(),String.class,true));
+		pack.addAttr(new XmlAttribute("Dcore",dcore.getText(), String.class,false));
+		pack.addAttr(new XmlAttribute("Dvendor", dvendor.getText(), String.class,false));
+		pack.addAttr(new XmlAttribute("Dname", dname.getText(), String.class,false));
+		pack.addAttr(new XmlAttribute("Tcompiler", tcompiler.getText(), XmlTag.class,false));
 		tagArr.add(pack);
 		return tagArr;
 	}

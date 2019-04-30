@@ -11,9 +11,9 @@ import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 
 import listeners.StepOneFormFocusListener;
-import model.xmlComponents.XmlAttribute;
-import model.xmlComponents.XmlTagContents;
-import model.xmlComponents.XmlTag;
+import model.XmlAttribute;
+import model.XmlTag;
+import model.XmlTagContents;
 import view.PdscWizardFrame;
 import java.awt.SystemColor;
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package model.xmlComponents;
+package model;
 
 import java.util.ArrayList;
 

@@ -37,7 +37,9 @@ import java.awt.Font;
 public class PdscWizardFrame extends JFrame {
 	
 	private static JScrollPane leftScrollPane;
+	private static JScrollBar leftPanelScrollBar;
 	private static JScrollPane tagListScrollPane;
+	private static JScrollBar tagListPanelScrollBar;
 	private static JButton continueBtn;
 	private static JButton backBtn;
 	private static JPanel contentPane;								/* contentPane */
@@ -256,25 +258,27 @@ public class PdscWizardFrame extends JFrame {
 	
 	//--------------------------------------------------------------------------setListeners()
 	private void hideScrollBar() {
-        JScrollBar scrollBar = new JScrollBar(JScrollBar.VERTICAL) {
+		tagListPanelScrollBar = new JScrollBar(JScrollBar.VERTICAL) {
 
             @Override
             public boolean isVisible() {
                 return true;
             }
         }; 
-        tagListScrollPane.setVerticalScrollBar(scrollBar);
+        tagListPanelScrollBar.setUnitIncrement(16);
+        tagListScrollPane.setVerticalScrollBar(tagListPanelScrollBar);
         tagListScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         tagListScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
         
-        JScrollBar scrollBar1 = new JScrollBar(JScrollBar.VERTICAL) {
+        leftPanelScrollBar = new JScrollBar(JScrollBar.VERTICAL) {
 
             @Override
             public boolean isVisible() {
                 return true;
             }
         }; 
-        leftScrollPane.setVerticalScrollBar(scrollBar1);
+        leftPanelScrollBar.setUnitIncrement(16);
+        leftScrollPane.setVerticalScrollBar(leftPanelScrollBar);
         leftScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         leftScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
 	}

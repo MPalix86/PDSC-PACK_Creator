@@ -19,9 +19,9 @@ import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 
 import model.Response;
-import model.xmlComponents.XmlAttribute;
-import model.xmlComponents.XmlTagContents;
-import model.xmlComponents.XmlTag;
+import model.XmlAttribute;
+import model.XmlTag;
+import model.XmlTagContents;
 import view.components.StepOneFormContainer;
 
 public class WizardBusiness {

@@ -5,6 +5,7 @@
 	<classpathentry kind="lib" path="/Users/mircopalese/eclipse-workspace/PDSC/libraries/jdom-2.0.6.jar"/>
 	<classpathentry kind="lib" path="/Users/mircopalese/eclipse-workspace/PDSC/libraries/jsyntaxpane-1.0.0.jar"/>
 	<classpathentry kind="lib" path="/Users/mircopalese/eclipse-workspace/PDSC/libraries/h2-1.4.197.jar"/>
-	<classpathentry kind="lib" path="jgoodies-forms-1.8.0.jar" sourcepath="jgoodies-forms-1.8.0-sources.jar"/>
+	<classpathentry kind="lib" path="/Users/mircopalese/eclipse-workspace/PDSC/libraries/jgoodies-common-1.8.0.jar"/>
+	<classpathentry kind="lib" path="/Users/mircopalese/eclipse-workspace/PDSC/libraries/jgoodies-forms-1.8.0.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
