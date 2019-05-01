@@ -36,6 +36,7 @@ import business.FileBusiness;
 import model.XmlAttribute;
 import model.XmlTag;
 import model.XmlTagContents;
+import model.pdscComponent.Conditions;
 import view.components.TagContainer;
 import view.components.TagPanelComponent;
 
@@ -84,7 +85,7 @@ public class StartUp extends JFrame {
 		
 		//TagPanelComponent p = new TagPanelComponent(tag);
 		//CollapsablePanel cp = new CollapsablePanel("tag", p);
-//		TagContainer c = new TagContainer(tag);
+		//TagContainer c = new TagContainer(new Conditions());
 //			JFrame f = new JFrame();
 //	        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 //	        f.getContentPane().setSize(360, 500);

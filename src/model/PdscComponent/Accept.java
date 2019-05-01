@@ -7,14 +7,12 @@ import model.pdscType.DeviceVendorEnum;
 import model.pdscType.DfpuEnum;
 import model.pdscType.DmpuEnum;
 
-public class Require extends XmlTag {
-	
-	public void setValue() {
-		
-	}
-	
-	public Require() {
-		this.setName("require");
+/* 
+ * this class represnt pdsc tag <accept> that have same structure of pdsc tag <require>ß
+ */
+public class Accept extends XmlTag{
+	public Accept() {
+		this.setName("accept");
 		this.addAttr(new XmlAttribute ("Dvendor", false, DeviceVendorEnum.class));
 		this.addAttr(new XmlAttribute ("Dfamily", false, String.class));
 		this.addAttr(new XmlAttribute ("DsubFamily", false, String.class));

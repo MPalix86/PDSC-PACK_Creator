@@ -11,6 +11,9 @@ import java.awt.Color;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.border.MatteBorder;
+
+import listeners.TagListPanelListener;
+
 import javax.swing.border.LineBorder;
 import javax.swing.JSeparator;
 import java.awt.SystemColor;
@@ -18,6 +21,8 @@ import java.awt.Font;
 
 public class TagListPanelComponent extends JPanel{
 	public TagListPanelComponent() {
+		
+		
 		setBorder(null);
 		setPreferredSize(new Dimension(130, 878));
 		setMinimumSize(new Dimension(130, 10));
@@ -33,11 +38,9 @@ public class TagListPanelComponent extends JPanel{
 		panel.setLayout(null);
 		
 		JButton dominate = new JButton("<dominate>");
+		dominate.addActionListener(new TagListPanelListener());
+		dominate.setActionCommand("dominate");
 		dominate.setFont(new Font("Lucida Grande", Font.PLAIN, 14));
-		dominate.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
 		dominate.setBounds(-11, -11, 151, 91);
 		dominate.setMinimumSize(new Dimension(117, 70));
 		dominate.setMaximumSize(new Dimension(117, 70));
@@ -53,6 +56,8 @@ public class TagListPanelComponent extends JPanel{
 		add(panel_1);
 		
 		JButton requirements = new JButton("<requirements>");
+		requirements.addActionListener(new TagListPanelListener());
+		requirements.setActionCommand("requirements");
 		requirements.setFont(new Font("Lucida Grande", Font.PLAIN, 14));
 		requirements.setMinimumSize(new Dimension(117, 70));
 		requirements.setMaximumSize(new Dimension(117, 70));
@@ -70,6 +75,8 @@ public class TagListPanelComponent extends JPanel{
 		
 		JButton create = new JButton("<create>");
 		create.setFont(new Font("Lucida Grande", Font.PLAIN, 14));
+		create.addActionListener(new TagListPanelListener());
+		create.setActionCommand("create");
 		create.setMinimumSize(new Dimension(117, 70));
 		create.setMaximumSize(new Dimension(117, 70));
 		create.setForeground(new Color(0, 0, 128));
@@ -85,6 +92,8 @@ public class TagListPanelComponent extends JPanel{
 		add(panel_3);
 		
 		JButton repository = new JButton("<repository>");
+		repository.addActionListener(new TagListPanelListener());
+		repository.setActionCommand("repository");
 		repository.setFont(new Font("Lucida Grande", Font.PLAIN, 14));
 		repository.setMinimumSize(new Dimension(117, 70));
 		repository.setMaximumSize(new Dimension(117, 70));
@@ -101,6 +110,8 @@ public class TagListPanelComponent extends JPanel{
 		add(panel_4);
 		
 		JButton releases = new JButton("<releases>");
+		releases.addActionListener(new TagListPanelListener());
+		releases.setActionCommand("releases");
 		releases.setFont(new Font("Lucida Grande", Font.PLAIN, 14));
 		releases.setMinimumSize(new Dimension(117, 70));
 		releases.setMaximumSize(new Dimension(117, 70));
@@ -117,6 +128,8 @@ public class TagListPanelComponent extends JPanel{
 		add(panel_5);
 		
 		JButton keywords = new JButton("<keywords>");
+		keywords.addActionListener(new TagListPanelListener());
+		keywords.setActionCommand("keywords");
 		keywords.setFont(new Font("Lucida Grande", Font.PLAIN, 14));
 		keywords.setMinimumSize(new Dimension(117, 70));
 		keywords.setMaximumSize(new Dimension(117, 70));
@@ -133,6 +146,8 @@ public class TagListPanelComponent extends JPanel{
 		add(panel_6);
 		
 		JButton generators = new JButton("<generators>");
+		generators.addActionListener(new TagListPanelListener());
+		generators.setActionCommand("generators");
 		generators.setFont(new Font("Lucida Grande", Font.PLAIN, 14));
 		generators.setMinimumSize(new Dimension(117, 70));
 		generators.setMaximumSize(new Dimension(117, 70));
@@ -149,6 +164,8 @@ public class TagListPanelComponent extends JPanel{
 		add(panel_8);
 		
 		JButton devices = new JButton("<devices>");
+		devices.addActionListener(new TagListPanelListener());
+		devices.setActionCommand("devices");
 		devices.setFont(new Font("Lucida Grande", Font.PLAIN, 14));
 		devices.setMinimumSize(new Dimension(117, 70));
 		devices.setMaximumSize(new Dimension(117, 70));
@@ -165,6 +182,8 @@ public class TagListPanelComponent extends JPanel{
 		add(panel_9);
 		
 		JButton boards = new JButton("<boards>");
+		boards.addActionListener(new TagListPanelListener());
+		boards.setActionCommand("boards");
 		boards.setFont(new Font("Lucida Grande", Font.PLAIN, 14));
 		boards.setMinimumSize(new Dimension(117, 70));
 		boards.setMaximumSize(new Dimension(117, 70));
@@ -181,6 +200,8 @@ public class TagListPanelComponent extends JPanel{
 		add(panel_7);
 		
 		JButton taxonomy = new JButton("<taxonomy>");
+		taxonomy.addActionListener(new TagListPanelListener());
+		taxonomy.setActionCommand("taxonomy");
 		taxonomy.setMinimumSize(new Dimension(117, 70));
 		taxonomy.setMaximumSize(new Dimension(117, 70));
 		taxonomy.setForeground(new Color(0, 0, 128));
@@ -197,6 +218,8 @@ public class TagListPanelComponent extends JPanel{
 		add(panel_10);
 		
 		JButton apis = new JButton("<apis>");
+		apis.addActionListener(new TagListPanelListener());
+		apis.setActionCommand("apis");
 		apis.setMinimumSize(new Dimension(117, 70));
 		apis.setMaximumSize(new Dimension(117, 70));
 		apis.setForeground(new Color(0, 0, 128));
@@ -213,6 +236,8 @@ public class TagListPanelComponent extends JPanel{
 		add(panel_11);
 		
 		JButton conditions = new JButton("<conditions>");
+		conditions.addActionListener(new TagListPanelListener());
+		conditions.setActionCommand("conditions");
 		conditions.setMinimumSize(new Dimension(117, 70));
 		conditions.setMaximumSize(new Dimension(117, 70));
 		conditions.setForeground(new Color(0, 0, 128));
@@ -229,6 +254,8 @@ public class TagListPanelComponent extends JPanel{
 		add(panel_12);
 		
 		JButton examples = new JButton("<examples>");
+		examples.addActionListener(new TagListPanelListener());
+		examples.setActionCommand("examples");
 		examples.setMinimumSize(new Dimension(117, 70));
 		examples.setMaximumSize(new Dimension(117, 70));
 		examples.setForeground(new Color(0, 0, 128));
@@ -245,6 +272,8 @@ public class TagListPanelComponent extends JPanel{
 		add(panel_13);
 		
 		JButton components = new JButton("<components>");
+		components.addActionListener(new TagListPanelListener());
+		components.setActionCommand("components");
 		components.setMinimumSize(new Dimension(117, 70));
 		components.setMaximumSize(new Dimension(117, 70));
 		components.setForeground(new Color(0, 0, 128));

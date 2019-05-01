@@ -38,7 +38,7 @@ class CollapsablePanel extends JPanel {
         	this.setBackground(Color.WHITE);
             addMouseListener(this);
             text_ = text;
-            font = new Font("sans-serif", Font.PLAIN, 12);
+            font = new Font("sans-serif", Font.PLAIN, 15);
             // setRequestFocusEnabled(true);
             setPreferredSize(new Dimension(200, 20));
             int w = getWidth();
@@ -102,7 +102,7 @@ class CollapsablePanel extends JPanel {
         selected = false;
         headerPanel_ = new HeaderPanel(text);
  
-        setBackground(new Color(200, 200, 220));
+        setBackground(Color.WHITE);
         contentPanel_ = panel;
  
         add(headerPanel_, gbc);

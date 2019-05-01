@@ -9,8 +9,10 @@ public class XmlTag {
 	private String description;
 	private boolean required;
 	private  ArrayList<XmlTag> children;
+	private Integer max;
 
-	
+
+
 	private XmlTag (XmlTagBuilder builder) {
 		this.name = builder.name;
 		this.content = builder.content;
@@ -21,6 +23,15 @@ public class XmlTag {
 	
 	public XmlTag () {
 
+	}
+	
+	
+	public Integer getMax() {
+		return max;
+	}
+
+	public void setMax(int max) {
+		this.max = max;
 	}
 	
 	
@@ -86,6 +97,7 @@ public class XmlTag {
 		boolean isEmpty;
 		private ArrayList<XmlAttribute> attrArr;
 		private String description;
+		private int max;
 		
 		
 		public XmlTagBuilder(String name , boolean required , XmlTagContents content){
@@ -96,6 +108,11 @@ public class XmlTag {
 		
 		public XmlTagBuilder content(XmlTagContents content) {
 			this.content = content;
+			return this;
+		}
+		
+		public XmlTagBuilder max(int max) {
+			this.max = max;
 			return this;
 		}
 		

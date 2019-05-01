@@ -1,25 +1,29 @@
 package model;
 
+import model.Exception.TypeMismatchException;
+
 public class XmlAttribute {
 	private String name;
 	private String value;
 	private boolean required;
 	private Class valueType;
 	
-	public XmlAttribute (String name , String value , Class valueType , boolean required ) {
+	public XmlAttribute (String name , String value , Class valueType , boolean required ) throws TypeMismatchException {
 		this.name = name;
 		this.value = value;
 		this.required = required;
 		this.valueType = valueType;
 		if(this.valueType != value.getClass()) {
-			System.out.println("value mismatch");
+			throw new TypeMismatchException("Type mismatch"); 
 		}
 	}
 	
-	public XmlAttribute (String name  , boolean required) {
+	public XmlAttribute (String name  , boolean required , Class valueType) {
 		this.name = name;
 		this.required = required;
+		this.valueType = valueType;
 	}
+	
 	
 	public XmlAttribute () {
 	}
@@ -40,15 +44,15 @@ public class XmlAttribute {
 		return value;
 	}
 
-	public void setValue(String value) {
+	public void setValue(String value) throws TypeMismatchException {
 		if(this.valueType != null) {
-			System.out.println("valuetype diverso da null");
 			if(this.valueType != value.getClass()) {
-				System.out.println("value mismatch");
+				throw new TypeMismatchException("Type mismatch"); 
 			}
 		}
-		
-		this.value = value;
+		else {
+			this.value = value;
+		}
 	}
 
 	public boolean isRequired() {

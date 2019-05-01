@@ -40,37 +40,50 @@ public class TagPanelComponent extends JPanel{
 		
 		this.setBorder(new EmptyBorder(15, 15, 15, 15));
 		setBackground(Color.WHITE);
-		gridBagLayout = new GridBagLayout();
-		gridBagLayout.columnWidths = new int[]{0, 0, 0, 0};
-		gridBagLayout.rowHeights = new int[]{0, 0, 0, 0};
-		gridBagLayout.columnWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
-		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
+			gridBagLayout = new GridBagLayout();
+			gridBagLayout.columnWidths = new int[]{0, 0, 0, 0};
+			gridBagLayout.rowHeights = new int[]{0, 0, 0, 0};
+			gridBagLayout.columnWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
+			gridBagLayout.rowWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
 		setLayout(gridBagLayout);
 		
-		JLabel lblTagname = new JLabel("<"+this.tag.getName()+">");
-		lblTagname.setForeground(new Color(0,0,128));
-		lblTagname.setFont(new Font("Lucida Grande", Font.PLAIN, 16));
-		gbc = new GridBagConstraints();
-		gbc.insets = new Insets(0, 0, 5, 5);
-		gbc.gridx = 1;
-		gbc.gridy = 1;
+			
+			JLabel lblTagName = new JLabel("<"+this.tag.getName()+">");
+//			if(tag.getMax() != null) {
+//				lblTagName = new JLabel("<"+this.tag.getName()+">");
+//				JLabel lblMax = new JLabel("<"+this.tag.getName()+">");
+//				lblMax.setForeground(new Color(0,0,0));
+//				lblMax.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
+//				gbc.gridx = 2;
+//				gbc.gridy = 1;
+//				add(lblTagName, gbc);
+//			}
+
+			lblTagName.setForeground(new Color(0,0,128));
+			lblTagName.setFont(new Font("Lucida Grande", Font.PLAIN, 16));
+			
+			gbc = new GridBagConstraints();
+			gbc.insets = new Insets(0, 0, 5, 5);
+			gbc.gridx = 1;
+			gbc.gridy = 1;
+			
+		add(lblTagName, gbc);
 		
-		
-	
-		add(lblTagname, gbc);
-		checkBoxPanel = new JPanel( );
-		checkBoxPanel.setBackground(Color.WHITE);
-		checkBoxPanel.setLayout(new BoxLayout(checkBoxPanel, BoxLayout.Y_AXIS));
-        gbc.weightx = 1.0;
-        gbc.fill = gbc.HORIZONTAL;
-        gbc.gridwidth = gbc.REMAINDER;
-		gbc.gridy = 2;
-		checkBoxPanel.setBorder(new EmptyBorder(0, 15, 0, 0));
-		JLabel label = new JLabel("Attributes :");
-		label.setFont(new Font("Lucida Grande", Font.PLAIN, 14));
-		label.setForeground(Color.BLACK);
-		checkBoxPanel.add(new JSeparator());
-		checkBoxPanel.add(label);
+			checkBoxPanel = new JPanel( );
+			checkBoxPanel.setBackground(Color.WHITE);
+			checkBoxPanel.setLayout(new BoxLayout(checkBoxPanel, BoxLayout.Y_AXIS));
+			
+	        gbc.weightx = 1.0;
+	        gbc.fill = GridBagConstraints.HORIZONTAL;
+	        gbc.gridwidth = GridBagConstraints.REMAINDER;
+			gbc.gridy = 2;
+			
+			checkBoxPanel.setBorder(new EmptyBorder(0, 15, 0, 0));
+				JLabel label = new JLabel("Attributes :");
+				label.setFont(new Font("Lucida Grande", Font.PLAIN, 14));
+				label.setForeground(Color.BLACK);
+			checkBoxPanel.add(new JSeparator());
+			checkBoxPanel.add(label);
 		
 		add(checkBoxPanel, gbc);
 		tag.getAttrArr().forEach((a) -> addAttribute(a));

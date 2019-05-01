@@ -7,12 +7,21 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import javafx.scene.control.ScrollBar;
 import model.XmlTag;
+import view.components.TagContainer;
 
 import java.awt.Color;
+import java.awt.Container;
+
 import javax.swing.JMenuItem;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JPopupMenu;
+import javax.swing.JScrollBar;
+import javax.swing.JScrollPane;
+import javax.swing.JSeparator;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.SwingConstants;
 
 public class TagCustomizationFrame extends JFrame {
 
@@ -27,16 +36,43 @@ public class TagCustomizationFrame extends JFrame {
 		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 904, 528);
-		contentPane = new JPanel();
-		contentPane.setBackground(Color.WHITE);
-		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		contentPane.setLayout(new BorderLayout(0, 0));
-		setContentPane(contentPane);
-		
-		JPanel leftPanel = new JPanel();
-		leftPanel.setBackground(Color.WHITE);
-		contentPane.add(leftPanel, BorderLayout.CENTER);
-		
+			Container c = this.getContentPane();
+			contentPane = new JPanel(new BorderLayout());
+				contentPane.setBackground(Color.WHITE);
+				contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+				contentPane.setLayout(new BorderLayout(0, 0));
+				contentPane.setBorder(new EmptyBorder(0, 0, 0, 0));
+					
+					JPanel leftPanel = new JPanel();
+					leftPanel.setBackground(Color.WHITE);
+					leftPanel.setLayout(new BorderLayout(0, 0));
+					leftPanel.setBorder(new EmptyBorder(0, 0, 0, 0));
+					leftPanel.add(new JSeparator(SwingConstants.VERTICAL));
+						TagContainer tagContainer = new TagContainer(tag);
+						JScrollPane scrollPane = new JScrollPane(tagContainer);
+						JScrollBar scrollBar = new JScrollBar(){
+				            @Override
+				            public boolean isVisible() {
+				                return true;
+				            }
+				        }; 
+						scrollBar.setUnitIncrement(16);
+						scrollPane.setVerticalScrollBar(scrollBar);
+						scrollPane.setBorder(new EmptyBorder(0, 0, 0, 0));
+						scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+						scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
+					leftPanel.add(scrollPane);
+					
+				contentPane.add(leftPanel, BorderLayout.WEST);
+			
+			c.add(contentPane);
+			c.setBackground(Color.WHITE);
+		this.setBackground(Color.WHITE);
+		this.setContentPane(c);//(contentPane);
+		this.setVisible(true);
+		this.setSize(360, 500);       
+        this.setLocation(200, 100);
+        this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 	}
 
 }
