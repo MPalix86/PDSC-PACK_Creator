@@ -36,7 +36,7 @@ import business.FileBusiness;
 import model.XmlAttribute;
 import model.XmlTag;
 import model.XmlTagContents;
-import model.pdscComponent.Conditions;
+import model.pdscTag.Conditions;
 import view.components.TagContainer;
 import view.components.TagPanelComponent;
 

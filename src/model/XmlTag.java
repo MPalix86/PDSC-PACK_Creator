@@ -10,6 +10,7 @@ public class XmlTag {
 	private boolean required;
 	private  ArrayList<XmlTag> children;
 	private Integer max;
+	public final static int MAX_OCCURENCE_NUMBER = 1000;
 
 
 
@@ -30,8 +31,13 @@ public class XmlTag {
 		return max;
 	}
 
-	public void setMax(int max) {
+//	public void setMax(int max) {
+//		this.max = max;
+//	}
+	
+	public XmlTag setMax(Integer max) {
 		this.max = max;
+		return this;
 	}
 	
 	
@@ -100,16 +106,16 @@ public class XmlTag {
 		private int max;
 		
 		
-		public XmlTagBuilder(String name , boolean required , XmlTagContents content){
+		public XmlTagBuilder(String name , boolean required ){
 			this.name = name;
 			this.required = required;
-			this.content = content;
 		}
 		
 		public XmlTagBuilder content(XmlTagContents content) {
 			this.content = content;
 			return this;
 		}
+		
 		
 		public XmlTagBuilder max(int max) {
 			this.max = max;

@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 
 import view.PdscWizardFrame;
+import view.TagCustomizationFrame;
 
 public class Session {
 	private static File currentWorkingFile = null;
@@ -11,9 +12,18 @@ public class Session {
 	private static String currentWorkingFileName;
 	private static Session instance;																			
 	private static PdscWizardFrame wizardFrame;
+	private static TagCustomizationFrame tagCustomizationFrame;
 																												/* GETTTERS */
 	
 	
+	public static TagCustomizationFrame getTagCustomizationFrame() {
+		return tagCustomizationFrame;
+	}
+
+	public static void setTagCustomizationFrame(TagCustomizationFrame tagCustomizationFrame) {
+		Session.tagCustomizationFrame = tagCustomizationFrame;
+	}
+
 	//--------------------------------------------------------------------------getCurrentWorkingFile()
 	public static File getCurrentWorkingFile() {
 		return Session.currentWorkingFile;

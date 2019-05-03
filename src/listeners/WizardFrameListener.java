@@ -47,8 +47,8 @@ public class WizardFrameListener implements ActionListener {
 				ArrayList<XmlTag> tagArr = StepOneFormContainer.getTagArr();
 				tagArr.addAll(StepTwoFormContainer.getTagArr());
 				
-				//Document doc = WizardBusiness.writePdsc(tagArr);
-				Document doc = WizardBusiness.writePdsc(test());
+				Document doc = WizardBusiness.writePdsc(tagArr);
+				//Document doc = WizardBusiness.writePdsc(test());
 				response = FileBusiness.createFile(destinationPath.toString() , "PDSC", doc);
 				ext = "PDSC";
 			}

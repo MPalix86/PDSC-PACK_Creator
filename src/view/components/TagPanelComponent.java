@@ -5,7 +5,7 @@ import javax.swing.JSeparator;
 import javax.swing.border.EmptyBorder;
 
 import javafx.scene.control.CheckBox;
-import listeners.AttributesListener;
+import listeners.TagCustomizationFrameListener;
 import model.XmlAttribute;
 import model.XmlTag;
 import model.XmlTagContents;
@@ -22,6 +22,8 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import java.awt.Insets;
 import java.awt.RenderingHints;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -33,11 +35,13 @@ public class TagPanelComponent extends JPanel{
 	private GridBagConstraints gbc;
 	private GridBagLayout gridBagLayout;
 
-	private JPanel checkBoxPanel;
+	private JPanel AttributesPanel;
+	private JPanel childrenPanel;
 	
 	public TagPanelComponent(XmlTag tag) {
 		this.tag = tag;
 		
+		/* initial layout setup */
 		this.setBorder(new EmptyBorder(15, 15, 15, 15));
 		setBackground(Color.WHITE);
 			gridBagLayout = new GridBagLayout();
@@ -47,7 +51,7 @@ public class TagPanelComponent extends JPanel{
 			gridBagLayout.rowWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
 		setLayout(gridBagLayout);
 		
-			
+			/* tag title label setup */
 			JLabel lblTagName = new JLabel("<"+this.tag.getName()+">");
 //			if(tag.getMax() != null) {
 //				lblTagName = new JLabel("<"+this.tag.getName()+">");
@@ -68,39 +72,82 @@ public class TagPanelComponent extends JPanel{
 			gbc.gridy = 1;
 			
 		add(lblTagName, gbc);
-		
-			checkBoxPanel = new JPanel( );
-			checkBoxPanel.setBackground(Color.WHITE);
-			checkBoxPanel.setLayout(new BoxLayout(checkBoxPanel, BoxLayout.Y_AXIS));
 			
-	        gbc.weightx = 1.0;
-	        gbc.fill = GridBagConstraints.HORIZONTAL;
-	        gbc.gridwidth = GridBagConstraints.REMAINDER;
-			gbc.gridy = 2;
+			/* AttributesPanel setup */
+			AttributesPanel = new JPanel( );
+			AttributesPanel.setBackground(Color.WHITE);
+			AttributesPanel.setLayout(new BoxLayout(AttributesPanel, BoxLayout.Y_AXIS));
+			AttributesPanel.setBorder(new EmptyBorder(0, 15, 0, 0));
 			
-			checkBoxPanel.setBorder(new EmptyBorder(0, 15, 0, 0));
 				JLabel label = new JLabel("Attributes :");
 				label.setFont(new Font("Lucida Grande", Font.PLAIN, 14));
 				label.setForeground(Color.BLACK);
-			checkBoxPanel.add(new JSeparator());
-			checkBoxPanel.add(label);
+			
+		        gbc.weightx = 1.0;
+		        gbc.fill = GridBagConstraints.HORIZONTAL;
+		        gbc.gridwidth = GridBagConstraints.REMAINDER;
+				gbc.gridy = 2;
+				
+			AttributesPanel.add(new JSeparator());
+			AttributesPanel.add(label);
+			
+		if(tag.getAttrArr() != null) {
+			tag.getAttrArr().forEach((a) -> addAttribute(a));
+			add(AttributesPanel, gbc);
+		}
 		
-		add(checkBoxPanel, gbc);
-		tag.getAttrArr().forEach((a) -> addAttribute(a));
+			/* childrenPanel setup */
+			childrenPanel = new JPanel( );
+			childrenPanel.setBorder(new EmptyBorder(0, 15, 0, 0));
+			childrenPanel.setBackground(Color.WHITE);
+			childrenPanel.setLayout(new BoxLayout(childrenPanel, BoxLayout.Y_AXIS));
+			
+				JLabel childLabel = new JLabel("Child Elements :");
+				childLabel.setFont(new Font("Lucida Grande", Font.PLAIN, 14));
+				childLabel.setForeground(Color.BLACK);
+				 
+				gbc.gridy = 3;
+				
+			childrenPanel.add(new JSeparator());
+			childrenPanel.add(childLabel);
 		
+		if(tag.getChildren() != null) {
+			tag.getChildren().forEach((t) -> addChild(t));
+			add(childrenPanel, gbc);   
+		}
+		
+		JButton removeBtn = new JButton("x");
+		removeBtn.addActionListener(new TagCustomizationFrameListener());
+		removeBtn.setActionCommand("removeTagPanel");
+		removeBtn.setName(tag.getName());
+		add(removeBtn,gbc);
 		
 	}
 	
+	//--------------------------------------------------------------------------addAttribute()
 	private void addAttribute(XmlAttribute a) {
 		
 		JCheckBox c = new JCheckBox(a.getName());
 		c.setForeground(new Color(255, 99, 71));
-		c.addItemListener(new AttributesListener());
+		c.setName("attribute");
+		//c.addItemListener(new TagCustomizationFrameListener());
 		if(a.isRequired()) {
 			c.setSelected(true);
 			c.setEnabled(false);
 		}
-		checkBoxPanel.add(c); 
+		AttributesPanel.add(c); 
+	}
+	
+	//--------------------------------------------------------------------------addChild()
+	private void addChild(XmlTag t) {
+			JButton b = new JButton(t.getName());
+			b.addActionListener(new TagCustomizationFrameListener());
+			b.setName(t.getName());
+			b.setActionCommand("addTagPanel");
+		if(t.isRequired()) {
+			
+		}
+		childrenPanel.add(b); 
 	}
 	
 	

@@ -134,12 +134,12 @@ public class StepTwoFormContainer extends JPanel{
 	 
 	public static ArrayList<XmlTag> getTagArr() {
 		ArrayList<XmlTag> tagArr = new ArrayList();
-		tagArr.add(new XmlTag.XmlTagBuilder("name", true , new XmlTagContents(name.getText(),null)).build());
-		tagArr.add(new XmlTag.XmlTagBuilder("vendor", true , new XmlTagContents(vendor.getText() , null)).build());
-		tagArr.add(new XmlTag.XmlTagBuilder("description", true , new XmlTagContents(description.getText() , null)).build());
-		tagArr.add(new XmlTag.XmlTagBuilder("url", true , new XmlTagContents(url.getText() , null)).build());
-		tagArr.add(new XmlTag.XmlTagBuilder("supportContact", true , new XmlTagContents(supportContact.getText() , null)).build());
-		tagArr.add(new XmlTag.XmlTagBuilder("license", true , new XmlTagContents(license.getText() , null)).build());
+//		tagArr.add(new XmlTag.XmlTagBuilder("name", true , new XmlTagContents(name.getText(),null)).build());
+//		tagArr.add(new XmlTag.XmlTagBuilder("vendor", true , new XmlTagContents(vendor.getText() , null)).build());
+//		tagArr.add(new XmlTag.XmlTagBuilder("description", true , new XmlTagContents(description.getText() , null)).build());
+//		tagArr.add(new XmlTag.XmlTagBuilder("url", true , new XmlTagContents(url.getText() , null)).build());
+//		tagArr.add(new XmlTag.XmlTagBuilder("supportContact", true , new XmlTagContents(supportContact.getText() , null)).build());
+//		tagArr.add(new XmlTag.XmlTagBuilder("license", true , new XmlTagContents(license.getText() , null)).build());
 		return tagArr;
 		
 	}

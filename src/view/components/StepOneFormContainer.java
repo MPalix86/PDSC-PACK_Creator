@@ -14,7 +14,7 @@ import javax.swing.UIManager;
 import listeners.StepOneFormFocusListener;
 import model.XmlAttribute;
 import model.XmlTag;
-import model.Exception.TypeMismatchException;
+import model.Exceptions.TypeMismatchException;
 import view.PdscWizardFrame;
 
 import javax.swing.SwingConstants;
@@ -164,10 +164,10 @@ public class StepOneFormContainer extends JPanel {
 	
 	public static ArrayList<XmlTag> getTagArr() { 
 		ArrayList<XmlTag> tagArr = new ArrayList();
-		XmlTag pack = new XmlTag.XmlTagBuilder("package", true , null).build();
+		XmlTag pack = new XmlTag.XmlTagBuilder("package", true ).build();
 		
 		try {
-			pack.addAttr(new XmlAttribute("schemaVersion", schemaVersion.getText(), String.class,  true));
+			pack.addAttr(new XmlAttribute(new String ("schemaVersion"), schemaVersion.getText(), String.class,  true));
 			pack.addAttr(new XmlAttribute("xmlnsxs", xmlns.getText(), String.class,true));
 			pack.addAttr(new XmlAttribute("xsnoNamespaceSchemaLocation", noNamespaceSchemaLocation.getText(),String.class,true));
 			pack.addAttr(new XmlAttribute("Dcore",dcore.getText(), String.class,false));

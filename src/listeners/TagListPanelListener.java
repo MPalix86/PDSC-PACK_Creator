@@ -3,7 +3,9 @@ package listeners;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import model.pdscComponent.Conditions;
+import business.Utils;
+import model.XmlTag;
+import model.pdscTag.Conditions;
 import model.pdscType.TagTypeEnum;
 import view.TagCustomizationFrame;
 
@@ -11,23 +13,22 @@ public class TagListPanelListener implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		TagTypeEnum tagType = TagTypeEnum.valueOf(e.getActionCommand());
+		/* 
+		 * for description see tagCustomizationFrameListener 
+		 */
+		Class<XmlTag> tagClass = null;
+		try {
+			tagClass = (Class<XmlTag>) Class.forName("model.pdscTag." + Utils.firstLetterCaps(e.getActionCommand()));
+		} 
+		catch (ClassNotFoundException e1) {
+			e1.printStackTrace();
+		} 
 		System.out.println(e.getActionCommand());
-		switch(tagType) {
-			case dominate : 
-			case requirements :
-			case create  :
-			case repository :
-			case releases  :
-			case keywords  :
-			case generators  :
-			case devices  :
-			case boards  :
-			case taxonomy  :
-			case apis  :
-			case conditions  : TagCustomizationFrame f = new TagCustomizationFrame(new Conditions());
-			case examples  :
-			case components  :
+		try {
+			TagCustomizationFrame f = new TagCustomizationFrame(tagClass.newInstance());
+		} 
+		catch (InstantiationException | IllegalAccessException e1) {
+			e1.printStackTrace();
 		}
 	}
 

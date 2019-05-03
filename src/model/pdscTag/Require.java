@@ -1,19 +1,22 @@
-package model.pdscComponent;
+package model.pdscTag;
 
 import model.XmlAttribute;
 import model.XmlTag;
+import model.pdscAttributes.Dvendor;
 import model.pdscType.DcoreEnum;
 import model.pdscType.DeviceVendorEnum;
 import model.pdscType.DfpuEnum;
 import model.pdscType.DmpuEnum;
 
-/* 
- * this class represnt pdsc tag <deny> that have same structure of pdsc tag <deny>
- */
-public class Deny extends XmlTag{
-	public Deny(){
-		this.setName("deny");
-		this.addAttr(new XmlAttribute ("Dvendor", false, DeviceVendorEnum.class));
+public class Require extends XmlTag {
+	
+	public void setValue() {
+		
+	}
+	
+	public Require() {
+		this.setName("require");
+		this.addAttr(new Dvendor().setRequired(false));
 		this.addAttr(new XmlAttribute ("Dfamily", false, String.class));
 		this.addAttr(new XmlAttribute ("DsubFamily", false, String.class));
 		this.addAttr(new XmlAttribute ("Dname", false, String.class));

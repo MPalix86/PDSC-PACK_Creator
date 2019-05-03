@@ -7,14 +7,17 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import business.Session;
 import javafx.scene.control.ScrollBar;
 import model.XmlTag;
 import view.components.TagContainer;
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Container;
 
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollBar;
@@ -26,14 +29,14 @@ import javax.swing.SwingConstants;
 public class TagCustomizationFrame extends JFrame {
 
 	private JPanel contentPane;
+	private TagContainer tagContainer;
+	private XmlTag parent;
 
-
-	
 	/**
 	 * Create the frame.
 	 */
 	public TagCustomizationFrame(XmlTag tag) {
-		
+		this.parent = tag;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 904, 528);
 			Container c = this.getContentPane();
@@ -48,7 +51,8 @@ public class TagCustomizationFrame extends JFrame {
 					leftPanel.setLayout(new BorderLayout(0, 0));
 					leftPanel.setBorder(new EmptyBorder(0, 0, 0, 0));
 					leftPanel.add(new JSeparator(SwingConstants.VERTICAL));
-						TagContainer tagContainer = new TagContainer(tag);
+						tagContainer = new TagContainer(tag);
+						
 						JScrollPane scrollPane = new JScrollPane(tagContainer);
 						JScrollBar scrollBar = new JScrollBar(){
 				            @Override
@@ -73,6 +77,24 @@ public class TagCustomizationFrame extends JFrame {
 		this.setSize(360, 500);       
         this.setLocation(200, 100);
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        Session.setTagCustomizationFrame(this);
 	}
 
+	
+	public void addTag(XmlTag tag) {
+		tagContainer.addTag(tag);
+	}
+	
+	public void removeTagPanel(JPanel panel) {
+		tagContainer.removeTagPanel(panel);
+	}
+	
+	public XmlTag getTagParent() {
+		return this.parent;
+	}
+	
+	public void warningMessage(String message) {
+		JOptionPane.showMessageDialog(this,message,"Alert",JOptionPane.INFORMATION_MESSAGE);
+	
+	}
 }

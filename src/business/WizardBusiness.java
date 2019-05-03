@@ -59,7 +59,7 @@ public class WizardBusiness {
 						System.out.println("Attribute :" + xmlAttr.getName() + " is required");
 						return null;
 					}
-					el.setAttribute(xmlAttr.getName(), xmlAttr.getValue());
+					el.setAttribute(xmlAttr.getName(), (String)xmlAttr.getValue());
 				}
 			}
 			if( i == 0) { 														// element root
