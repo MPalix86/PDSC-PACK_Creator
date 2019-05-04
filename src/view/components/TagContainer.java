@@ -23,14 +23,14 @@ public class TagContainer extends JPanel{
 	public TagContainer(XmlTag tag) {
 		this.tag = tag;
 		
-		addTag(tag);		
+		addTagPanel(tag);		
 		MigLayout layout = new MigLayout("wrap 1");
 		setLayout(layout);
 		setBorder(new EmptyBorder(0, 0, 0, 0));
 		this.setBackground(Color.WHITE);
 	}
 	
-	public void addTag(XmlTag tag ){
+	public void addTagPanel(XmlTag tag){
 		CollapsablePanel collPanel = new CollapsablePanel(tag.getName() , new TagPanelComponent(tag));
 		collPanel.setBorder(new LineBorder(Color.LIGHT_GRAY,1));
 		add(collPanel, "span");

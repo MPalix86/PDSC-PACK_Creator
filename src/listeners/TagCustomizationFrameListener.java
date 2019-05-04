@@ -4,12 +4,15 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 
 import business.Session;
+import business.TagBusiness;
 import business.Utils;
 import model.XmlAttribute;
 import model.XmlTag;
@@ -23,15 +26,18 @@ import view.components.TagContainer;
 
 public class TagCustomizationFrameListener implements ItemListener, ActionListener{
 	private TagCustomizationFrame tagCustomizationFrame;
-	private XmlTag newTag;
+	private JButton b;
+	private TagBusiness tagBusiness;  
+	private Session session;
 
 
-	/*
-	 * use of Java Reflection to generate, Dynamically, specific class object
-	 */
+	public TagCustomizationFrameListener () {
+		Session session = Session.getInstance();
+	}
+	
 	@Override
 	public void itemStateChanged(ItemEvent e) {
-		tagCustomizationFrame = Session.getTagCustomizationFrame();
+		tagCustomizationFrame = session.getTagCustomizationFrame();
 		JCheckBox c = (JCheckBox) e.getItem();
 		if(c.getName() == "tag") {
 			if(c.isSelected()) {}
@@ -41,77 +47,35 @@ public class TagCustomizationFrameListener implements ItemListener, ActionListen
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		tagCustomizationFrame = Session.getTagCustomizationFrame();
+		tagCustomizationFrame = session.getTagCustomizationFrame();
 		String command = e.getActionCommand();
-		JButton b = (JButton) e.getSource();
+		b = (JButton) e.getSource();
 		
 		if(command == "removeTagPanel") {
-			Class<XmlTag> tagClass = null;
-			try {
-				/* Class.forname(String classname) return class instance of classname passed like string:
-				 * it's like saying: classname tagClass; but it is dynamic.
-				 */
-				tagClass = (Class<XmlTag>) Class.forName("model.pdscTag." + Utils.firstLetterCaps(b.getName())); 
-				
-				XmlTag parent = Session.getTagCustomizationFrame().getTagParent();
-				for (int i = 0; i < parent.getChildren().size(); i++) {				// start child search cycle 
-					XmlTag child = parent.getChildren().get(i);						
-					if(child.getClass() == tagClass) {								// comparing child with user selected tag (read tagClass comment above)
-						JPanel tagPanel = (JPanel) b.getParent().getParent();		// recovering tagPanel
-						tagCustomizationFrame.removeTagPanel(tagPanel);				// removing child
-						child.setMax(child.getMax() + 1);							// maximum number of children is augmented by one	
-					}
-				}
-			} 
-			catch (ClassNotFoundException e1) {
-				e1.printStackTrace();
-			}
-		}
-		
+			String childSought 	= b.getName();											// recovering child sought
+			XmlTag parent 		= session.getTagCustomizationFrame().getTagParent();	// recovering parent
+			XmlTag child 		= TagBusiness.findSelectedChild(parent, childSought);	// recovering selected child								
+			JPanel tagPanel 	= (JPanel) b.getParent().getParent();					// recovering tagPanel
+			tagCustomizationFrame.removeTagPanel(tagPanel);								// removing child tag Panel
+			tagCustomizationFrame.removeTag(child);										// removing child from XmlModel	
+			child.setMax(child.getMax() + 1);											// maximum number of children is augmented by one	
+		}																				// child.getmax() is the maximum number of times that child tag can occur in parent
 		
 		if(command == "addTagPanel") {
-			Class<XmlTag> tagClass = null;
-			try {
-				/* Class.forname(String classname) return class instance of classname passed like string:
-				 * it's like saying: classname tagClass; but it is dynamic.
-				 */
-				tagClass = (Class<XmlTag>) Class.forName("model.pdscTag." + Utils.firstLetterCaps(b.getName())); 
-				
-				XmlTag parent = Session.getTagCustomizationFrame().getTagParent();
-				for (int i = 0; i < parent.getChildren().size(); i++) {				// start child search cycle 
-					XmlTag child = parent.getChildren().get(i);						
-					if(child.getClass() == tagClass) {								// comparing child with user selected tag (read tagClass comment above)
-						if(child.getMax() > 0 ) {									// if max child number is > 0
-							try {
-								/* tagClass.newInstance() return new instance of classname;
-								 * it's like saying: new classname();
-								 */
-								tagCustomizationFrame.addTag((XmlTag)tagClass.newInstance()); 	// add new child
-								child.setMax(child.getMax() -1 );								// maximum number of children is reduced by one
-								
-							} 
-							catch (InstantiationException | IllegalAccessException e1) {
-								e1.printStackTrace();
-							}
-						}
-						else {														// if max child number is = 0, cannot add this child
-							tagCustomizationFrame.warningMessage("maximum number of children reached for tag  <" + b.getName() +">");
-							break;
-						}
-					}
-				}
-			} 
-			catch (ClassNotFoundException e1) {
-				e1.printStackTrace();
+			String slectedChild 	= b.getName();
+			XmlTag parent 			= session.getTagCustomizationFrame().getTagParent();
+			XmlTag child 			= TagBusiness.findSelectedChild(parent,slectedChild);
+			if(child.getMax() > 0 ) {															// for child.getmax() see comment above
+				XmlTag newTagInstance = TagBusiness.getClassInstanceFromClassName(slectedChild);
+				tagCustomizationFrame.addTagPanel(newTagInstance); 								// add new child panel
+				tagCustomizationFrame.addTag(child);											// add new child panel into XmlModel
+				child.setMax(child.getMax() -1 );												// maximum number of children is reduced by one
 			}
-		
-			
+			else {																				// if max child number is = 0, cannot add this child
+				tagCustomizationFrame.warningMessage("maximum number of children reached for tag  <" + b.getName() +">");
+			}	
 		}
 		
 	}
-	
-	
-
-
 
 }

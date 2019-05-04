@@ -2,6 +2,7 @@ package view;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
+import java.util.ArrayList;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -30,13 +31,14 @@ public class TagCustomizationFrame extends JFrame {
 
 	private JPanel contentPane;
 	private TagContainer tagContainer;
-	private XmlTag parent;
+	private ArrayList<XmlTag> selectedTag; 
 
 	/**
 	 * Create the frame.
 	 */
-	public TagCustomizationFrame(XmlTag tag) {
-		this.parent = tag;
+	public TagCustomizationFrame(XmlTag parent) {
+		selectedTag = new ArrayList();
+		selectedTag.add(parent);
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 904, 528);
 			Container c = this.getContentPane();
@@ -51,7 +53,7 @@ public class TagCustomizationFrame extends JFrame {
 					leftPanel.setLayout(new BorderLayout(0, 0));
 					leftPanel.setBorder(new EmptyBorder(0, 0, 0, 0));
 					leftPanel.add(new JSeparator(SwingConstants.VERTICAL));
-						tagContainer = new TagContainer(tag);
+						tagContainer = new TagContainer(parent);
 						
 						JScrollPane scrollPane = new JScrollPane(tagContainer);
 						JScrollBar scrollBar = new JScrollBar(){
@@ -82,15 +84,28 @@ public class TagCustomizationFrame extends JFrame {
 
 	
 	public void addTag(XmlTag tag) {
-		tagContainer.addTag(tag);
+		selectedTag.add(tag);
+	}
+	
+	public void addTagPanel(XmlTag tag) {
+		tagContainer.addTagPanel(tag);
 	}
 	
 	public void removeTagPanel(JPanel panel) {
 		tagContainer.removeTagPanel(panel);
 	}
 	
+	public void removeTag(XmlTag tag) {
+		int index = selectedTag.indexOf(tag);
+		selectedTag.remove(index);
+	}
+	
 	public XmlTag getTagParent() {
-		return this.parent;
+		return this.selectedTag.get(0);
+	}
+	
+	public ArrayList<XmlTag> getSelectedTag() {
+		return selectedTag;
 	}
 	
 	public void warningMessage(String message) {

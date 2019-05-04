@@ -115,12 +115,11 @@ public class TagPanelComponent extends JPanel{
 			tag.getChildren().forEach((t) -> addChild(t));
 			add(childrenPanel, gbc);   
 		}
-		
 		JButton removeBtn = new JButton("x");
 		removeBtn.addActionListener(new TagCustomizationFrameListener());
 		removeBtn.setActionCommand("removeTagPanel");
 		removeBtn.setName(tag.getName());
-		add(removeBtn,gbc);
+		add(removeBtn);
 		
 	}
 	

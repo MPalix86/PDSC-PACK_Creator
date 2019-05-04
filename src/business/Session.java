@@ -16,43 +16,38 @@ public class Session {
 																												/* GETTTERS */
 	
 	
-	public static TagCustomizationFrame getTagCustomizationFrame() {
+	public  TagCustomizationFrame getTagCustomizationFrame() {
 		return tagCustomizationFrame;
 	}
 
-	public static void setTagCustomizationFrame(TagCustomizationFrame tagCustomizationFrame) {
+	public  void setTagCustomizationFrame(TagCustomizationFrame tagCustomizationFrame) {
 		Session.tagCustomizationFrame = tagCustomizationFrame;
 	}
 
 	//--------------------------------------------------------------------------getCurrentWorkingFile()
-	public static File getCurrentWorkingFile() {
+	public File getCurrentWorkingFile() {
 		return Session.currentWorkingFile;
 	}
 	
 	//--------------------------------------------------------------------------getWizardFrame()
-	public static PdscWizardFrame getWizardFrame() {
+	public PdscWizardFrame getWizardFrame() {
 		return Session.wizardFrame;
 	}
 	
 	//--------------------------------------------------------------------------getCurrentWorkingFileName()
-	public static String getCurrentWorkingFileName() {
+	public String getCurrentWorkingFileName() {
 		return Session.currentWorkingFileName;
 	}
 	
 	//--------------------------------------------------------------------------getArrWorkingFile()
-	public static ArrayList<File> getArrWorkingFile() {
+	public ArrayList<File> getArrWorkingFile() {
 		return Session.arrWorkingFile;
 	}
 																												/* SETTERS */
 	
-	//--------------------------------------------------------------------------setCurrentWorkingFile()
-	public static void setCurrentWorkingFile(File currentWorkingFile) {
-		Session.currentWorkingFile = currentWorkingFile;
-		Session.setCurrentWorkingFileName(currentWorkingFile.getName());
-	}
 	
 	//--------------------------------------------------------------------------setCurrentWorkingFileName()
-	public static void setCurrentWorkingFileName(String name) {
+	public void setCurrentWorkingFileName(String name) {
 		Session.currentWorkingFileName = name;
 	}	
 	
@@ -63,14 +58,14 @@ public class Session {
 																												/* OTHERS */
 	
 	//--------------------------------------------------------------------------addFileArrWorkingFile()
-	public static void addFileArrWorkingFile(File file) {
+	public void addFileArrWorkingFile(File file) {
 		if(!Session.arrWorkingFile.contains(file)){
 			Session.arrWorkingFile.add(file);
 		}
 	}
 	
 	//--------------------------------------------------------------------------removeFileArrWorkingFile()
-	public static void removeFileArrWorkingFile(File file) {
+	public void removeFileArrWorkingFile(File file) {
 		int index;
 		if(Session.arrWorkingFile.contains(file)){
 			index = Session.arrWorkingFile.indexOf(file);

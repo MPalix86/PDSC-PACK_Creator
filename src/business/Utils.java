@@ -17,4 +17,10 @@ public class Utils {
 	      String restLetters = data.substring(1).toLowerCase();
 	      return firstLetter + restLetters;
 	  }
+	  
+		//--------------------------------------------------------------------------firstLetterCaps() 
+	  public static void print( String message )
+	  {
+		  System.out.println(message);
+	  }
 }
