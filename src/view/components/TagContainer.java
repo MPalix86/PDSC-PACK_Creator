@@ -10,6 +10,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
+import listeners.TagCustomizationFrameListener;
 import model.XmlAttribute;
 import java.awt.*;
 
@@ -19,9 +20,11 @@ import net.miginfocom.swing.MigLayout;
 
 public class TagContainer extends JPanel{
 	private XmlTag tag;
+	private TagCustomizationFrameListener listener;
 	
-	public TagContainer(XmlTag tag) {
+	public TagContainer(XmlTag tag,TagCustomizationFrameListener listener) {
 		this.tag = tag;
+		this.listener = listener;
 		
 		addTagPanel(tag);		
 		MigLayout layout = new MigLayout("wrap 1");
@@ -31,7 +34,8 @@ public class TagContainer extends JPanel{
 	}
 	
 	public void addTagPanel(XmlTag tag){
-		CollapsablePanel collPanel = new CollapsablePanel(tag.getName() , new TagPanelComponent(tag));
+		TagPanelComponent tagPanel = new TagPanelComponent(tag,listener);
+		CollapsablePanel collPanel = new CollapsablePanel(tag.getName() , tagPanel);
 		collPanel.setBorder(new LineBorder(Color.LIGHT_GRAY,1));
 		add(collPanel, "span");
 		this.repaint();
@@ -43,7 +47,6 @@ public class TagContainer extends JPanel{
 		this.repaint();
 		this.revalidate();
 	}
-	
 	
 	
 }

@@ -14,8 +14,10 @@ public class StepOneFormFocusListener implements FocusListener {
 	private PdscWizardFrame frame ;
 	private StepOneFormContainer stepOneContainer;
 	private ArrayList<JTextField> textFieldArr;
+	private Session session;
 	
 	public StepOneFormFocusListener(StepOneFormContainer stepOneContainer){
+		session = Session.getInstance();
 		this.stepOneContainer = stepOneContainer;
 		textFieldArr = stepOneContainer.getTexFieldsArr();
 	}
@@ -24,7 +26,7 @@ public class StepOneFormFocusListener implements FocusListener {
 	public void focusGained(FocusEvent e) {
 		boolean found  = textFieldArr.contains(e.getComponent());
 		if(found) {
-			Session.getWizardFrame().printDescription("FOCUS LISTENER");
+			session.getWizardFrame().printDescription("FOCUS LISTENER");
 		}
 	} 
 

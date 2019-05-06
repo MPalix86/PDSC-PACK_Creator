@@ -10,7 +10,9 @@ import javax.swing.border.EmptyBorder;
 
 import business.Session;
 import javafx.scene.control.ScrollBar;
+import listeners.TagCustomizationFrameListener;
 import model.XmlTag;
+import view.components.TagBtn;
 import view.components.TagContainer;
 
 import java.awt.Color;
@@ -19,6 +21,7 @@ import java.awt.Container;
 
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JButton;
 import javax.swing.JCheckBoxMenuItem;
 import javax.swing.JPopupMenu;
 import javax.swing.JScrollBar;
@@ -31,14 +34,18 @@ public class TagCustomizationFrame extends JFrame {
 
 	private JPanel contentPane;
 	private TagContainer tagContainer;
-	private ArrayList<XmlTag> selectedTag; 
+	private Session session;
+	private TagCustomizationFrameListener listener;
+	private XmlTag parent;
 
 	/**
 	 * Create the frame.
 	 */
 	public TagCustomizationFrame(XmlTag parent) {
-		selectedTag = new ArrayList();
-		selectedTag.add(parent);
+		this.parent = parent;
+		listener = new TagCustomizationFrameListener(this);
+		session = Session.getInstance();
+		
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 904, 528);
 			Container c = this.getContentPane();
@@ -52,8 +59,7 @@ public class TagCustomizationFrame extends JFrame {
 					leftPanel.setBackground(Color.WHITE);
 					leftPanel.setLayout(new BorderLayout(0, 0));
 					leftPanel.setBorder(new EmptyBorder(0, 0, 0, 0));
-					leftPanel.add(new JSeparator(SwingConstants.VERTICAL));
-						tagContainer = new TagContainer(parent);
+						tagContainer = new TagContainer(parent, listener);
 						
 						JScrollPane scrollPane = new JScrollPane(tagContainer);
 						JScrollBar scrollBar = new JScrollBar(){
@@ -69,6 +75,9 @@ public class TagCustomizationFrame extends JFrame {
 						scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
 					leftPanel.add(scrollPane);
 					
+					TagBtn addBtn = new TagBtn (parent, "Add");
+					addBtn.setActionCommand("add");
+				contentPane.add(addBtn, BorderLayout.SOUTH);
 				contentPane.add(leftPanel, BorderLayout.WEST);
 			
 			c.add(contentPane);
@@ -79,13 +88,10 @@ public class TagCustomizationFrame extends JFrame {
 		this.setSize(360, 500);       
         this.setLocation(200, 100);
         this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-        Session.setTagCustomizationFrame(this);
+        session.setTagCustomizationFrame(this);
 	}
 
 	
-	public void addTag(XmlTag tag) {
-		selectedTag.add(tag);
-	}
 	
 	public void addTagPanel(XmlTag tag) {
 		tagContainer.addTagPanel(tag);
@@ -95,21 +101,14 @@ public class TagCustomizationFrame extends JFrame {
 		tagContainer.removeTagPanel(panel);
 	}
 	
-	public void removeTag(XmlTag tag) {
-		int index = selectedTag.indexOf(tag);
-		selectedTag.remove(index);
-	}
 	
 	public XmlTag getTagParent() {
-		return this.selectedTag.get(0);
-	}
-	
-	public ArrayList<XmlTag> getSelectedTag() {
-		return selectedTag;
+		return this.parent;
 	}
 	
 	public void warningMessage(String message) {
 		JOptionPane.showMessageDialog(this,message,"Alert",JOptionPane.INFORMATION_MESSAGE);
 	
 	}
+	
 }

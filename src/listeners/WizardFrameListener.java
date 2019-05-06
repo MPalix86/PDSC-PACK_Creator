@@ -23,24 +23,26 @@ import view.components.StepTwoFormContainer;
 public class WizardFrameListener implements ActionListener {
 	private Response response;
 	private String ext;
+	private Session session;
 	
 	public WizardFrameListener() {
-		Session.getWizardFrame();
+		session = Session.getInstance();
+		session.getWizardFrame();
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		String command = e.getActionCommand();
 		if(command == "continue") {
-			Session.getWizardFrame().next();
+			session.getWizardFrame().next();
 		}
 		
 		else if(command == "back") {
-			Session.getWizardFrame().back();
+			session.getWizardFrame().back();
 		}
 		
 		else if(command == "generatePdsc" ) {
-			File destinationPath = Session.getWizardFrame().showNewFileFrame();
+			File destinationPath = session.getWizardFrame().showNewFileFrame();
 			if (destinationPath != null) {
 				
 				
@@ -59,8 +61,8 @@ public class WizardFrameListener implements ActionListener {
 			
 			if (response.getStatus() == FileBusiness.FILE_CREATED_CORRECTLY) {
 				File createdFile = new File(destinationPath.toString() + "." + ext);
-				Session.setCurrentWorkingFile(createdFile);		 								/*saving current path in session */
-				Session.addFileArrWorkingFile(createdFile);
+				//session.setCurrentWorkingFile(createdFile);		 								/*saving current path in session */
+				session.addFileArrWorkingFile(createdFile);
 				
 			}
 			else if(response.getStatus() == FileBusiness.FILE_ALREADY_EXIST) {

@@ -4,14 +4,31 @@ import java.util.ArrayList;
 
 import model.XmlTag;
 
-public class TagBusiness {
+public class TagCustomizationBusiness {
+	private XmlTag model;
+
 	
 	
 	
 	
-	
-	
-	
+	public XmlTag getModel() {
+		return model;
+	}
+
+
+
+
+
+
+	public void setModel(XmlTag model) {
+		this.model = model;
+	}
+
+
+
+
+
+
 	/* 
 	 * Breadth first search algorithm:
 	 * it is exploited BFS algorithm to find user's selected child tag starting 
@@ -21,7 +38,7 @@ public class TagBusiness {
 	 * child's class with user's selected tag class. 
 	 * 
 	 * NOTE: name of the class that represents tag, is always the same as the 
-	 * name of the tag
+	 * name of the tag 
 	 * 
 	 */
 	public static XmlTag findSelectedChild(XmlTag parent, String childClassName) {
@@ -86,6 +103,27 @@ public class TagBusiness {
 		return instance;
 	}
 	
+	
+	
+	public static void printTag(XmlTag parent) {
+		
+		ArrayList <XmlTag> children = new ArrayList();
+		children.add(parent);
+		while(!children.isEmpty()) {
+			XmlTag element = children.get(0);
+			children.remove(element);
+			if (element.getParent()!= null) {
+				System.out.print("parent : " + element.getParent().getName());
+			}
+			Utils.print("tag: " + element.getName());
+			if(element.getSelectedAttrArr() !=  null) {
+				element.getSelectedAttrArr().forEach((a)->Utils.print(" " + a.getName()));
+			}
+			if( element.getSelectedChildren() != null ) {
+				element.getSelectedChildren().forEach((c)-> children.add(c));
+			}
+		}
+	}
 	
 	
 	

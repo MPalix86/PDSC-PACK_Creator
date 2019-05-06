@@ -1,6 +1,7 @@
 package view.components;
 
 import javax.swing.JPanel;
+import view.components.AttributeCheckBox;
 import javax.swing.JSeparator;
 import javax.swing.border.EmptyBorder;
 
@@ -37,10 +38,12 @@ public class TagPanelComponent extends JPanel{
 
 	private JPanel AttributesPanel;
 	private JPanel childrenPanel;
+	private TagCustomizationFrameListener listener;
 	
-	public TagPanelComponent(XmlTag tag) {
+	public TagPanelComponent(XmlTag tag, TagCustomizationFrameListener listener ) {
 		this.tag = tag;
-		
+		this.listener = listener;
+	
 		/* initial layout setup */
 		this.setBorder(new EmptyBorder(15, 15, 15, 15));
 		setBackground(Color.WHITE);
@@ -53,15 +56,6 @@ public class TagPanelComponent extends JPanel{
 		
 			/* tag title label setup */
 			JLabel lblTagName = new JLabel("<"+this.tag.getName()+">");
-//			if(tag.getMax() != null) {
-//				lblTagName = new JLabel("<"+this.tag.getName()+">");
-//				JLabel lblMax = new JLabel("<"+this.tag.getName()+">");
-//				lblMax.setForeground(new Color(0,0,0));
-//				lblMax.setFont(new Font("Lucida Grande", Font.PLAIN, 12));
-//				gbc.gridx = 2;
-//				gbc.gridy = 1;
-//				add(lblTagName, gbc);
-//			}
 
 			lblTagName.setForeground(new Color(0,0,128));
 			lblTagName.setFont(new Font("Lucida Grande", Font.PLAIN, 16));
@@ -92,7 +86,7 @@ public class TagPanelComponent extends JPanel{
 			AttributesPanel.add(label);
 			
 		if(tag.getAttrArr() != null) {
-			tag.getAttrArr().forEach((a) -> addAttribute(a));
+			tag.getAttrArr().forEach((a) -> addAttribute(a , tag));
 			add(AttributesPanel, gbc);
 		}
 		
@@ -115,21 +109,19 @@ public class TagPanelComponent extends JPanel{
 			tag.getChildren().forEach((t) -> addChild(t));
 			add(childrenPanel, gbc);   
 		}
-		JButton removeBtn = new JButton("x");
-		removeBtn.addActionListener(new TagCustomizationFrameListener());
+		TagBtn removeBtn = new TagBtn(tag , "X");
+		removeBtn.addActionListener(listener);
 		removeBtn.setActionCommand("removeTagPanel");
-		removeBtn.setName(tag.getName());
 		add(removeBtn);
 		
 	}
-	
+	  
 	//--------------------------------------------------------------------------addAttribute()
-	private void addAttribute(XmlAttribute a) {
+	private void addAttribute(XmlAttribute a , XmlTag tag) {
 		
-		JCheckBox c = new JCheckBox(a.getName());
-		c.setForeground(new Color(255, 99, 71));
-		c.setName("attribute");
-		//c.addItemListener(new TagCustomizationFrameListener());
+		AttributeCheckBox c = new AttributeCheckBox(a , tag);   
+		c.setForeground(new Color(255, 99, 71));   
+		c.addItemListener(listener);
 		if(a.isRequired()) {
 			c.setSelected(true);
 			c.setEnabled(false);
@@ -139,14 +131,18 @@ public class TagPanelComponent extends JPanel{
 	
 	//--------------------------------------------------------------------------addChild()
 	private void addChild(XmlTag t) {
-			JButton b = new JButton(t.getName());
-			b.addActionListener(new TagCustomizationFrameListener());
-			b.setName(t.getName());
+			TagBtn b = new TagBtn(t);
+			b.addActionListener(listener);
 			b.setActionCommand("addTagPanel");
 		if(t.isRequired()) {
 			
 		}
 		childrenPanel.add(b); 
+	}
+	
+	//--------------------------------------------------------------------------setListener()
+	public void setListener(TagCustomizationFrameListener listener) {
+		this.listener = listener;
 	}
 	
 	

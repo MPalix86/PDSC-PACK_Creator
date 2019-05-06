@@ -7,6 +7,7 @@
 	<classpathentry kind="lib" path="/Users/mircopalese/eclipse-workspace/PDSC/libraries/h2-1.4.197.jar"/>
 	<classpathentry kind="lib" path="/Users/mircopalese/eclipse-workspace/PDSC/libraries/jgoodies-common-1.8.0.jar"/>
 	<classpathentry kind="lib" path="/Users/mircopalese/eclipse-workspace/PDSC/libraries/jgoodies-forms-1.8.0.jar"/>
-	<classpathentry kind="lib" path="/Users/mircopalese/eclipse-workspace/PDSC/libraries/miglayout-4.0-swing.jar"/>
+	<classpathentry kind="lib" path="/Users/mircopalese/eclipse-workspace/PDSC/libraries/miglayout-core-5.2.jar"/>
+	<classpathentry kind="lib" path="/Users/mircopalese/eclipse-workspace/PDSC/libraries/miglayout-swing-5.2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

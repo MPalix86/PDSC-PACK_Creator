@@ -54,11 +54,13 @@ public class PdscWizardFrame extends JFrame {
 	private static WizardFrameListener listener;
 	private JPanel tagListPanel;
 	private JList tagList;
+	private Session session;
 	
 
 
 	//--------------------------------------------------------------------------constructor()
 	public PdscWizardFrame() {
+		session = Session.getInstance();
 		steps = new ArrayList();
 		steps.add(new StepOneFormContainer());
 		steps.add(new StepTwoFormContainer());
@@ -228,13 +230,13 @@ public class PdscWizardFrame extends JFrame {
 	public File showNewFileFrame() {
 		JFileChooser fileChooser = new JFileChooser();
 			fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-		if(Session.getCurrentWorkingFile() != null) {fileChooser.setCurrentDirectory(Session.getCurrentWorkingFile());} 	
+		if(session.getCurrentWorkingFile() != null) {fileChooser.setCurrentDirectory(session.getCurrentWorkingFile());} 	
 		int val = fileChooser.showSaveDialog(this);
 		if(val == JFileChooser.APPROVE_OPTION) {
 			File destinationPath = fileChooser.getSelectedFile();
 			return destinationPath;
 		}
-		else if(val == JFileChooser.ERROR_OPTION) {
+		else if(val == JFileChooser.ERROR_OPTION) {  
 			JOptionPane.showMessageDialog(this, "Some error occurred", "Error", JOptionPane.ERROR_MESSAGE);
 			return null;
 		}

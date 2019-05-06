@@ -2,24 +2,99 @@ package model;
 
 import java.util.ArrayList;
 
+import business.Utils;
+
 public class XmlTag {
 	private String name;
 	private XmlTagContents content;
-	private ArrayList<XmlAttribute> attrArr;
+	private ArrayList<XmlAttribute> attrArr;									/* ------------------ DA SPOSTARE NELLE SINGOLE CLASSI--------------*/
+	private ArrayList<XmlAttribute> selectedAttrArr;
 	private String description;
 	private boolean required;
-	private  ArrayList<XmlTag> children;
+	private  ArrayList<XmlTag> children;										/* ------------------ DA SPOSTARE NELLE SINGOLE CLASSI--------------*/
+	private  ArrayList<XmlTag> selectedChildren;
+	private XmlTag parent;
 	private Integer max;
 	public final static int MAX_OCCURENCE_NUMBER = 1000;
 
 
-
+	
 	private XmlTag (XmlTagBuilder builder) {
 		this.name = builder.name;
 		this.content = builder.content;
 		this.attrArr = builder.attrArr;
 		this.description = builder.description;
 		this.required = builder.required;
+	}
+	
+	
+	public XmlTag getParent() {
+		return parent;
+	}
+
+
+
+	public XmlTag setParent(XmlTag parent) {
+		this.parent = parent;
+		return this;
+	}
+
+	
+	public ArrayList<XmlTag> getSelectedChildren() {
+		return selectedChildren;
+	}
+
+
+	public void setSelectedChildren(ArrayList<XmlTag> selectedChildren) {
+		this.selectedChildren = selectedChildren;
+	}
+	
+	public void addSelecteChild(XmlTag tag) {
+		if(selectedChildren == null) {
+			selectedChildren = new ArrayList<XmlTag>();
+		}
+		if(!selectedChildren.contains(tag)) {
+			this.selectedChildren.add(tag);
+		}
+		else {
+			Utils.print("l'attributo è gia presente tra gli attributi selezionati");
+		}
+	}
+	
+	public void removeSelecteChild(XmlTag tag) {
+		if(selectedChildren.contains(tag)) {
+			this.selectedChildren.remove(tag);
+		}
+		else {
+			Utils.print("l'attributo è gia presente tra gli attributi selezionati");
+		}
+	}
+	
+	
+	
+	public ArrayList<XmlAttribute> getSelectedAttrArr() {
+		return selectedAttrArr;
+	}
+
+	public void setSelectedAttrArr(ArrayList<XmlAttribute> selectedAttrArr) {
+		this.selectedAttrArr = selectedAttrArr;
+	}
+
+
+	public void addSelectedAttr(XmlAttribute attr) {
+		if(selectedAttrArr == null) {
+			selectedAttrArr = new ArrayList<XmlAttribute>();
+		}
+		if(!selectedAttrArr.contains(attr)) {
+			this.selectedAttrArr.add(attr);
+		}
+		
+	}
+	
+	public void removeSelectedAttr(XmlAttribute attr) {
+		if(selectedAttrArr.contains(attr)) {
+			this.selectedAttrArr.remove(attr);
+		}
 	}
 	
 	public XmlTag () {
@@ -36,7 +111,7 @@ public class XmlTag {
 //	}
 	
 	public XmlTag setMax(Integer max) {
-		this.max = max;
+		this.max = max;								  /*------------------CORRECTION--------------------*/
 		return this;
 	}
 	
@@ -83,6 +158,11 @@ public class XmlTag {
 		}
 		this.attrArr.add(attr);
 	}
+	
+	public void removeAttr(XmlAttribute attr) {
+		this.attrArr.remove(attr);
+	}
+	
 	public boolean isRequired() {
 		return this.required;
 	}

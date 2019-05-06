@@ -1,6 +1,10 @@
 package listeners;
 
+import java.awt.Container;
 import java.awt.event.ActionEvent;
+
+import view.components.AttributeCheckBox;
+import view.components.TagBtn;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
@@ -12,8 +16,9 @@ import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 
 import business.Session;
-import business.TagBusiness;
+import business.TagCustomizationBusiness;
 import business.Utils;
+import javafx.scene.Parent;
 import model.XmlAttribute;
 import model.XmlTag;
 import model.pdscTag.Accept;
@@ -26,56 +31,68 @@ import view.components.TagContainer;
 
 public class TagCustomizationFrameListener implements ItemListener, ActionListener{
 	private TagCustomizationFrame tagCustomizationFrame;
-	private JButton b;
-	private TagBusiness tagBusiness;  
+	private TagBtn tagBtn;
+	private TagCustomizationBusiness tagBusiness;  
 	private Session session;
 
 
-	public TagCustomizationFrameListener () {
-		Session session = Session.getInstance();
+	public TagCustomizationFrameListener (TagCustomizationFrame tagCustomizationFrame) {
+		tagBusiness = new TagCustomizationBusiness();
+		this.tagCustomizationFrame = tagCustomizationFrame;
+		session = Session.getInstance();
 	}
 	
 	@Override
 	public void itemStateChanged(ItemEvent e) {
-		tagCustomizationFrame = session.getTagCustomizationFrame();
-		JCheckBox c = (JCheckBox) e.getItem();
-		if(c.getName() == "tag") {
-			if(c.isSelected()) {}
+		AttributeCheckBox c = (AttributeCheckBox) e.getItem();
+		XmlAttribute attr =  c.getAttr();
+		XmlTag tag = c.getTag();
+		if(c.isSelected()) {
+			tag.addSelectedAttr(attr);
 		}
+		else {
+			tag.removeSelectedAttr(attr);
+		}	
 	}
-		
+		  
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		tagCustomizationFrame = session.getTagCustomizationFrame();
 		String command = e.getActionCommand();
-		b = (JButton) e.getSource();
+		tagBtn = (TagBtn) e.getSource();
 		
 		if(command == "removeTagPanel") {
-			String childSought 	= b.getName();											// recovering child sought
-			XmlTag parent 		= session.getTagCustomizationFrame().getTagParent();	// recovering parent
-			XmlTag child 		= TagBusiness.findSelectedChild(parent, childSought);	// recovering selected child								
-			JPanel tagPanel 	= (JPanel) b.getParent().getParent();					// recovering tagPanel
-			tagCustomizationFrame.removeTagPanel(tagPanel);								// removing child tag Panel
-			tagCustomizationFrame.removeTag(child);										// removing child from XmlModel	
-			child.setMax(child.getMax() + 1);											// maximum number of children is augmented by one	
-		}																				// child.getmax() is the maximum number of times that child tag can occur in parent
+			XmlTag parent 		= tagCustomizationFrame.getTagParent();
+			XmlTag child 		= tagBtn.getTag();								// recovering child
+			parent.removeSelecteChild(child); 									// updating selectedChild array
+			JPanel tagPanel 	= (JPanel) tagBtn.getParent().getParent();		// recovering tagpanel
+			tagCustomizationFrame.removeTagPanel(tagPanel);						// removing child tag Panel
+			child.setMax(child.getMax() + 1);									// maximum number of children is augmented by one	
+																				// child.getmax() is the maximum number of times that child tag can occur in parent
+		}																				
+		
+		
 		
 		if(command == "addTagPanel") {
-			String slectedChild 	= b.getName();
-			XmlTag parent 			= session.getTagCustomizationFrame().getTagParent();
-			XmlTag child 			= TagBusiness.findSelectedChild(parent,slectedChild);
-			if(child.getMax() > 0 ) {															// for child.getmax() see comment above
-				XmlTag newTagInstance = TagBusiness.getClassInstanceFromClassName(slectedChild);
-				tagCustomizationFrame.addTagPanel(newTagInstance); 								// add new child panel
-				tagCustomizationFrame.addTag(child);											// add new child panel into XmlModel
-				child.setMax(child.getMax() -1 );												// maximum number of children is reduced by one
+			XmlTag child 			= tagBtn.getTag();							// recovering child	
+			XmlTag parent 	= child.getParent();
+			if(child.getMax() > 0 ) {
+				parent.addSelecteChild(child);
+				tagCustomizationFrame.addTagPanel(child); 						// add new child panel
+				child.setMax(child.getMax() -1 );								// maximum number of children is reduced by one
 			}
-			else {																				// if max child number is = 0, cannot add this child
-				tagCustomizationFrame.warningMessage("maximum number of children reached for tag  <" + b.getName() +">");
-			}	
+			else {																// if max child number is = 0, cannot add this child
+				tagCustomizationFrame.warningMessage("maximum number of children reached for tag  <" + tagBtn.getName() +">"); // show message
+			}
+			
 		}
 		
+		if(command == "add") {
+			
+		}
+		
+		XmlTag parent = tagCustomizationFrame.getTagParent();
+		TagCustomizationBusiness.printTag(parent);
 	}
 
 }
