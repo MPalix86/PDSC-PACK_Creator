@@ -1,35 +1,21 @@
 package view.components;
 
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
+import java.awt.Insets;
+
+import javax.swing.BoxLayout;
+import javax.swing.JLabel;
 import javax.swing.JPanel;
-import view.components.AttributeCheckBox;
 import javax.swing.JSeparator;
 import javax.swing.border.EmptyBorder;
 
-import javafx.scene.control.CheckBox;
+import business.Utils;
 import listeners.TagCustomizationFrameListener;
 import model.XmlAttribute;
 import model.XmlTag;
-import model.XmlTagContents;
-
-import java.awt.GridBagLayout;
-import java.awt.Image;
-
-import javax.swing.JLabel;
-import java.awt.GridBagConstraints;
-
-import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import java.awt.Insets;
-import java.awt.RenderingHints;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.Graphics2D;
 
 public class TagPanelComponent extends JPanel{
 	private XmlTag tag;
@@ -131,13 +117,13 @@ public class TagPanelComponent extends JPanel{
 	
 	//--------------------------------------------------------------------------addChild()
 	private void addChild(XmlTag t) {
-			TagBtn b = new TagBtn(t);
-			b.addActionListener(listener);
-			b.setActionCommand("addTagPanel");
-		if(t.isRequired()) {
-			
-		}
+		TagBtn b = new TagBtn(t);
+		b.addActionListener(listener);
+		b.setActionCommand("addTagPanel");
 		childrenPanel.add(b); 
+		if(t.isRequired()) {
+			Utils.print("required");
+		}
 	}
 	
 	//--------------------------------------------------------------------------setListener()

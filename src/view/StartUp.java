@@ -35,8 +35,8 @@ import org.w3c.dom.Node;
 import business.FileBusiness;
 import model.XmlAttribute;
 import model.XmlTag;
-import model.XmlTagContents;
-import model.pdscTag.Conditions;
+import model.XmlTagContent;
+import model.pdscTag.rootChildren.Conditions;
 import view.components.TagContainer;
 import view.components.TagPanelComponent;
 

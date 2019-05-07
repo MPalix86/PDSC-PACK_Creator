@@ -1,6 +1,13 @@
 package model.pdscType;
 
-public enum DmpuEnum {
-	MPU,
-	NO_MPU;
+import java.util.ArrayList;
+
+public class DmpuEnum extends ArrayList<String>{
+	
+	public DmpuEnum(){
+		this.add("MPU");
+		this.add("NO_MPU");
+	}
+
+
 }

@@ -1,38 +1,34 @@
 package view;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.GridLayout;
+import java.io.File;
+import java.util.ArrayList;
+
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
-import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;
+import javax.swing.JScrollPane;
+import javax.swing.JTextPane;
+import javax.swing.ScrollPaneConstants;
+import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.MatteBorder;
+
 import business.Session;
 import listeners.WizardFrameListener;
+import model.XmlTag;
+import model.pdscTag.Package;
 import view.components.FinalStepFormContainer;
-import view.components.StepOneFormContainer;
+import view.components.FormContainer;
 import view.components.StepTwoFormContainer;
 import view.components.TagListPanelComponent;
-
-import java.awt.Color;
-import java.awt.Dimension;
-import javax.swing.JButton;
-import javax.swing.JFileChooser;
-
-import java.util.ArrayList;
-import javax.swing.UIManager;
-import java.awt.GraphicsDevice;
-import javax.swing.JScrollPane;
-import javax.swing.ScrollPaneConstants;
-import java.awt.MouseInfo;
-import java.awt.Point;
-import java.awt.Rectangle;
-import java.io.File;
-import java.awt.GridLayout;
-import javax.swing.border.MatteBorder;
-import javax.swing.JTextPane;
-import javax.swing.JList;
-import java.awt.Font;
 
 public class PdscWizardFrame extends JFrame {
 	
@@ -55,14 +51,20 @@ public class PdscWizardFrame extends JFrame {
 	private JPanel tagListPanel;
 	private JList tagList;
 	private Session session;
+	private XmlTag pac; 
 	
 
 
 	//--------------------------------------------------------------------------constructor()
 	public PdscWizardFrame() {
+		
 		session = Session.getInstance();
+		
 		steps = new ArrayList();
-		steps.add(new StepOneFormContainer());
+		pac = new Package();
+		pac.setSelectedAttrArr(pac.getAttrArr());
+		
+		steps.add(new FormContainer(pac));
 		steps.add(new StepTwoFormContainer());
 		steps.add(new FinalStepFormContainer());
 		
@@ -94,8 +96,8 @@ public class PdscWizardFrame extends JFrame {
 			
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setVisible(true);
-		Session.setWizardFrame(this);
 		setListeners();
+		session.setWizardFrame(this);
 		
 	}
 	
@@ -181,7 +183,6 @@ public class PdscWizardFrame extends JFrame {
 		descriptionPane.setForeground(Color.WHITE);
 		descriptionPane.setBackground(Color.DARK_GRAY);
 		rightPanel_center_lv1.add(descriptionPane, BorderLayout.CENTER);
-		Session.setWizardFrame(this);
 		
 	}
 	
@@ -215,7 +216,7 @@ public class PdscWizardFrame extends JFrame {
 		contentPane.add(stepBarPanel, BorderLayout.SOUTH);
 		contentPane.revalidate();
 		contentPane.repaint();	
-		Session.setWizardFrame(this);
+		session.setWizardFrame(this);
 		setListeners();
 	}
 	
@@ -258,6 +259,14 @@ public class PdscWizardFrame extends JFrame {
 		return steps;
 	}
 	
+	
+	//--------------------------------------------------------------------------getSteps()
+	public void addStep(JPanel step) {
+		int index = steps.size();
+		this.steps.add(index - 1, step);
+		this.UpdateComponent();
+	}
+	
 	//--------------------------------------------------------------------------setListeners()
 	private void hideScrollBar() {
 		tagListPanelScrollBar = new JScrollBar(JScrollBar.VERTICAL) {
@@ -284,5 +293,6 @@ public class PdscWizardFrame extends JFrame {
         leftScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         leftScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
 	}
+	
 	
 }

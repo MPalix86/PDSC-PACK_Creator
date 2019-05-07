@@ -48,8 +48,10 @@ public class TagCustomizationBusiness {
 			Class<XmlTag> tagClass = getClassFromClassName(childClassName);
 			XmlTag element = children.get(0);
 			children.remove(element);
-			if(element.getClass() == tagClass) {								
+			if(element.getClass() == tagClass) {	
+				Utils.print("trovato");
 				return element;
+				
 			}
 			if( element.getChildren() != null ) {
 				element.getChildren().forEach((c)-> children.add(c));
@@ -72,7 +74,7 @@ public class TagCustomizationBusiness {
 	public static Class<XmlTag> getClassFromClassName(String className){
 		Class<XmlTag> tagClass = null;
 		try {
-			tagClass = (Class<XmlTag>) Class.forName("model.pdscTag." + Utils.firstLetterCaps(className));
+			tagClass = (Class<XmlTag>) Class.forName(className);
 		} 
 		catch (ClassNotFoundException e) {
 			e.printStackTrace();
@@ -123,6 +125,18 @@ public class TagCustomizationBusiness {
 				element.getSelectedChildren().forEach((c)-> children.add(c));
 			}
 		}
+	}
+	
+	public static XmlTag getNewinstance(Class cl) {
+		XmlTag tag = new XmlTag();
+		try {
+			tag = (XmlTag) cl.newInstance();
+		} catch (InstantiationException e) {
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+		}
+		return tag;
 	}
 	
 	

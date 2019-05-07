@@ -76,6 +76,7 @@ public class TagCustomizationFrame extends JFrame {
 					leftPanel.add(scrollPane);
 					
 					TagBtn addBtn = new TagBtn (parent, "Add");
+					addBtn.addActionListener(listener);
 					addBtn.setActionCommand("add");
 				contentPane.add(addBtn, BorderLayout.SOUTH);
 				contentPane.add(leftPanel, BorderLayout.WEST);

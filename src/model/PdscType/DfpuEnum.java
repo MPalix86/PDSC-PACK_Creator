@@ -1,10 +1,16 @@
 package model.pdscType;
 
-public enum DfpuEnum {
+import java.util.ArrayList;
 
-	NO_FPU,
-	FPU,
-	DP_FPU,
-	SP_FPU;
+public class DfpuEnum extends ArrayList<String>{
+	
+	
+	public DfpuEnum() {
+		this.add("NO_FPU");
+		this.add("FPU");
+		this.add("DP_FPU");
+		this.add("SP_FPU");
+	}
+
 
 }

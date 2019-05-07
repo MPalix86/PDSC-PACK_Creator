@@ -15,15 +15,15 @@ import model.XmlAttribute;
 import java.awt.*;
 
 import model.XmlTag;
-import model.XmlTagContents;
+import model.XmlTagContent;
 import net.miginfocom.swing.MigLayout;
 
 public class TagContainer extends JPanel{
-	private XmlTag tag;
+	private XmlTag parent;
 	private TagCustomizationFrameListener listener;
 	
 	public TagContainer(XmlTag tag,TagCustomizationFrameListener listener) {
-		this.tag = tag;
+		this.parent = parent;
 		this.listener = listener;
 		
 		addTagPanel(tag);		
@@ -33,9 +33,9 @@ public class TagContainer extends JPanel{
 		this.setBackground(Color.WHITE);
 	}
 	
-	public void addTagPanel(XmlTag tag){
-		TagPanelComponent tagPanel = new TagPanelComponent(tag,listener);
-		CollapsablePanel collPanel = new CollapsablePanel(tag.getName() , tagPanel);
+	public void addTagPanel(XmlTag parent){
+		TagPanelComponent tagPanel = new TagPanelComponent(parent,listener);
+		CollapsablePanel collPanel = new CollapsablePanel(parent.getName() , tagPanel);
 		collPanel.setBorder(new LineBorder(Color.LIGHT_GRAY,1));
 		add(collPanel, "span");
 		this.repaint();

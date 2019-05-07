@@ -6,7 +6,7 @@ import business.Utils;
 
 public class XmlTag {
 	private String name;
-	private XmlTagContents content;
+	private String content;
 	private ArrayList<XmlAttribute> attrArr;									/* ------------------ DA SPOSTARE NELLE SINGOLE CLASSI--------------*/
 	private ArrayList<XmlAttribute> selectedAttrArr;
 	private String description;
@@ -120,7 +120,7 @@ public class XmlTag {
 		return this.name;
 	}
 	
-	public XmlTagContents getContent() {
+	public String getContent() {
 		return this.content;
 	}
 	
@@ -144,7 +144,7 @@ public class XmlTag {
 		this.name = name;
 	}
 	
-	public void setContent(XmlTagContents content) {
+	public void setContent(String content) {
 		this.content = content;
 	}
 	
@@ -167,6 +167,11 @@ public class XmlTag {
 		return this.required;
 	}
 	
+	public XmlTag setRequired(boolean required) {
+		this.required = required;
+		return this;
+	}
+	
 	
 	
 	
@@ -177,7 +182,7 @@ public class XmlTag {
 		// required parameters
 		private String name;
 		private boolean required;
-		private XmlTagContents content;
+		private String content;
 
 		// optional parameters
 		boolean isEmpty;
@@ -191,7 +196,7 @@ public class XmlTag {
 			this.required = required;
 		}
 		
-		public XmlTagBuilder content(XmlTagContents content) {
+		public XmlTagBuilder content(String content) {
 			this.content = content;
 			return this;
 		}

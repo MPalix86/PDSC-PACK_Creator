@@ -21,7 +21,7 @@ import org.jdom2.output.XMLOutputter;
 import model.Response;
 import model.XmlAttribute;
 import model.XmlTag;
-import model.XmlTagContents;
+import model.XmlTagContent;
 import view.components.StepOneFormContainer;
 
 public class WizardBusiness {
@@ -43,7 +43,7 @@ public class WizardBusiness {
 			try { xmlAttrArr = tagArr.get(i).getAttrArr();} 					// if attrArr != null
 			catch(Exception e) {}
 			Element el = new Element(xmlTag.getName());							// conversion of XmlTag into JDOM Element
-			XmlTagContents xmlTagContents = xmlTag.getContent();
+			XmlTagContent xmlTagContents = xmlTag.getContent();
 			if(xmlTagContents != null) {													
 				if (xmlTagContents.getValue() != null) {						// if element contains String
 					el.setText(xmlTagContents.getValue());
@@ -83,7 +83,7 @@ public class WizardBusiness {
 	 */
 	//--------------------------------------------------------------------------addChild();
 	private static Element addChild(XmlTag tag) {
-		XmlTagContents parentContents = tag.getContent();
+		XmlTagContent parentContents = tag.getContent();
 		Element parent = new Element(tag.getName());
 		if( parentContents.getTagArr() != null) {								// if parent tag contains other tag
 			ArrayList<XmlTag> xmlChildTagArr = parentContents.getTagArr();

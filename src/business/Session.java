@@ -11,7 +11,7 @@ public class Session {
 	private static ArrayList<File> arrWorkingFile = new ArrayList<File>();
 	private static String currentWorkingFileName;
 	private static Session instance;																			
-	private static PdscWizardFrame wizardFrame;
+	private  PdscWizardFrame wizardFrame;
 	private static TagCustomizationFrame tagCustomizationFrame;
 																												/* GETTTERS */
 	
@@ -31,7 +31,7 @@ public class Session {
 	
 	//--------------------------------------------------------------------------getWizardFrame()
 	public PdscWizardFrame getWizardFrame() {
-		return Session.wizardFrame;
+		return this.wizardFrame;
 	}
 	
 	//--------------------------------------------------------------------------getCurrentWorkingFileName()
@@ -52,8 +52,8 @@ public class Session {
 	}	
 	
 	//--------------------------------------------------------------------------setWizardFrame()
-	public static void setWizardFrame(PdscWizardFrame wizardFrame) {
-		Session.wizardFrame = wizardFrame;
+	public void setWizardFrame(PdscWizardFrame wizardFrame) {
+		this.wizardFrame = wizardFrame;
 	}
 																												/* OTHERS */
 	

@@ -80,6 +80,7 @@ public class StepOneFormContainer extends JPanel {
 		noNamespaceSchemaLocation.setForeground(Color.DARK_GRAY);
 		noNamespaceSchemaLocation.setColumns(10);
 		noNamespaceSchemaLocation.setBounds(57, 259, 296, 33);
+		System.out.println(noNamespaceSchemaLocation.getSize().toString());
 		noNamespaceSchemaLocation.addFocusListener(new StepOneFormFocusListener(this));
 		add(noNamespaceSchemaLocation);
 		
@@ -165,19 +166,13 @@ public class StepOneFormContainer extends JPanel {
 	public static ArrayList<XmlTag> getTagArr() { 
 		ArrayList<XmlTag> tagArr = new ArrayList();
 		XmlTag pack = new XmlTag.XmlTagBuilder("package", true ).build();
-		
-		try {
-			pack.addAttr(new XmlAttribute(new String ("schemaVersion"), schemaVersion.getText(), String.class,  true));
-			pack.addAttr(new XmlAttribute("xmlnsxs", xmlns.getText(), String.class,true));
-			pack.addAttr(new XmlAttribute("xsnoNamespaceSchemaLocation", noNamespaceSchemaLocation.getText(),String.class,true));
-			pack.addAttr(new XmlAttribute("Dcore",dcore.getText(), String.class,false));
-			pack.addAttr(new XmlAttribute("Dvendor", dvendor.getText(), String.class,false));
-			pack.addAttr(new XmlAttribute("Dname", dname.getText(), String.class,false));
-			pack.addAttr(new XmlAttribute("Tcompiler", tcompiler.getText(), String.class,false));
-		} 
-		catch (TypeMismatchException e) {
-			e.printStackTrace();
-		}
+//			pack.addAttr(new XmlAttribute(new String ("schemaVersion"), schemaVersion.getText(), String.class,  true));
+//			pack.addAttr(new XmlAttribute("xmlnsxs", xmlns.getText(), String.class,true));
+//			pack.addAttr(new XmlAttribute("xsnoNamespaceSchemaLocation", noNamespaceSchemaLocation.getText(),String.class,true));
+//			pack.addAttr(new XmlAttribute("Dcore",dcore.getText(), String.class,false));
+//			pack.addAttr(new XmlAttribute("Dvendor", dvendor.getText(), String.class,false));
+//			pack.addAttr(new XmlAttribute("Dname", dname.getText(), String.class,false));
+//			pack.addAttr(new XmlAttribute("Tcompiler", tcompiler.getText(), String.class,false));
 		
 		tagArr.add(pack);
 		return tagArr;

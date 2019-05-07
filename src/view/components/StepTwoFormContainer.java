@@ -13,7 +13,7 @@ import javax.swing.UIManager;
 import listeners.StepOneFormFocusListener;
 import model.XmlAttribute;
 import model.XmlTag;
-import model.XmlTagContents;
+import model.XmlTagContent;
 import view.PdscWizardFrame;
 import java.awt.SystemColor;
 import java.util.ArrayList;

@@ -5,8 +5,6 @@ import java.awt.event.ActionListener;
 
 import business.Utils;
 import model.XmlTag;
-import model.pdscTag.Conditions;
-import model.pdscType.TagTypeEnum;
 import view.TagCustomizationFrame;
 
 public class TagListPanelListener implements ActionListener {
@@ -18,7 +16,7 @@ public class TagListPanelListener implements ActionListener {
 		 */
 		Class<XmlTag> tagClass = null;
 		try {
-			tagClass = (Class<XmlTag>) Class.forName("model.pdscTag." + Utils.firstLetterCaps(e.getActionCommand()));
+			tagClass = (Class<XmlTag>) Class.forName("model.pdscTag.rootChildren." + Utils.firstLetterCaps(e.getActionCommand()));
 		} 
 		catch (ClassNotFoundException e1) {
 			e1.printStackTrace();

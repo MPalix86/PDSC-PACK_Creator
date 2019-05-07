@@ -1,17 +1,13 @@
 package model.pdscType;
-public enum DeviceVendorEnum {
 
-	ABOV_Semiconductor_126("ABOV Semiconductor:126"),
-	Actel_56("Actel:56"),
-	TMicroelectronics_13("STMicroelectronics:13");
+import java.util.ArrayList;
 
-	private final String vendorName;
+public class DeviceVendorEnum extends ArrayList<String> {
+	 
+	public DeviceVendorEnum() {  
+		this.add("ABOV Semiconductor:126");
+		this.add("Actel:56");
+		this.add("STMicroelectronics:13");
+	}
 
-    private DeviceVendorEnum(String vendorName) {
-        this.vendorName = vendorName;
-    }
-
-    public String getValue() {
-        return this.vendorName;
-    }
 }

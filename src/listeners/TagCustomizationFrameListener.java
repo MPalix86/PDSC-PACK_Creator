@@ -1,45 +1,34 @@
 package listeners;
 
-import java.awt.Container;
 import java.awt.event.ActionEvent;
-
-import view.components.AttributeCheckBox;
-import view.components.TagBtn;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.util.ArrayList;
-import java.util.List;
 
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
 import javax.swing.JPanel;
 
 import business.Session;
 import business.TagCustomizationBusiness;
-import business.Utils;
-import javafx.scene.Parent;
 import model.XmlAttribute;
 import model.XmlTag;
-import model.pdscTag.Accept;
-import model.pdscTag.Conditions;
-import model.pdscTag.Deny;
-import model.pdscTag.Require;
-import model.pdscType.TagTypeEnum;
+import view.PdscWizardFrame;
 import view.TagCustomizationFrame;
-import view.components.TagContainer;
+import view.components.AttributeCheckBox;
+import view.components.FormContainer;
+import view.components.TagBtn;
 
 public class TagCustomizationFrameListener implements ItemListener, ActionListener{
 	private TagCustomizationFrame tagCustomizationFrame;
 	private TagBtn tagBtn;
 	private TagCustomizationBusiness tagBusiness;  
 	private Session session;
-
+	private PdscWizardFrame pdscWizardFrame;
 
 	public TagCustomizationFrameListener (TagCustomizationFrame tagCustomizationFrame) {
+		session = Session.getInstance();
+		this.pdscWizardFrame = session.getWizardFrame();
 		tagBusiness = new TagCustomizationBusiness();
 		this.tagCustomizationFrame = tagCustomizationFrame;
-		session = Session.getInstance();
 	}
 	
 	@Override
@@ -63,8 +52,9 @@ public class TagCustomizationFrameListener implements ItemListener, ActionListen
 		
 		if(command == "removeTagPanel") {
 			XmlTag parent 		= tagCustomizationFrame.getTagParent();
-			XmlTag child 		= tagBtn.getTag();								// recovering child
-			parent.removeSelecteChild(child); 									// updating selectedChild array
+			XmlTag newChild 	= tagBtn.getTag();								// recovering child
+			XmlTag child 		= TagCustomizationBusiness.findSelectedChild(parent, newChild.getClass().getName()); //recovering instance that contains all constraints from new isntance generated when this tag was added
+			parent.removeSelecteChild(newChild); 								// updating selectedChild array
 			JPanel tagPanel 	= (JPanel) tagBtn.getParent().getParent();		// recovering tagpanel
 			tagCustomizationFrame.removeTagPanel(tagPanel);						// removing child tag Panel
 			child.setMax(child.getMax() + 1);									// maximum number of children is augmented by one	
@@ -77,8 +67,10 @@ public class TagCustomizationFrameListener implements ItemListener, ActionListen
 			XmlTag child 			= tagBtn.getTag();							// recovering child	
 			XmlTag parent 	= child.getParent();
 			if(child.getMax() > 0 ) {
-				parent.addSelecteChild(child);
-				tagCustomizationFrame.addTagPanel(child); 						// add new child panel
+				Class cl = child.getClass();									// recovering class
+				XmlTag newChild = TagCustomizationBusiness.getNewinstance(cl);	// recovering new instance of selected tag
+				parent.addSelecteChild(newChild);
+				tagCustomizationFrame.addTagPanel(newChild); 					// add new child panel
 				child.setMax(child.getMax() -1 );								// maximum number of children is reduced by one
 			}
 			else {																// if max child number is = 0, cannot add this child
@@ -88,11 +80,8 @@ public class TagCustomizationFrameListener implements ItemListener, ActionListen
 		}
 		
 		if(command == "add") {
-			
+			pdscWizardFrame.addStep(new FormContainer(tagBtn.getTag()));   
 		}
-		
-		XmlTag parent = tagCustomizationFrame.getTagParent();
-		TagCustomizationBusiness.printTag(parent);
 	}
 
 }

@@ -15,7 +15,7 @@ import business.WizardBusiness;
 import business.Session;
 import model.Response;
 import model.XmlTag;
-import model.XmlTagContents;
+import model.XmlTagContent;
 import view.PdscWizardFrame;
 import view.components.StepOneFormContainer;
 import view.components.StepTwoFormContainer;
@@ -81,18 +81,18 @@ public class WizardFrameListener implements ActionListener {
 		ArrayList<XmlTag> tagArr1 = new ArrayList();
 		ArrayList<XmlTag> childOfchildArr = new ArrayList();
 		
-		XmlTag childOfChild  = new XmlTag.XmlTagBuilder("childOfChild", true , new XmlTagContents("childOfchild",null)).build();
-		childOfchildArr.add(childOfChild);
-		
-		
-		XmlTag root = new XmlTag.XmlTagBuilder("root", true , null).build();
-		XmlTag childTag1 = new XmlTag.XmlTagBuilder("child1", true , new XmlTagContents("child1" ,null)).build();
-		tagArr.add(childTag1);
-		XmlTag childTag2 = new XmlTag.XmlTagBuilder("child2", true , new XmlTagContents(null ,childOfchildArr )).build();
-		tagArr.add(childTag2);
-		XmlTag tag = new XmlTag.XmlTagBuilder("parent", true , new XmlTagContents(null ,tagArr )).build();
-		tagArr1.add(root);
-		tagArr1.add(tag);
+//		XmlTag childOfChild  = new XmlTag.XmlTagBuilder("childOfChild", true , new XmlTagContents("childOfchild",null)).build();
+//		childOfchildArr.add(childOfChild);
+//		
+//		
+//		XmlTag root = new XmlTag.XmlTagBuilder("root", true , null).build();
+//		XmlTag childTag1 = new XmlTag.XmlTagBuilder("child1", true , new XmlTagContents("child1" ,null)).build();
+//		tagArr.add(childTag1);
+//		XmlTag childTag2 = new XmlTag.XmlTagBuilder("child2", true , new XmlTagContents(null ,childOfchildArr )).build();
+//		tagArr.add(childTag2);
+//		XmlTag tag = new XmlTag.XmlTagBuilder("parent", true , new XmlTagContents(null ,tagArr )).build();
+//		tagArr1.add(root);
+//		tagArr1.add(tag);
 		
 		
 		return tagArr1;
