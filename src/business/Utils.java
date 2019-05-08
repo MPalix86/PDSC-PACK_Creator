@@ -1,5 +1,9 @@
 package business;
 
+import java.util.ArrayList;
+
+import model.XmlTag;
+
 public class Utils {
 	private static Utils instance;
 	
@@ -23,4 +27,27 @@ public class Utils {
 	  {
 		  System.out.println(message);
 	  }
+	  
+	  
+		public static void printTag(XmlTag parent) {
+			
+			ArrayList <XmlTag> children = new ArrayList();
+			children.add(parent);
+			while(!children.isEmpty()) {
+				Utils.print("");
+				XmlTag element = children.get(0);
+				children.remove(element);
+				if(element.getParent() != null) {
+					System.out.print("parent -> " + element.getParent().getName()+ "   ");
+				}
+				System.out.print("tag: " + element.getName());
+				if(element.getSelectedAttrArr() !=  null) {
+					element.getSelectedAttrArr().forEach((a)->System.out.print(" " + a.getName()));
+				}
+				if( element.getSelectedChildren() != null ) {
+					element.getSelectedChildren().forEach((c)-> children.add(c));
+				}	
+			
+			}
+		}
 }

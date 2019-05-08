@@ -49,7 +49,6 @@ public class TagCustomizationBusiness {
 			XmlTag element = children.get(0);
 			children.remove(element);
 			if(element.getClass() == tagClass) {	
-				Utils.print("trovato");
 				return element;
 				
 			}
@@ -62,6 +61,64 @@ public class TagCustomizationBusiness {
 	
 	
 	
+	/* 
+	 * dependencies research on xml tag (graph).
+	 * uncomment all Sytem.out.println(), run program and press add button on 
+	 * tag customization frame to see how it works (based on Breadth first search)
+	 */
+	public static XmlTag dependencyCheck(XmlTag parent) {
+		ArrayList <XmlTag> children = new ArrayList();
+		children.add(parent);
+		while(!children.isEmpty()) {
+			XmlTag element = children.get(0);
+			//System.out.println("analyzing " +  element.getName());
+			children.remove(element);
+			ArrayList <XmlTag> requiredChildren = new ArrayList<XmlTag>(getRequiredChildren(element));
+			if(!requiredChildren.isEmpty()) {
+				//System.out.println(element.getName() + " has dependencies");
+				for(int i = 0; i < requiredChildren.size(); i++) {
+					XmlTag requiredChild = requiredChildren.get(i);
+					//System.out.println("check if there is the denpendency :  "  + requiredChild.getName());
+					boolean found = false;
+					if(element.getSelectedChildren() != null) {
+						for(int j = 0; j < element.getSelectedChildren().size(); j++) {
+							XmlTag child = element.getSelectedChildren().get(j);
+							if(requiredChild.getClass() == child.getClass()) {
+								found = true;
+							}
+							if( found ) {/* System.out.println(child.getName() + " found ");*/break;}
+						}
+						if(!found) {/*System.out.println(requiredChild.getName() + " not found ");*/return requiredChild;}
+					}
+					else {/*System.out.println(requiredChild.getName() + " not found ");*/return requiredChild;}
+
+				}
+			}else {/*System.out.println(element.getName() + " has no dependencies");*/}
+			if( element.getSelectedChildren() != null ) {
+				element.getSelectedChildren().forEach((c)-> children.add(c));
+			}
+		}
+		return null;
+	}
+	
+	
+	
+	/* 
+	 * if there are required children return requiredChildren array otherwise 
+	 * return empty array 
+	 */ 
+	public static ArrayList<XmlTag> getRequiredChildren(XmlTag parent){
+		ArrayList <XmlTag> requiredChildren = new ArrayList();
+		if(parent.getChildren() != null) {
+			ArrayList <XmlTag> children = new ArrayList(parent.getChildren());
+			for (int i = 0 ; i < children.size(); i++) {
+				if(children.get(i).isRequired()) {
+					requiredChildren.add(children.get(i));
+				}
+			}
+		}
+		return requiredChildren;
+	}
 	
 	
 	
@@ -81,9 +138,6 @@ public class TagCustomizationBusiness {
 		} 
 		return tagClass;
 	}
-	
-	
-	
 	
 	
 	
@@ -107,26 +161,10 @@ public class TagCustomizationBusiness {
 	
 	
 	
-	public static void printTag(XmlTag parent) {
-		
-		ArrayList <XmlTag> children = new ArrayList();
-		children.add(parent);
-		while(!children.isEmpty()) {
-			XmlTag element = children.get(0);
-			children.remove(element);
-			if (element.getParent()!= null) {
-				System.out.print("parent : " + element.getParent().getName());
-			}
-			Utils.print("tag: " + element.getName());
-			if(element.getSelectedAttrArr() !=  null) {
-				element.getSelectedAttrArr().forEach((a)->Utils.print(" " + a.getName()));
-			}
-			if( element.getSelectedChildren() != null ) {
-				element.getSelectedChildren().forEach((c)-> children.add(c));
-			}
-		}
-	}
-	
+
+	/*
+	 * return new instance of passed class
+	 */
 	public static XmlTag getNewinstance(Class cl) {
 		XmlTag tag = new XmlTag();
 		try {

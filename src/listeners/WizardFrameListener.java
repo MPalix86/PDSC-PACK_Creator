@@ -5,29 +5,25 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.util.ArrayList;
 
-import javax.swing.JOptionPane;
-
-import org.jdom2.Attribute;
 import org.jdom2.Document;
 
 import business.FileBusiness;
-import business.WizardBusiness;
 import business.Session;
+import business.WizardBusiness;
 import model.Response;
 import model.XmlTag;
-import model.XmlTagContent;
 import view.PdscWizardFrame;
 import view.components.StepOneFormContainer;
 import view.components.StepTwoFormContainer;
 
 public class WizardFrameListener implements ActionListener {
 	private Response response;
-	private String ext;
 	private Session session;
+	private PdscWizardFrame wizardFrame;
 	
-	public WizardFrameListener() {
+	public WizardFrameListener(PdscWizardFrame wizardFrame) {
+		this.wizardFrame = wizardFrame;
 		session = Session.getInstance();
-		session.getWizardFrame();
 	}
 
 	@Override
@@ -42,6 +38,7 @@ public class WizardFrameListener implements ActionListener {
 		}
 		
 		else if(command == "generatePdsc" ) {
+			String ext = "";
 			File destinationPath = session.getWizardFrame().showNewFileFrame();
 			if (destinationPath != null) {
 				

@@ -12,7 +12,6 @@ import javax.swing.JPanel;
 import javax.swing.JSeparator;
 import javax.swing.border.EmptyBorder;
 
-import business.Utils;
 import listeners.TagCustomizationFrameListener;
 import model.XmlAttribute;
 import model.XmlTag;
@@ -121,9 +120,6 @@ public class TagPanelComponent extends JPanel{
 		b.addActionListener(listener);
 		b.setActionCommand("addTagPanel");
 		childrenPanel.add(b); 
-		if(t.isRequired()) {
-			Utils.print("required");
-		}
 	}
 	
 	//--------------------------------------------------------------------------setListener()

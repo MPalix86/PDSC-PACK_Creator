@@ -10,7 +10,6 @@ import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.UIManager;
 
-import listeners.StepOneFormFocusListener;
 import model.XmlAttribute;
 import model.XmlTag;
 import model.XmlTagContent;
@@ -18,6 +17,9 @@ import view.PdscWizardFrame;
 import java.awt.SystemColor;
 import java.util.ArrayList;
 import javax.swing.border.MatteBorder;
+
+import listeners.FormContainerListener;
+
 import javax.swing.border.LineBorder;
 
 public class StepTwoFormContainer extends JPanel{

@@ -11,7 +11,6 @@ import java.awt.Dimension;
 
 import javax.swing.UIManager;
 
-import listeners.StepOneFormFocusListener;
 import model.XmlAttribute;
 import model.XmlTag;
 import model.Exceptions.TypeMismatchException;
@@ -23,6 +22,9 @@ import java.awt.SystemColor;
 import java.util.ArrayList;
 import java.util.HashMap;
 import javax.swing.border.MatteBorder;
+
+import listeners.FormContainerListener;
+
 import javax.swing.border.LineBorder;
 
 public class StepOneFormContainer extends JPanel {
@@ -52,7 +54,7 @@ public class StepOneFormContainer extends JPanel {
 		schemaVersion.setBorder(new LineBorder(Color.LIGHT_GRAY));
 		schemaVersion.setForeground(Color.DARK_GRAY);
 		schemaVersion.setBounds(57, 113, 296, 33);
-		schemaVersion.addFocusListener(new StepOneFormFocusListener(this));
+		schemaVersion.addFocusListener(new FormContainerListener(this));
 		add(schemaVersion);
 		schemaVersion.setColumns(10);
 		
@@ -67,7 +69,7 @@ public class StepOneFormContainer extends JPanel {
 		xmlns.setText("http://www.w3.org/2001/XMLSchema-instance\"");
 		xmlns.setColumns(10);
 		xmlns.setBounds(57, 186, 296, 33);
-		xmlns.addFocusListener(new StepOneFormFocusListener(this));
+		xmlns.addFocusListener(new FormContainerListener(this));
 		add(xmlns);
 		
 		JLabel lblXsnonamespaceschemalocation = new JLabel("xs:noNamespaceSchemaLocation *");
@@ -81,7 +83,7 @@ public class StepOneFormContainer extends JPanel {
 		noNamespaceSchemaLocation.setColumns(10);
 		noNamespaceSchemaLocation.setBounds(57, 259, 296, 33);
 		System.out.println(noNamespaceSchemaLocation.getSize().toString());
-		noNamespaceSchemaLocation.addFocusListener(new StepOneFormFocusListener(this));
+		noNamespaceSchemaLocation.addFocusListener(new FormContainerListener(this));
 		add(noNamespaceSchemaLocation);
 		
 		JLabel lblDcore = new JLabel("Dcore");
@@ -94,7 +96,7 @@ public class StepOneFormContainer extends JPanel {
 		dcore.setForeground(Color.DARK_GRAY);
 		dcore.setColumns(10);
 		dcore.setBounds(57, 332, 296, 33);
-		dcore.addFocusListener(new StepOneFormFocusListener(this));
+		dcore.addFocusListener(new FormContainerListener(this));
 		add(dcore);
 		
 		JLabel lblDvendor = new JLabel("Dvendor");
@@ -107,7 +109,7 @@ public class StepOneFormContainer extends JPanel {
 		dvendor.setForeground(Color.DARK_GRAY);
 		dvendor.setColumns(10);
 		dvendor.setBounds(57, 405, 296, 33);
-		dvendor.addFocusListener(new StepOneFormFocusListener(this));
+		dvendor.addFocusListener(new FormContainerListener(this));
 		add(dvendor);
 		
 		JLabel lblDname = new JLabel("Dname");
@@ -120,7 +122,7 @@ public class StepOneFormContainer extends JPanel {
 		dname.setForeground(Color.DARK_GRAY);
 		dname.setColumns(10);
 		dname.setBounds(57, 478, 296, 33);
-		dname.addFocusListener(new StepOneFormFocusListener(this));
+		dname.addFocusListener(new FormContainerListener(this));
 		add(dname);
 		
 		JLabel lblTcompiler = new JLabel("Tcompiler");
@@ -133,7 +135,7 @@ public class StepOneFormContainer extends JPanel {
 		tcompiler.setForeground(Color.DARK_GRAY);
 		tcompiler.setColumns(10);
 		tcompiler.setBounds(57, 551, 296, 33);
-		tcompiler.addFocusListener(new StepOneFormFocusListener(this));
+		tcompiler.addFocusListener(new FormContainerListener(this));
 		add(tcompiler);
 		
 		titleLabel = new JLabel("PDSC creator");

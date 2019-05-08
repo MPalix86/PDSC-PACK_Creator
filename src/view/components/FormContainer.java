@@ -39,7 +39,6 @@ public class FormContainer extends JPanel{
 		positionY = 49;
 		this.tag = tag;
 		setLayout(null);
-		this.setMinimumSize(new Dimension(400,400));
 		this.setBackground(Color.WHITE);
 		
 		placeComponents();
@@ -131,6 +130,7 @@ public class FormContainer extends JPanel{
 
 			
 		}
+		this.setPreferredSize(new Dimension(420, positionY +10));
 
 	}
 	

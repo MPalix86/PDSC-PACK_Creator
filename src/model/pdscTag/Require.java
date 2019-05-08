@@ -21,7 +21,8 @@ public class Require extends XmlTag {
 	public Require() {
 		//
 		this.setName("require");
-
+		
+		
 		this.addAttr(new Dvendor().setRequired(false));
 		this.addAttr(new Dfamily().setRequired(false));
 		this.addAttr(new DsubFamily().setRequired(false));

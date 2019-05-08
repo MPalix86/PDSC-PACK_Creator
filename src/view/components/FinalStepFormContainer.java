@@ -4,14 +4,10 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 
+import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 import javax.swing.SwingConstants;
-
-import listeners.WizardFrameListener;
-import listeners.StepOneFormFocusListener;
-import javax.swing.JButton;
 
 public class FinalStepFormContainer extends JPanel{
 	
@@ -32,7 +28,7 @@ public class FinalStepFormContainer extends JPanel{
 		generatePdscBtn.setForeground(Color.BLACK);
 		generatePdscBtn.setBackground(Color.WHITE);
 		generatePdscBtn.setBounds(116, 145, 185, 44);
-		generatePdscBtn.addActionListener(new WizardFrameListener());
+		//generatePdscBtn.addActionListener(new WizardFrameListener());
 		generatePdscBtn.setActionCommand("generatePdsc");
 		
 		add(generatePdscBtn);

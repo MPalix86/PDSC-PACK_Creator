@@ -1,34 +1,23 @@
 package view;
 
 import java.awt.BorderLayout;
-import java.awt.EventQueue;
-import java.util.ArrayList;
+import java.awt.Color;
+import java.awt.Container;
 
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollBar;
+import javax.swing.JScrollPane;
+import javax.swing.ScrollPaneConstants;
 import javax.swing.border.EmptyBorder;
 
 import business.Session;
-import javafx.scene.control.ScrollBar;
 import listeners.TagCustomizationFrameListener;
 import model.XmlTag;
 import view.components.TagBtn;
 import view.components.TagContainer;
-
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Container;
-
-import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
-import javax.swing.JButton;
-import javax.swing.JCheckBoxMenuItem;
-import javax.swing.JPopupMenu;
-import javax.swing.JScrollBar;
-import javax.swing.JScrollPane;
-import javax.swing.JSeparator;
-import javax.swing.ScrollPaneConstants;
-import javax.swing.SwingConstants;
 
 public class TagCustomizationFrame extends JFrame {
 
@@ -108,8 +97,20 @@ public class TagCustomizationFrame extends JFrame {
 	}
 	
 	public void warningMessage(String message) {
-		JOptionPane.showMessageDialog(this,message,"Alert",JOptionPane.INFORMATION_MESSAGE);
+		Object[] options = { "OK"};
+		JOptionPane.showOptionDialog (null, message, "Warning", JOptionPane.OK_OPTION,
+				 JOptionPane.INFORMATION_MESSAGE,
+				 new ImageIcon ("icons/warning.png"), options, options[0]); 
 	
+	}
+	
+	public boolean yesNoWarningMessage(String message) {
+		Object[] options = { "YES", "NO" };
+		int value = JOptionPane.showOptionDialog (null, message, "Warning", JOptionPane.YES_NO_OPTION,
+				 JOptionPane.INFORMATION_MESSAGE,
+				 new ImageIcon ("icons/warning.png"), options, options[0]); 
+		if(value == 0) return true;
+		else return false;
 	}
 	
 }

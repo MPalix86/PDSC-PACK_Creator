@@ -57,7 +57,7 @@ public class PdscWizardFrame extends JFrame {
 
 	//--------------------------------------------------------------------------constructor()
 	public PdscWizardFrame() {
-		
+		listener = new WizardFrameListener(this);
 		session = Session.getInstance();
 		
 		steps = new ArrayList();
@@ -247,7 +247,6 @@ public class PdscWizardFrame extends JFrame {
 	
 	//--------------------------------------------------------------------------setListeners()
 	private void setListeners() {
-		listener = new WizardFrameListener();
 		continueBtn.addActionListener(listener);
 		continueBtn.setActionCommand("continue");
 		backBtn.addActionListener(listener);

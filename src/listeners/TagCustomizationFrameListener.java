@@ -68,19 +68,30 @@ public class TagCustomizationFrameListener implements ItemListener, ActionListen
 			XmlTag parent 	= child.getParent();
 			if(child.getMax() > 0 ) {
 				Class cl = child.getClass();									// recovering class
-				XmlTag newChild = TagCustomizationBusiness.getNewinstance(cl);	// recovering new instance of selected tag
+				XmlTag newChild = TagCustomizationBusiness.getNewinstance(cl);	// new instance creation of selected tag
 				parent.addSelecteChild(newChild);
 				tagCustomizationFrame.addTagPanel(newChild); 					// add new child panel
 				child.setMax(child.getMax() -1 );								// maximum number of children is reduced by one
 			}
 			else {																// if max child number is = 0, cannot add this child
-				tagCustomizationFrame.warningMessage("maximum number of children reached for tag  <" + tagBtn.getName() +">"); // show message
+				tagCustomizationFrame.warningMessage("<html><p><span style=\"font-size: 14pt; color: #333333;\"> "
+													+ " Maximum number of children reached for tag " +tagBtn.getName() + "  </span></p></html>"); 
 			}
 			
 		}
 		
 		if(command == "add") {
-			pdscWizardFrame.addStep(new FormContainer(tagBtn.getTag()));   
+			XmlTag missingDependency = TagCustomizationBusiness.dependencyCheck(tagBtn.getTag()); 
+			if(missingDependency != null) {
+				boolean flag = tagCustomizationFrame.yesNoWarningMessage("<html><p><span style=\"font-size: 14pt; color: #333333;\"> "
+														+ " Missing dependency : " + missingDependency.getName() + " </p><br>"
+														+ " <p> Do you want to continue </span></p></html>"); 
+				
+				if(flag) pdscWizardFrame.addStep(new FormContainer(tagBtn.getTag()));
+				
+			}
+			else {pdscWizardFrame.addStep(new FormContainer(tagBtn.getTag()));}
+			
 		}
 	}
 
