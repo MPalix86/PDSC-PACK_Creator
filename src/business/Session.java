@@ -3,7 +3,7 @@ package business;
 import java.io.File;
 import java.util.ArrayList;
 
-import view.PdscWizardFrame;
+import view.WizardFrame;
 import view.TagCustomizationFrame;
 
 public class Session {
@@ -11,7 +11,7 @@ public class Session {
 	private static ArrayList<File> arrWorkingFile = new ArrayList<File>();
 	private static String currentWorkingFileName;
 	private static Session instance;																			
-	private  PdscWizardFrame wizardFrame;
+	private  WizardFrame wizardFrame;
 	private static TagCustomizationFrame tagCustomizationFrame;
 																												/* GETTTERS */
 	
@@ -30,7 +30,7 @@ public class Session {
 	}
 	
 	//--------------------------------------------------------------------------getWizardFrame()
-	public PdscWizardFrame getWizardFrame() {
+	public WizardFrame getWizardFrame() {
 		return this.wizardFrame;
 	}
 	
@@ -52,7 +52,7 @@ public class Session {
 	}	
 	
 	//--------------------------------------------------------------------------setWizardFrame()
-	public void setWizardFrame(PdscWizardFrame wizardFrame) {
+	public void setWizardFrame(WizardFrame wizardFrame) {
 		this.wizardFrame = wizardFrame;
 	}
 																												/* OTHERS */

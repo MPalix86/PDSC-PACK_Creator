@@ -1,4 +1,4 @@
-package view.components;
+package view.Components.tagCustomizationFrameComponents;
 
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -17,6 +17,7 @@ import java.awt.*;
 import model.XmlTag;
 import model.XmlTagContent;
 import net.miginfocom.swing.MigLayout;
+import view.Components.StylizedComponents.CollapsablePanel;
 
 public class TagContainer extends JPanel{
 	private XmlTag parent;
@@ -34,7 +35,7 @@ public class TagContainer extends JPanel{
 	}
 	
 	public void addTagPanel(XmlTag parent){
-		TagPanelComponent tagPanel = new TagPanelComponent(parent,listener);
+		CollapsableTagPanel tagPanel = new CollapsableTagPanel(parent,listener);
 		CollapsablePanel collPanel = new CollapsablePanel(parent.getName() , tagPanel);
 		collPanel.setBorder(new LineBorder(Color.LIGHT_GRAY,1));
 		add(collPanel, "span");

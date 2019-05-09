@@ -11,18 +11,18 @@ import business.Session;
 import business.TagCustomizationBusiness;
 import model.XmlAttribute;
 import model.XmlTag;
-import view.PdscWizardFrame;
+import view.WizardFrame;
+import view.Components.ModelComponents.AttributeCheckBox;
+import view.Components.ModelComponents.TagBtn;
+import view.Components.wizardFrameComponents.Form;
 import view.TagCustomizationFrame;
-import view.components.AttributeCheckBox;
-import view.components.FormContainer;
-import view.components.TagBtn;
 
 public class TagCustomizationFrameListener implements ItemListener, ActionListener{
 	private TagCustomizationFrame tagCustomizationFrame;
 	private TagBtn tagBtn;
 	private TagCustomizationBusiness tagBusiness;  
 	private Session session;
-	private PdscWizardFrame pdscWizardFrame;
+	private WizardFrame pdscWizardFrame;
 
 	public TagCustomizationFrameListener (TagCustomizationFrame tagCustomizationFrame) {
 		session = Session.getInstance();
@@ -87,10 +87,10 @@ public class TagCustomizationFrameListener implements ItemListener, ActionListen
 														+ " Missing dependency : " + missingDependency.getName() + " </p><br>"
 														+ " <p> Do you want to continue </span></p></html>"); 
 				
-				if(flag) pdscWizardFrame.addStep(new FormContainer(tagBtn.getTag()));
+				if(flag) pdscWizardFrame.addStep(new Form(tagBtn.getTag()));
 				
 			}
-			else {pdscWizardFrame.addStep(new FormContainer(tagBtn.getTag()));}
+			else {pdscWizardFrame.addStep(new Form(tagBtn.getTag()));}
 			
 		}
 	}

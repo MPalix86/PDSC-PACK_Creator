@@ -5,6 +5,8 @@ import java.util.ArrayList;
 public class DcoreEnum extends ArrayList<String>{
 	
 	public	DcoreEnum(){
+		this.add("");
+		
 		this.add("SC000");
 		this.add("SC300");
 		

@@ -1,4 +1,4 @@
-package view.components;
+package view.Components.ModelComponents;
 
 import java.util.ArrayList;
 
@@ -18,6 +18,10 @@ public class AttributeComboBox extends JComboBox<String>{
 	
 	public void setAttrValue() {
 		attr.setValue((String)this.getSelectedItem());
+	}
+	
+	public XmlAttribute  getAttr() {
+		return this.attr;
 	}
 
 }

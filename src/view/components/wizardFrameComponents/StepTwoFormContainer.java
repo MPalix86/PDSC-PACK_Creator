@@ -1,4 +1,4 @@
-package view.components;
+package view.Components.wizardFrameComponents;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -13,12 +13,12 @@ import javax.swing.UIManager;
 import model.XmlAttribute;
 import model.XmlTag;
 import model.XmlTagContent;
-import view.PdscWizardFrame;
+import view.WizardFrame;
 import java.awt.SystemColor;
 import java.util.ArrayList;
 import javax.swing.border.MatteBorder;
 
-import listeners.FormContainerListener;
+import listeners.FormListener;
 
 import javax.swing.border.LineBorder;
 

@@ -36,7 +36,7 @@ import business.Session;
 import jsyntaxpane.DefaultSyntaxKit;
 import jsyntaxpane.syntaxkits.JavaSyntaxKit;
 import listeners.TopMenuBarListener;
-import view.components.PaneTitleTabComponent;
+import view.Components.PaneTitleTabComponent;
 
 public class EditFileFrame extends JFrame {
 	

@@ -5,6 +5,8 @@ import java.util.ArrayList;
 public class DmpuEnum extends ArrayList<String>{
 	
 	public DmpuEnum(){
+		this.add("");
+		
 		this.add("MPU");
 		this.add("NO_MPU");
 	}

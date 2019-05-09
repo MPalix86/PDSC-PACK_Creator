@@ -1,4 +1,4 @@
-package view.components;
+package view.Components.ModelComponents;
 
 import javax.swing.JButton;
 

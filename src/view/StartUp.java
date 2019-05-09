@@ -37,8 +37,8 @@ import model.XmlAttribute;
 import model.XmlTag;
 import model.XmlTagContent;
 import model.pdscTag.rootChildren.Conditions;
-import view.components.TagContainer;
-import view.components.TagPanelComponent;
+import view.Components.tagCustomizationFrameComponents.TagContainer;
+import view.Components.tagCustomizationFrameComponents.CollapsableTagPanel;
 
 
 
@@ -52,7 +52,7 @@ public class StartUp extends JFrame {
 //		parser.writeXmlFile("./test.xml");
 //		EditFileFrame mf = new EditFileFrame();
 //		mf.placeComponents();
-		PdscWizardFrame frame = new PdscWizardFrame();
+		WizardFrame frame = new WizardFrame();
 	
 		
 //		XmlTag tag = new XmlTag.XmlTagBuilder("test", true, new XmlTagContents("ciao" , null)).build();

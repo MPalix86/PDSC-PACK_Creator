@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 public class DsecureEnum extends ArrayList<String>{
 	public DsecureEnum() {
+		this.add("");
+		
 		this.add("Secure ");
 		this.add("Non-secure");
 	}

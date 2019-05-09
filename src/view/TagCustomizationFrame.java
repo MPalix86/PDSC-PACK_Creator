@@ -11,13 +11,15 @@ import javax.swing.JPanel;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
+import javax.swing.plaf.ColorUIResource;
 
 import business.Session;
 import listeners.TagCustomizationFrameListener;
 import model.XmlTag;
-import view.components.TagBtn;
-import view.components.TagContainer;
+import view.Components.ModelComponents.TagBtn;
+import view.Components.tagCustomizationFrameComponents.TagContainer;
 
 public class TagCustomizationFrame extends JFrame {
 
@@ -31,6 +33,10 @@ public class TagCustomizationFrame extends JFrame {
 	 * Create the frame.
 	 */
 	public TagCustomizationFrame(XmlTag parent) {
+		UIManager UI=new UIManager();
+		 UI.put("OptionPane.background",new ColorUIResource(255,255,255));
+		 UI.put("Panel.background",new ColorUIResource(255,255,255));
+		 
 		this.parent = parent;
 		listener = new TagCustomizationFrameListener(this);
 		session = Session.getInstance();
@@ -100,7 +106,7 @@ public class TagCustomizationFrame extends JFrame {
 		Object[] options = { "OK"};
 		JOptionPane.showOptionDialog (null, message, "Warning", JOptionPane.OK_OPTION,
 				 JOptionPane.INFORMATION_MESSAGE,
-				 new ImageIcon ("icons/warning.png"), options, options[0]); 
+				 new ImageIcon ("icons/warning48.png"), options, options[0]); 
 	
 	}
 	
@@ -108,7 +114,7 @@ public class TagCustomizationFrame extends JFrame {
 		Object[] options = { "YES", "NO" };
 		int value = JOptionPane.showOptionDialog (null, message, "Warning", JOptionPane.YES_NO_OPTION,
 				 JOptionPane.INFORMATION_MESSAGE,
-				 new ImageIcon ("icons/warning.png"), options, options[0]); 
+				 new ImageIcon ("icons/warning48.png"), options, options[0]); 
 		if(value == 0) return true;
 		else return false;
 	}

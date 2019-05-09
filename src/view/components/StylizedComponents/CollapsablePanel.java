@@ -1,4 +1,4 @@
-package view.components;
+package view.Components.StylizedComponents;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -22,7 +22,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 
-class CollapsablePanel extends JPanel {
+public class CollapsablePanel extends JPanel {
 	 
     private boolean selected;
     JPanel contentPanel_;

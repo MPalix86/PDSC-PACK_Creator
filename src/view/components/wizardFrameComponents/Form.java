@@ -1,4 +1,4 @@
-package view.components;
+package view.Components.wizardFrameComponents;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -8,16 +8,19 @@ import java.util.ArrayList;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextField;
 import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
 
+import listeners.FormListener;
 import model.XmlAttribute;
 import model.XmlTag;
+import view.Components.ModelComponents.AttributeComboBox;
+import view.Components.ModelComponents.AttributeTextField;
+import view.Components.ModelComponents.TagTextField;
 
 
 
-public class FormContainer extends JPanel{
+public class Form extends JPanel{
 	private XmlTag tag;
 	private JScrollPane s ;
 	
@@ -33,9 +36,22 @@ public class FormContainer extends JPanel{
 	private final static int DELTA_TEXT_LABEL = 45;
 	private final static int DELTA_TITLE = 36;
 	
+	private FormListener listener;
+	
 	private static int positionY ;
 	
-	public FormContainer(XmlTag tag) {
+	public Form(XmlTag tag) {
+		this.listener = new FormListener(this);
+		positionY = 49;
+		this.tag = tag;
+		setLayout(null);
+		this.setBackground(Color.WHITE);
+		
+		placeComponents();
+	}
+	
+	public Form(XmlTag tag, FormListener listener) {
+		this.listener = listener;
 		positionY = 49;
 		this.tag = tag;
 		setLayout(null);
@@ -60,6 +76,7 @@ public class FormContainer extends JPanel{
 				valueText.setBorder(new LineBorder(Color.LIGHT_GRAY));
 				valueText.setForeground(Color.DARK_GRAY);
 				valueText.setColumns(10);
+				valueText.addFocusListener(listener);
 				valueText.setBounds(TEXT_X, positionY, TEXT_WIDTH, TEXT_HEIGHT);
 				positionY += DELTA_TEXT_LABEL;
 				this.add(valueText);
@@ -67,7 +84,7 @@ public class FormContainer extends JPanel{
 			else if(attr.getPossibleValues() != null) {
 					ArrayList<String> values =  (ArrayList<String>)attr.getPossibleValues();
 					AttributeComboBox valuesComboBox = new AttributeComboBox(attr);  
-					
+					valuesComboBox.addActionListener(listener);
 					valuesComboBox.setPreferredSize(new Dimension(296, 33));
 					valuesComboBox.setForeground(Color.DARK_GRAY);
 					valuesComboBox.setBounds(TEXT_X, positionY, TEXT_WIDTH, TEXT_HEIGHT);
@@ -81,6 +98,8 @@ public class FormContainer extends JPanel{
 		
 	}
 	
+
+
 	public void placeComponents() {
 		JLabel titleLabel = new JLabel("PDSC creator");
 		titleLabel.setFont(new Font("Lucida Grande", Font.PLAIN, 20));
@@ -113,8 +132,9 @@ public class FormContainer extends JPanel{
 			}
 			else {
 				if(element.getContent() != null) {
-					JTextField valueText = new JTextField();
+					TagTextField valueText = new TagTextField(element);
 					valueText.setBorder(new LineBorder(Color.LIGHT_GRAY));
+					valueText.addFocusListener(listener);
 					valueText.setForeground(Color.DARK_GRAY);
 					valueText.setColumns(10);
 					valueText.setBounds(37, positionY, TEXT_WIDTH, TEXT_HEIGHT);
@@ -132,6 +152,15 @@ public class FormContainer extends JPanel{
 		}
 		this.setPreferredSize(new Dimension(420, positionY +10));
 
+	}
+	
+	
+	public XmlTag getTag() {
+		return tag;
+	}
+
+	public void setTag(XmlTag tag) {
+		this.tag = tag;
 	}
 	
 }

@@ -25,12 +25,11 @@ import business.Session;
 import listeners.WizardFrameListener;
 import model.XmlTag;
 import model.pdscTag.Package;
-import view.components.FinalStepFormContainer;
-import view.components.FormContainer;
-import view.components.StepTwoFormContainer;
-import view.components.TagListPanelComponent;
+import view.Components.wizardFrameComponents.FinalStepForm;
+import view.Components.wizardFrameComponents.Form;
+import view.Components.wizardFrameComponents.TagListBar;
 
-public class PdscWizardFrame extends JFrame {
+public class WizardFrame extends JFrame {
 	
 	private static JScrollPane leftScrollPane;
 	private static JScrollBar leftPanelScrollBar;
@@ -56,17 +55,17 @@ public class PdscWizardFrame extends JFrame {
 
 
 	//--------------------------------------------------------------------------constructor()
-	public PdscWizardFrame() {
+	public WizardFrame() {
 		listener = new WizardFrameListener(this);
 		session = Session.getInstance();
 		
 		steps = new ArrayList();
-		pac = new Package();
+		pac = new Package();      									// first step;
 		pac.setSelectedAttrArr(pac.getAttrArr());
 		
-		steps.add(new FormContainer(pac));
-		steps.add(new StepTwoFormContainer());
-		steps.add(new FinalStepFormContainer());
+		steps.add(new Form(pac));
+		//steps.add(new StepTwoFormContainer());
+		steps.add(new FinalStepForm());
 		
 		/* frame initial setup */
 		setBackground(Color.WHITE);
@@ -132,7 +131,7 @@ public class PdscWizardFrame extends JFrame {
 		
 		/* rightPanel initial setup */
 		rightPanel = new JPanel();
-		rightPanel.setBackground(Color.DARK_GRAY);
+		rightPanel.setBackground(new Color(52, 73, 94));
 		rightPanel.setSize(new Dimension(420,590));
 		rightPanel.setLayout(new BorderLayout(0, 0));
 		
@@ -141,7 +140,7 @@ public class PdscWizardFrame extends JFrame {
 			rightPanel_center_lv1.setBackground(Color.DARK_GRAY);
 			
 			/* setting up tag list Panel */
-			tagListScrollPane = new JScrollPane(new TagListPanelComponent());
+			tagListScrollPane = new JScrollPane(new TagListBar());
 			
 			/* hide scrollbar into leftScrollPane, tagListScrollPane */
 			hideScrollBar();
@@ -291,6 +290,18 @@ public class PdscWizardFrame extends JFrame {
         leftScrollPane.setVerticalScrollBar(leftPanelScrollBar);
         leftScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         leftScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
+	}
+	
+	public ArrayList<XmlTag> getTagArr(){
+		session.setWizardFrame(this);
+		
+		ArrayList<XmlTag> tagArr = new ArrayList<XmlTag>();
+		for (int i = 0; i < steps.size() - 1; i++) {   /* because last steps is final step without any tag */
+			
+			Form step = (Form) steps.get(i);
+			tagArr.add(step.getTag());
+		}
+		return tagArr;
 	}
 	
 	

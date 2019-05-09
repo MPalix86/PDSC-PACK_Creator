@@ -4,7 +4,7 @@ import model.XmlAttribute;
 
 public class XsnoNamespaceSchemaLocation extends XmlAttribute{
 	public XsnoNamespaceSchemaLocation() {
-		this.setName("xs:noNamespaceSchemaLocation");
+		this.setName("xs_noNamespaceSchemaLocation");
 		this.setPossibleValues(new String());
 	}
 }

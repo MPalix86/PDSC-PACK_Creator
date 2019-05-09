@@ -1,4 +1,4 @@
-package view.components;
+package view.Components.wizardFrameComponents;
 
 import javax.swing.JPanel;
 import javax.swing.BoxLayout;
@@ -19,8 +19,8 @@ import javax.swing.JSeparator;
 import java.awt.SystemColor;
 import java.awt.Font;
 
-public class TagListPanelComponent extends JPanel{
-	public TagListPanelComponent() {
+public class TagListBar extends JPanel{
+	public TagListBar() {
 		
 		
 		setBorder(null);

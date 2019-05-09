@@ -1,4 +1,4 @@
-package view.components;
+package view.Components.tagCustomizationFrameComponents;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -15,8 +15,10 @@ import javax.swing.border.EmptyBorder;
 import listeners.TagCustomizationFrameListener;
 import model.XmlAttribute;
 import model.XmlTag;
+import view.Components.ModelComponents.AttributeCheckBox;
+import view.Components.ModelComponents.TagBtn;
 
-public class TagPanelComponent extends JPanel{
+public class CollapsableTagPanel extends JPanel{
 	private XmlTag tag;
 	private GridBagConstraints gbc;
 	private GridBagLayout gridBagLayout;
@@ -25,7 +27,7 @@ public class TagPanelComponent extends JPanel{
 	private JPanel childrenPanel;
 	private TagCustomizationFrameListener listener;
 	
-	public TagPanelComponent(XmlTag tag, TagCustomizationFrameListener listener ) {
+	public CollapsableTagPanel(XmlTag tag, TagCustomizationFrameListener listener ) {
 		this.tag = tag;
 		this.listener = listener;
 	

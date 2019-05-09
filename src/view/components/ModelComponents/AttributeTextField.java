@@ -1,4 +1,4 @@
-package view.components;
+package view.Components.ModelComponents;
 
 import javax.swing.JTextField;
 
@@ -13,5 +13,9 @@ public class AttributeTextField extends JTextField{
 	
 	public void setAttrValue() {
 		attr.setValue(this.getText());
+	}
+	
+	public XmlAttribute getAttribute() {
+		return this.attr;
 	}
 }

@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 public class CompilerEnumType extends ArrayList<String>{
 	public	CompilerEnumType(){
+		this.add("");
+		
 		this.add("GCC");
 		this.add("G++");
 		

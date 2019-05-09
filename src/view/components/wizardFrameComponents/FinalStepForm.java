@@ -1,4 +1,4 @@
-package view.components;
+package view.Components.wizardFrameComponents;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -9,9 +9,23 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
-public class FinalStepFormContainer extends JPanel{
+import listeners.WizardFrameListener;
+
+public class FinalStepForm extends JPanel{
+	private WizardFrameListener listener;
 	
-	public FinalStepFormContainer() {
+	public FinalStepForm(WizardFrameListener listenenr) {
+		placeComponent();
+		this.listener = listenenr;
+	}
+	
+	public FinalStepForm() {
+		this.listener = new WizardFrameListener();  
+		placeComponent();
+	
+	}
+	
+	private void placeComponent() {
 		setForeground(Color.BLACK);
 		setBorder(null);
 		setBackground(Color.WHITE);
@@ -28,11 +42,9 @@ public class FinalStepFormContainer extends JPanel{
 		generatePdscBtn.setForeground(Color.BLACK);
 		generatePdscBtn.setBackground(Color.WHITE);
 		generatePdscBtn.setBounds(116, 145, 185, 44);
-		//generatePdscBtn.addActionListener(new WizardFrameListener());
+		generatePdscBtn.addActionListener(listener);
 		generatePdscBtn.setActionCommand("generatePdsc");
 		
 		add(generatePdscBtn);
-		
-		
 	}
 }

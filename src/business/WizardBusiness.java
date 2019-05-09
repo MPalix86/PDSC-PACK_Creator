@@ -2,27 +2,17 @@ package business;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.jdom2.Attribute;
 import org.jdom2.Document;
 import org.jdom2.Element;
-import org.jdom2.JDOMException;
-import org.jdom2.input.SAXBuilder;
-import org.jdom2.output.Format;
-import org.jdom2.output.XMLOutputter;
 
-import model.Response;
 import model.XmlAttribute;
 import model.XmlTag;
-import model.XmlTagContent;
-import view.components.StepOneFormContainer;
 
 public class WizardBusiness {
 	private static Document doc;
@@ -40,18 +30,20 @@ public class WizardBusiness {
 		for(int i = 0 ; i < tagArr.size(); i++) { 
 			XmlTag xmlTag = tagArr.get(i);
 			ArrayList<XmlAttribute> xmlAttrArr = null;
-			try { xmlAttrArr = tagArr.get(i).getAttrArr();} 					// if attrArr != null
+			try { xmlAttrArr = tagArr.get(i).getSelectedAttrArr();} 			// if attrArr != null
 			catch(Exception e) {}
 			Element el = new Element(xmlTag.getName());							// conversion of XmlTag into JDOM Element
-			XmlTagContent xmlTagContents = xmlTag.getContent();
-			if(xmlTagContents != null) {													
-				if (xmlTagContents.getValue() != null) {						// if element contains String
-					el.setText(xmlTagContents.getValue());
-				}
-				else if (xmlTagContents.getTagArr() != null) {					// if element contains other tag
+															
+	
+			if (xmlTag.getSelectedChildren() != null) {							// if element contains other tag
+				if( !xmlTag.getSelectedChildren().isEmpty() ) {
 					el = addChild(xmlTag);
 				}
 			}
+			else if (xmlTag.getContent() != null) {								// if element contains String
+				el.setText(xmlTag.getContent());
+			}
+			
 			if(xmlAttrArr != null) {											// if tag contains attributes
 				for(int j = 0 ; j < xmlAttrArr.size(); j++) {
 					XmlAttribute xmlAttr = xmlAttrArr.get(j);
@@ -59,7 +51,7 @@ public class WizardBusiness {
 						System.out.println("Attribute :" + xmlAttr.getName() + " is required");
 						return null;
 					}
-					el.setAttribute(xmlAttr.getName(), (String)xmlAttr.getValue());
+					if((String)xmlAttr.getValue() != null) {el.setAttribute(xmlAttr.getName(), (String)xmlAttr.getValue());}					
 				}
 			}
 			if( i == 0) { 														// element root
@@ -81,19 +73,28 @@ public class WizardBusiness {
 	 * in model/xmlComponents. To write file with JDOM library need to
 	 * to convert xmlTag into JDOM Element;
 	 */
-	//--------------------------------------------------------------------------addChild();
+	//--------------------------------------------------------------------------addChildren();
 	private static Element addChild(XmlTag tag) {
-		XmlTagContent parentContents = tag.getContent();
 		Element parent = new Element(tag.getName());
-		if( parentContents.getTagArr() != null) {								// if parent tag contains other tag
-			ArrayList<XmlTag> xmlChildTagArr = parentContents.getTagArr();
-			for(int i = 0; i < xmlChildTagArr.size(); i++) {					// for each child
-				Element childEl = new Element(xmlChildTagArr.get(i).getName());
-				if (xmlChildTagArr.get(i).getContent().getTagArr() != null) {	// if child tag contains children tag
-					parent.addContent( addChild(xmlChildTagArr.get(i)));		// recursion
+		if( tag.getSelectedChildren() != null) {								// if parent tag contains other tag
+			ArrayList<XmlTag> xmlChildren = tag.getSelectedChildren();
+			for(int i = 0; i < xmlChildren.size(); i++) {						// for each child
+				XmlTag child = xmlChildren.get(i);
+				Element childEl = new Element(child.getName());
+				ArrayList<XmlAttribute> xmlAttrArr =child.getSelectedAttrArr();
+				for(int j = 0; j < xmlAttrArr.size(); j++) {
+					XmlAttribute xmlAttr = xmlAttrArr.get(j);
+					if(xmlAttr.isRequired() && xmlAttr.getValue() == "") {		// if attribute is required and attribute is empty
+						System.out.println("Attribute :" + xmlAttr.getName() + " is required");
+						return null;
+					}
+					childEl.setAttribute(xmlAttr.getName(), (String)xmlAttr.getValue());
+				}
+				if (child.getSelectedChildren() != null) {						// if child tag contains children tag
+					parent.addContent( addChild(child));		// recursion
 				}
 				else {															// if child tag does not contains children tag
-					childEl.setText(xmlChildTagArr.get(i).getContent().getValue());
+					childEl.setText(child.getContent());
 					parent.addContent(childEl);
 				}
 			}

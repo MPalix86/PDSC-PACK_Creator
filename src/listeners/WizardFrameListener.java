@@ -12,18 +12,21 @@ import business.Session;
 import business.WizardBusiness;
 import model.Response;
 import model.XmlTag;
-import view.PdscWizardFrame;
-import view.components.StepOneFormContainer;
-import view.components.StepTwoFormContainer;
+import view.WizardFrame;
 
 public class WizardFrameListener implements ActionListener {
 	private Response response;
 	private Session session;
-	private PdscWizardFrame wizardFrame;
+	private WizardFrame wizardFrame;
 	
-	public WizardFrameListener(PdscWizardFrame wizardFrame) {
+	public WizardFrameListener(WizardFrame wizardFrame) {
 		this.wizardFrame = wizardFrame;
 		session = Session.getInstance();
+	}
+	
+	public WizardFrameListener() {
+		session = Session.getInstance();
+		this.wizardFrame = session.getWizardFrame();
 	}
 
 	@Override
@@ -42,12 +45,11 @@ public class WizardFrameListener implements ActionListener {
 			File destinationPath = session.getWizardFrame().showNewFileFrame();
 			if (destinationPath != null) {
 				
-				
-				ArrayList<XmlTag> tagArr = StepOneFormContainer.getTagArr();
-				tagArr.addAll(StepTwoFormContainer.getTagArr());
-				
+				session = Session.getInstance();
+				this.wizardFrame = session.getWizardFrame();
+				ArrayList<XmlTag> tagArr = wizardFrame.getTagArr();
 				Document doc = WizardBusiness.writePdsc(tagArr);
-				//Document doc = WizardBusiness.writePdsc(test());
+				
 				response = FileBusiness.createFile(destinationPath.toString() , "PDSC", doc);
 				ext = "PDSC";
 			}
