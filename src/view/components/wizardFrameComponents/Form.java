@@ -21,7 +21,7 @@ import view.Components.ModelComponents.TagTextField;
 
 
 public class Form extends JPanel{
-	private XmlTag tag;
+	private ArrayList<XmlTag> tagArr;
 	private JScrollPane s ;
 	
 	
@@ -61,7 +61,6 @@ public class Form extends JPanel{
 	}
 	
 	private void placeAttr(XmlAttribute attr) {
-		
 			JLabel attrLabel = new JLabel();
 				attrLabel.setForeground(new Color(255, 99, 71));
 				attrLabel.setBounds(LABEL_X, positionY ,LABEL_WIDTH, LABEL_HEIGHT);
@@ -101,56 +100,61 @@ public class Form extends JPanel{
 
 
 	public void placeComponents() {
-		JLabel titleLabel = new JLabel("PDSC creator");
-		titleLabel.setFont(new Font("Lucida Grande", Font.PLAIN, 20));
-		titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
-		titleLabel.setBounds(142, 0, 135, 44);  
-		add(titleLabel);
-		ArrayList <XmlTag> children = new ArrayList();
-		children.add(this.tag);
-		while(!children.isEmpty()) {
-			XmlTag element = children.get(0);
-			JLabel tagNameLabel;
-			if(element.isRequired()) {
-				tagNameLabel = new JLabel("<"+element.getName()+"> *");
-			}
-			else {
-				tagNameLabel = new JLabel("<"+element.getName()+">");
-			}
-	
-			tagNameLabel.setForeground(new Color(0, 0, 128));
-			tagNameLabel.setFont(new Font("Lucida Grande", Font.PLAIN, 15));
-			tagNameLabel.setBounds(30, positionY , 123, 24);
-			positionY += DELTA_TITLE;
-			
-			this.add(tagNameLabel);
-				
-			children.remove(element);
-			
-			if( element.getSelectedChildren() != null ) {
-				element.getSelectedChildren().forEach((c)-> children.add(c));
-			}
-			else {
-				if(element.getContent() != null) {
-					TagTextField valueText = new TagTextField(element);
-					valueText.setBorder(new LineBorder(Color.LIGHT_GRAY));
-					valueText.addFocusListener(listener);
-					valueText.setForeground(Color.DARK_GRAY);
-					valueText.setColumns(10);
-					valueText.setBounds(37, positionY, TEXT_WIDTH, TEXT_HEIGHT);
-					positionY += DELTA_TEXT_LABEL;
-					this.add(valueText);
+		XmlTag tag = new XmlTag();
+		for(int i = 0; i < tagArr.size(); i++) {
+			tag = tagArr.get(i);
+			JLabel titleLabel = new JLabel("PDSC creator");
+			titleLabel.setFont(new Font("Lucida Grande", Font.PLAIN, 20));
+			titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
+			titleLabel.setBounds(142, 0, 135, 44);  
+			add(titleLabel);
+			ArrayList <XmlTag> children = new ArrayList();
+			children.add(tag);
+			while(!children.isEmpty()) {
+				XmlTag element = children.get(0);
+				JLabel tagNameLabel;
+				if(element.isRequired()) {
+					tagNameLabel = new JLabel("<"+element.getName()+"> *");
 				}
-			}
-	
-			if(element.getSelectedAttrArr()!=  null) {
-				ArrayList<XmlAttribute> attrArr = element.getSelectedAttrArr();
-				attrArr.forEach((a)->placeAttr(a));
-			}
+				else {
+					tagNameLabel = new JLabel("<"+element.getName()+">");
+				}
+		
+				tagNameLabel.setForeground(new Color(0, 0, 128));
+				tagNameLabel.setFont(new Font("Lucida Grande", Font.PLAIN, 15));
+				tagNameLabel.setBounds(30, positionY , 123, 24);
+				positionY += DELTA_TITLE;
+				
+				this.add(tagNameLabel);
+					
+				children.remove(element);
+				
+				if( element.getSelectedChildren() != null ) {
+					element.getSelectedChildren().forEach((c)-> children.add(c));
+				}
+				else {
+					if(element.getContent() != null) {
+						TagTextField valueText = new TagTextField(element);
+						valueText.setBorder(new LineBorder(Color.LIGHT_GRAY));
+						valueText.addFocusListener(listener);
+						valueText.setForeground(Color.DARK_GRAY);
+						valueText.setColumns(10);
+						valueText.setBounds(37, positionY, TEXT_WIDTH, TEXT_HEIGHT);
+						positionY += DELTA_TEXT_LABEL;
+						this.add(valueText);
+					}
+				}
+		
+				if(element.getSelectedAttrArr()!=  null) {
+					ArrayList<XmlAttribute> attrArr = element.getSelectedAttrArr();
+					attrArr.forEach((a)->placeAttr(a));
+				}
 
-			
+				
+			}
+			this.setPreferredSize(new Dimension(420, positionY +10));
 		}
-		this.setPreferredSize(new Dimension(420, positionY +10));
+		
 
 	}
 	

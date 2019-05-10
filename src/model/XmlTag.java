@@ -17,9 +17,21 @@ public class XmlTag {
 	private Integer max;
 	private String defaultContent;
 	public final static int MAX_OCCURENCE_NUMBER = 1000;
+	private XmlNameSpace nameSpace;
 
 
 	
+	public XmlNameSpace getNameSpace() {
+		return nameSpace;
+	}
+
+
+	public XmlTag setNameSpace(XmlNameSpace nameSpace) {
+		this.nameSpace = nameSpace;
+		return this;
+	}
+
+
 	private XmlTag (XmlTagBuilder builder) {
 		this.name = builder.name;
 		this.content = builder.content;

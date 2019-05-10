@@ -8,10 +8,13 @@ import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.jdom2.Attribute;
 import org.jdom2.Document;
 import org.jdom2.Element;
+import org.jdom2.Namespace;
 
 import model.XmlAttribute;
+import model.XmlNameSpace;
 import model.XmlTag;
 
 public class WizardBusiness {
@@ -33,7 +36,11 @@ public class WizardBusiness {
 			try { xmlAttrArr = tagArr.get(i).getSelectedAttrArr();} 			// if attrArr != null
 			catch(Exception e) {}
 			Element el = new Element(xmlTag.getName());							// conversion of XmlTag into JDOM Element
-															
+			if(el.getNamespace() != null) {
+				XmlNameSpace xmlNs= xmlTag.getNameSpace();
+				Namespace ns = Namespace.getNamespace(xmlNs.getPrefix(), xmlNs.getUrl());
+				el.addNamespaceDeclaration(ns);
+			}
 	
 			if (xmlTag.getSelectedChildren() != null) {							// if element contains other tag
 				if( !xmlTag.getSelectedChildren().isEmpty() ) {
@@ -46,11 +53,8 @@ public class WizardBusiness {
 			
 			if(xmlAttrArr != null) {											// if tag contains attributes
 				for(int j = 0 ; j < xmlAttrArr.size(); j++) {
-					XmlAttribute xmlAttr = xmlAttrArr.get(j);
-					if(xmlAttr.isRequired() && xmlAttr.getValue() == "") {		// if attribute is required and attribute is empty
-						System.out.println("Attribute :" + xmlAttr.getName() + " is required");
-					}
-					if((String)xmlAttr.getValue() != null) {el.setAttribute(xmlAttr.getName(), (String)xmlAttr.getValue());}					
+					Attribute attribute = addAttribute(xmlAttrArr.get(j));
+					if (attribute != null) el.setAttribute(attribute);				
 				}
 			}
 			if( i == 0) { 														// element root
@@ -83,11 +87,8 @@ public class WizardBusiness {
 				ArrayList<XmlAttribute> xmlAttrArr =child.getSelectedAttrArr();
 				if(xmlAttrArr != null) {
 					for(int j = 0; j < xmlAttrArr.size(); j++) {
-						XmlAttribute xmlAttr = xmlAttrArr.get(j);
-						if(xmlAttr.isRequired() && xmlAttr.getValue() == "") {		// if attribute is required and attribute is empty
-							System.out.println("Attribute :" + xmlAttr.getName() + " is required");
-						}
-						childEl.setAttribute(xmlAttr.getName(), (String)xmlAttr.getValue());
+						Attribute attribute = addAttribute(xmlAttrArr.get(j));
+						if (attribute != null) childEl.setAttribute(attribute);
 					}
 					if (child.getSelectedChildren() != null) {						// if child tag contains children tag
 						parent.addContent( addChild(child));		// recursion
@@ -100,6 +101,27 @@ public class WizardBusiness {
 			}
 		}
 		return parent;
+	}
+	
+	
+	
+	private static Attribute addAttribute(XmlAttribute attr ) {
+		
+		XmlAttribute xmlAttr = attr;
+		Attribute attribute = null;;
+		if( (xmlAttr.isRequired() && xmlAttr.getValue() == "") || (xmlAttr.isRequired() && xmlAttr == null) ) {		// if attribute is required and attribute is empty
+			System.out.println("Attribute :" + xmlAttr.getName() + " is required");
+		}
+		if(xmlAttr.getNameSpace() != null) {
+			System.out.println("questo attributo ha il namespace" + xmlAttr.getName());
+			XmlNameSpace xmlNameSpace = xmlAttr.getNameSpace();
+			Namespace ns = Namespace.getNamespace(xmlNameSpace.getPrefix(), xmlNameSpace.getUrl());
+			attribute = new Attribute((String) xmlAttr.getName(),(String)  xmlAttr.getValue() , ns);
+		}
+		else {
+			attribute = new Attribute((String) xmlAttr.getName(),(String)  xmlAttr.getValue());
+		}
+		return attribute;
 	}
 	
 	

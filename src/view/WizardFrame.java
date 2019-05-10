@@ -57,7 +57,8 @@ public class WizardFrame extends JFrame {
 		session = Session.getInstance();
 		
 		steps = new ArrayList();
-		Package pac = new Package();      									
+		Package pac = new Package();  
+
 		pac.setSelectedAttrArr(pac.getAttrArr());
 		
 		steps.add(new Form(pac));

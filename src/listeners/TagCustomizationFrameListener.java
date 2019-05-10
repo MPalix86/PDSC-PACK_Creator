@@ -87,8 +87,8 @@ public class TagCustomizationFrameListener implements ItemListener, ActionListen
 														+ " Missing dependency : " + missingDependency.getName() + " </p><br>"
 														+ " <p> Do you want to continue </span></p></html>"); 
 			
-				
 				if(response) {
+					
 					XmlTag tag = tagBtn.getTag();
 					pdscWizardFrame.addStep(new Form(tag));
 					tagCustomizationFrame.dispose();

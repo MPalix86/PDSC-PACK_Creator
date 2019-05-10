@@ -6,7 +6,20 @@ public class XmlAttribute {
 	private String defaultValue;
 	private boolean required;
 	private Object possibleValues;
+	private XmlNameSpace nameSpace ;
 	
+	
+	public XmlNameSpace getNameSpace() {
+		return nameSpace;
+	}
+
+
+	public XmlAttribute setNameSpace(XmlNameSpace nameSpace) {
+		this.nameSpace = nameSpace;
+		return this;
+	}
+
+
 	public XmlAttribute (String name , String value ,  Object possibleValues, boolean required) {
 		this.name = name;
 		this.value = value;
