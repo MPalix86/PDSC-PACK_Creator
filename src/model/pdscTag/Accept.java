@@ -19,7 +19,6 @@ public class Accept extends XmlTag{
 		this.setName("accept");
 		
 		
-		
 		this.addAttr(new Dvendor().setRequired(false));
 		this.addAttr(new Dfamily().setRequired(false));
 		this.addAttr(new DsubFamily().setRequired(false));

@@ -15,6 +15,7 @@ public class XmlTag {
 	private  ArrayList<XmlTag> selectedChildren;
 	private XmlTag parent;
 	private Integer max;
+	private String defaultContent;
 	public final static int MAX_OCCURENCE_NUMBER = 1000;
 
 
@@ -27,6 +28,15 @@ public class XmlTag {
 		this.required = builder.required;
 	}
 	
+	
+	public XmlTag setDefaultContent(String content) {
+		this.defaultContent = content;
+		return this;
+	}
+	
+	public String getDefaultContent() {
+		return this.defaultContent;
+	}
 	
 	public XmlTag getParent() {
 		return parent;
@@ -45,8 +55,9 @@ public class XmlTag {
 	}
 
 
-	public void setSelectedChildren(ArrayList<XmlTag> selectedChildren) {
+	public XmlTag setSelectedChildren(ArrayList<XmlTag> selectedChildren) {
 		this.selectedChildren = selectedChildren;
+		return this;
 	}
 	
 	public void addSelecteChild(XmlTag tag) {
@@ -76,8 +87,10 @@ public class XmlTag {
 		return selectedAttrArr;
 	}
 
-	public void setSelectedAttrArr(ArrayList<XmlAttribute> selectedAttrArr) {
+	public XmlTag setSelectedAttrArr(ArrayList<XmlAttribute> selectedAttrArr) {
 		this.selectedAttrArr = selectedAttrArr;
+		return this;
+		
 	}
 
 
@@ -140,16 +153,19 @@ public class XmlTag {
 		this.children.add(child);
 	}
 	
-	public void setName(String name) {
+	public XmlTag setName(String name) {
 		this.name = name;
+		return this;
 	}
 	
-	public void setContent(String content) {
+	public XmlTag setContent(String content) {
 		this.content = content;
+		return this;
 	}
 	
-	public void setAttr(ArrayList<XmlAttribute> attrArr) {
+	public XmlTag setAttr(ArrayList<XmlAttribute> attrArr) {
 		this.attrArr = attrArr;
+		return this;
 	}
 	
 	public void addAttr(XmlAttribute attr) {

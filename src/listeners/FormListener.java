@@ -40,7 +40,7 @@ public class FormListener  implements FocusListener , ActionListener{
 		Document doc = WizardBusiness.writePdsc(tagArr); 
 		if(doc != null) {
 			String preview = FileBusiness.getDocumentPreview(doc);
-			session.getWizardFrame().setPreviewDocument(preview);
+			session.getWizardFrame().updateXmlPreviewPane(preview);
 		}
 		
 		
@@ -53,19 +53,20 @@ public class FormListener  implements FocusListener , ActionListener{
 		Document doc = WizardBusiness.writePdsc(tagArr);
 		if(doc != null) {
 			String preview = FileBusiness.getDocumentPreview(doc);
-			session.getWizardFrame().setPreviewDocument(preview);
+			session.getWizardFrame().updateXmlPreviewPane(preview);
 		}
 		
 	}
 
-	
-	
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource().getClass() == AttributeComboBox.class) {
 			AttributeComboBox comboBox = (AttributeComboBox) e.getSource();
 			comboBox.setAttrValue();
-			
+			ArrayList<XmlTag> tagArr = session.getWizardFrame().getTagArr();
+			Document doc = WizardBusiness.writePdsc(tagArr);
+			String preview = FileBusiness.getDocumentPreview(doc);
+			session.getWizardFrame().updateXmlPreviewPane(preview);
 		}
 		
 	}

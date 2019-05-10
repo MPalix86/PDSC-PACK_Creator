@@ -22,7 +22,6 @@ public class Require extends XmlTag {
 		//
 		this.setName("require");
 		
-		this.addChild(new Accept().setMax(MAX_OCCURENCE_NUMBER).setParent(this).setRequired(false));
 		this.addAttr(new Dvendor().setRequired(false));
 		this.addAttr(new Dfamily().setRequired(false));
 		this.addAttr(new DsubFamily().setRequired(false));

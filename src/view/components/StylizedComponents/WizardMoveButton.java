@@ -2,28 +2,26 @@ package view.Components.StylizedComponents;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Insets;
 
 import javax.swing.JButton;
 
-public class CustomButton extends JButton{
+public class WizardMoveButton extends JButton{
 
     private Color hoverBackgroundColor;
     private Color pressedBackgroundColor;
 
-    public CustomButton() {
+    public WizardMoveButton() {
         this(null);
     }
 
-    public CustomButton(String text) {
+    public WizardMoveButton(String text) {
         super(text);
-        this.setPressedBackgroundColor(new Color(52, 73, 94).brighter());
-        this.setBackground(new Color(52, 73, 94));
-        super.setBorderPainted(false);
+        this.setPressedBackgroundColor(Color.DARK_GRAY);
         this.setForeground(Color.WHITE);
-        this.setMargin(new Insets(5, 5, 5, 5));
-       
-        //this.setBorder(new LineBorder(Color.BLACK));
+        this.setBackground(new Color(52, 73, 94).brighter());
+        super.setBorderPainted(false);
+        
+      
     }
 
     @Override

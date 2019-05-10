@@ -3,6 +3,7 @@ package model;
 public class XmlAttribute {
 	private String name;
 	private String value;
+	private String defaultValue;
 	private boolean required;
 	private Object possibleValues;
 	
@@ -14,6 +15,13 @@ public class XmlAttribute {
 	}
 	
 	
+	public void setDefaultContent(String value) {
+		this.defaultValue = value;
+	}
+	
+	public String getDefaultContent() {
+		return this.defaultValue;
+	}
 	
 	public Object getPossibleValues() {
 		return possibleValues;

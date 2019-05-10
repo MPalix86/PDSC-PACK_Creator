@@ -86,13 +86,21 @@ public class TagCustomizationFrameListener implements ItemListener, ActionListen
 				boolean response = tagCustomizationFrame.yesNoWarningMessage("<html><p><span style=\"font-size: 14pt; color: #333333;\"> "
 														+ " Missing dependency : " + missingDependency.getName() + " </p><br>"
 														+ " <p> Do you want to continue </span></p></html>"); 
+			
+				
 				if(response) {
 					XmlTag tag = tagBtn.getTag();
-					tag.freeMemory();						/* THIS FUNCTION SET attrArr and children to null, be careful */
 					pdscWizardFrame.addStep(new Form(tag));
+					tagCustomizationFrame.dispose();
+					TagCustomizationFrame f = new TagCustomizationFrame(TagCustomizationBusiness.getClassInstanceFromClassName(tag.getClass().getName()));
 				}
 			}
-			else {pdscWizardFrame.addStep(new Form(tagBtn.getTag()));}
+			else {
+				XmlTag tag = tagBtn.getTag();
+				pdscWizardFrame.addStep(new Form(tag));
+				tagCustomizationFrame.dispose();
+				TagCustomizationFrame f = new TagCustomizationFrame(TagCustomizationBusiness.getClassInstanceFromClassName(tag.getClass().getName()));
+			}
 			
 		}
 	}

@@ -7,7 +7,6 @@ import java.awt.GridLayout;
 import java.io.File;
 import java.util.ArrayList;
 
-import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -25,31 +24,30 @@ import listeners.WizardFrameListener;
 import model.XmlTag;
 import model.pdscTag.Package;
 import view.Components.ModelComponents.xmlEditor.XmlTextPane;
+import view.Components.StylizedComponents.WizardMoveButton;
 import view.Components.wizardFrameComponents.FinalStepForm;
 import view.Components.wizardFrameComponents.Form;
 import view.Components.wizardFrameComponents.TagListBar;
 
 public class WizardFrame extends JFrame {
 	
-	private static JScrollPane leftScrollPane;
-	private static JScrollBar leftPanelScrollBar;
+	private static JScrollPane wizardScrollPane;
+	private static JScrollBar wizardScrollPaneScrollBar;
 	private static JScrollPane tagListScrollPane;
-	private static JScrollBar tagListPanelScrollBar;
-	private static JButton continueBtn;
-	private static JButton backBtn;
+
 	private static JPanel contentPane;								/* contentPane */
-	private static JPanel rightPanel;								/* rightPanel it's inside contentPane */
-	private static JPanel rightPanel_center_lv1;					/* rightPanel_center_lv1 it's inside rightPanel */
-	private static JPanel rightPanel_bottom_lv2;					/* rightPanel_bottom_lv1 it's inside rightPanel_center_lv1 */	
+	private static JPanel centerPanel;								/* centerPanel it's inside contentPane */
+	
+	private static JPanel leftPanelBottomButtonBar;					/* centerPanel_bottom_lv1 it's inside centerPanel_center_lv1 */	
 	private static JPanel leftPanel; 								/* contains actual step frame , it's inside contentPane*/						
-	private static JPanel stepBarPanel;								/* stepBarPanel it's inside contentPane */								
+		
 	private static ArrayList<JPanel> steps; 						/* contains all steps panel */
 	private static int step_number = 0;								/* current step number */						
-	private static XmlTextPane previewPane;						/* description label */
+	private static XmlTextPane xmlPreviewPane;						/* description label */
 	private static WizardFrameListener listener;
-	private JPanel tagListPanel;
-	private Session session;
-	private XmlTag pac; 
+	private static JPanel topPanel;
+	private static JPanel rightPanel;
+	private Session session; 
 	
 
 
@@ -59,11 +57,10 @@ public class WizardFrame extends JFrame {
 		session = Session.getInstance();
 		
 		steps = new ArrayList();
-		pac = new Package();      									// first step;
+		Package pac = new Package();      									
 		pac.setSelectedAttrArr(pac.getAttrArr());
 		
 		steps.add(new Form(pac));
-		//steps.add(new StepTwoFormContainer());
 		steps.add(new FinalStepForm());
 		
 		/* frame initial setup */
@@ -71,204 +68,271 @@ public class WizardFrame extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1026, 598);
 		
-			/* contentPane initial setup */
-			contentPane = new JPanel();
-			contentPane.setBackground(Color.WHITE);
-			contentPane.setBorder(new EmptyBorder(0, 0, 0, 0));
-				BorderLayout b = new BorderLayout(0, 0);
-				b.setHgap(0);
-				b.setVgap(0);
-			contentPane.setLayout(b);
-			setContentPane(contentPane); 
+		/* contentPane initial setup */
+		contentPane = new JPanel();
+		contentPane.setBackground(Color.WHITE);
+		contentPane.setBorder(new EmptyBorder(0,0,0,0));
+			BorderLayout b = new BorderLayout(0, 0);
+			b.setHgap(0);
+			b.setVgap(0);
+		contentPane.setLayout(b);
+		setContentPane(contentPane); 
 		
-			/* generate all component */
-			generateStepBar();
-			placeComponent();
+		/* generate and palce all component */
+		placeComponent();
 			
-			/* place all all component into contentPane */
-			contentPane.add(leftScrollPane, BorderLayout.WEST);  
-			contentPane.add(rightPanel, BorderLayout.CENTER);
-			contentPane.add(stepBarPanel, BorderLayout.SOUTH);
-			contentPane.revalidate();
-			contentPane.repaint();
+			
 			
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setVisible(true);
-		setListeners();
+	
 		session.setWizardFrame(this);
 		
 	}
 	
-	//--------------------------------------------------------------------------next()
-	public void next() {
-		if(step_number < steps.size()-1) { 
-			step_number += 1;
-		}
-		contentPane.remove(stepBarPanel);
-		contentPane.remove(leftScrollPane);
-		generateStepBar();
-		
-		leftPanel = new JPanel();			
-		leftPanel.setBackground(Color.WHITE);
-		leftPanel.setBorder(new EmptyBorder(0, 0, 0, 0));
-		leftPanel.add(steps.get(step_number));
-		leftScrollPane = new JScrollPane(leftPanel);
-		leftScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-		leftScrollPane.setBorder(new EmptyBorder(0, 0, 0, 0));
-		
-		contentPane.add(stepBarPanel, BorderLayout.SOUTH);
-		contentPane.add(leftScrollPane, BorderLayout.WEST);
-		contentPane.repaint();
-		contentPane.revalidate();
 
+	
+    /*
+	 * UI elements update function
+	 * this series of functions allow to update and repaint element in JFrame 
+	 */
+	
+	private void updateLeftPanel() {
+		contentPane.remove(leftPanel);
+		generateLeftPanel();
+		contentPane.add(leftPanel, BorderLayout.WEST);
+		repaintContentPane();
 	}
 	
-	//--------------------------------------------------------------------------back()
-	public void back() {
-		if(step_number > 0) { 
-			step_number -= 1;
-		}
-		contentPane.remove(stepBarPanel);
-		contentPane.remove(leftScrollPane);
-		generateStepBar();
-		
-		leftPanel = new JPanel();			
-		leftPanel.setBackground(Color.WHITE);
-		leftPanel.setBorder(new EmptyBorder(0, 0, 0, 0));
-		leftPanel.add(steps.get(step_number));
-		leftScrollPane = new JScrollPane(leftPanel);
-		leftScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-		leftScrollPane.setBorder(new EmptyBorder(0, 0, 0, 0));
-		
-		contentPane.add(stepBarPanel, BorderLayout.SOUTH);
-		contentPane.add(leftScrollPane, BorderLayout.WEST);
+	private void updateCenterPanel() {
+		contentPane.remove(centerPanel);
+		generateCenterPanel();
+		contentPane.add(centerPanel, BorderLayout.WEST);
+		repaintContentPane();
+	}
+	
+	private void updateTopPanel() {
+		contentPane.remove(topPanel);
+		generateTopPanel();
+		contentPane.add(topPanel, BorderLayout.NORTH);
+		repaintContentPane();
+	}
+
+	private void repaintContentPane() {
 		contentPane.repaint();
 		contentPane.revalidate();
 	}
 	
-	//--------------------------------------------------------------------------placeComponent()
-	private void placeComponent() {
+	
+	
+	/*
+	 * Ui element creation and setup function
+	 * this series of functions allow to update and repaint element in JFrame 
+	 */
+	
+	private void generateLeftPanel(){
 		
 		/* leftPanel initial setup */
 		leftPanel = new JPanel();			
 		leftPanel.setBackground(Color.WHITE);
-		leftPanel.setBorder(new EmptyBorder(0, 0, 0, 0));
-		leftPanel.add(steps.get(step_number));
-		leftScrollPane = new JScrollPane(leftPanel);
-		leftScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-		leftScrollPane.setBorder(new EmptyBorder(0, 0, 0, 0));
+		leftPanel.setBorder(new MatteBorder(0,0,0,2, new Color(52, 73, 94).brighter()));
+		leftPanel.setLayout(new BorderLayout());
 		
-		/* rightPanel initial setup */
-		rightPanel = new JPanel();
-		rightPanel.setBackground(new Color(52, 73, 94));
-		rightPanel.setSize(new Dimension(420,590));
-		rightPanel.setLayout(new BorderLayout(0, 0));
-		rightPanel.setBorder(new MatteBorder(0,0,0,0,Color.white));
 		
-			/* rightPanel_center_lv1 initial setup */
-			rightPanel_center_lv1 = new JPanel();
-			rightPanel_center_lv1.setBackground(Color.DARK_GRAY);
-			
-			/* setting up tag list Panel */
-			tagListScrollPane = new JScrollPane(new TagListBar());
-			
-			/* hide scrollbar into leftScrollPane, tagListScrollPane */
-			hideScrollBar();
-			
-		/* placement of stepBar, rightpanel_center, tagListPanel into rightPanel */
-		rightPanel.add(tagListScrollPane, BorderLayout.EAST);
-		rightPanel.add(rightPanel_center_lv1, BorderLayout.CENTER);
-		rightPanel_center_lv1.setLayout(new BorderLayout(0, 0));
-		
-			/* setting up rightpanel_bottom_lv1, panel that contains bar with "continue" and "back" buttons*/
-			rightPanel_bottom_lv2 = new JPanel();
-			rightPanel_bottom_lv2.setBorder(new MatteBorder(0, 0, 0, 0, (Color) new Color(255, 255, 255)));
-			rightPanel_bottom_lv2.setBackground(Color.DARK_GRAY);
-			rightPanel_bottom_lv2.setLayout(new GridLayout(0, 5));
-			
-			
-		
-				/* generating void panel for rightpanel_bottom_lv1 to force buttons on right side*/
-				for(int i = 0; i < 3; i++) {
-					JPanel panel_1 = new JPanel();
-					panel_1.setBackground(Color.DARK_GRAY);
-					panel_1.setBorder(new EmptyBorder(0, 0, 0, 0));
-					rightPanel_bottom_lv2.add(panel_1);
-				}
-			
-				/* setting up backBtn */
-				backBtn = new JButton("back");
-				backBtn.setForeground(Color.DARK_GRAY);
-				backBtn.setBackground(Color.WHITE);
-			
-				/* setting up continueBtn */
-				continueBtn = new JButton("Continue");
-				continueBtn.setForeground(Color.DARK_GRAY);
-				continueBtn.setBackground(Color.WHITE);
-			
-			rightPanel_bottom_lv2.add(backBtn);
-			rightPanel_bottom_lv2.add(continueBtn);
-			
+			/* setting up backButton */
+			WizardMoveButton backButton = new WizardMoveButton("< Back");
+			backButton.addActionListener(listener);
+			backButton.setActionCommand("back");
 	
-				previewPane = new XmlTextPane();
-				previewPane.setBackground(Color.WHITE);
-				previewPane.setEditable(false);
-				JPanel xmlEditoriPane = new JPanel();
-				xmlEditoriPane.add(previewPane);
-				JScrollPane XmEditorlScrollPane = new JScrollPane(xmlEditoriPane);
-				xmlEditoriPane.setBackground(Color.white);
-				xmlEditoriPane.setBorder(new MatteBorder(0,0,0,0, Color.white));
-				previewPane.setBorder(new MatteBorder(0,0,0,0, Color.white));
-				XmEditorlScrollPane.setBorder(new MatteBorder(0,0,0,0, Color.white));
+			/* setting up nextButton */
+			WizardMoveButton nextButton = new WizardMoveButton("Next >");
+			nextButton.addActionListener(listener);
+			nextButton.setActionCommand("continue");
 		
-		rightPanel_center_lv1.add(XmEditorlScrollPane, BorderLayout.CENTER);
-		rightPanel_center_lv1.add(rightPanel_bottom_lv2, BorderLayout.SOUTH);
+			/* adding button into leftPanelBottomButtonBar */
+			leftPanelBottomButtonBar = new JPanel();
+			leftPanelBottomButtonBar.setLayout(new GridLayout(0,2));
+			leftPanelBottomButtonBar.setBorder(new EmptyBorder(0,0,0,0));
+			leftPanelBottomButtonBar.setBackground(Color.WHITE);
+			leftPanelBottomButtonBar.add(backButton);
+			leftPanelBottomButtonBar.add(nextButton);
+			
+			/* setting up wizardPane */
+			JPanel wizardPane = new JPanel();
+			wizardPane.setBorder(new EmptyBorder(0,0,0,0));
+			wizardPane.setBackground(Color.WHITE);
+			wizardPane.setLayout(new BorderLayout());
+			wizardPane.add(steps.get(step_number), BorderLayout.CENTER);
+			
+			/* setting up wizardScrollPaneScrollBar */
+	        wizardScrollPaneScrollBar = new JScrollBar(JScrollBar.VERTICAL) {
+
+	            @Override
+	            public boolean isVisible() {
+	                return true;
+	            }
+	        }; 
+	        wizardScrollPaneScrollBar.setUnitIncrement(16);
+			
+			/* setting up wizardScrollPane*/
+			wizardScrollPane = new JScrollPane(wizardPane);
+			wizardScrollPane.setBorder(new EmptyBorder(0,0,0,0));
+			wizardScrollPane.setVerticalScrollBar(wizardScrollPaneScrollBar);
+			wizardScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		    wizardScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
 		
+		/* adding alll elements into leftPanel*/
+		leftPanel.add(leftPanelBottomButtonBar,BorderLayout.SOUTH);
+		leftPanel.add(wizardScrollPane,BorderLayout.CENTER);
 	}
 	
+	private void generateCenterPanel() {
+		
+		/* centerPanel initial setup */
+		centerPanel = new JPanel();
+		centerPanel.setBackground(new Color(52, 73, 94));
+		centerPanel.setSize(new Dimension(420,590));
+		centerPanel.setLayout(new BorderLayout(0, 0));
+		centerPanel.setBorder(new EmptyBorder(0,0,0,0));
+			
+			/* setting up xmlPreviewPane */
+			xmlPreviewPane = new XmlTextPane();
+			xmlPreviewPane.setBorder(new EmptyBorder(0,0,0,0));
+			xmlPreviewPane.setBackground(Color.WHITE);
+			xmlPreviewPane.setEditable(false);
+		
+			/* setting up XmlPreviewScrollPane */
+			JScrollPane XmlPreviewScrollPane = new JScrollPane(xmlPreviewPane);
+			XmlPreviewScrollPane.setBackground(Color.WHITE);
+			XmlPreviewScrollPane.setBorder(new EmptyBorder(0,0,0,0));
+			
+				
+		/* placement of previewPanel, tagListPanel into centerPanel */
+		centerPanel.add(tagListScrollPane, BorderLayout.EAST);
+		centerPanel.add(XmlPreviewScrollPane, BorderLayout.CENTER);
 	
-	//--------------------------------------------------------------------------generateStepBar()
-	private void generateStepBar() {
-		stepBarPanel = new JPanel();
-		stepBarPanel.setBackground(UIManager.getColor(Color.WHITE));
-		stepBarPanel.setMinimumSize(new Dimension(10, 200));
-		stepBarPanel.setLayout(new GridLayout(1,steps.size()));
+	
+	}
+	
+	private void generateRightPanel() {
+		/* setting up rightPanel */
+		rightPanel = new JPanel();
+		rightPanel.setLayout(new BorderLayout());
+		rightPanel.setBackground(Color.WHITE);
+		
+		/* setting up tagListPanelScrollBar Panel */
+		JScrollBar tagListScrollPaneScrollBar = new JScrollBar(JScrollBar.VERTICAL) {
+
+            @Override
+            public boolean isVisible() {
+                return true;
+            }
+        }; 
+        tagListScrollPaneScrollBar.setUnitIncrement(16);
+        
+		/* setting up tagListScrollPane */
+		tagListScrollPane = new JScrollPane(new TagListBar());
+		tagListScrollPane.setVerticalScrollBar(tagListScrollPaneScrollBar);
+        tagListScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        tagListScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
+        tagListScrollPane.setBorder(new MatteBorder(0,2,0,0, new Color(52, 73, 94)));
+        
+        rightPanel.add(tagListScrollPane, BorderLayout.CENTER);
+	}
+	
+	private void generateTopPanel() {
+		
+		topPanel = new JPanel();
+		topPanel.setBackground(UIManager.getColor(Color.WHITE));
+		topPanel.setMinimumSize(new Dimension(10, 200));
+		topPanel.setLayout(new GridLayout(1,steps.size()));
+		topPanel.setBorder(new EmptyBorder(0,0,0,0));
 		for (int i = 0 ; i < steps.size(); i++) {
 			JPanel panel = new JPanel();
 			if(i <= step_number) {
-				panel.setBackground(new Color(30, 144, 255));
+				panel.setBackground(new Color(52, 73, 94).brighter());
 			}
 			else {
 				panel.setBackground(UIManager.getColor(Color.WHITE));
 			}
-			stepBarPanel.add(panel);
+			topPanel.add(panel);
 		}
+	
+	}
+	
+	private void placeComponent() {
+		
+		/* generating main panels */
+		generateLeftPanel();
+		generateRightPanel();
+		generateCenterPanel();
+		generateTopPanel();
+		
+		/* place all all component into contentPane */
+		contentPane.add(leftPanel, BorderLayout.WEST);  
+		contentPane.add(centerPanel, BorderLayout.CENTER);
+		contentPane.add(topPanel, BorderLayout.NORTH);
+		contentPane.add(rightPanel, BorderLayout.EAST);
+		
+		/* repaint ContentPane */
+		repaintContentPane();
 	}
 	
 	
-	//--------------------------------------------------------------------------UpdateComponent()
-	private void UpdateComponent() {
-		contentPane.removeAll();
-			generateStepBar();
-			placeComponent();
-		contentPane.add(leftScrollPane, BorderLayout.WEST);  
-		contentPane.add(rightPanel, BorderLayout.CENTER);
-		contentPane.add(stepBarPanel, BorderLayout.SOUTH);
-		contentPane.revalidate();
-		contentPane.repaint();	
+	
+	/*
+	 * Public function
+	 * this series of function allow to modify UI from outside
+	 */
+	
+	public static ArrayList<JPanel> getSteps() {
+		return steps;
+	}
+	
+	public void addStep(JPanel step) {
+		int index = steps.size();
+		steps.add(index - 1, step);
+		updateLeftPanel();
+		updateTopPanel();
+		repaintContentPane();
+	}
+	
+	public ArrayList<XmlTag> getTagArr(){
 		session.setWizardFrame(this);
-		setListeners();
+		ArrayList<XmlTag> tagArr = new ArrayList<XmlTag>();
+		for (int i = 0; i < steps.size() - 1; i++) {   					/* -1 because last steps have no tag */
+			Form step = (Form) steps.get(i);
+			tagArr.add(step.getTag());
+		}
+		return tagArr;
+	}
+	
+
+	public void next() {
+		if(step_number < steps.size()-1) { 
+			step_number += 1;
+		}
+		updateLeftPanel();
+		updateTopPanel();
+		repaintContentPane();
 	}
 	
 	
-	//--------------------------------------------------------------------------printDescription()
-	public void setPreviewDocument(String preview) {
-		previewPane.getDocument().putProperty(DefaultEditorKit.EndOfLineStringProperty, "\n");
-		previewPane.setText(preview);
-		previewPane.revalidate();
+	public void back() {
+		if(step_number > 0) { 
+			step_number -= 1;
+		}
+		updateLeftPanel();
+		updateTopPanel();
+		repaintContentPane();
 	}
 	
-	//--------------------------------------------------------------------------showNewFileFrame()
+	public void updateXmlPreviewPane(String preview) {
+		xmlPreviewPane.getDocument().putProperty(DefaultEditorKit.EndOfLineStringProperty, "\n");
+		xmlPreviewPane.setText(preview);
+		xmlPreviewPane.revalidate();
+	}
+	
 	public File showNewFileFrame() {
 		JFileChooser fileChooser = new JFileChooser();
 			fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
@@ -284,73 +348,6 @@ public class WizardFrame extends JFrame {
 		}
 		else if(val == JFileChooser.CANCEL_OPTION) {}
 		return null;
-	}
-	
-	//--------------------------------------------------------------------------setListeners()
-	private void setListeners() {
-		continueBtn.addActionListener(listener);
-		continueBtn.setActionCommand("continue");
-		backBtn.addActionListener(listener);
-		backBtn.setActionCommand("back");
-	}
-	
-	//--------------------------------------------------------------------------getSteps()
-	public static ArrayList<JPanel> getSteps() {
-		return steps;
-	}
-	
-	
-	//--------------------------------------------------------------------------getSteps()
-	public void addStep(JPanel step) {
-		int index = steps.size();
-		steps.add(index - 1, step);
-		
-		contentPane.remove(stepBarPanel);
-		contentPane.remove(leftPanel);
-		generateStepBar();
-		contentPane.add(stepBarPanel, BorderLayout.SOUTH);
-		contentPane.add(leftScrollPane, BorderLayout.WEST);
-		contentPane.repaint();
-		contentPane.revalidate();
-		
-		//this.UpdateComponent();
-	}
-	
-	//--------------------------------------------------------------------------setListeners()
-	private void hideScrollBar() {
-		tagListPanelScrollBar = new JScrollBar(JScrollBar.VERTICAL) {
-
-            @Override
-            public boolean isVisible() {
-                return true;
-            }
-        }; 
-        tagListPanelScrollBar.setUnitIncrement(16);
-        tagListScrollPane.setVerticalScrollBar(tagListPanelScrollBar);
-        tagListScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-        tagListScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
-        
-        leftPanelScrollBar = new JScrollBar(JScrollBar.VERTICAL) {
-
-            @Override
-            public boolean isVisible() {
-                return true;
-            }
-        }; 
-        leftPanelScrollBar.setUnitIncrement(16);
-        leftScrollPane.setVerticalScrollBar(leftPanelScrollBar);
-        leftScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-        leftScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
-	}
-	
-	public ArrayList<XmlTag> getTagArr(){
-		session.setWizardFrame(this);
-		ArrayList<XmlTag> tagArr = new ArrayList<XmlTag>();
-		for (int i = 0; i < steps.size() - 1; i++) {   					/* because last steps is final step without any tag */
-			Form step = (Form) steps.get(i);
-			tagArr.add(step.getTag());
-		}
-		return tagArr;
 	}
 	
 	
