@@ -10,21 +10,21 @@ import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
-import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
-import javax.swing.JTextPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.MatteBorder;
+import javax.swing.text.DefaultEditorKit;
 
 import business.Session;
 import listeners.WizardFrameListener;
 import model.XmlTag;
 import model.pdscTag.Package;
+import view.Components.ModelComponents.xmlEditor.XmlTextPane;
 import view.Components.wizardFrameComponents.FinalStepForm;
 import view.Components.wizardFrameComponents.Form;
 import view.Components.wizardFrameComponents.TagListBar;
@@ -40,15 +40,14 @@ public class WizardFrame extends JFrame {
 	private static JPanel contentPane;								/* contentPane */
 	private static JPanel rightPanel;								/* rightPanel it's inside contentPane */
 	private static JPanel rightPanel_center_lv1;					/* rightPanel_center_lv1 it's inside rightPanel */
-	private static JPanel rightPanel_bottom_lv1;					/* rightPanel_bottom_lv1 it's inside rightPanel_center_lv1 */	
+	private static JPanel rightPanel_bottom_lv2;					/* rightPanel_bottom_lv1 it's inside rightPanel_center_lv1 */	
 	private static JPanel leftPanel; 								/* contains actual step frame , it's inside contentPane*/						
 	private static JPanel stepBarPanel;								/* stepBarPanel it's inside contentPane */								
 	private static ArrayList<JPanel> steps; 						/* contains all steps panel */
 	private static int step_number = 0;								/* current step number */						
-	private static JTextPane descriptionPane;						/* description label */
+	private static XmlTextPane previewPane;						/* description label */
 	private static WizardFrameListener listener;
 	private JPanel tagListPanel;
-	private JList tagList;
 	private Session session;
 	private XmlTag pac; 
 	
@@ -105,7 +104,22 @@ public class WizardFrame extends JFrame {
 		if(step_number < steps.size()-1) { 
 			step_number += 1;
 		}
-		UpdateComponent();
+		contentPane.remove(stepBarPanel);
+		contentPane.remove(leftScrollPane);
+		generateStepBar();
+		
+		leftPanel = new JPanel();			
+		leftPanel.setBackground(Color.WHITE);
+		leftPanel.setBorder(new EmptyBorder(0, 0, 0, 0));
+		leftPanel.add(steps.get(step_number));
+		leftScrollPane = new JScrollPane(leftPanel);
+		leftScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		leftScrollPane.setBorder(new EmptyBorder(0, 0, 0, 0));
+		
+		contentPane.add(stepBarPanel, BorderLayout.SOUTH);
+		contentPane.add(leftScrollPane, BorderLayout.WEST);
+		contentPane.repaint();
+		contentPane.revalidate();
 
 	}
 	
@@ -114,7 +128,22 @@ public class WizardFrame extends JFrame {
 		if(step_number > 0) { 
 			step_number -= 1;
 		}
-		UpdateComponent();
+		contentPane.remove(stepBarPanel);
+		contentPane.remove(leftScrollPane);
+		generateStepBar();
+		
+		leftPanel = new JPanel();			
+		leftPanel.setBackground(Color.WHITE);
+		leftPanel.setBorder(new EmptyBorder(0, 0, 0, 0));
+		leftPanel.add(steps.get(step_number));
+		leftScrollPane = new JScrollPane(leftPanel);
+		leftScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		leftScrollPane.setBorder(new EmptyBorder(0, 0, 0, 0));
+		
+		contentPane.add(stepBarPanel, BorderLayout.SOUTH);
+		contentPane.add(leftScrollPane, BorderLayout.WEST);
+		contentPane.repaint();
+		contentPane.revalidate();
 	}
 	
 	//--------------------------------------------------------------------------placeComponent()
@@ -134,8 +163,9 @@ public class WizardFrame extends JFrame {
 		rightPanel.setBackground(new Color(52, 73, 94));
 		rightPanel.setSize(new Dimension(420,590));
 		rightPanel.setLayout(new BorderLayout(0, 0));
+		rightPanel.setBorder(new MatteBorder(0,0,0,0,Color.white));
 		
-			/* rightPanel_center initial setup */
+			/* rightPanel_center_lv1 initial setup */
 			rightPanel_center_lv1 = new JPanel();
 			rightPanel_center_lv1.setBackground(Color.DARK_GRAY);
 			
@@ -150,19 +180,20 @@ public class WizardFrame extends JFrame {
 		rightPanel.add(rightPanel_center_lv1, BorderLayout.CENTER);
 		rightPanel_center_lv1.setLayout(new BorderLayout(0, 0));
 		
-			/* setting up rightpanel_bottom_lv1 */
-			rightPanel_bottom_lv1 = new JPanel();
-			rightPanel_bottom_lv1.setBorder(new MatteBorder(1, 0, 0, 0, (Color) new Color(255, 255, 255)));
-			rightPanel_bottom_lv1.setBackground(Color.DARK_GRAY);
-			rightPanel_center_lv1.add(rightPanel_bottom_lv1, BorderLayout.SOUTH);
-			rightPanel_bottom_lv1.setLayout(new GridLayout(0, 5));
+			/* setting up rightpanel_bottom_lv1, panel that contains bar with "continue" and "back" buttons*/
+			rightPanel_bottom_lv2 = new JPanel();
+			rightPanel_bottom_lv2.setBorder(new MatteBorder(0, 0, 0, 0, (Color) new Color(255, 255, 255)));
+			rightPanel_bottom_lv2.setBackground(Color.DARK_GRAY);
+			rightPanel_bottom_lv2.setLayout(new GridLayout(0, 5));
+			
+			
 		
-				/* generating void panel */
+				/* generating void panel for rightpanel_bottom_lv1 to force buttons on right side*/
 				for(int i = 0; i < 3; i++) {
 					JPanel panel_1 = new JPanel();
 					panel_1.setBackground(Color.DARK_GRAY);
 					panel_1.setBorder(new EmptyBorder(0, 0, 0, 0));
-					rightPanel_bottom_lv1.add(panel_1);
+					rightPanel_bottom_lv2.add(panel_1);
 				}
 			
 				/* setting up backBtn */
@@ -175,13 +206,23 @@ public class WizardFrame extends JFrame {
 				continueBtn.setForeground(Color.DARK_GRAY);
 				continueBtn.setBackground(Color.WHITE);
 			
-			rightPanel_bottom_lv1.add(backBtn);
-			rightPanel_bottom_lv1.add(continueBtn);
+			rightPanel_bottom_lv2.add(backBtn);
+			rightPanel_bottom_lv2.add(continueBtn);
+			
+	
+				previewPane = new XmlTextPane();
+				previewPane.setBackground(Color.WHITE);
+				previewPane.setEditable(false);
+				JPanel xmlEditoriPane = new JPanel();
+				xmlEditoriPane.add(previewPane);
+				JScrollPane XmEditorlScrollPane = new JScrollPane(xmlEditoriPane);
+				xmlEditoriPane.setBackground(Color.white);
+				xmlEditoriPane.setBorder(new MatteBorder(0,0,0,0, Color.white));
+				previewPane.setBorder(new MatteBorder(0,0,0,0, Color.white));
+				XmEditorlScrollPane.setBorder(new MatteBorder(0,0,0,0, Color.white));
 		
-		descriptionPane = new JTextPane();
-		descriptionPane.setForeground(Color.WHITE);
-		descriptionPane.setBackground(Color.DARK_GRAY);
-		rightPanel_center_lv1.add(descriptionPane, BorderLayout.CENTER);
+		rightPanel_center_lv1.add(XmEditorlScrollPane, BorderLayout.CENTER);
+		rightPanel_center_lv1.add(rightPanel_bottom_lv2, BorderLayout.SOUTH);
 		
 	}
 	
@@ -221,9 +262,10 @@ public class WizardFrame extends JFrame {
 	
 	
 	//--------------------------------------------------------------------------printDescription()
-	public void printDescription(String text) {
-		descriptionPane.setText("");
-		descriptionPane.setText(text);
+	public void setPreviewDocument(String preview) {
+		previewPane.getDocument().putProperty(DefaultEditorKit.EndOfLineStringProperty, "\n");
+		previewPane.setText(preview);
+		previewPane.revalidate();
 	}
 	
 	//--------------------------------------------------------------------------showNewFileFrame()
@@ -261,8 +303,17 @@ public class WizardFrame extends JFrame {
 	//--------------------------------------------------------------------------getSteps()
 	public void addStep(JPanel step) {
 		int index = steps.size();
-		this.steps.add(index - 1, step);
-		this.UpdateComponent();
+		steps.add(index - 1, step);
+		
+		contentPane.remove(stepBarPanel);
+		contentPane.remove(leftPanel);
+		generateStepBar();
+		contentPane.add(stepBarPanel, BorderLayout.SOUTH);
+		contentPane.add(leftScrollPane, BorderLayout.WEST);
+		contentPane.repaint();
+		contentPane.revalidate();
+		
+		//this.UpdateComponent();
 	}
 	
 	//--------------------------------------------------------------------------setListeners()
@@ -294,10 +345,8 @@ public class WizardFrame extends JFrame {
 	
 	public ArrayList<XmlTag> getTagArr(){
 		session.setWizardFrame(this);
-		
 		ArrayList<XmlTag> tagArr = new ArrayList<XmlTag>();
-		for (int i = 0; i < steps.size() - 1; i++) {   /* because last steps is final step without any tag */
-			
+		for (int i = 0; i < steps.size() - 1; i++) {   					/* because last steps is final step without any tag */
 			Form step = (Form) steps.get(i);
 			tagArr.add(step.getTag());
 		}

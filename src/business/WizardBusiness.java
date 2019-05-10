@@ -49,7 +49,6 @@ public class WizardBusiness {
 					XmlAttribute xmlAttr = xmlAttrArr.get(j);
 					if(xmlAttr.isRequired() && xmlAttr.getValue() == "") {		// if attribute is required and attribute is empty
 						System.out.println("Attribute :" + xmlAttr.getName() + " is required");
-						return null;
 					}
 					if((String)xmlAttr.getValue() != null) {el.setAttribute(xmlAttr.getName(), (String)xmlAttr.getValue());}					
 				}
@@ -82,20 +81,21 @@ public class WizardBusiness {
 				XmlTag child = xmlChildren.get(i);
 				Element childEl = new Element(child.getName());
 				ArrayList<XmlAttribute> xmlAttrArr =child.getSelectedAttrArr();
-				for(int j = 0; j < xmlAttrArr.size(); j++) {
-					XmlAttribute xmlAttr = xmlAttrArr.get(j);
-					if(xmlAttr.isRequired() && xmlAttr.getValue() == "") {		// if attribute is required and attribute is empty
-						System.out.println("Attribute :" + xmlAttr.getName() + " is required");
-						return null;
+				if(xmlAttrArr != null) {
+					for(int j = 0; j < xmlAttrArr.size(); j++) {
+						XmlAttribute xmlAttr = xmlAttrArr.get(j);
+						if(xmlAttr.isRequired() && xmlAttr.getValue() == "") {		// if attribute is required and attribute is empty
+							System.out.println("Attribute :" + xmlAttr.getName() + " is required");
+						}
+						childEl.setAttribute(xmlAttr.getName(), (String)xmlAttr.getValue());
 					}
-					childEl.setAttribute(xmlAttr.getName(), (String)xmlAttr.getValue());
-				}
-				if (child.getSelectedChildren() != null) {						// if child tag contains children tag
-					parent.addContent( addChild(child));		// recursion
-				}
-				else {															// if child tag does not contains children tag
-					childEl.setText(child.getContent());
-					parent.addContent(childEl);
+					if (child.getSelectedChildren() != null) {						// if child tag contains children tag
+						parent.addContent( addChild(child));		// recursion
+					}
+					else {															// if child tag does not contains children tag
+						childEl.setText(child.getContent());
+						parent.addContent(childEl);
+					}
 				}
 			}
 		}
@@ -129,6 +129,9 @@ public class WizardBusiness {
 		    }
 		}
 	}
+	
+	
+
 	
 	
 	

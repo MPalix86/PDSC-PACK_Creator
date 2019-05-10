@@ -10,6 +10,7 @@ public class TagTextField extends JTextField {
 	public TagTextField(XmlTag tag){
 		super();
 		this.tag = tag;
+		this.tag.setContent("");
 	}
 	
 	public void setTagContent(){

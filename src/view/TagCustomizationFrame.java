@@ -34,7 +34,7 @@ public class TagCustomizationFrame extends JFrame {
 	 */
 	public TagCustomizationFrame(XmlTag parent) {
 		UIManager UI=new UIManager();
-		 UI.put("OptionPane.background",new ColorUIResource(255,255,255));
+		 UI.put("OptionPane.background",new ColorUIResource(255,255,255));    /* JOPTIOPANE COLOR */
 		 UI.put("Panel.background",new ColorUIResource(255,255,255));
 		 
 		this.parent = parent;

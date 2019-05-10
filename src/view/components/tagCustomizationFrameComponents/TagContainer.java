@@ -1,21 +1,13 @@
 package view.Components.tagCustomizationFrameComponents;
 
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.util.ArrayList;
+import java.awt.Color;
 
-import javax.swing.Box;
-import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 
 import listeners.TagCustomizationFrameListener;
-import model.XmlAttribute;
-import java.awt.*;
-
 import model.XmlTag;
-import model.XmlTagContent;
 import net.miginfocom.swing.MigLayout;
 import view.Components.StylizedComponents.CollapsablePanel;
 

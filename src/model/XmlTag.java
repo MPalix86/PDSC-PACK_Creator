@@ -172,6 +172,12 @@ public class XmlTag {
 		return this;
 	}
 	
+	public void freeMemory() {
+		this.attrArr = null;
+		this.children = null;
+		this.parent = null;
+		this.max = null;
+	}
 	
 	
 	
@@ -221,6 +227,8 @@ public class XmlTag {
 		public XmlTag build(){
 			return new XmlTag(this); 
 		}
+		
+
 
 	}
 }

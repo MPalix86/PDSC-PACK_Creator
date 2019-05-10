@@ -1,11 +1,12 @@
 package business;
-import java.io.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.ArrayList;
 
-import javax.swing.JOptionPane;
-
-import org.jdom2.*;
-import org.jdom2.input.SAXBuilder;
+import org.jdom2.Document;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 
@@ -91,6 +92,16 @@ public class FileBusiness {
         } 
         
 		
+	}
+	
+	
+	public static String getDocumentPreview(Document doc) {
+		XMLOutputter xmlOutputter = new XMLOutputter(Format.getPrettyFormat());
+		String preview = xmlOutputter.outputString(doc);
+		if(preview != null) {
+			return xmlOutputter.outputString(doc);
+		}
+		else return "";
 	}
 	
 

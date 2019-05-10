@@ -49,8 +49,8 @@ public class WizardFrameListener implements ActionListener {
 				this.wizardFrame = session.getWizardFrame();
 				ArrayList<XmlTag> tagArr = wizardFrame.getTagArr();
 				Document doc = WizardBusiness.writePdsc(tagArr);
-				
 				response = FileBusiness.createFile(destinationPath.toString() , "PDSC", doc);
+				
 				ext = "PDSC";
 			}
 			else { // Operation cancelled || some error occurred 

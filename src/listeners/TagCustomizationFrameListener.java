@@ -11,11 +11,11 @@ import business.Session;
 import business.TagCustomizationBusiness;
 import model.XmlAttribute;
 import model.XmlTag;
+import view.TagCustomizationFrame;
 import view.WizardFrame;
 import view.Components.ModelComponents.AttributeCheckBox;
 import view.Components.ModelComponents.TagBtn;
 import view.Components.wizardFrameComponents.Form;
-import view.TagCustomizationFrame;
 
 public class TagCustomizationFrameListener implements ItemListener, ActionListener{
 	private TagCustomizationFrame tagCustomizationFrame;
@@ -83,12 +83,14 @@ public class TagCustomizationFrameListener implements ItemListener, ActionListen
 		if(command == "add") {
 			XmlTag missingDependency = TagCustomizationBusiness.dependencyCheck(tagBtn.getTag()); 
 			if(missingDependency != null) {
-				boolean flag = tagCustomizationFrame.yesNoWarningMessage("<html><p><span style=\"font-size: 14pt; color: #333333;\"> "
+				boolean response = tagCustomizationFrame.yesNoWarningMessage("<html><p><span style=\"font-size: 14pt; color: #333333;\"> "
 														+ " Missing dependency : " + missingDependency.getName() + " </p><br>"
 														+ " <p> Do you want to continue </span></p></html>"); 
-				
-				if(flag) pdscWizardFrame.addStep(new Form(tagBtn.getTag()));
-				
+				if(response) {
+					XmlTag tag = tagBtn.getTag();
+					tag.freeMemory();						/* THIS FUNCTION SET attrArr and children to null, be careful */
+					pdscWizardFrame.addStep(new Form(tag));
+				}
 			}
 			else {pdscWizardFrame.addStep(new Form(tagBtn.getTag()));}
 			

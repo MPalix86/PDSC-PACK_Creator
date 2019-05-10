@@ -9,6 +9,7 @@ public class AttributeTextField extends JTextField{
 	
 	public AttributeTextField(XmlAttribute attr) {
 		this.attr = attr;
+		this.attr.setValue("");
 	}
 	
 	public void setAttrValue() {

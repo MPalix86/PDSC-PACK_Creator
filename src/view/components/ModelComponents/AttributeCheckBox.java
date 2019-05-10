@@ -14,6 +14,7 @@ public class AttributeCheckBox extends JCheckBox{
 		this.tag = tag;
 		this.attr = attr;
 		super.setText(attr.getName());
+		
 	}
 
 	public XmlTag getTag() {
