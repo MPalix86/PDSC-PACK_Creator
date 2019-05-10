@@ -40,25 +40,37 @@ public class Form extends JPanel{
 	
 	private static int positionY ;
 	
-	public Form(XmlTag tag) {
+	public Form(ArrayList<XmlTag> tagArr) {
 		this.listener = new FormListener(this);
 		positionY = 49;
-		this.tag = tag;
+		this.tagArr = tagArr;
 		setLayout(null);
 		this.setBackground(Color.WHITE);
 		
 		placeComponents();
 	}
 	
-	public Form(XmlTag tag, FormListener listener) {
+	public Form(ArrayList<XmlTag> tagArr, FormListener listener) {
 		this.listener = listener;
 		positionY = 49;
-		this.tag = tag;
+		this.tagArr = tagArr;
 		setLayout(null);
 		this.setBackground(Color.WHITE);
 		
 		placeComponents();
 	}
+	
+	public Form(XmlTag tag) {
+		this.listener = new FormListener(this);
+		positionY = 49;
+		this.tagArr = new ArrayList<XmlTag>();
+		tagArr.add(tag);
+		setLayout(null);
+		this.setBackground(Color.WHITE);
+		
+		placeComponents();
+	}
+
 	
 	private void placeAttr(XmlAttribute attr) {
 			JLabel attrLabel = new JLabel();
@@ -159,12 +171,12 @@ public class Form extends JPanel{
 	}
 	
 	
-	public XmlTag getTag() {
-		return tag;
+	public ArrayList<XmlTag>getTagArr() {
+		return tagArr;
 	}
 
-	public void setTag(XmlTag tag) {
-		this.tag = tag;
+	public void setTagArr(ArrayList<XmlTag> tagArr) {
+		this.tagArr = tagArr;
 	}
 	
 }

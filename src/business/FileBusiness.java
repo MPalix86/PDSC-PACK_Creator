@@ -31,8 +31,8 @@ public class FileBusiness {
 				if (doc == null) {
 					doc = new Document();
 				}
-				
-		        XMLOutputter xmlOutputter = new XMLOutputter(Format.getPrettyFormat());
+				Format format = Format.getPrettyFormat();
+		        XMLOutputter xmlOutputter = new XMLOutputter(format);
 		        xmlOutputter.output(doc, new FileOutputStream(file));
 		        Response response = new Response.ResponseBuilder().status(FILE_CREATED_CORRECTLY).message("file created correctly").build();
 		        return response;

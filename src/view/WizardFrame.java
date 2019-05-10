@@ -17,7 +17,6 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.MatteBorder;
-import javax.swing.text.DefaultEditorKit;
 
 import business.Session;
 import listeners.WizardFrameListener;
@@ -39,10 +38,10 @@ public class WizardFrame extends JFrame {
 	private static JPanel centerPanel;								/* centerPanel it's inside contentPane */
 	
 	private static JPanel leftPanelBottomButtonBar;					/* centerPanel_bottom_lv1 it's inside centerPanel_center_lv1 */	
-	private static JPanel leftPanel; 								/* contains actual step frame , it's inside contentPane*/						
+	private static JPanel leftPanel; 								/* contains actual form frame , it's inside contentPane*/						
 		
 	private static ArrayList<JPanel> steps; 						/* contains all steps panel */
-	private static int step_number = 0;								/* current step number */						
+	private static int step_number = 0;								/* current form number */						
 	private static XmlTextPane xmlPreviewPane;						/* description label */
 	private static WizardFrameListener listener;
 	private static JPanel topPanel;
@@ -58,10 +57,11 @@ public class WizardFrame extends JFrame {
 		
 		steps = new ArrayList();
 		Package pac = new Package();  
-
+   
 		pac.setSelectedAttrArr(pac.getAttrArr());
-		
-		steps.add(new Form(pac));
+		ArrayList<XmlTag> tagArr = new ArrayList<XmlTag>();
+		tagArr.add(pac);
+		steps.add(new Form(tagArr));
 		steps.add(new FinalStepForm());
 		
 		/* frame initial setup */
@@ -290,20 +290,24 @@ public class WizardFrame extends JFrame {
 		return steps;
 	}
 	
-	public void addStep(JPanel step) {
+	public void addStep(JPanel form) {
 		int index = steps.size();
-		steps.add(index - 1, step);
+		steps.add(index - 1, form);
 		updateLeftPanel();
 		updateTopPanel();
 		repaintContentPane();
-	}
+	}     
 	
 	public ArrayList<XmlTag> getTagArr(){
 		session.setWizardFrame(this);
 		ArrayList<XmlTag> tagArr = new ArrayList<XmlTag>();
+		XmlTag tag = new XmlTag();
 		for (int i = 0; i < steps.size() - 1; i++) {   					/* -1 because last steps have no tag */
-			Form step = (Form) steps.get(i);
-			tagArr.add(step.getTag());
+			Form form = (Form) steps.get(i);
+			for (int j = 0; j < form.getTagArr().size(); j++) {
+				tag = form.getTagArr().get(j);
+				tagArr.add(tag);
+			}
 		}
 		return tagArr;
 	}
@@ -329,7 +333,6 @@ public class WizardFrame extends JFrame {
 	}
 	
 	public void updateXmlPreviewPane(String preview) {
-		xmlPreviewPane.getDocument().putProperty(DefaultEditorKit.EndOfLineStringProperty, "\n");
 		xmlPreviewPane.setText(preview);
 		xmlPreviewPane.revalidate();
 	}

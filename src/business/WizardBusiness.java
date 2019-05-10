@@ -29,14 +29,14 @@ public class WizardBusiness {
 	 */
 	//--------------------------------------------------------------------------writePdsc()
 	public static Document writePdsc(ArrayList<XmlTag> tagArr) {
-		doc = new Document();		
+		doc = new Document();	
 		for(int i = 0 ; i < tagArr.size(); i++) { 
 			XmlTag xmlTag = tagArr.get(i);
 			ArrayList<XmlAttribute> xmlAttrArr = null;
 			try { xmlAttrArr = tagArr.get(i).getSelectedAttrArr();} 			// if attrArr != null
 			catch(Exception e) {}
 			Element el = new Element(xmlTag.getName());							// conversion of XmlTag into JDOM Element
-			if(el.getNamespace() != null) {
+			if(xmlTag.getNameSpace() != null) {
 				XmlNameSpace xmlNs= xmlTag.getNameSpace();
 				Namespace ns = Namespace.getNamespace(xmlNs.getPrefix(), xmlNs.getUrl());
 				el.addNamespaceDeclaration(ns);
@@ -57,11 +57,16 @@ public class WizardBusiness {
 					if (attribute != null) el.setAttribute(attribute);				
 				}
 			}
+			
+			Element space = new Element(null);
 			if( i == 0) { 														// element root
 				doc.setRootElement(el);
+				doc.getRootElement().addContent(space);
+				
 			}
 			else {																// other element
 				doc.getRootElement().addContent(el);
+				doc.getRootElement().addContent(space);
 			}
 			
 		}
@@ -113,7 +118,6 @@ public class WizardBusiness {
 			System.out.println("Attribute :" + xmlAttr.getName() + " is required");
 		}
 		if(xmlAttr.getNameSpace() != null) {
-			System.out.println("questo attributo ha il namespace" + xmlAttr.getName());
 			XmlNameSpace xmlNameSpace = xmlAttr.getNameSpace();
 			Namespace ns = Namespace.getNamespace(xmlNameSpace.getPrefix(), xmlNameSpace.getUrl());
 			attribute = new Attribute((String) xmlAttr.getName(),(String)  xmlAttr.getValue() , ns);
