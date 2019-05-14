@@ -64,12 +64,13 @@ public class TagCustomizationFrameListener implements ItemListener, ActionListen
 		
 		
 		if(command == "addTagPanel") {
-			XmlTag child = tagBtn.getTag();							// recovering child	
+			XmlTag child = tagBtn.getTag();							
 			XmlTag parent = child.getParent();
 			if(child.getMax() > 0 ) {
 				XmlTag newChild = new XmlTag(child);
 				parent.addSelectedChild(newChild);
-				tagCustomizationFrame.addTagPanel(newChild); 					// add new child panel
+				tagCustomizationFrame.addTagPanel(newChild);
+				newChild.freeModelFields();
 				child.setMax(child.getMax() -1 );								// maximum number of children is reduced by one
 			}
 			else {																// if max child number is = 0, cannot add this child

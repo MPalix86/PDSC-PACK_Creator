@@ -82,7 +82,7 @@ public class XmlTag{
 	 * <p>
 	 * other constructor to avoid inconsistency was defined in XmlTagAbstract
 	 * 
-	 * @see src/model/XmlTagAbstract
+	 * <a href="file:XmlTagAbstract.java">XmlTagABstract</a>
 	 * @param tag the tag to be copied into new instance
 	 */
 	
@@ -550,6 +550,7 @@ public class XmlTag{
 	 * Add child inside childrendArr
 	 * 
 	 * @return void
+	 * @param child the child to add
 	 */
 	
 	public void addChild(XmlTag child) {
@@ -564,6 +565,7 @@ public class XmlTag{
 	 * Add attribute inside attrArr
 	 * 
 	 * @return void
+	 * @param attr the attr to add
 	 */
 	
 	public void addAttr(XmlAttribute attr) {
@@ -578,6 +580,7 @@ public class XmlTag{
 	 * Add attribute inside selctedChildrenArr
 	 * 
 	 * @return void
+	 * @param child the child to add
 	 */
 	
 	public void addSelectedChild(XmlTag child) {
@@ -592,6 +595,7 @@ public class XmlTag{
 	 * Add attribute inside selectedAttrArr
 	 * 
 	 * @return void
+	 * @param attr the attribute to add
 	 */
 	
 	public void addSelectedAttr(XmlAttribute attr) {
@@ -604,7 +608,7 @@ public class XmlTag{
 	/**
 	 * Add attribute inside selectedAttrArr
 	 * 
-	 * @param the child to remove
+	 * @param child the child to remove
 	 * @return void
 	 */
 	
@@ -618,7 +622,7 @@ public class XmlTag{
 	/**
 	 * remove selected attribute from selectedAttrArr
 	 * 
-	 * @param attr the attribute to remove
+	 * @param attr attr the attribute to remove
 	 * @return void
 	 */
 	public void removeSelectedAttr(XmlAttribute attr) {

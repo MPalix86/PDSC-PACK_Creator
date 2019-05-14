@@ -24,12 +24,12 @@ import javax.swing.border.MatteBorder;
 import business.Session;
 import listeners.WizardFrameListener;
 import model.XmlTag;
+import model.pdsc.tags.Description;
+import model.pdsc.tags.License;
+import model.pdsc.tags.Name;
 import model.pdsc.tags.Package;
-import model.pdsc.tags.rootChildren.Description;
-import model.pdsc.tags.rootChildren.License;
-import model.pdsc.tags.rootChildren.Name;
-import model.pdsc.tags.rootChildren.Url;
-import model.pdsc.tags.rootChildren.Vendor;
+import model.pdsc.tags.Url;
+import model.pdsc.tags.Vendor;
 import view.Components.ModelComponents.xmlEditor.XmlTextPane;
 import view.Components.StylizedComponents.SquareButton;
 import view.Components.wizardFrameComponents.FinalStepForm;
@@ -93,7 +93,7 @@ public class WizardFrame extends JFrame {
 	 * place all components, initializing wizard procedure with the mandatory 
 	 * tag of PDSC document
 	 * 
-	 * @see  #placeComponent()
+	 * @return void
 	 */
 	
 	public WizardFrame() {
@@ -493,8 +493,6 @@ public class WizardFrame extends JFrame {
 	 * every root tag child contains relative children. 
 	 *
 	 * @return Array that contains all tag inserted during wizard
-	 * @see #src.view.Components.wizardFrameComponents.Form
-	 * @see #steps
 	 */
 	
 	public ArrayList<XmlTag> getTagArr(){
@@ -520,9 +518,7 @@ public class WizardFrame extends JFrame {
 	/**
 	 * Go to the next step of the wizard.
 	 *
-	 * @see #updateLeftPanel
-	 * @see #updateTopPanel
-	 * @see #repaintContentPane
+	 * @return void
 	 */
 	
 	public void next() {
@@ -540,9 +536,6 @@ public class WizardFrame extends JFrame {
 	/**
 	 * Go to the previous step of the wizard.
 	 *
-	 * @see #updateLeftPanel
-	 * @see #updateTopPanel
-	 * @see #repaintContentPane
 	 */
 	
 	public void back() {
@@ -560,7 +553,6 @@ public class WizardFrame extends JFrame {
 	 * update xml preview text pane.
 	 *
 	 * @param preview String with new content of updateXmlPreviewPane
-	 * @see #updateXmlPreviewPane
 	 */
 	
 	public void updateXmlPreviewPane(String preview) {

@@ -1,2 +1,13 @@
+business
+listeners
+model
+model.builders
+model.pdsc.attributes
+model.pdsc.attributes.values
+model.pdsc.tags
 view
+view.Components.ModelComponents
+view.Components.ModelComponents.xmlEditor
+view.Components.StylizedComponents
+view.Components.tagCustomizationFrameComponents
 view.Components.wizardFrameComponents
