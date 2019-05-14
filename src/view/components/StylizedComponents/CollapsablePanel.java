@@ -14,7 +14,6 @@ import java.awt.event.MouseListener;
 import java.awt.font.FontRenderContext;
 import java.awt.font.LineMetrics;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
@@ -45,8 +44,8 @@ public class CollapsablePanel extends JPanel {
             int h = getHeight();
  
             try {
-                open = ImageIO.read(new File("./icons/downArrow.png"));
-                closed = ImageIO.read(new File("./icons/rightArrow.png"));
+                open = ImageIO.read(getClass().getResourceAsStream("/icons/downArrow.png"));
+                closed = ImageIO.read(getClass().getResourceAsStream("/icons/rightArrow.png"));
             } catch (IOException e) {
                 e.printStackTrace();
             }

@@ -41,19 +41,17 @@ public class TagCustomizationBusiness {
 	 * name of the tag 
 	 * 
 	 */
-	public static XmlTag findSelectedChild(XmlTag parent, String childClassName) {
+	public static XmlTag findChildFromSelectedChildName(XmlTag parent, String childName) {
 		ArrayList <XmlTag> children = new ArrayList();
 		children.add(parent);
 		while(!children.isEmpty()) {
-			Class<XmlTag> tagClass = getClassFromClassName(childClassName);
 			XmlTag element = children.get(0);
 			children.remove(element);
-			if(element.getClass() == tagClass) {	
+			if(element.getName() == childName) {	
 				return element;
-				
 			}
-			if( element.getChildren() != null ) {
-				element.getChildren().forEach((c)-> children.add(c));
+			if( element.getChildrenArr() != null ) {
+				element.getChildrenArr().forEach((c)-> children.add(c));
 			}
 		}
 		return null;
@@ -71,31 +69,31 @@ public class TagCustomizationBusiness {
 		children.add(parent);
 		while(!children.isEmpty()) {
 			XmlTag element = children.get(0);
-			//System.out.println("analyzing " +  element.getName());
+			System.out.println("analyzing " +  element.getName());
 			children.remove(element);
 			ArrayList <XmlTag> requiredChildren = new ArrayList<XmlTag>(getRequiredChildren(element));
 			if(!requiredChildren.isEmpty()) {
-				//System.out.println(element.getName() + " has dependencies");
+				System.out.println(element.getName() + " has dependencies");
 				for(int i = 0; i < requiredChildren.size(); i++) {
 					XmlTag requiredChild = requiredChildren.get(i);
-					//System.out.println("check if there is the denpendency :  "  + requiredChild.getName());
+					System.out.println("check if there is the denpendency :  "  + requiredChild.getName());
 					boolean found = false;
-					if(element.getSelectedChildren() != null) {
-						for(int j = 0; j < element.getSelectedChildren().size(); j++) {
-							XmlTag child = element.getSelectedChildren().get(j);
-							if(requiredChild.getClass() == child.getClass()) {
+					if(element.getSelectedChildrenArr() != null) {
+						for(int j = 0; j < element.getSelectedChildrenArr().size(); j++) {
+							XmlTag selectedChild = element.getSelectedChildrenArr().get(j);
+							if(requiredChild.getName() == selectedChild.getName()) {
 								found = true;
 							}
-							if( found ) {/* System.out.println(child.getName() + " found ");*/break;}
+							if( found ) { System.out.println(selectedChild .getName() + " found ");break;}
 						}
-						if(!found) {/*System.out.println(requiredChild.getName() + " not found ");*/return requiredChild;}
+						if(!found) {System.out.println(requiredChild.getName() + " not found ");return requiredChild;}
 					}
-					else {/*System.out.println(requiredChild.getName() + " not found ");*/return requiredChild;}
+					else {System.out.println(requiredChild.getName() + " not found ");return requiredChild;}
 
 				}
-			}else {/*System.out.println(element.getName() + " has no dependencies");*/}
-			if( element.getSelectedChildren() != null ) {
-				element.getSelectedChildren().forEach((c)-> children.add(c));
+			}else {System.out.println(element.getName() + " has no dependencies");}
+			if( element.getSelectedChildrenArr() != null ) {
+				element.getSelectedChildrenArr().forEach((c)-> children.add(c));
 			}
 		}
 		return null;
@@ -109,8 +107,8 @@ public class TagCustomizationBusiness {
 	 */ 
 	public static ArrayList<XmlTag> getRequiredChildren(XmlTag parent){
 		ArrayList <XmlTag> requiredChildren = new ArrayList();
-		if(parent.getChildren() != null) {
-			ArrayList <XmlTag> children = new ArrayList(parent.getChildren());
+		if(parent.getChildrenArr() != null) {
+			ArrayList <XmlTag> children = new ArrayList(parent.getChildrenArr());
 			for (int i = 0 ; i < children.size(); i++) {
 				if(children.get(i).isRequired()) {
 					requiredChildren.add(children.get(i));
@@ -165,19 +163,24 @@ public class TagCustomizationBusiness {
 	/*
 	 * return new instance of passed class
 	 */
-	public static XmlTag getNewinstance(Class cl) {
-		XmlTag tag = new XmlTag();
-		try {
-			tag = (XmlTag) cl.newInstance();
-		} catch (InstantiationException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			e.printStackTrace();
-		}
-		return tag;
+	public static XmlTag getNewinstance(XmlTag tag) {
+		XmlTag newTag = new XmlTag(tag);
+		return newTag;
 	}
-	
-	
-	
-	
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+
 }

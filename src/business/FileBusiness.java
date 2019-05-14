@@ -31,8 +31,10 @@ public class FileBusiness {
 				if (doc == null) {
 					doc = new Document();
 				}
+
 				Format format = Format.getPrettyFormat();
-		        XMLOutputter xmlOutputter = new XMLOutputter(format);
+				format.setIndent("	");
+				XMLOutputter xmlOutputter = new XMLOutputter(format);
 		        xmlOutputter.output(doc, new FileOutputStream(file));
 		        Response response = new Response.ResponseBuilder().status(FILE_CREATED_CORRECTLY).message("file created correctly").build();
 		        return response;
@@ -96,7 +98,11 @@ public class FileBusiness {
 	
 	
 	public static String getDocumentPreview(Document doc) {
-		XMLOutputter xmlOutputter = new XMLOutputter(Format.getPrettyFormat());
+	
+		
+		Format format = Format.getPrettyFormat();
+		format.setIndent("        ");
+		XMLOutputter xmlOutputter = new XMLOutputter(format);
 		String preview = xmlOutputter.outputString(doc);
 		if(preview != null) {
 			return xmlOutputter.outputString(doc);

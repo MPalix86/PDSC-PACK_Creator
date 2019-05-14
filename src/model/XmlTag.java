@@ -2,207 +2,521 @@ package model;
 
 import java.util.ArrayList;
 
-import business.Utils;
+/**
+ * XmlTag class represent an abstraction of xml tag. To manage Dynamically tags
+ * with them attributes division has been made.
+ * <p>
+ * MODEL'S FIELDS : defined during class modeling; they should not be changed in
+ * 					run time. These fields represent elements defined in some standard
+ * 					which are modeled in form of classes.
+ * <p>
+ * LOCAL FIELDS :	These fields are used to personalize model's field. For example
+ * 					to select only certain attributes among all those present in model's
+ * 					fields.
+ *
+ * 					
+ * 
+ * @author Mirco Palese
+ */
 
-public class XmlTag {
-	private String name;
-	private String content;
-	private ArrayList<XmlAttribute> attrArr;									/* ------------------ DA SPOSTARE NELLE SINGOLE CLASSI--------------*/
+public class XmlTag{
+	
+/**
+ * ==================================
+ * LOCAL FIELDS
+ * ==================================
+ */
+	/** tag's name */
+	protected String name;
+	
+	/** tag's content*/
+	protected String content;
+
+	/** true if tag is mandatory, false otherwise */
+	protected boolean required;
+	
+	/** tag's selected childrendArr */
+	private  ArrayList<XmlTag> selectedChildrenArr;
+	
+	/** tag's selected attributes array */
 	private ArrayList<XmlAttribute> selectedAttrArr;
-	private String description;
-	private boolean required;
-	private  ArrayList<XmlTag> children;										/* ------------------ DA SPOSTARE NELLE SINGOLE CLASSI--------------*/
-	private  ArrayList<XmlTag> selectedChildren;
+	
+	/** tag's parent */
 	private XmlTag parent;
+	
+	/** tag's max occurrence number */
 	private Integer max;
+	
+	/** tag's default content */
 	private String defaultContent;
-	public final static int MAX_OCCURENCE_NUMBER = 1000;
+	
+	/** tag's name space */
 	private XmlNameSpace nameSpace;
-
-
-	
-	public XmlNameSpace getNameSpace() {
-		return nameSpace;
-	}
-
-
-	public XmlTag setNameSpace(XmlNameSpace nameSpace) {
-		this.nameSpace = nameSpace;
-		return this;
-	}
-
-
-	private XmlTag (XmlTagBuilder builder) {
-		this.name = builder.name;
-		this.content = builder.content;
-		this.attrArr = builder.attrArr;
-		this.description = builder.description;
-		this.required = builder.required;
-	}
 	
 	
-	public XmlTag setDefaultContent(String content) {
-		this.defaultContent = content;
-		return this;
+/**
+ * ==================================
+ * MODEL'S FIELD
+ * ==================================
+ */
+	/** general max occurrence number */
+	public final static int MAX_OCCURENCE_NUMBER = 1000;
+	
+	/** tag's attributes array */
+	private ArrayList<XmlAttribute> attrArr;
+	
+
+	/** tag's description */
+	private String description;
+	
+	
+	/** tag's childrendArr */
+	private  ArrayList<XmlTag> childrenArr;	
+	
+	
+	
+	
+	
+	/**
+	 * This constructor return the exact copy of tag passed by parameter in a new instance
+	 * <p>
+	 * other constructor to avoid inconsistency was defined in XmlTagAbstract
+	 * 
+	 * @see src/model/XmlTagAbstract
+	 * @param tag the tag to be copied into new instance
+	 */
+	
+	public XmlTag(XmlTag tag) {
+		
+		if(tag.getAttrArr() != null) {
+			
+			/** initialization of attrArr */
+			this.attrArr = new ArrayList<XmlAttribute>(); 
+			
+			/** for each attribute add new instance inside attrArr */
+			tag.getAttrArr().forEach((a)->this.attrArr.add(new XmlAttribute(a)));
+		}
+
+		if(tag.getSelectedAttrArr() != null) {
+			
+			/** initialization of selectedAttrArr */
+			this.selectedAttrArr = new ArrayList<XmlAttribute>(); 
+			
+			/** for each selected attribute add new instance inside attrArr */
+			tag.getSelectedAttrArr().forEach((a)-> this.selectedAttrArr.add(new XmlAttribute(a)));
+		}
+		
+		
+		if(tag.getChildrenArr() != null) {
+			
+			/** initialization of childrendArr */
+			this.childrenArr = new ArrayList<XmlTag>(); 
+			
+			/** for each children add new instance inside childrenArr */
+			tag.getChildrenArr().forEach((c)->this.childrenArr.add(new XmlTag(c)));
+		}
+		
+		if(tag.getSelectedChildrenArr() != null) {
+			
+			/** initialization of selectedchildrendArr */
+			this.selectedChildrenArr = new ArrayList<XmlTag>(); 
+			
+			/** for each selected children add new instance inside selectedchildrendArr */
+			tag.getSelectedChildrenArr().forEach((c)-> this.selectedChildrenArr.add(new XmlTag(c)));
+		}
+	
+		if(tag.getParent() != null) this.parent = tag.getParent();
+		
+		if(tag.getDefaultContent() != null) this.defaultContent = tag.getDefaultContent();
+		
+		if(tag.getContent() != null) this.content = tag.getContent();
+		
+		if(tag.getDescription() != null) this.description = tag.getDescription();
+		
+		if(tag.getNameSpace() != null) this.nameSpace = tag.getNameSpace();
+		
+		if(tag.getName() != null) this.name = tag.getName();
+		
+		if(tag.getMax() != null) this.max = tag.getMax();
+		
+		this.required = tag.isRequired();
 	}
 	
-	public String getDefaultContent() {
-		return this.defaultContent;
+	
+	
+	
+	/**
+	 * void Constructor be careful to use it
+	 * 
+	 * @return new void instance
+	 */
+	
+	public XmlTag() {}
+	
+
+	
+
+	
+	/**
+	 * Return the tag's name
+	 * 
+	 * @return the name
+	 */
+	
+	public String getName() {
+		return name;
 	}
+	
+	
+	
+	
+	
+
+	/**
+	 * set the tag's name
+	 * 
+	 * @param name the name to set
+	 */
+	
+	public void setName(String name) {
+		this.name = name;
+	}
+	
+	
+	
+	
+	
+	/**
+	 * Return the tag's content
+	 * 
+	 * @return tag's content
+	 */
+	
+	public String getContent() {
+		return content;
+	}
+
+	
+	
+	
+	
+	/**
+	 * set tag's content
+	 * 
+	 * @param content the content to set
+	 */
+	
+	public void setContent(String content) {
+		this.content = content;
+	}
+
+	
+	
+	
+	
+	/**
+	 * true if tag is required false otherwise
+	 * 
+	 * @return true if tag is required false otherwise
+	 */
+	
+	public boolean isRequired() {
+		return required;
+	}
+
+	
+	
+	
+	
+	/**
+	 * set if tag is required
+	 * 
+	 * @param required true if tag is required false otherwise
+	 */
+	
+	public void setRequired(boolean required) {
+		this.required = required;
+	}
+	
+	
+	
+	
+
+	/**
+	 * Return tag's selected childrendArr
+	 * 
+	 * @return the selectedchildrendArr
+	 */
+	
+	public ArrayList<XmlTag> getSelectedChildrenArr() {
+		return selectedChildrenArr;
+	}
+	
+	
+	
+	
+	
+	/**
+	 * set selected childrendArr
+	 * 
+	 * @param selectedchildrendArr the selectedchildrendArr array to set
+	 */
+	
+	public void setSelectedChildrenArr(ArrayList<XmlTag> selectedChildrenArr) {
+		this.selectedChildrenArr = selectedChildrenArr;
+	}
+
+	
+	
+	
+	
+	/**
+	 * get tag's parent
+	 * 
+	 * @return tag's parent
+	 */
 	
 	public XmlTag getParent() {
 		return parent;
 	}
-
-
-
-	public XmlTag setParent(XmlTag parent) {
+	
+	
+	
+	
+	
+	/**
+	 * set tag's parent
+	 * 
+	 * @param parent the parent to set
+	 */
+	
+	public void setParent(XmlTag parent) {
 		this.parent = parent;
-		return this;
+	}
+	
+	
+	
+	
+
+	/**
+	 * tag's max occurrence
+	 * 
+	 * @return the max occurrence 
+	 */
+	
+	public Integer getMax() {
+		return this.max;
 	}
 
 	
-	public ArrayList<XmlTag> getSelectedChildren() {
-		return selectedChildren;
+	
+	
+	
+	/**
+	 * set tag's max occurrence number
+	 * 
+	 * @param max the max to set
+	 */
+	
+	public void setMax(Integer max) {
+		this.max = max;
+	}
+	
+	
+	
+	
+
+	/**
+	 * return tag's default content
+	 * 
+	 * @return the defaultContent
+	 */
+	
+	public String getDefaultContent() {
+		return defaultContent;
+	}
+	
+	
+	
+	
+
+	/**
+	 * set tag's default content
+	 * 
+	 * @param defaultContent the defaultContent to set
+	 */
+	
+	public void setDefaultContent(String defaultContent) {
+		this.defaultContent = defaultContent;
 	}
 
+	
+	
+	
+	
+	/**
+	 * return tag's name space
+	 * 
+	 * @return the nameSpace
+	 */
+	
+	public XmlNameSpace getNameSpace() {
+		return nameSpace;
+	}
+	
+	
+	
+	
 
-	public XmlTag setSelectedChildren(ArrayList<XmlTag> selectedChildren) {
-		this.selectedChildren = selectedChildren;
-		return this;
+	/**
+	 * set tag's name space
+	 * 
+	 * @param nameSpace the nameSpace to set
+	 */
+	
+	public void setNameSpace(XmlNameSpace nameSpace) {
+		this.nameSpace = nameSpace;
 	}
+
 	
-	public void addSelecteChild(XmlTag tag) {
-		if(selectedChildren == null) {
-			selectedChildren = new ArrayList<XmlTag>();
-		}
-		if(!selectedChildren.contains(tag)) {
-			this.selectedChildren.add(tag);
-		}
-		else {
-			Utils.print("l'attributo è gia presente tra gli attributi selezionati");
-		}
+	
+	
+	
+	/**
+	 * return arraylist containing all tag's attributes
+	 * 
+	 * @return the arraylist containing all tag's attributes
+	 */
+	
+	public ArrayList<XmlAttribute> getAttrArr() {
+		return attrArr;
 	}
+
 	
-	public void removeSelecteChild(XmlTag tag) {
-		if(selectedChildren.contains(tag)) {
-			this.selectedChildren.remove(tag);
-		}
-		else {
-			Utils.print("l'attributo è gia presente tra gli attributi selezionati");
-		}
+	
+	
+	
+	/**
+	 * set tag's possible attribute's
+	 * 
+	 * @param attrArr the attrArr to set
+	 */
+	
+	public void setAttrArr(ArrayList<XmlAttribute> attrArr) {
+		this.attrArr = attrArr;
 	}
+
 	
 	
+	
+	
+	/**
+	 * return arraylist containing all selected attributes
+	 * 
+	 * @return the selectedAttrArr
+	 */
 	
 	public ArrayList<XmlAttribute> getSelectedAttrArr() {
 		return selectedAttrArr;
 	}
 
-	public XmlTag setSelectedAttrArr(ArrayList<XmlAttribute> selectedAttrArr) {
+	
+	
+	
+	
+	/**
+	 * set selcted attrbute's array
+	 * 
+	 * @param selectedAttrArr the selectedAttrArr to set
+	 */
+	
+	public void setSelectedAttrArr(ArrayList<XmlAttribute> selectedAttrArr) {
 		this.selectedAttrArr = selectedAttrArr;
-		return this;
-		
 	}
 
+	
+	
+	
+	
+	/**
+	 * return tag's description
+	 * 
+	 * @return the description
+	 */
+	
+	public String getDescription() {
+		return description;
+	}
+	
+	
+	
+	
 
-	public void addSelectedAttr(XmlAttribute attr) {
-		if(selectedAttrArr == null) {
-			selectedAttrArr = new ArrayList<XmlAttribute>();
-		}
-		if(!selectedAttrArr.contains(attr)) {
-			this.selectedAttrArr.add(attr);
-		}
-		
-	}
+	/**
+	 * set tag's description
+	 * 
+	 * @param description the description to set
+	 */
 	
-	public void removeSelectedAttr(XmlAttribute attr) {
-		if(selectedAttrArr.contains(attr)) {
-			this.selectedAttrArr.remove(attr);
-		}
-	}
-	
-	public XmlTag () {
-
-	}
-	
-	
-	public Integer getMax() {
-		return max;
+	public void setDescription(String description) {
+		this.description = description;
 	}
 
-//	public void setMax(int max) {
-//		this.max = max;
-//	}
 	
-	public XmlTag setMax(Integer max) {
-		this.max = max;								  /*------------------CORRECTION--------------------*/
-		return this;
+	
+	
+	
+	/**
+	 * return array containig all tag's children
+	 * 
+	 * @return the childrendArr
+	 */
+	
+	public ArrayList<XmlTag> getChildrenArr() {
+		return childrenArr;
+	}
+
+	
+	
+	
+	
+	/**
+	 * set tag's children array
+	 * 
+	 * @param childrendArr the childrendArr to set
+	 */
+	
+	public void setChildrenArr(ArrayList<XmlTag> childrendArr) {
+		this.childrenArr = childrendArr;
+	}
+
+	
+	
+	
+	
+	/**
+	 * return max occurrence number
+	 * 
+	 * @return the maxOccurenceNumber
+	 */
+	
+	public static int getMaxOccurenceNumber() {
+		return MAX_OCCURENCE_NUMBER;
 	}
 	
 	
-	public String getName() {
-		return this.name;
-	}
-	
-	public String getContent() {
-		return this.content;
-	}
-	
-	public ArrayList<XmlAttribute> getAttrArr() {
-		return this.attrArr;
-	}
-	
-	public ArrayList<XmlTag> getChildren() {
-		return this.children;
-	}
 	
 	
-	public void addChild(XmlTag child) {
-		if( children == null) {
-			children = new ArrayList<XmlTag>();
-		}
-		this.children.add(child);
-	}
 	
-	public XmlTag setName(String name) {
-		this.name = name;
-		return this;
-	}
+	/**
+	 * Free memory occupied by model's fields. Be careful to use it
+	 * 
+	 * @return void
+	 */
 	
-	public XmlTag setContent(String content) {
-		this.content = content;
-		return this;
-	}
-	
-	public XmlTag setAttr(ArrayList<XmlAttribute> attrArr) {
-		this.attrArr = attrArr;
-		return this;
-	}
-	
-	public void addAttr(XmlAttribute attr) {
-		if(attrArr == null) {
-			attrArr = new ArrayList<XmlAttribute>();
-		}
-		this.attrArr.add(attr);
-	}
-	
-	public void removeAttr(XmlAttribute attr) {
-		this.attrArr.remove(attr);
-	}
-	
-	public boolean isRequired() {
-		return this.required;
-	}
-	
-	public XmlTag setRequired(boolean required) {
-		this.required = required;
-		return this;
-	}
-	
-	public void freeMemory() {
+	public void freeModelFields() {
 		this.attrArr = null;
-		this.children = null;
+		this.childrenArr = null;
 		this.parent = null;
 		this.max = null;
 	}
@@ -210,53 +524,105 @@ public class XmlTag {
 	
 	
 	
-	//  builder pattern
-	public static class XmlTagBuilder{
-
-		// required parameters
-		private String name;
-		private boolean required;
-		private String content;
-
-		// optional parameters
-		boolean isEmpty;
-		private ArrayList<XmlAttribute> attrArr;
-		private String description;
-		private int max;
+	
+	/**
+	 * Free memory occupied by local's fields. Be careful to use it
+	 * 
+	 * @return void
+	 */
+	
+	public void freeLocalFields() {
+		this.name = null;
+		this.content = null;
+		this.selectedAttrArr = null;
+		this.selectedChildrenArr = null;
+		this.max = null;
+		this.parent = null;
+		this.nameSpace = null;
+		this.defaultContent = null;
 		
-		
-		public XmlTagBuilder(String name , boolean required ){
-			this.name = name;
-			this.required = required;
-		}
-		
-		public XmlTagBuilder content(String content) {
-			this.content = content;
-			return this;
-		}
-		
-		
-		public XmlTagBuilder max(int max) {
-			this.max = max;
-			return this;
-		}
-		
-		public XmlTagBuilder attr(ArrayList<XmlAttribute> attrArr) {
-			this.attrArr = attrArr;
-			return this;
-		}
-		
-		
-		public XmlTagBuilder descritpion(String description) {
-			this.description = description;
-			return this;
-		}
-		
-		public XmlTag build(){
-			return new XmlTag(this); 
-		}
-		
-
-
 	}
+	
+	
+	
+	
+	/**
+	 * Add child inside childrendArr
+	 * 
+	 * @return void
+	 */
+	
+	public void addChild(XmlTag child) {
+		if (childrenArr == null) childrenArr = new ArrayList<XmlTag>();
+		this.childrenArr.add(child);
+	}
+	
+	
+	
+	
+	/**
+	 * Add attribute inside attrArr
+	 * 
+	 * @return void
+	 */
+	
+	public void addAttr(XmlAttribute attr) {
+		if (attrArr == null) attrArr = new ArrayList<XmlAttribute>();
+		this.attrArr.add(attr);
+	}
+	
+	
+	
+	
+	/**
+	 * Add attribute inside selctedChildrenArr
+	 * 
+	 * @return void
+	 */
+	
+	public void addSelectedChild(XmlTag child) {
+		if (selectedChildrenArr == null) selectedChildrenArr = new ArrayList<XmlTag>();
+		this.selectedChildrenArr.add(child);
+	}
+	
+	
+	
+	
+	/**
+	 * Add attribute inside selectedAttrArr
+	 * 
+	 * @return void
+	 */
+	
+	public void addSelectedAttr(XmlAttribute attr) {
+		if (selectedAttrArr == null) selectedAttrArr = new ArrayList<XmlAttribute>();
+		this.selectedAttrArr.add(attr);
+	}
+	
+	
+	
+	/**
+	 * Add attribute inside selectedAttrArr
+	 * 
+	 * @param the child to remove
+	 * @return void
+	 */
+	
+	public void removeSelectedChild(XmlTag child) {
+		this.selectedChildrenArr.remove(child);
+	}
+	
+	
+	
+	
+	/**
+	 * remove selected attribute from selectedAttrArr
+	 * 
+	 * @param attr the attribute to remove
+	 * @return void
+	 */
+	public void removeSelectedAttr(XmlAttribute attr) {
+		this.selectedAttrArr.remove(attr);
+	}
+
 }

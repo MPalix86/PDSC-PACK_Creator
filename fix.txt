@@ -1,2 +1,0 @@
-1) close Button
-2) file with same name and different extension cause problem

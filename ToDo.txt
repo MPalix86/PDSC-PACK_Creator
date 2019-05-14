@@ -1,0 +1,13 @@
+=====================================
+ TODO LIST
+=====================================
+
+- Change color of preview panel editor
+
+- add default value ^
+
+- ask for logo	^
+
+- free memory after passing tag ^
+
+- implements missing tag ^

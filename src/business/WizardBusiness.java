@@ -42,8 +42,8 @@ public class WizardBusiness {
 				el.addNamespaceDeclaration(ns);
 			}
 	
-			if (xmlTag.getSelectedChildren() != null) {							// if element contains other tag
-				if( !xmlTag.getSelectedChildren().isEmpty() ) {
+			if (xmlTag.getSelectedChildrenArr() != null) {							// if element contains other tag
+				if( !xmlTag.getSelectedChildrenArr().isEmpty() ) {
 					el = addChild(xmlTag);
 				}
 			}
@@ -58,15 +58,12 @@ public class WizardBusiness {
 				}
 			}
 			
-			Element space = new Element(null);
+			
 			if( i == 0) { 														// element root
 				doc.setRootElement(el);
-				doc.getRootElement().addContent(space);
-				
 			}
-			else {																// other element
+			else {		
 				doc.getRootElement().addContent(el);
-				doc.getRootElement().addContent(space);
 			}
 			
 		}
@@ -84,8 +81,8 @@ public class WizardBusiness {
 	//--------------------------------------------------------------------------addChildren();
 	private static Element addChild(XmlTag tag) {
 		Element parent = new Element(tag.getName());
-		if( tag.getSelectedChildren() != null) {								// if parent tag contains other tag
-			ArrayList<XmlTag> xmlChildren = tag.getSelectedChildren();
+		if( tag.getSelectedChildrenArr() != null) {								// if parent tag contains other tag
+			ArrayList<XmlTag> xmlChildren = tag.getSelectedChildrenArr();
 			for(int i = 0; i < xmlChildren.size(); i++) {						// for each child
 				XmlTag child = xmlChildren.get(i);
 				Element childEl = new Element(child.getName());
@@ -95,13 +92,13 @@ public class WizardBusiness {
 						Attribute attribute = addAttribute(xmlAttrArr.get(j));
 						if (attribute != null) childEl.setAttribute(attribute);
 					}
-					if (child.getSelectedChildren() != null) {						// if child tag contains children tag
-						parent.addContent( addChild(child));		// recursion
-					}
-					else {															// if child tag does not contains children tag
-						childEl.setText(child.getContent());
-						parent.addContent(childEl);
-					}
+				}
+				if (child.getSelectedChildrenArr() != null) {						// if child tag contains children tag
+					parent.addContent( addChild(child));		// recursion
+				}
+				else {															// if child tag does not contains children tag
+					childEl.setText(child.getContent());
+					parent.addContent(childEl);
 				}
 			}
 		}

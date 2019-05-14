@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -46,5 +47,12 @@ public class FinalStepForm extends JPanel{
 		generatePdscBtn.setActionCommand("generatePdsc");
 		
 		add(generatePdscBtn);
+		
+		JLabel lblNewLabel = new JLabel("");
+		lblNewLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewLabel.setBounds(71, 288, 271, 147);
+		ImageIcon stIcon = new ImageIcon((getClass().getResource("/icons/stLogo.png")));
+		lblNewLabel.setIcon(stIcon);
+		add(lblNewLabel);
 	}
 }

@@ -53,8 +53,8 @@ public class TagCustomizationFrameListener implements ItemListener, ActionListen
 		if(command == "removeTagPanel") {
 			XmlTag parent 		= tagCustomizationFrame.getTagParent();
 			XmlTag newChild 	= tagBtn.getTag();								// recovering child
-			XmlTag child 		= TagCustomizationBusiness.findSelectedChild(parent, newChild.getClass().getName()); //recovering instance that contains all constraints from new isntance generated when this tag was added
-			parent.removeSelecteChild(newChild); 								// updating selectedChild array
+			XmlTag child 		= TagCustomizationBusiness.findChildFromSelectedChildName(parent, newChild.getName()); //recovering instance that contains all constraints from new isntance generated when this tag was added
+			parent.removeSelectedChild(newChild); 								// updating selectedChild array
 			JPanel tagPanel 	= (JPanel) tagBtn.getParent().getParent();		// recovering tagpanel
 			tagCustomizationFrame.removeTagPanel(tagPanel);						// removing child tag Panel
 			child.setMax(child.getMax() + 1);									// maximum number of children is augmented by one	
@@ -64,12 +64,11 @@ public class TagCustomizationFrameListener implements ItemListener, ActionListen
 		
 		
 		if(command == "addTagPanel") {
-			XmlTag child 			= tagBtn.getTag();							// recovering child	
-			XmlTag parent 	= child.getParent();
+			XmlTag child = tagBtn.getTag();							// recovering child	
+			XmlTag parent = child.getParent();
 			if(child.getMax() > 0 ) {
-				Class cl = child.getClass();									// recovering class
-				XmlTag newChild = TagCustomizationBusiness.getNewinstance(cl);	// new instance creation of selected tag
-				parent.addSelecteChild(newChild);
+				XmlTag newChild = new XmlTag(child);
+				parent.addSelectedChild(newChild);
 				tagCustomizationFrame.addTagPanel(newChild); 					// add new child panel
 				child.setMax(child.getMax() -1 );								// maximum number of children is reduced by one
 			}
@@ -90,16 +89,12 @@ public class TagCustomizationFrameListener implements ItemListener, ActionListen
 				if(response) {
 					
 					XmlTag tag = tagBtn.getTag();
-					pdscWizardFrame.addStep(new Form(tag));
-					tagCustomizationFrame.dispose();
-					TagCustomizationFrame f = new TagCustomizationFrame(TagCustomizationBusiness.getClassInstanceFromClassName(tag.getClass().getName()));
+					pdscWizardFrame.addStep(new Form(new XmlTag(tag)));
 				}
 			}
 			else {
 				XmlTag tag = tagBtn.getTag();
-				pdscWizardFrame.addStep(new Form(tag));
-				tagCustomizationFrame.dispose();
-				TagCustomizationFrame f = new TagCustomizationFrame(TagCustomizationBusiness.getClassInstanceFromClassName(tag.getClass().getName()));
+				pdscWizardFrame.addStep(new Form(new XmlTag(tag)));
 			}
 			
 		}

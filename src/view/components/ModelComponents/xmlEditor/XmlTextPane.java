@@ -15,6 +15,7 @@
  */
 package view.Components.ModelComponents.xmlEditor;
 
+import java.awt.Rectangle;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.logging.Level;
@@ -33,7 +34,11 @@ import javax.swing.text.BadLocationException;
  *
  */
 public class XmlTextPane extends JTextPane {
-
+	  @Override
+	    public void scrollRectToVisible(final Rectangle aRect) {
+	      // supress scrollToRect in textarea
+	    }
+	  
     private static final long serialVersionUID = 6270183148379328084L;
     private Logger logger = Logger.getLogger(getClass().getName());
 

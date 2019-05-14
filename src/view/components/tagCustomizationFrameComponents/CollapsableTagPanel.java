@@ -18,92 +18,141 @@ import model.XmlTag;
 import view.Components.ModelComponents.AttributeCheckBox;
 import view.Components.ModelComponents.TagBtn;
 
+
+
+
+
+
+/**
+ * CollapsableTagPanel. Collapsable panel containig tag
+ * 
+ * @author Mirco Palese
+ */
+
 public class CollapsableTagPanel extends JPanel{
+	
+	/** panel's tag */
 	private XmlTag tag;
+	
+	/** layout */
 	private GridBagConstraints gbc;
 	private GridBagLayout gridBagLayout;
-
+	
+	/** attributes panel */
 	private JPanel AttributesPanel;
+	
+	/** children panel */
 	private JPanel childrenPanel;
 	private TagCustomizationFrameListener listener;
+	
+	
+	
+	
+	/**
+	 * Constructor. Create new collapsable panel with all components containing passed tag
+	 * 
+	 * @param tag	panel's tag
+	 * @param listener	TagCustomizationFrameListener listener
+	 */
 	
 	public CollapsableTagPanel(XmlTag tag, TagCustomizationFrameListener listener ) {
 		this.tag = tag;
 		this.listener = listener;
 	
-		/* initial layout setup */
-		this.setBorder(new EmptyBorder(15, 15, 15, 15));
+		/** initial setup */
+		setBorder(new EmptyBorder(15, 15, 15, 15));
 		setBackground(Color.WHITE);
-			gridBagLayout = new GridBagLayout();
-			gridBagLayout.columnWidths = new int[]{0, 0, 0, 0};
-			gridBagLayout.rowHeights = new int[]{0, 0, 0, 0};
-			gridBagLayout.columnWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
-			gridBagLayout.rowWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gridBagLayout = new GridBagLayout();
+		gridBagLayout.columnWidths = new int[]{0, 0, 0, 0};
+		gridBagLayout.rowHeights = new int[]{0, 0, 0, 0};
+		gridBagLayout.columnWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
+		gridBagLayout.rowWeights = new double[]{0.0, 0.0, 0.0, Double.MIN_VALUE};
 		setLayout(gridBagLayout);
 		
-			/* tag title label setup */
-			JLabel lblTagName = new JLabel("<"+this.tag.getName()+">");
-
-			lblTagName.setForeground(new Color(0,0,128));
-			lblTagName.setFont(new Font("Lucida Grande", Font.PLAIN, 16));
-			
-			gbc = new GridBagConstraints();
-			gbc.insets = new Insets(0, 0, 5, 5);
-			gbc.gridx = 1;
-			gbc.gridy = 1;
+		/** tag title label setup */
+		JLabel lblTagName = new JLabel("<"+this.tag.getName()+">");
+		lblTagName.setForeground(new Color(0,0,128));
+		lblTagName.setFont(new Font("Lucida Grande", Font.PLAIN, 16));
+		
+		/** GridBagConstraints initial setup */
+		gbc = new GridBagConstraints();
+		gbc.insets = new Insets(0, 0, 5, 5);
+		gbc.gridx = 1;
+		gbc.gridy = 1;
 			
 		add(lblTagName, gbc);
 			
-			/* AttributesPanel setup */
-			AttributesPanel = new JPanel( );
-			AttributesPanel.setBackground(Color.WHITE);
-			AttributesPanel.setLayout(new BoxLayout(AttributesPanel, BoxLayout.Y_AXIS));
-			AttributesPanel.setBorder(new EmptyBorder(0, 15, 0, 0));
-			
-				JLabel label = new JLabel("Attributes :");
-				label.setFont(new Font("Lucida Grande", Font.PLAIN, 14));
-				label.setForeground(Color.BLACK);
-			
-		        gbc.weightx = 1.0;
-		        gbc.fill = GridBagConstraints.HORIZONTAL;
-		        gbc.gridwidth = GridBagConstraints.REMAINDER;
-				gbc.gridy = 2;
+		/** AttributesPanel setup */
+		AttributesPanel = new JPanel( );
+		AttributesPanel.setBackground(Color.WHITE);
+		AttributesPanel.setLayout(new BoxLayout(AttributesPanel, BoxLayout.Y_AXIS));
+		AttributesPanel.setBorder(new EmptyBorder(0, 15, 0, 0));
+		
+		/** attributeTitle setup */
+		JLabel attributeTitle = new JLabel("Attributes :");
+		attributeTitle.setFont(new Font("Lucida Grande", Font.PLAIN, 14));
+		attributeTitle.setForeground(Color.BLACK);
+		
+		/** setting up attributeTitle position */
+        gbc.weightx = 1.0;
+        gbc.fill = GridBagConstraints.HORIZONTAL;
+        gbc.gridwidth = GridBagConstraints.REMAINDER;
+		gbc.gridy = 2;
 				
-			AttributesPanel.add(new JSeparator());
-			AttributesPanel.add(label);
+		AttributesPanel.add(new JSeparator());
+		AttributesPanel.add(attributeTitle);
 			
+		/** if tag has attributes */
 		if(tag.getAttrArr() != null) {
 			tag.getAttrArr().forEach((a) -> addAttribute(a , tag));
 			add(AttributesPanel, gbc);
 		}
 		
-			/* childrenPanel setup */
-			childrenPanel = new JPanel( );
-			childrenPanel.setBorder(new EmptyBorder(0, 15, 0, 0));
-			childrenPanel.setBackground(Color.WHITE);
-			childrenPanel.setLayout(new BoxLayout(childrenPanel, BoxLayout.Y_AXIS));
+		/** childrenPanel setup */
+		childrenPanel = new JPanel( );
+		childrenPanel.setBorder(new EmptyBorder(0, 15, 0, 0));
+		childrenPanel.setBackground(Color.WHITE);
+		childrenPanel.setLayout(new BoxLayout(childrenPanel, BoxLayout.Y_AXIS));
 			
-				JLabel childLabel = new JLabel("Child Elements :");
-				childLabel.setFont(new Font("Lucida Grande", Font.PLAIN, 14));
-				childLabel.setForeground(Color.BLACK);
-				 
-				gbc.gridy = 3;
-				
-			childrenPanel.add(new JSeparator());
-			childrenPanel.add(childLabel);
+		/** childLabel setup */
+		JLabel childLabel = new JLabel("Child Elements :");
+		childLabel.setFont(new Font("Lucida Grande", Font.PLAIN, 14));
+		childLabel.setForeground(Color.BLACK);
+	
+		/** childLabel position setup */
+		gbc.gridy = 3;
 		
-		if(tag.getChildren() != null) {
-			tag.getChildren().forEach((t) -> addChild(t));
+		
+		childrenPanel.add(new JSeparator());
+		childrenPanel.add(childLabel);
+		
+		/** if tag has children */
+		if(tag.getChildrenArr() != null) {
+			tag.getChildrenArr().forEach((t) -> addChild(t));
 			add(childrenPanel, gbc);   
 		}
-		TagBtn removeBtn = new TagBtn(tag , "X");
-		removeBtn.addActionListener(listener);
-		removeBtn.setActionCommand("removeTagPanel");
-		add(removeBtn);
 		
+		/** show remove button only in children */
+		if(tag.getParent() != null) {
+			TagBtn removeBtn = new TagBtn(tag , "X");
+			removeBtn.addActionListener(listener);
+			removeBtn.setActionCommand("removeTagPanel");
+			add(removeBtn);
+		}
+
 	}
-	  
-	//--------------------------------------------------------------------------addAttribute()
+	
+	
+	
+	
+	
+	/**
+	 * Add atrtibutes into attrbitesPanel
+	 * 
+	 * @param a		attribute
+	 * @param tag	attribute's owner
+	 * @return void
+	 */
 	private void addAttribute(XmlAttribute a , XmlTag tag) {
 		
 		AttributeCheckBox c = new AttributeCheckBox(a , tag);   
@@ -116,17 +165,21 @@ public class CollapsableTagPanel extends JPanel{
 		AttributesPanel.add(c); 
 	}
 	
-	//--------------------------------------------------------------------------addChild()
+	
+	
+	
+	/**
+	 * Add child tag inside children panel
+	 * 
+	 * @param t tag to be added
+	 * @return void
+	 */
+	
 	private void addChild(XmlTag t) {
 		TagBtn b = new TagBtn(t);
 		b.addActionListener(listener);
 		b.setActionCommand("addTagPanel");
 		childrenPanel.add(b); 
-	}
-	
-	//--------------------------------------------------------------------------setListener()
-	public void setListener(TagCustomizationFrameListener listener) {
-		this.listener = listener;
 	}
 	
 	

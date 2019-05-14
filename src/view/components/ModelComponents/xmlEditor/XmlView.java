@@ -59,15 +59,12 @@ public class XmlView extends PlainView {
         // NOTE: the order is important!
         patternColors = new LinkedHashMap<Pattern, Color>();
         patternColors
-                .put(Pattern.compile(TAG_PATTERN), new Color(63, 127, 127));
-        patternColors.put(Pattern.compile(TAG_CDATA), Color.GRAY);
-        patternColors.put(Pattern.compile(TAG_ATTRIBUTE_PATTERN), new Color(
-                127, 0, 127));
-        patternColors.put(Pattern.compile(TAG_END_PATTERN), new Color(63, 127,
-                127));
-        patternColors.put(Pattern.compile(TAG_ATTRIBUTE_VALUE), new Color(42,
-                0, 255));
-        patternColors.put(Pattern.compile(TAG_COMMENT), Color.BLUE);
+                .put(Pattern.compile(TAG_PATTERN), new Color(54, 79, 241));
+        patternColors.put(Pattern.compile(TAG_CDATA),new Color(54, 79, 241));
+        patternColors.put(Pattern.compile(TAG_ATTRIBUTE_PATTERN), new Color(255, 99, 71));
+        patternColors.put(Pattern.compile(TAG_END_PATTERN), new Color(54, 79, 241));
+        patternColors.put(Pattern.compile(TAG_ATTRIBUTE_VALUE), new Color(201,59, 128));
+        patternColors.put(Pattern.compile(TAG_COMMENT), new Color(150,122, 176));
     }
 
     public XmlView(Element element) {

@@ -10,7 +10,7 @@ import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 
 import listeners.TagListPanelListener;
-import view.Components.StylizedComponents.WizardMoveButton;
+import view.Components.StylizedComponents.SquareButton;
 
 public class TagListBar extends JPanel{
 	public TagListBar() {
@@ -19,21 +19,21 @@ public class TagListBar extends JPanel{
 		setBorder(null);
 		setPreferredSize(new Dimension(130, 878));
 		setMinimumSize(new Dimension(130, 10));
-		setBackground(Color.GRAY);
+		setBackground(Color.LIGHT_GRAY);
 		setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		
 		JPanel panel = new JPanel();
 		panel.setBorder(new LineBorder(new Color(0, 0, 0)));
 		panel.setMinimumSize(new Dimension(10, 70));
 		panel.setMaximumSize(new Dimension(32767, 70));
-		panel.setBackground(Color.GRAY);
+		panel.setBackground(Color.LIGHT_GRAY);
 		add(panel);
 		panel.setLayout(null);
 		
-		WizardMoveButton dominate = new WizardMoveButton("<dominate>");
+		SquareButton dominate = new SquareButton("<dominate>");
 		dominate.setForeground(Color.WHITE);
 		dominate.addActionListener(new TagListPanelListener());
-		dominate.setBackground(Color.GRAY);
+		dominate.setBackground(Color.LIGHT_GRAY);
 		dominate.setActionCommand("dominate");
 		dominate.setFont(new Font("Lucida Grande", Font.PLAIN, 14));
 		dominate.setBounds(-11, -11, 151, 91);
@@ -50,9 +50,9 @@ public class TagListBar extends JPanel{
 		panel_1.setBackground(Color.WHITE);
 		add(panel_1);
 		
-		WizardMoveButton requirements = new WizardMoveButton("<requirements>");
+		SquareButton requirements = new SquareButton("<requirements>");
 		requirements.addActionListener(new TagListPanelListener());
-		requirements.setBackground(Color.GRAY);
+		requirements.setBackground(Color.LIGHT_GRAY);
 		requirements.setForeground(Color.WHITE);
 		requirements.setActionCommand("requirements");
 		requirements.setFont(new Font("Lucida Grande", Font.PLAIN, 14));
@@ -70,9 +70,9 @@ public class TagListBar extends JPanel{
 		panel_2.setBackground(Color.WHITE);
 		add(panel_2);
 		
-		WizardMoveButton create = new WizardMoveButton("<create>");
+		SquareButton create = new SquareButton("<create>");
 		create.setFont(new Font("Lucida Grande", Font.PLAIN, 14));
-		create.setBackground(Color.GRAY);
+		create.setBackground(Color.LIGHT_GRAY);
 		create.setForeground(Color.WHITE);
 		create.addActionListener(new TagListPanelListener());
 		create.setActionCommand("create");
@@ -90,9 +90,9 @@ public class TagListBar extends JPanel{
 		panel_3.setBackground(Color.WHITE);
 		add(panel_3);
 		
-		WizardMoveButton repository = new WizardMoveButton("<repository>");
+		SquareButton repository = new SquareButton("<repository>");
 		repository.addActionListener(new TagListPanelListener());
-		repository.setBackground(Color.GRAY);
+		repository.setBackground(Color.LIGHT_GRAY);
 		repository.setForeground(Color.WHITE);
 		repository.setActionCommand("repository");
 		repository.setFont(new Font("Lucida Grande", Font.PLAIN, 14));
@@ -110,9 +110,9 @@ public class TagListBar extends JPanel{
 		panel_4.setBackground(Color.WHITE);
 		add(panel_4);
 		
-		WizardMoveButton releases = new WizardMoveButton("<releases>");
+		SquareButton releases = new SquareButton("<releases>");
 		releases.addActionListener(new TagListPanelListener());
-		releases.setBackground(Color.GRAY);
+		releases.setBackground(Color.LIGHT_GRAY);
 		releases.setForeground(Color.WHITE);
 		releases.setActionCommand("releases");
 		releases.setFont(new Font("Lucida Grande", Font.PLAIN, 14));
@@ -130,10 +130,10 @@ public class TagListBar extends JPanel{
 		panel_5.setBackground(Color.WHITE);
 		add(panel_5);
 		
-		WizardMoveButton keywords = new WizardMoveButton("<keywords>");
+		SquareButton keywords = new SquareButton("<keywords>");
 		keywords.addActionListener(new TagListPanelListener());
 		keywords.setActionCommand("keywords");
-		keywords.setBackground(Color.GRAY);
+		keywords.setBackground(Color.LIGHT_GRAY);
 		keywords.setForeground(Color.WHITE);
 		keywords.setFont(new Font("Lucida Grande", Font.PLAIN, 14));
 		keywords.setMinimumSize(new Dimension(117, 70));
@@ -150,9 +150,9 @@ public class TagListBar extends JPanel{
 		panel_6.setBackground(Color.WHITE);
 		add(panel_6);
 		
-		WizardMoveButton generators = new WizardMoveButton("<generators>");
+		SquareButton generators = new SquareButton("<generators>");
 		generators.addActionListener(new TagListPanelListener());
-		generators.setBackground(Color.GRAY);
+		generators.setBackground(Color.LIGHT_GRAY);
 		generators.setForeground(Color.WHITE);
 		generators.setActionCommand("generators");
 		generators.setFont(new Font("Lucida Grande", Font.PLAIN, 14));
@@ -170,9 +170,9 @@ public class TagListBar extends JPanel{
 		panel_8.setBackground(Color.WHITE);
 		add(panel_8);
 		
-		WizardMoveButton devices = new WizardMoveButton("<devices>");
+		SquareButton devices = new SquareButton("<devices>");
 		devices.addActionListener(new TagListPanelListener());
-		devices.setBackground(Color.GRAY);
+		devices.setBackground(Color.LIGHT_GRAY);
 		devices.setForeground(Color.WHITE);
 		devices.setActionCommand("devices");
 		devices.setFont(new Font("Lucida Grande", Font.PLAIN, 14));
@@ -190,9 +190,9 @@ public class TagListBar extends JPanel{
 		panel_9.setBackground(Color.WHITE);
 		add(panel_9);
 		
-		WizardMoveButton boards = new WizardMoveButton("<boards>");
+		SquareButton boards = new SquareButton("<boards>");
 		boards.addActionListener(new TagListPanelListener());
-		boards.setBackground(Color.GRAY);
+		boards.setBackground(Color.LIGHT_GRAY);
 		boards.setForeground(Color.WHITE);
 		boards.setActionCommand("boards");
 		boards.setFont(new Font("Lucida Grande", Font.PLAIN, 14));
@@ -229,9 +229,9 @@ public class TagListBar extends JPanel{
 		panel_10.setBackground(Color.WHITE);
 		add(panel_10);
 		
-		WizardMoveButton apis = new WizardMoveButton("<apis>");
+		SquareButton apis = new SquareButton("<apis>");
 		apis.addActionListener(new TagListPanelListener());
-		apis.setBackground(Color.GRAY);
+		apis.setBackground(Color.LIGHT_GRAY);
 		apis.setForeground(Color.WHITE);
 		apis.setActionCommand("apis");
 		apis.setMinimumSize(new Dimension(117, 70));
@@ -268,9 +268,9 @@ public class TagListBar extends JPanel{
 		panel_12.setBackground(Color.WHITE);
 		add(panel_12);
 		
-		WizardMoveButton examples = new WizardMoveButton("<examples>");
+		SquareButton examples = new SquareButton("<examples>");
 		examples.addActionListener(new TagListPanelListener());
-		examples.setBackground(Color.GRAY);
+		examples.setBackground(Color.LIGHT_GRAY);
 		examples.setForeground(Color.WHITE);
 		examples.setActionCommand("examples");
 		examples.setMinimumSize(new Dimension(117, 70));
@@ -286,13 +286,13 @@ public class TagListBar extends JPanel{
 		panel_13.setMaximumSize(new Dimension(32767, 70));
 		panel_13.setBorder(new LineBorder(new Color(0, 0, 0)));
 		panel_13.setBackground(Color.WHITE);
-		panel_13.setBackground(Color.GRAY);
+		panel_13.setBackground(Color.LIGHT_GRAY);
 		add(panel_13);
 		
-		WizardMoveButton components = new WizardMoveButton("<components>");
+		SquareButton components = new SquareButton("<components>");
 		components.addActionListener(new TagListPanelListener());
 		components.setForeground(Color.WHITE);
-		components.setBackground(Color.GRAY);
+		components.setBackground(Color.LIGHT_GRAY);
 		components.setActionCommand("components");
 		components.setMinimumSize(new Dimension(117, 70));
 		components.setMaximumSize(new Dimension(117, 70));
