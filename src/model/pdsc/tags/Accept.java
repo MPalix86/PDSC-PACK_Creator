@@ -73,7 +73,6 @@ public class Accept extends XmlTagAbstract{
 	@Override
 	protected void addChildren() {
 		// TODO Auto-generated method stub
-		
 	}
 	
 	

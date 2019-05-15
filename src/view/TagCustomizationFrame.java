@@ -84,6 +84,7 @@ public class TagCustomizationFrame extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		placeComponents();
+		//generateCenterPanel();
 	}
 	
 	
@@ -173,8 +174,25 @@ public class TagCustomizationFrame extends JFrame {
 		
 		/** adding contentPane inside Container */
 		c.add(contentPane);
-	    
 	}
+	
+	
+	
+	
+	/**
+	 * Generate centerPanel 
+	 * 
+	 * @return void
+	 */
+	
+	public void generateCenterPanel(){
+	}
+	
+	
+	
+	
+	
+
 	
 	
 	

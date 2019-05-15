@@ -29,11 +29,16 @@ public class WizardBusiness {
 	 */
 	//--------------------------------------------------------------------------writePdsc()
 	public static Document writePdsc(ArrayList<XmlTag> tagArr) {
+		System.out.println("");
+		System.out.println("");
+		System.out.println("");
+		System.out.println("");
+		System.out.println("");
 		doc = new Document();	
 		for(int i = 0 ; i < tagArr.size(); i++) { 
 			XmlTag xmlTag = tagArr.get(i);
 			ArrayList<XmlAttribute> xmlAttrArr = null;
-			try { xmlAttrArr = tagArr.get(i).getSelectedAttrArr();} 			// if attrArr != null
+			try { xmlAttrArr = xmlTag.getSelectedAttrArr();} 			// if attrArr != null
 			catch(Exception e) {}
 			Element el = new Element(xmlTag.getName());							// conversion of XmlTag into JDOM Element
 			if(xmlTag.getNameSpace() != null) {
@@ -47,14 +52,21 @@ public class WizardBusiness {
 					el = addChild(xmlTag);
 				}
 			}
-			else if (xmlTag.getContent() != null) {								// if element contains String
+			else if (xmlTag.getContent() != null) {	
 				el.setText(xmlTag.getContent());
 			}
+
 			
 			if(xmlAttrArr != null) {											// if tag contains attributes
+				
+				
 				for(int j = 0 ; j < xmlAttrArr.size(); j++) {
-					Attribute attribute = addAttribute(xmlAttrArr.get(j));
-					if (attribute != null) el.setAttribute(attribute);				
+					
+					if (xmlAttrArr.get(j).getValue() != null) {
+						Attribute attribute = new Attribute (xmlAttrArr.get(j).getName(), xmlAttrArr.get(j).getValue());
+						el.setAttribute(attribute);	
+					}
+								
 				}
 			}
 			
@@ -73,57 +85,75 @@ public class WizardBusiness {
 	}
 	
 	
-	/* CAUTION 
-	 * this function use XmlTag XmlAttribute XmlTagContent defined 
-	 * in model/xmlComponents. To write file with JDOM library need to
-	 * to convert xmlTag into JDOM Element;
+	/**
+	 * Add all XmlTag's selected children with respective attributes inside 
+	 * new JDom Element 
+	 * 
+	 * @param tag
+	 * @return
 	 */
-	//--------------------------------------------------------------------------addChildren();
+	
 	private static Element addChild(XmlTag tag) {
 		Element parent = new Element(tag.getName());
-		if( tag.getSelectedChildrenArr() != null) {								// if parent tag contains other tag
+		
+		addAttribute(tag,parent);
+		
+		if( tag.getSelectedChildrenArr() != null) {								
 			ArrayList<XmlTag> xmlChildren = tag.getSelectedChildrenArr();
-			for(int i = 0; i < xmlChildren.size(); i++) {						// for each child
-				XmlTag child = xmlChildren.get(i);
-				Element childEl = new Element(child.getName());
-				ArrayList<XmlAttribute> xmlAttrArr =child.getSelectedAttrArr();
-				if(xmlAttrArr != null) {
-					for(int j = 0; j < xmlAttrArr.size(); j++) {
-						Attribute attribute = addAttribute(xmlAttrArr.get(j));
-						if (attribute != null) childEl.setAttribute(attribute);
-					}
-				}
-				if (child.getSelectedChildrenArr() != null) {						// if child tag contains children tag
-					parent.addContent( addChild(child));		// recursion
-				}
-				else {															// if child tag does not contains children tag
-					childEl.setText(child.getContent());
-					parent.addContent(childEl);
-				}
+			for(int i = 0; i < xmlChildren.size(); i++) {						
+				XmlTag child = xmlChildren.get(i);	
+					parent.addContent( addChild(child));		
 			}
 		}
+		if(tag.getContent() != null) parent.setText(tag.getContent());	
 		return parent;
 	}
 	
 	
 	
-	private static Attribute addAttribute(XmlAttribute attr ) {
+	
+	
+	/**
+	 * add all XmlTag's (tag) selected attributes inside passed JDom Element (el)
+	 * 
+	 * @param tag XmlTag with selected attributes
+	 * @param el  JDom Element in which to move attributes
+	 */
+
+	private static void addAttribute(XmlTag tag,Element parent) {
 		
-		XmlAttribute xmlAttr = attr;
-		Attribute attribute = null;;
-		if( (xmlAttr.isRequired() && xmlAttr.getValue() == "") || (xmlAttr.isRequired() && xmlAttr == null) ) {		// if attribute is required and attribute is empty
-			System.out.println("Attribute :" + xmlAttr.getName() + " is required");
+		ArrayList<XmlAttribute> xmlAttrArr = tag.getSelectedAttrArr();
+		
+		/** if tag contains attributes */
+		if(xmlAttrArr != null) {
+			
+			for(int j = 0; j < xmlAttrArr.size(); j++) {	
+				
+				/** saving current attribute */
+				XmlAttribute xmlAttr = xmlAttrArr.get(j);
+				
+				/** conversion from XmlAttribute to JDom attribute */
+				Attribute attribute = new Attribute((String) xmlAttr.getName(),(String)  xmlAttr.getValue());
+				
+				/** check attribute's value */
+				if( xmlAttr.getValue() == "" || xmlAttr == null ) {		
+					//System.out.println("Attribute :" + xmlAttr.getName() + " was no inserted ");
+				}
+				
+				/** if attribute have name space */
+				if(xmlAttr.getNameSpace() != null) {
+					XmlNameSpace xmlNameSpace = xmlAttr.getNameSpace();
+					Namespace ns = Namespace.getNamespace(xmlNameSpace.getPrefix(), xmlNameSpace.getUrl());
+					attribute.setNamespace(ns);
+				}
+				
+				/** add JDom attribute inside JDome element parent */
+				if (attribute != null) parent.setAttribute(attribute);
+			}
 		}
-		if(xmlAttr.getNameSpace() != null) {
-			XmlNameSpace xmlNameSpace = xmlAttr.getNameSpace();
-			Namespace ns = Namespace.getNamespace(xmlNameSpace.getPrefix(), xmlNameSpace.getUrl());
-			attribute = new Attribute((String) xmlAttr.getName(),(String)  xmlAttr.getValue() , ns);
-		}
-		else {
-			attribute = new Attribute((String) xmlAttr.getName(),(String)  xmlAttr.getValue());
-		}
-		return attribute;
 	}
+	
+	
 	
 	
 	//--------------------------------------------------------------------------readPdsc()

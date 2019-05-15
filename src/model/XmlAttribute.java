@@ -94,8 +94,8 @@ public class XmlAttribute {
 		this.required = attr.isRequired();
 		
 		if ( attr.getPossibleValues() != null ) this.possibleValues = attr.getPossibleValues();
-		if ( attr.getValue() != null) this.value = attr.getValue();
-		if ( attr.getDefaultValue() != null) this.defaultValue = attr.getDefaultValue();
+		if ( attr.getValue() != null) this.value = new String(attr.getValue());
+		if ( attr.getDefaultValue() != null) this.defaultValue = new String(attr.getDefaultValue());
 		if ( attr.getNameSpace() != null) this.nameSpace = new XmlNameSpace(attr.getNameSpace());
 	}
 	

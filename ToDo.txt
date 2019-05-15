@@ -18,15 +18,13 @@ no date
 
 14/05/2019
 --------------------------------------------------------------------------------
-– string field in package and other tag that not have children
+– string field in package and other tag that not have children ^
 
 - see for configuration file
 
 - tag customization style
 
 - begin implementation of pack creator
-
-- use Jtree to implement tag customization
 
 - adjust listener comment
 
@@ -35,4 +33,10 @@ no date
 - adjust tag list panel
 
 - unify color
+
+- child of itself !!!!
+
+- add editor for tag that have content
+
+- verify dependency
 

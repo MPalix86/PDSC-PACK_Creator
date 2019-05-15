@@ -8,7 +8,7 @@ public class TagBtn extends JButton{
 	private String tagName;
 	private XmlTag	tag;
 	
-	public TagBtn(XmlTag tag) {
+	public TagBtn(XmlTag tag ) {
 		super();
 		this.tagName = tag.getName();
 		this.tag = tag;

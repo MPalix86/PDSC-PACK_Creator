@@ -37,7 +37,7 @@ public class TagCustomizationFrameListener implements ItemListener, ActionListen
 		XmlAttribute attr =  c.getAttr();
 		XmlTag tag = c.getTag();
 		if(c.isSelected()) {
-			tag.addSelectedAttr(attr);
+			tag.addSelectedAttr(new XmlAttribute(attr));
 		}
 		else {
 			tag.removeSelectedAttr(attr);
@@ -64,13 +64,19 @@ public class TagCustomizationFrameListener implements ItemListener, ActionListen
 		
 		
 		if(command == "addTagPanel") {
-			XmlTag child = tagBtn.getTag();							
+			XmlTag child = tagBtn.getTag();
+			//System.out.println("child =" + child.getName());
+			
 			XmlTag parent = child.getParent();
+			//System.out.println("parent =" + parent.getName());
+			
 			if(child.getMax() > 0 ) {
 				XmlTag newChild = new XmlTag(child);
+				if(newChild.getChildrenArr() != null) newChild.getChildrenArr().forEach((c)-> c.setParent(newChild));
 				parent.addSelectedChild(newChild);
+				
+				//System.out.println("ho aggiunto al parent " + newChild.getName());
 				tagCustomizationFrame.addTagPanel(newChild);
-				newChild.freeModelFields();
 				child.setMax(child.getMax() -1);
 				// maximum number of children is reduced by one
 			}

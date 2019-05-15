@@ -142,17 +142,17 @@ public class XmlTag{
 			tag.getSelectedChildrenArr().forEach((c)-> this.selectedChildrenArr.add(new XmlTag(c)));
 		}
 	
-		if(tag.getParent() != null) this.parent = tag.getParent();
+		if(tag.getParent() != null) this.parent = null;
 		
-		if(tag.getDefaultContent() != null) this.defaultContent = tag.getDefaultContent();
+		if(tag.getDefaultContent() != null) this.defaultContent = new String(tag.getDefaultContent());
 		
-		if(tag.getContent() != null) this.content = tag.getContent();
+		if(tag.getContent() != null) this.content = new String(tag.getContent());
 		
-		if(tag.getDescription() != null) this.description = tag.getDescription();
+		if(tag.getDescription() != null) this.description = new String (tag.getDescription());
 		
-		if(tag.getNameSpace() != null) this.nameSpace = tag.getNameSpace();
+		if(tag.getNameSpace() != null) this.nameSpace = new XmlNameSpace(tag.getNameSpace());
 		
-		if(tag.getName() != null) this.name = tag.getName();
+		if(tag.getName() != null) this.name = new String(tag.getName());
 		
 		if(tag.getMax() != null) this.max = tag.getMax();
 		

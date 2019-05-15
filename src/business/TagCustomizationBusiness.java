@@ -79,8 +79,13 @@ public class TagCustomizationBusiness {
 					System.out.println("check if there is the denpendency :  "  + requiredChild.getName());
 					boolean found = false;
 					if(element.getSelectedChildrenArr() != null) {
+						
+						
 						for(int j = 0; j < element.getSelectedChildrenArr().size(); j++) {
+							
 							XmlTag selectedChild = element.getSelectedChildrenArr().get(j);
+							System.out.println("selectedchild" + selectedChild.getName());
+							
 							if(requiredChild.getName() == selectedChild.getName()) {
 								found = true;
 							}
@@ -88,7 +93,7 @@ public class TagCustomizationBusiness {
 						}
 						if(!found) {System.out.println(requiredChild.getName() + " not found ");return requiredChild;}
 					}
-					else {System.out.println(requiredChild.getName() + " not found ");return requiredChild;}
+					else {System.out.println("ou vedi che " + element.getName() + " non ha figli");System.out.println(requiredChild.getName() + " not found ");return requiredChild;}
 
 				}
 			}else {System.out.println(element.getName() + " has no dependencies");}
@@ -156,31 +161,9 @@ public class TagCustomizationBusiness {
 		}
 		return instance;
 	}
-	
-	
-	
-
-	/*
-	 * return new instance of passed class
-	 */
-	public static XmlTag getNewinstance(XmlTag tag) {
-		XmlTag newTag = new XmlTag(tag);
-		return newTag;
-	}
 		
 		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
+			
 		
 
 }

@@ -29,7 +29,7 @@ import view.Components.ModelComponents.TagBtn;
  * @author Mirco Palese
  */
 
-public class CollapsableTagPanel extends JPanel{
+public class CollapsableTagElement extends JPanel{
 	
 	/** panel's tag */
 	private XmlTag tag;
@@ -55,7 +55,7 @@ public class CollapsableTagPanel extends JPanel{
 	 * @param listener	TagCustomizationFrameListener listener
 	 */
 	
-	public CollapsableTagPanel(XmlTag tag, TagCustomizationFrameListener listener ) {
+	public CollapsableTagElement(XmlTag tag, TagCustomizationFrameListener listener ) {
 		this.tag = tag;
 		this.listener = listener;
 	
@@ -159,6 +159,7 @@ public class CollapsableTagPanel extends JPanel{
 	 * @param tag	attribute's owner
 	 * @return void
 	 */
+	
 	private void addAttribute(XmlAttribute a , XmlTag tag) {
 		
 		AttributeCheckBox c = new AttributeCheckBox(a , tag);   
@@ -171,7 +172,7 @@ public class CollapsableTagPanel extends JPanel{
 		attributesPanel.add(c); 
 	}
 	
-	
+	  
 	
 	
 	/**
