@@ -18,7 +18,7 @@ public class TagListPanelListener implements ActionListener {
 		 */
 		Class<XmlTag> tagClass = null;
 		try {
-			tagClass = (Class<XmlTag>) Class.forName("model.pdsc.tags.rootChildren." + Utils.firstLetterCaps(e.getActionCommand()));
+			tagClass = (Class<XmlTag>) Class.forName("model.pdsc.tags." + Utils.firstLetterCaps(e.getActionCommand()));
 			Constructor<?> cons = tagClass.getConstructor(boolean.class, XmlTag.class, int.class);
 			TagCustomizationFrame f = new TagCustomizationFrame((XmlTag) cons.newInstance(true, null, 1));
 		} 

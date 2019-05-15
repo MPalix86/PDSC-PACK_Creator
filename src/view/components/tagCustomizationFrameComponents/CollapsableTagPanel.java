@@ -39,7 +39,7 @@ public class CollapsableTagPanel extends JPanel{
 	private GridBagLayout gridBagLayout;
 	
 	/** attributes panel */
-	private JPanel AttributesPanel;
+	private JPanel attributesPanel;
 	
 	/** children panel */
 	private JPanel childrenPanel;
@@ -82,11 +82,11 @@ public class CollapsableTagPanel extends JPanel{
 			
 		add(lblTagName, gbc);
 			
-		/** AttributesPanel setup */
-		AttributesPanel = new JPanel( );
-		AttributesPanel.setBackground(Color.WHITE);
-		AttributesPanel.setLayout(new BoxLayout(AttributesPanel, BoxLayout.Y_AXIS));
-		AttributesPanel.setBorder(new EmptyBorder(0, 15, 0, 0));
+		/** attributesPanel setup */
+		attributesPanel = new JPanel( );
+		attributesPanel.setBackground(Color.WHITE);
+		attributesPanel.setLayout(new BoxLayout(attributesPanel, BoxLayout.Y_AXIS));
+		attributesPanel.setBorder(new EmptyBorder(0, 15, 0, 0));
 		
 		/** attributeTitle setup */
 		JLabel attributeTitle = new JLabel("Attributes :");
@@ -99,13 +99,19 @@ public class CollapsableTagPanel extends JPanel{
         gbc.gridwidth = GridBagConstraints.REMAINDER;
 		gbc.gridy = 2;
 				
-		AttributesPanel.add(new JSeparator());
-		AttributesPanel.add(attributeTitle);
+		attributesPanel.add(new JSeparator());
+		attributesPanel.add(attributeTitle);
 			
 		/** if tag has attributes */
 		if(tag.getAttrArr() != null) {
 			tag.getAttrArr().forEach((a) -> addAttribute(a , tag));
-			add(AttributesPanel, gbc);
+			add(attributesPanel, gbc);
+		}
+		
+		/** if tag hasn't attributes */
+		else {
+			attributesPanel.add(new JLabel(tag.getName() + " has no attributes")) ;
+			add(attributesPanel, gbc);
 		}
 		
 		/** childrenPanel setup */
@@ -162,7 +168,7 @@ public class CollapsableTagPanel extends JPanel{
 			c.setSelected(true);
 			c.setEnabled(false);
 		}
-		AttributesPanel.add(c); 
+		attributesPanel.add(c); 
 	}
 	
 	

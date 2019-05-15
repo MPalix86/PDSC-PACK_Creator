@@ -2,7 +2,10 @@
  TODO LIST
 =====================================
 
-- Change color of preview panel editor
+
+no date
+--------------------------------------------------------------------------------
+- Change color of preview panel editor ^
 
 - add default value ^
 
@@ -11,3 +14,25 @@
 - free memory after passing tag ^
 
 - implements missing tag ^
+
+
+14/05/2019
+--------------------------------------------------------------------------------
+– string field in package and other tag that not have children
+
+- see for configuration file
+
+- tag customization style
+
+- begin implementation of pack creator
+
+- use Jtree to implement tag customization
+
+- adjust listener comment
+
+- adjust businees comment
+
+- adjust tag list panel
+
+- unify color
+

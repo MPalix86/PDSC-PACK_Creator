@@ -82,7 +82,7 @@ public class WizardFrame extends JFrame {
 	private Session session; 
 	
 	/** STMicroelectronics blue color */
-	private static final Color stBlue = new Color (57,140,186);
+	private static final Color stBlue = new Color (0,153,214);
 	
 	
 	
@@ -116,10 +116,10 @@ public class WizardFrame extends JFrame {
 		/** other mandatory tag instances */
 		ArrayList<XmlTag> tagArr1 = new ArrayList<XmlTag>();
 		tagArr1.add(new Vendor(true, null, 1, "STMicroelectronics"));
-		tagArr1.add(new Name(true, null, 1));
-		tagArr1.add(new Description(true, null, 1));
-		tagArr1.add(new License(true, null, 1));
-		tagArr1.add(new Url(true, null, 1));
+		tagArr1.add(new Name(true, null, 1, ""));
+		tagArr1.add(new Description(true, null, 1, ""));
+		tagArr1.add(new License(true, null, 1, ""));
+		tagArr1.add(new Url(true, null, 1,"http://sw-center.st.com/packs/x-cube/"));
 		
 		/** populating steps array */
 		steps.add(new Form(tagArr));

@@ -71,7 +71,8 @@ public class TagCustomizationFrameListener implements ItemListener, ActionListen
 				parent.addSelectedChild(newChild);
 				tagCustomizationFrame.addTagPanel(newChild);
 				newChild.freeModelFields();
-				child.setMax(child.getMax() -1 );								// maximum number of children is reduced by one
+				child.setMax(child.getMax() -1);
+				// maximum number of children is reduced by one
 			}
 			else {																// if max child number is = 0, cannot add this child
 				tagCustomizationFrame.warningMessage("<html><p><span style=\"font-size: 14pt; color: #333333;\"> "
@@ -91,11 +92,13 @@ public class TagCustomizationFrameListener implements ItemListener, ActionListen
 					
 					XmlTag tag = tagBtn.getTag();
 					pdscWizardFrame.addStep(new Form(new XmlTag(tag)));
+					tagCustomizationFrame.okMessage("Tag added correctly", "done");
 				}
 			}
 			else {
 				XmlTag tag = tagBtn.getTag();
 				pdscWizardFrame.addStep(new Form(new XmlTag(tag)));
+				tagCustomizationFrame.okMessage("Tag added correctly", "done");
 			}
 			
 		}

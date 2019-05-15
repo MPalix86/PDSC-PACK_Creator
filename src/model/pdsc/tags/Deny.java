@@ -40,9 +40,6 @@ public class Deny extends XmlTagAbstract{
 	public Deny(boolean required, XmlTag parent, int max) {
 		
 		super(required, parent, max);
-		
-		addAttributes();
-		addChildren();
 	}
 	
 	
@@ -61,9 +58,6 @@ public class Deny extends XmlTagAbstract{
 	public Deny(boolean required, XmlTag parent, int max, String defaultContent) {
 		
 		super(required, parent, max, defaultContent);
-		
-		addAttributes();
-		addChildren();
 	}
 	
 	

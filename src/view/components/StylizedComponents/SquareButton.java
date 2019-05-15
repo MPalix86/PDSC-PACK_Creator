@@ -7,7 +7,7 @@ import javax.swing.JButton;
 
 public class SquareButton extends JButton{
 	
-	private static final Color stBlue = new Color (57,140,186);
+	private static final Color stBlue = new Color (0,153,214);
 	
     private Color hoverBackgroundColor;
     private Color pressedBackgroundColor;

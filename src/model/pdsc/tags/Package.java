@@ -42,9 +42,6 @@ public class Package extends XmlTagAbstract {
 	public Package(boolean required, XmlTag parent, int max) {
 		
 		super(required, parent, max);
-		
-		addAttributes();
-		addChildren();
 	}
 	
 	
@@ -63,9 +60,6 @@ public class Package extends XmlTagAbstract {
 	public Package(boolean required, XmlTag parent, int max, String defaultContent) {
 		
 		super(required, parent, max, defaultContent);
-		
-		addAttributes();
-		addChildren();
 	}
 	
 	

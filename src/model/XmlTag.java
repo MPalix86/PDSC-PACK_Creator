@@ -3,18 +3,21 @@ package model;
 import java.util.ArrayList;
 
 /**
- * XmlTag class represent an abstraction of xml tag. To manage Dynamically tags
- * with them attributes division has been made.
+ * XmlTag class represent an abstraction of generic xml tag. To manage Dynamically tags
+ * with them attributes, symbolic division has been made.
  * <p>
  * MODEL'S FIELDS : defined during class modeling; they should not be changed in
- * 					run time. These fields represent elements defined in some standard
- * 					which are modeled in form of classes.
+ * 					run time. These fields represent main features of an elements 
+ * 					defined in some xml standard which is modeled in form of class. 
+ * 					However only these fields are not necessary to completely 
+ * 					describes generic tag, because many properties depends on 
+ * 					the context, for example from the parent tag.
+ *                  you can find all these other fields in local fields above.
  * <p>
  * LOCAL FIELDS :	These fields are used to personalize model's field. For example
  * 					to select only certain attributes among all those present in model's
- * 					fields.
- *
- * 					
+ * 					fields, or to set some properties that depend only from parent tag
+ * 					like, for example the max occurrence number (max),	
  * 
  * @author Mirco Palese
  */
@@ -26,32 +29,46 @@ public class XmlTag{
  * LOCAL FIELDS
  * ==================================
  */
-	/** tag's name */
-	protected String name;
-	
 	/** tag's content*/
 	protected String content;
 
+	
 	/** true if tag is mandatory, false otherwise */
 	protected boolean required;
+	
 	
 	/** tag's selected childrendArr */
 	private  ArrayList<XmlTag> selectedChildrenArr;
 	
+	
 	/** tag's selected attributes array */
 	private ArrayList<XmlAttribute> selectedAttrArr;
+	
 	
 	/** tag's parent */
 	private XmlTag parent;
 	
-	/** tag's max occurrence number */
+	
+	/** tag's max occurrence number in parent*/
 	private Integer max;
 	
-	/** tag's default content */
-	private String defaultContent;
 	
 	/** tag's name space */
 	private XmlNameSpace nameSpace;
+	
+	
+	/**
+	 * tag's default content, set to void string ("") if tag can have content, 
+	 * set do desire content if tag has predefined content, set to null if tag
+	 * can't have any content (tag can only contains other tags).
+	 * <p>
+	 * NOTE : if tag can't have content you can use directly constructor 
+	 *        without defaultContent value. see XmlTagAbstract  
+	 * 
+	 * <a href="file:XmlTagAbstract.java">XmlTagABstract</a>
+	 */
+	private String defaultContent;
+
 	
 	
 /**
@@ -59,8 +76,9 @@ public class XmlTag{
  * MODEL'S FIELD
  * ==================================
  */
-	/** general max occurrence number */
-	public final static int MAX_OCCURENCE_NUMBER = 1000;
+	/** tag's name */
+	private String name;
+
 	
 	/** tag's attributes array */
 	private ArrayList<XmlAttribute> attrArr;
@@ -74,13 +92,16 @@ public class XmlTag{
 	private  ArrayList<XmlTag> childrenArr;	
 	
 	
+	/** general max occurrence number */
+	public final static int MAX_OCCURENCE_NUMBER = 1000;
+	
 	
 	
 	
 	/**
 	 * This constructor return the exact copy of tag passed by parameter in a new instance
 	 * <p>
-	 * other constructor to avoid inconsistency was defined in XmlTagAbstract
+	 * other constructor to avoid inconsistency, was defined in XmlTagAbstract
 	 * 
 	 * <a href="file:XmlTagAbstract.java">XmlTagABstract</a>
 	 * @param tag the tag to be copied into new instance
@@ -90,7 +111,6 @@ public class XmlTag{
 		
 		if(tag.getAttrArr() != null) {
 			
-			/** initialization of attrArr */
 			this.attrArr = new ArrayList<XmlAttribute>(); 
 			
 			/** for each attribute add new instance inside attrArr */
@@ -99,7 +119,6 @@ public class XmlTag{
 
 		if(tag.getSelectedAttrArr() != null) {
 			
-			/** initialization of selectedAttrArr */
 			this.selectedAttrArr = new ArrayList<XmlAttribute>(); 
 			
 			/** for each selected attribute add new instance inside attrArr */
@@ -109,7 +128,6 @@ public class XmlTag{
 		
 		if(tag.getChildrenArr() != null) {
 			
-			/** initialization of childrendArr */
 			this.childrenArr = new ArrayList<XmlTag>(); 
 			
 			/** for each children add new instance inside childrenArr */
@@ -118,7 +136,6 @@ public class XmlTag{
 		
 		if(tag.getSelectedChildrenArr() != null) {
 			
-			/** initialization of selectedchildrendArr */
 			this.selectedChildrenArr = new ArrayList<XmlTag>(); 
 			
 			/** for each selected children add new instance inside selectedchildrendArr */
@@ -140,6 +157,7 @@ public class XmlTag{
 		if(tag.getMax() != null) this.max = tag.getMax();
 		
 		this.required = tag.isRequired();
+		
 	}
 	
 	
@@ -209,7 +227,7 @@ public class XmlTag{
 	public void setContent(String content) {
 		this.content = content;
 	}
-
+	
 	
 	
 	

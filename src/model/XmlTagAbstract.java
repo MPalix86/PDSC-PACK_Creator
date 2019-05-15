@@ -16,6 +16,9 @@ public abstract class XmlTagAbstract extends XmlTag{
 		super.setParent(parent);
 		super.setMax(max);
 		super.setDefaultContent(defaultContent);
+		
+		this.addChildren();
+		this.addAttributes();
 	}
 	
 	
@@ -33,6 +36,9 @@ public abstract class XmlTagAbstract extends XmlTag{
 		super.setRequired(required);
 		super.setParent(parent);
 		super.setMax(max);
+		
+		this.addChildren();
+		this.addAttributes();
 	}
 	
 	
@@ -44,9 +50,9 @@ public abstract class XmlTagAbstract extends XmlTag{
 	 * left the method blank 
 	 * <p>
 	 * EXAMPLE: addChildren(){
-	 * 				add(new PredefinedXmlTag0())
-	 * 				add(new PredefinedXmlTag1())
-	 * 				add(new PredefinedXmlTag2())
+	 * 				this.addChild(new PredefinedXmlTag0())
+	 * 				this.addChild(new PredefinedXmlTag1())
+	 * 				this.addChild(new PredefinedXmlTag2())
 	 * 			}
 	 * <p>
 	 * you can find all predefined standard PDSC tag in scr/model/pdsc/tags/
@@ -65,9 +71,9 @@ public abstract class XmlTagAbstract extends XmlTag{
 	 * left the method blank
 	 * <p>
 	 * EXAMPLE: addChildren(){
-	 * 				add(new PredefinedXmlAttribute0())
-	 * 				add(new PredefinedXmlAttribute0())
-	 * 				add(new PredefinedXmlAttribute0())
+	 * 				this.addAttr(new PredefinedXmlAttribute0())
+	 * 				this.addAttr(new PredefinedXmlAttribute0())
+	 * 				this.addAttr(new PredefinedXmlAttribute0())
 	 * 			}
 	 * <p>
 	 * you can find all predefined standard PDSC attributes in scr/model/pdsc/attributes/

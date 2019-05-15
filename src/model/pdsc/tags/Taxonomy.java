@@ -31,9 +31,6 @@ public class Taxonomy extends XmlTagAbstract{
 	public Taxonomy(boolean required, XmlTag parent, int max) {
 		
 		super(required, parent, max);
-		
-		addAttributes();
-		addChildren();
 	}
 	
 	
@@ -52,9 +49,6 @@ public class Taxonomy extends XmlTagAbstract{
 	public Taxonomy(boolean required, XmlTag parent, int max, String defaultContent) {
 		
 		super(required, parent, max, defaultContent);
-		
-		addAttributes();
-		addChildren();
 	}
 	
 	
@@ -71,7 +65,7 @@ public class Taxonomy extends XmlTagAbstract{
 	
 	@Override
 	protected void addChildren() {
-		this.addChild(new Description(true, this, 1));
+		this.addChild(new Description(true, this, 1,""));
 	}
 	
 	

@@ -153,12 +153,11 @@ public class TagCustomizationFrame extends JFrame {
 		contentPane.setBorder(new EmptyBorder(0, 0, 0, 0));
 		
 		/** frame initial setup */
-		setBounds(100, 100, 904, 528);
 		c.setBackground(Color.WHITE);
 		setBackground(Color.WHITE);
 		setContentPane(c);//(contentPane);
 		setVisible(true);
-		setSize(360, 500);       
+		setSize(400, 600);       
 	    setLocation(200, 100);
 	    setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 	    
@@ -170,7 +169,7 @@ public class TagCustomizationFrame extends JFrame {
 		
 		/** adding bottomPanel, leftPanel inside contentPane */
 		contentPane.add(bottomPanel, BorderLayout.SOUTH);
-		contentPane.add(leftPanel, BorderLayout.WEST);
+		contentPane.add(leftPanel, BorderLayout.CENTER);
 		
 		/** adding contentPane inside Container */
 		c.add(contentPane);
@@ -283,6 +282,25 @@ public class TagCustomizationFrame extends JFrame {
 				 icon, options, options[0]); 
 		if(value == 0) return true;
 		else return false;
+	}
+	
+	
+	
+	
+	/**
+	 * Show option pane warning message with only "ok" option
+	 * 
+	 * @param message	message to show inside option pane
+	 * @return void
+	 */
+	
+	public void okMessage(String message, String title) {
+		ImageIcon icon = new ImageIcon (getClass().getClassLoader().getResource("icons/ok96.png"));
+		Object[] options = { "OK"};
+		JOptionPane.showOptionDialog (null, message, title, JOptionPane.OK_OPTION,
+				 JOptionPane.INFORMATION_MESSAGE,
+				 icon, options, options[0]); 
+	
 	}
 
 }

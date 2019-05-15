@@ -26,10 +26,6 @@ import view.Components.ModelComponents.TagTextField;
 
 public class Form extends JPanel{
 	
-	/** array that contains all tag to be inserted inside form */
-	private ArrayList<XmlTag> tagArr;
-	
-	
 	/** dimension of text field and label  */
 	private final static int LABEL_HEIGHT = 16;
 	private final static int TEXT_HEIGHT = 33;
@@ -38,13 +34,16 @@ public class Form extends JPanel{
 	private final static int TEXT_X = 57;
 	private final static int LABEL_X = 57;
 	
-	/** new y position between label and text */
+	/** array that contains all tags to be inserted inside form */
+	private ArrayList<XmlTag> tagArr;
+	
+	/** value to add y position between label and text */
 	private final static int DELTA_LABEL_TEXT = 28;
 	
-	/** new y position between text and label */
+	/** value to add at y position between text and label */
 	private final static int DELTA_TEXT_LABEL = 45;
 	
-	/** new y position between title and other elements */
+	/** value to add y position between title and other elements */
 	private final static int DELTA_TITLE = 36;
 	
 	/** attribute color */
@@ -269,22 +268,26 @@ public class Form extends JPanel{
 				/** if element has no selected children */
 				else {	
 					
-					/** setting up TagTextField valueText */
-					TagTextField valueText = new TagTextField(element);
-					valueText.setBorder(new LineBorder(Color.LIGHT_GRAY));
-					valueText.setForeground(Color.DARK_GRAY);
-					valueText.setColumns(10);
-					
-					/** adding focus listener */
-					valueText.addFocusListener(listener);
-					
-					/** setting up position of valueText */
-					valueText.setBounds(37, positionY, TEXT_WIDTH, TEXT_HEIGHT);
-					
-					/** calculation of new position */
-					positionY += DELTA_TEXT_LABEL;
-					
-					this.add(valueText);
+					/** if tag can have content */
+					if(element.getDefaultContent() != null) {
+						
+						/** setting up TagTextField valueText */
+						TagTextField valueText = new TagTextField(element);
+						valueText.setBorder(new LineBorder(Color.LIGHT_GRAY));
+						valueText.setForeground(Color.DARK_GRAY);
+						valueText.setColumns(10);
+						
+						/** adding focus listener */
+						valueText.addFocusListener(listener);
+						
+						/** setting up position of valueText */
+						valueText.setBounds(37, positionY, TEXT_WIDTH, TEXT_HEIGHT);
+						
+						/** calculation of new position */
+						positionY += DELTA_TEXT_LABEL;
+						
+						this.add(valueText);
+					}
 				}
 				
 				/** if element has selected attributes */
