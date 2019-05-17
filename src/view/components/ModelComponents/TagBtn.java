@@ -1,36 +1,62 @@
 package view.Components.ModelComponents;
 
-import javax.swing.JButton;
-
 import model.XmlTag;
 
-public class TagBtn extends JButton{
-	private String tagName;
+/**
+ * This button contains an XmlTag instance
+ * 
+ * @author mircopalese
+ */
+public class TagBtn extends SquareButton{
+	
 	private XmlTag	tag;
 	
+
+    
+	/**
+	 * initialize tag instance and setting text and color
+	 * 
+	 * @param tag button's associated tag
+	 */
+	
 	public TagBtn(XmlTag tag ) {
-		super();
-		this.tagName = tag.getName();
+		super("< " + tag.getName() + " >");
+		super.setForeground(CustomColor.TAG_COLOR);
 		this.tag = tag;
-		super.setName(tagName);
-		super.setText(tag.getName());
+		
 	}
 	
-	public TagBtn(XmlTag tag , String text) {
-		super();
+	
+	
+	public TagBtn(XmlTag tag , String text ) {
+		
+		super(text);
 		this.tag = tag;
-		super.setText(text);
+		
 	}
-
-	public String getTagName() {
-		return tagName;
-	}
-	public void setTagName(String tagName) {
-		this.tagName = tagName;
-	}
+	
+	
+	
+	
+	/**
+	 * return button's associated tag
+	 * 
+	 * @return button's associated tag
+	 */
+	
 	public XmlTag getTag() {
 		return tag;
 	}
+	
+	
+	
+	
+	/**
+	 * set button's associated tag
+	 * 
+	 * @param tag  button's associated tag
+	 */
+	
 	public void setTag(XmlTag tag) {
 		this.tag = tag;
 	}

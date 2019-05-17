@@ -29,7 +29,7 @@ public class XmlTag{
  * LOCAL FIELDS
  * ==================================
  */
-	/** tag's content*/
+	/** tag's content */
 	protected String content;
 
 	
@@ -49,7 +49,7 @@ public class XmlTag{
 	private XmlTag parent;
 	
 	
-	/** tag's max occurrence number in parent*/
+	/** tag's max occurrence number in parent */
 	private Integer max;
 	
 	
@@ -99,7 +99,7 @@ public class XmlTag{
 	
 	
 	/**
-	 * This constructor return the exact copy of tag passed by parameter in a new instance
+	 * This constructor return the exact PARENTLESS copy of tag passed by parameter in a new instance
 	 * <p>
 	 * other constructor to avoid inconsistency, was defined in XmlTagAbstract
 	 * 
@@ -131,7 +131,7 @@ public class XmlTag{
 			this.childrenArr = new ArrayList<XmlTag>(); 
 			
 			/** for each children add new instance inside childrenArr */
-			tag.getChildrenArr().forEach((c)->this.childrenArr.add(new XmlTag(c)));
+			tag.getChildrenArr().forEach((c)->this.childrenArr.add(new XmlTag(c, this)));
 		}
 		
 		if(tag.getSelectedChildrenArr() != null) {
@@ -139,10 +139,10 @@ public class XmlTag{
 			this.selectedChildrenArr = new ArrayList<XmlTag>(); 
 			
 			/** for each selected children add new instance inside selectedchildrendArr */
-			tag.getSelectedChildrenArr().forEach((c)-> this.selectedChildrenArr.add(new XmlTag(c)));
+			tag.getSelectedChildrenArr().forEach((c)-> this.selectedChildrenArr.add(new XmlTag(c, this)));
 		}
 	
-		if(tag.getParent() != null) this.parent = null;
+		if(tag.getParent() != null) this.parent = null ;
 		
 		if(tag.getDefaultContent() != null) this.defaultContent = new String(tag.getDefaultContent());
 		
@@ -159,6 +159,73 @@ public class XmlTag{
 		this.required = tag.isRequired();
 		
 	}
+	
+	
+	
+	
+	/**
+	 * This constructor return the exact copy of tag passed by parameter in a new instance.
+	 * Parent is set to parent passed by paramenter
+	 * <p>
+	 * other constructor to avoid inconsistency, was defined in XmlTagAbstract
+	 * 
+	 * <a href="file:XmlTagAbstract.java">XmlTagABstract</a>
+	 * @param tag the tag to be copied into new instance
+	 */
+	
+	public XmlTag(XmlTag tag, XmlTag parent) {
+		
+		if(tag.getAttrArr() != null) {
+			
+			this.attrArr = new ArrayList<XmlAttribute>(); 
+			
+			/** for each attribute add new instance inside attrArr */
+			tag.getAttrArr().forEach((a)->this.attrArr.add(new XmlAttribute(a)));
+		}
+
+		if(tag.getSelectedAttrArr() != null) {
+			
+			this.selectedAttrArr = new ArrayList<XmlAttribute>(); 
+			
+			/** for each selected attribute add new instance inside attrArr */
+			tag.getSelectedAttrArr().forEach((a)-> this.selectedAttrArr.add(new XmlAttribute(a)));
+		}
+		
+		
+		if(tag.getChildrenArr() != null) {
+			
+			this.childrenArr = new ArrayList<XmlTag>(); 
+			
+			/** for each children add new instance inside childrenArr */
+			tag.getChildrenArr().forEach((c)->this.childrenArr.add(new XmlTag(c, this)));
+		}
+		
+		if(tag.getSelectedChildrenArr() != null) {
+			
+			this.selectedChildrenArr = new ArrayList<XmlTag>(); 
+			
+			/** for each selected children add new instance inside selectedchildrendArr */
+			tag.getSelectedChildrenArr().forEach((c)-> this.selectedChildrenArr.add(new XmlTag(c, this)));
+		}
+	
+		if(tag.getParent() != null) this.parent = parent ;
+		
+		if(tag.getDefaultContent() != null) this.defaultContent = new String(tag.getDefaultContent());
+		
+		if(tag.getContent() != null) this.content = new String(tag.getContent());
+		
+		if(tag.getDescription() != null) this.description = new String (tag.getDescription());
+		
+		if(tag.getNameSpace() != null) this.nameSpace = new XmlNameSpace(tag.getNameSpace());
+		
+		if(tag.getName() != null) this.name = new String(tag.getName());
+		
+		if(tag.getMax() != null) this.max = tag.getMax();
+		
+		this.required = tag.isRequired();
+		
+	}
+	
 	
 	
 	

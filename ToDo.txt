@@ -15,9 +15,6 @@ no date
 
 - implements missing tag ^
 
-
-14/05/2019
---------------------------------------------------------------------------------
 – string field in package and other tag that not have children ^
 
 - see for configuration file
@@ -26,7 +23,7 @@ no date
 
 - begin implementation of pack creator
 
-- adjust listener comment
+- adjust listener comment 1/2^
 
 - adjust businees comment
 
@@ -38,5 +35,11 @@ no date
 
 - add editor for tag that have content
 
-- verify dependency
+- verify dependency ^
+
+- parent in xmltag ^
+
+- vedere la cosa degli attributi defaultcontent ^
+
+- implementare controllo tag no testo no attr
 

@@ -30,8 +30,9 @@ import model.pdsc.tags.Name;
 import model.pdsc.tags.Package;
 import model.pdsc.tags.Url;
 import model.pdsc.tags.Vendor;
+import view.Components.ModelComponents.CustomColor;
+import view.Components.ModelComponents.SquareButton;
 import view.Components.ModelComponents.xmlEditor.XmlTextPane;
-import view.Components.StylizedComponents.SquareButton;
 import view.Components.wizardFrameComponents.FinalStepForm;
 import view.Components.wizardFrameComponents.Form;
 import view.Components.wizardFrameComponents.TagListBar;
@@ -80,9 +81,6 @@ public class WizardFrame extends JFrame {
 	
 	/** session */
 	private Session session; 
-	
-	/** STMicroelectronics blue color */
-	private static final Color stBlue = new Color (0,153,214);
 	
 	
 	
@@ -242,12 +240,12 @@ public class WizardFrame extends JFrame {
 		
 		
 			/** setting up backButton */
-			SquareButton backButton = new SquareButton("< Back");
+			SquareButton backButton = new SquareButton("< Back", CustomColor.ST_BLUE, Color.WHITE);
 			backButton.addActionListener(listener);
 			backButton.setActionCommand("back");
 	
 			/** setting up nextButton */
-			SquareButton nextButton = new SquareButton("Next >");
+			SquareButton nextButton = new SquareButton("Next >" , CustomColor.ST_BLUE, Color.WHITE);
 			nextButton.addActionListener(listener);
 			nextButton.setActionCommand("continue");
 		
@@ -317,7 +315,7 @@ public class WizardFrame extends JFrame {
 		
 		/** centerPanel initial setup */
 		centerPanel = new JPanel();
-		centerPanel.setBackground(stBlue);
+		centerPanel.setBackground(CustomColor.ST_BLUE);
 		centerPanel.setSize(new Dimension(420,590));
 		centerPanel.setLayout(new BorderLayout(0, 0));
 		centerPanel.setBorder(new EmptyBorder(0,0,0,0));
@@ -380,7 +378,7 @@ public class WizardFrame extends JFrame {
 		tagListScrollPane.setVerticalScrollBar(tagListScrollPaneScrollBar);
         tagListScrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
         tagListScrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
-        tagListScrollPane.setBorder(new MatteBorder(0,2,0,0, stBlue));
+        tagListScrollPane.setBorder(new MatteBorder(0,2,0,0, CustomColor.ST_BLUE));
         
         /** adding tagListScrollPane into centerPanel */
         rightPanel.add(tagListScrollPane, BorderLayout.CENTER);
@@ -410,7 +408,7 @@ public class WizardFrame extends JFrame {
 		for (int i = 0 ; i < steps.size(); i++) {
 			JPanel panel = new JPanel();
 			if(i <= stepIndex) {
-				panel.setBackground(stBlue);
+				panel.setBackground(CustomColor.ST_BLUE);
 			}
 			else {
 				panel.setBackground(UIManager.getColor(Color.WHITE));

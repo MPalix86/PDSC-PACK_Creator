@@ -17,25 +17,60 @@ import view.Components.ModelComponents.AttributeCheckBox;
 import view.Components.ModelComponents.TagBtn;
 import view.Components.wizardFrameComponents.Form;
 
+/**
+ * TagCustomizationFrame Listener
+ * 
+ * @author mirco Palese
+ */
 public class TagCustomizationFrameListener implements ItemListener, ActionListener{
+	
+	/** tagCustomizationFrame instance */
 	private TagCustomizationFrame tagCustomizationFrame;
-	private TagBtn tagBtn;
-	private TagCustomizationBusiness tagBusiness;  
+	
 	private Session session;
+	
 	private WizardFrame pdscWizardFrame;
 
+	
+	
+	
+	
+	/**
+	 * Constructor
+	 * 
+	 * @param tagCustomizationFrame the tag Customization frame
+	 */
+	
 	public TagCustomizationFrameListener (TagCustomizationFrame tagCustomizationFrame) {
+		
+		/** new instance of session */
 		session = Session.getInstance();
+		
+		/** recovering pdsc wizard frame */
 		this.pdscWizardFrame = session.getWizardFrame();
-		tagBusiness = new TagCustomizationBusiness();
+		
+		/** recovering tag customization frame */
 		this.tagCustomizationFrame = tagCustomizationFrame;
 	}
 	
+	
+	
+	
+	
+	/** 
+	 * Check for attributeCheckboxes status change
+	 * 
+	 * @param e the item that caused event
+	 */
+	
 	@Override
 	public void itemStateChanged(ItemEvent e) {
+		
 		AttributeCheckBox c = (AttributeCheckBox) e.getItem();
 		XmlAttribute attr =  c.getAttr();
 		XmlTag tag = c.getTag();
+		
+		/** if attribute was selected */
 		if(c.isSelected()) {
 			tag.addSelectedAttr(new XmlAttribute(attr));
 		}
@@ -43,71 +78,132 @@ public class TagCustomizationFrameListener implements ItemListener, ActionListen
 			tag.removeSelectedAttr(attr);
 		}	
 	}
-		  
-
+	
+	
+	
+	
+	/** 
+	 * Check for button status change
+	 * 
+	 * @param e the item that caused event
+	 */
+	
 	@Override
 	public void actionPerformed(ActionEvent e) {
+		
 		String command = e.getActionCommand();
-		tagBtn = (TagBtn) e.getSource();
+		
+		/** recovering TagButton instance */
+		TagBtn tagBtn = (TagBtn) e.getSource();
 		
 		if(command == "removeTagPanel") {
-			XmlTag parent 		= tagCustomizationFrame.getTagParent();
-			XmlTag newChild 	= tagBtn.getTag();								// recovering child
-			XmlTag child 		= TagCustomizationBusiness.findChildFromSelectedChildName(parent, newChild.getName()); //recovering instance that contains all constraints from new isntance generated when this tag was added
-			parent.removeSelectedChild(newChild); 								// updating selectedChild array
-			JPanel tagPanel 	= (JPanel) tagBtn.getParent().getParent();		// recovering tagpanel
-			tagCustomizationFrame.removeTagPanel(tagPanel);						// removing child tag Panel
-			child.setMax(child.getMax() + 1);									// maximum number of children is augmented by one	
-																				// child.getmax() is the maximum number of times that child tag can occur in parent
+			
+			/** recovering parent of the frame : tag customization frame */
+			XmlTag parent = tagCustomizationFrame.getTagParent();
+			
+			/** recovering child that user want to remove (selected child); the instance in tag's selectedChildrenArr  */
+			XmlTag selectedChild = tagBtn.getTag();			
+			
+			/** recovering model instance that contains all constraints for selected tag; i.e. the instance present in childrenArr */
+			XmlTag modelChild = TagCustomizationBusiness.findModelChildFromSelectedChildName(parent, selectedChild.getName()); 
+			
+			/** removing selected child from selectedChildrenArr */
+			parent.removeSelectedChild(selectedChild); 								
+			
+			/** recovering tag panel */
+			JPanel tagPanel = (JPanel) tagBtn.getParent().getParent().getParent().getParent();	
+			
+			/** removing tag panel from tag customization frame */
+			tagCustomizationFrame.removeTagPanel(tagPanel);
+			
+			/** maximum number of possible child in the model instance is augmented by one */
+			modelChild.setMax(modelChild.getMax() + 1);										
+																		
 		}																				
 		
-		
-		
 		if(command == "addTagPanel") {
+			
+			System.out.println("premuto");
+			
+			/** recovering model instance for selected child */
 			XmlTag child = tagBtn.getTag();
-			//System.out.println("child =" + child.getName());
 			
+			/** recovering parent instance for selected child */
 			XmlTag parent = child.getParent();
-			//System.out.println("parent =" + parent.getName());
 			
+			/** if max child number is > 0, add child */
 			if(child.getMax() > 0 ) {
-				XmlTag newChild = new XmlTag(child);
-				if(newChild.getChildrenArr() != null) newChild.getChildrenArr().forEach((c)-> c.setParent(newChild));
+				
+				/** creating new child instance of selected child with parent , passed parent */
+				XmlTag newChild = new XmlTag(child, parent);
+				
+				/** adding new child in selectedChildArr of new parent */
 				parent.addSelectedChild(newChild);
 				
-				//System.out.println("ho aggiunto al parent " + newChild.getName());
+				/** adding tag inside tag customization frame */
 				tagCustomizationFrame.addTagPanel(newChild);
+				
+				
 				child.setMax(child.getMax() -1);
-				// maximum number of children is reduced by one
-			}
-			else {																// if max child number is = 0, cannot add this child
-				tagCustomizationFrame.warningMessage("<html><p><span style=\"font-size: 14pt; color: #333333;\"> "
-													+ " Maximum number of children reached for tag " +tagBtn.getName() + "  </span></p></html>"); 
 			}
 			
+			/** if max child number is = 0, cannot add this child */
+			else {		
+				
+				tagCustomizationFrame.warningMessage(	"<html><p><span style=\"font-size: 14pt; color: #333333;\"> "
+														+ " Maximum number of children reached for tag  " +tagBtn.getTag().getName() + 
+														" </span></p></html>"
+													); 
+			}
 		}
 		
-		if(command == "add") {
-			XmlTag missingDependency = TagCustomizationBusiness.dependencyCheck(tagBtn.getTag()); 
-			if(missingDependency != null) {
-				boolean response = tagCustomizationFrame.yesNoWarningMessage("<html><p><span style=\"font-size: 14pt; color: #333333;\"> "
-														+ " Missing dependency : " + missingDependency.getName() + " </p><br>"
-														+ " <p> Do you want to continue </span></p></html>"); 
+		
+		if(command == "addInWizard") {
 			
+			/** check for missing dependency */
+			XmlTag missingDependency = TagCustomizationBusiness.dependencyCheck(tagBtn.getTag()); 
+			
+			/** if there are missing dependency */
+			if(missingDependency != null) {
+				
+				/** warn the user */ 
+				boolean response = tagCustomizationFrame.yesNoWarningMessage(	"<html><p><span style=\"font-size: 14pt; color: #333333;\"> "
+																				+ " Missing dependency : " + missingDependency.getName() + 
+																				" </p><br><p> Do you want to continue </span></p></html>"
+																			); 
+				/** if user want to continue */
 				if(response) {
 					
+					/** add step inside wizard frame */
 					XmlTag tag = tagBtn.getTag();
-					pdscWizardFrame.addStep(new Form(new XmlTag(tag)));
+					XmlTag newTag = new XmlTag(tag);
+					newTag.freeModelFields();
+					pdscWizardFrame.addStep(new Form(newTag));
 					tagCustomizationFrame.okMessage("Tag added correctly", "done");
 				}
 			}
+			
+			/** if there aren't missing dependency */
 			else {
 				XmlTag tag = tagBtn.getTag();
-				pdscWizardFrame.addStep(new Form(new XmlTag(tag)));
+				XmlTag newTag = new XmlTag(tag);
+				newTag.freeModelFields();
+				pdscWizardFrame.addStep(new Form(newTag));
 				tagCustomizationFrame.okMessage("Tag added correctly", "done");
+				
 			}
 			
 		}
+		
+		
+		
+		if(command.equals("showChildren")) {
+			System.out.println("pressed");
+			XmlTag tag = tagBtn.getTag();
+			tagCustomizationFrame.updateRightPanel(tag);
+		}
 	}
+
+
 
 }

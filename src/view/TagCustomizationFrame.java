@@ -3,6 +3,7 @@ package view;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Container;
+import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
@@ -13,12 +14,15 @@ import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.MatteBorder;
 import javax.swing.plaf.ColorUIResource;
 
 import business.Session;
 import listeners.TagCustomizationFrameListener;
 import model.XmlTag;
+import view.Components.ModelComponents.CustomColor;
 import view.Components.ModelComponents.TagBtn;
+import view.Components.tagCustomizationFrameComponents.ChildrenListBar;
 import view.Components.tagCustomizationFrameComponents.TagContainer;
 
 
@@ -42,6 +46,9 @@ public class TagCustomizationFrame extends JFrame {
 	/** left panel */
 	private JPanel leftPanel;
 	
+	/** right panel */
+	private JPanel rightPanel;
+	
 	/** tag container */
 	private TagContainer tagContainer;
 	
@@ -53,6 +60,8 @@ public class TagCustomizationFrame extends JFrame {
 	
 	/** frmae's parent tag */
 	private XmlTag parent;
+	
+	private ArrayList<JPanel> childrenPanelArr;
 	
 	
 	
@@ -138,6 +147,50 @@ public class TagCustomizationFrame extends JFrame {
 	
 	
 	
+	
+	/**
+	 * GenerateRightPanel
+	 * 
+	 * @return void
+	 */
+	
+	private void generateRightPanel(XmlTag tag){
+
+		rightPanel = new JPanel();
+		rightPanel.setLayout(new BorderLayout());
+		rightPanel.setBorder(new MatteBorder(0,1,0,0, CustomColor.LIGHT_GRAY));
+		
+		JScrollPane rightScrollPanel = new JScrollPane(new ChildrenListBar(tag, listener));
+		
+		/** creation of leftScrollPaneScrollBar. Scroll bar of LeftScrollPane */
+		JScrollBar rightScrollPanelScrollBar = new JScrollBar(){
+			
+	    	/**
+        	 * override isVisible to keep the scroll bar working even if
+        	 * it is hidden
+        	 */
+            @Override
+            public boolean isVisible() {
+                return true;
+            }
+        }; 
+        
+        /** setting up leftScrollPane */
+        rightScrollPanelScrollBar.setUnitIncrement(16);
+        rightScrollPanel.setVerticalScrollBar(rightScrollPanelScrollBar);
+        rightScrollPanel.setBorder(new EmptyBorder(0, 0, 0, 0));
+        rightScrollPanel.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        rightScrollPanel.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
+		
+		/** adding leftPanel inside lefScrollPanel */
+		rightPanel.add(rightScrollPanel);
+		
+	
+	}
+	
+	
+	
+	
 	/** 
 	 * recovering container, setting up frame, contentPane and placing all components 
 	 * 
@@ -158,7 +211,7 @@ public class TagCustomizationFrame extends JFrame {
 		setBackground(Color.WHITE);
 		setContentPane(c);//(contentPane);
 		setVisible(true);
-		setSize(400, 600);       
+		setSize(900, 600);       
 	    setLocation(200, 100);
 	    setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 	    
@@ -168,9 +221,13 @@ public class TagCustomizationFrame extends JFrame {
 		/** generating bottomPanel */
 		generateBottomPanel();
 		
+		/** generating rightPanel */
+		generateRightPanel(parent);
+		
 		/** adding bottomPanel, leftPanel inside contentPane */
 		contentPane.add(bottomPanel, BorderLayout.SOUTH);
 		contentPane.add(leftPanel, BorderLayout.CENTER);
+		contentPane.add(rightPanel, BorderLayout.EAST);
 		
 		/** adding contentPane inside Container */
 		c.add(contentPane);
@@ -192,12 +249,6 @@ public class TagCustomizationFrame extends JFrame {
 	
 	
 	
-
-	
-	
-	
-	
-	
 	/** 
 	 * creating bottomPanel 
 	 * 
@@ -214,10 +265,37 @@ public class TagCustomizationFrame extends JFrame {
 		/** setting up addButton */
 		TagBtn addButton = new TagBtn (parent, "Add");
 		addButton.addActionListener(listener);
-		addButton.setActionCommand("add");
+		addButton.setActionCommand("addInWizard");
+		addButton.setBackground(Color.DARK_GRAY);
+		addButton.setForeground(Color.WHITE);
+		addButton.setPressedBackgroundColor(Color.GRAY);
 		
 		/** adding addButoon inside bottomPanel */
 		bottomPanel.add(addButton , BorderLayout.CENTER);
+	}
+	
+	
+	
+	
+	/**
+	 * Update right Panel removing and repainting children list bar
+	 * 
+	 * @param tag for children list bar
+	 */
+	
+	public void updateRightPanel(XmlTag tag) {
+	
+		contentPane.remove(rightPanel);
+		
+		
+		if(tag.getChildrenArr() != null) {
+			generateRightPanel(tag);
+			contentPane.add(rightPanel, BorderLayout.EAST);
+			contentPane.repaint();
+			contentPane.revalidate();
+		}
+		
+		
 	}
 	
 	
@@ -320,5 +398,20 @@ public class TagCustomizationFrame extends JFrame {
 				 icon, options, options[0]); 
 	
 	}
+	
+	
+	
+	
+	/**
+	 * return children panel of this tag
+	 * 
+	 * @return children Panel
+	 */
+	
+	public ArrayList<JPanel> getChildrenPanelArr() {
+		return this.childrenPanelArr;
+	}
+	
+	
 
 }

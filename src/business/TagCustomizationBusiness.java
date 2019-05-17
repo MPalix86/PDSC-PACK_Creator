@@ -41,13 +41,13 @@ public class TagCustomizationBusiness {
 	 * name of the tag 
 	 * 
 	 */
-	public static XmlTag findChildFromSelectedChildName(XmlTag parent, String childName) {
+	public static XmlTag findModelChildFromSelectedChildName(XmlTag parent, String childName) {
 		ArrayList <XmlTag> children = new ArrayList();
 		children.add(parent);
 		while(!children.isEmpty()) {
 			XmlTag element = children.get(0);
 			children.remove(element);
-			if(element.getName() == childName) {	
+			if(element.getName().equals(childName)) {	
 				return element;
 			}
 			if( element.getChildrenArr() != null ) {
@@ -79,14 +79,20 @@ public class TagCustomizationBusiness {
 					System.out.println("check if there is the denpendency :  "  + requiredChild.getName());
 					boolean found = false;
 					if(element.getSelectedChildrenArr() != null) {
-						
-						
+						System.out.println("let's see if " +  requiredChild.getName() + " is present in selected children of " +element.getName());
 						for(int j = 0; j < element.getSelectedChildrenArr().size(); j++) {
-							
 							XmlTag selectedChild = element.getSelectedChildrenArr().get(j);
-							System.out.println("selectedchild" + selectedChild.getName());
+							System.out.println("analizyng selected child " + selectedChild.getName());
 							
-							if(requiredChild.getName() == selectedChild.getName()) {
+							String requiredChildName = requiredChild.getName();
+							requiredChildName.replaceAll("\\s+","");
+							
+							String selectedChildName = selectedChild.getName();
+							selectedChildName.replaceAll("\\s+","");
+							
+							//WTF requiredChildName == requiredChildName don't work !!!!
+							
+							if(requiredChildName.equals(selectedChildName)) {
 								found = true;
 							}
 							if( found ) { System.out.println(selectedChild .getName() + " found ");break;}
@@ -103,6 +109,7 @@ public class TagCustomizationBusiness {
 		}
 		return null;
 	}
+	
 	
 	
 	

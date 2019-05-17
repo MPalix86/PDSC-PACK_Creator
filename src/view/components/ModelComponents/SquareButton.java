@@ -1,4 +1,4 @@
-package view.Components.StylizedComponents;
+package view.Components.ModelComponents;
 
 import java.awt.Color;
 import java.awt.Graphics;
@@ -6,24 +6,59 @@ import java.awt.Graphics;
 import javax.swing.JButton;
 
 public class SquareButton extends JButton{
-	
-	private static final Color stBlue = new Color (0,153,214);
-	
+    
+    private Color background = Color.WHITE;
+    
+    private Color foreground = Color.DARK_GRAY;
+    
+    private Color pressedBackgroundColor = new Color(224,224,224); 
+    
     private Color hoverBackgroundColor;
-    private Color pressedBackgroundColor;
 
     public SquareButton() {
         this(null);
     }
 
+    
+    
+    
     public SquareButton(String text) {
         super(text);
-        this.setPressedBackgroundColor(stBlue.brighter());
-        this.setForeground(Color.WHITE);
-        this.setBackground(stBlue);
+        this.setBackground(background);
+    	this.setForeground(foreground);
+    	this.setPressedBackgroundColor(pressedBackgroundColor);
         super.setBorderPainted(false);
         
     }
+    
+    
+    
+    
+    public SquareButton(String text, Color background, Color foreground) {
+    	super(text);
+    	this.setBackground(background);
+    	this.setForeground(foreground);
+    	this.setPressedBackgroundColor(this.getBackground().brighter());
+        super.setBorderPainted(false);
+        
+    }
+    
+    
+    
+    
+    public SquareButton(String text, Color background, Color foreground, Color pressedBackgroundColor) {
+    	super(text);
+    	this.setBackground(background);
+    	this.setForeground(foreground);
+    	this.setPressedBackgroundColor(pressedBackgroundColor);
+        super.setBorderPainted(false);
+        
+    }
+    
+    
+    
+    
+
 
     @Override
     protected void paintComponent(Graphics g) {

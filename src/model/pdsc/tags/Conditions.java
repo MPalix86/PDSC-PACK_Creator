@@ -68,7 +68,7 @@ public class Conditions extends XmlTagAbstract{
 	@Override
 	protected void addChildren() {
 		this.addChild(new Description(false, this, 1, ""));
-		this.addChild(new Accept(false, this, MAX_OCCURENCE_NUMBER));
+		//this.addChild(new Accept(false, this, MAX_OCCURENCE_NUMBER));
 		this.addChild(new Deny(false, this, MAX_OCCURENCE_NUMBER));
 		this.addChild(new Require(false, this, MAX_OCCURENCE_NUMBER));
 	}

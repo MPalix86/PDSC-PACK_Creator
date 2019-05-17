@@ -15,6 +15,7 @@ import model.XmlAttribute;
 import model.XmlTag;
 import view.Components.ModelComponents.AttributeComboBox;
 import view.Components.ModelComponents.AttributeTextField;
+import view.Components.ModelComponents.CustomColor;
 import view.Components.ModelComponents.TagTextField;
 
 
@@ -46,13 +47,9 @@ public class Form extends JPanel{
 	/** value to add y position between title and other elements */
 	private final static int DELTA_TITLE = 36;
 	
-	/** attribute color */
-	private final static Color ATTR_COLOR = new Color(255, 99, 71);
-	
-	/** tag color */
-	private final static Color TAG_COLOR = new Color(0, 0, 128);
 	
 	private FormListener listener;
+	
 	
 	private int positionY = 49;
 	
@@ -151,7 +148,7 @@ public class Form extends JPanel{
 			
 		/** setting up attrLabel */
 		JLabel attrLabel = new JLabel();
-		attrLabel.setForeground(ATTR_COLOR);
+		attrLabel.setForeground(CustomColor.ATTR_COLOR);
 		
 		/** setting up position of attrLabel */
 		attrLabel.setBounds(LABEL_X, positionY ,LABEL_WIDTH, LABEL_HEIGHT);
@@ -252,7 +249,7 @@ public class Form extends JPanel{
 				else tagNameLabel = new JLabel("<"+element.getName()+">");
 				
 				/** setting up tagNameLabel */
-				tagNameLabel.setForeground(TAG_COLOR);
+				tagNameLabel.setForeground(CustomColor.TAG_COLOR);
 				tagNameLabel.setFont(new Font("Lucida Grande", Font.PLAIN, 15));
 				tagNameLabel.setBounds(30, positionY , 123, 24);
 				this.add(tagNameLabel);

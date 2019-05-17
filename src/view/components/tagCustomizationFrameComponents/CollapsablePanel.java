@@ -1,4 +1,4 @@
-package view.Components.StylizedComponents;
+package view.Components.tagCustomizationFrameComponents;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -30,7 +30,7 @@ public class CollapsablePanel extends JPanel {
     private class HeaderPanel extends JPanel implements MouseListener {
         String text_;
         Font font;
-        BufferedImage open, closed;
+        BufferedImage open, closed, remove;
         final int OFFSET = 30, PAD = 5;
  
         public HeaderPanel(String text) {
@@ -46,22 +46,32 @@ public class CollapsablePanel extends JPanel {
             try {
                 open = ImageIO.read(getClass().getResourceAsStream("/icons/downArrow.png"));
                 closed = ImageIO.read(getClass().getResourceAsStream("/icons/rightArrow.png"));
+                
             } catch (IOException e) {
                 e.printStackTrace();
             }
- 
+            
+          
+            
+         
         }
  
         protected void paintComponent(Graphics g) {
             super.paintComponent(g);
             Graphics2D g2 = (Graphics2D) g;
-            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                    RenderingHints.VALUE_ANTIALIAS_ON);
+            g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING,RenderingHints.VALUE_ANTIALIAS_ON);
             int h = getHeight();
-            if (selected)
-                g2.drawImage(open, PAD, 0, h, h, this);
-            else
-                g2.drawImage(closed, PAD, 0, h, h, this);
+            
+            int imgWidth;
+            if (selected) {
+            	g2.drawImage(open, PAD, 0, h, h, this);
+            }
+            else {
+
+            	g2.drawImage(closed, PAD, 0, h, h, this);
+            }
+            
+          
             g2.setFont(font);
             FontRenderContext frc = g2.getFontRenderContext();
             LineMetrics lm = font.getLineMetrics(text_, frc);
@@ -69,6 +79,10 @@ public class CollapsablePanel extends JPanel {
             float x = OFFSET;
             float y = (h + height) / 2 - lm.getDescent();
             g2.drawString(text_, x, y);
+            
+            int textWidth = g2.getFontMetrics().stringWidth(text_);
+           
+            
         }
  
         public void mouseClicked(MouseEvent e) {
@@ -125,6 +139,10 @@ public class CollapsablePanel extends JPanel {
         validate();
  
         headerPanel_.repaint();
+    }
+    
+    public JPanel getContentPanel() {
+    	return this.contentPanel_;
     }
  
 }

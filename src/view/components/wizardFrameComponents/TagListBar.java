@@ -10,7 +10,7 @@ import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 
 import listeners.TagListPanelListener;
-import view.Components.StylizedComponents.SquareButton;
+import view.Components.ModelComponents.SquareButton;
 
 public class TagListBar extends JPanel{
 	public TagListBar() {
