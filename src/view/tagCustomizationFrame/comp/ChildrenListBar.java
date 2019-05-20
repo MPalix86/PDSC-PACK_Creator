@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 
-import listeners.TagCustomizationFrameListener;
+import listeners.tagCustomizationFrameListener.TagCustomizationFrameListener;
 import model.XmlTag;
 import view.comp.TagBtn;
 

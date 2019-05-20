@@ -11,7 +11,7 @@ import javax.swing.JPanel;
 import javax.swing.border.MatteBorder;
 
 import business.Utils;
-import listeners.TagCustomizationFrameListener;
+import listeners.tagCustomizationFrameListener.TagCustomizationFrameListener;
 import model.XmlAttribute;
 import model.XmlTag;
 import net.miginfocom.swing.MigLayout;

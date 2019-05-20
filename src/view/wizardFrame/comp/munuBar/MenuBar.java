@@ -10,7 +10,7 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.JToolBar;
 
-import listeners.WizardFrameListener;
+import listeners.wizardFrameListener.comp.MenuBarListener;
 import model.pdsc.PackageChildEnum;
 import view.comp.IconButton;
 import view.wizardFrame.WizardFrame;
@@ -32,21 +32,14 @@ public class MenuBar extends JPanel{
 	private IconButton  saveAsButton;
 	
 	
-	private IconButton  trashButton;
-
-	
-	
-	private JPopupMenu tagsMenu;
-	
-	
 	private DropDownButton dropDownTagsButton;
 	
 	
 	/** wizardFrame instance */
 	private WizardFrame wizardFrame;
-	
-	/** WizardFrameListener */
-	private WizardFrameListener listener;
+
+
+	private MenuBarListener listener;
 	
 	
 	
@@ -55,9 +48,9 @@ public class MenuBar extends JPanel{
 	 * 
 	 * @param wizardFrame wizardFrame instance
 	 */
-	public MenuBar(WizardFrame wizardFrame, WizardFrameListener listener) {
+	public MenuBar() {
 		this.wizardFrame = wizardFrame;
-		this.listener = listener ;
+		this.listener = new MenuBarListener(this) ;
 		
 		placeComponents();
 	}

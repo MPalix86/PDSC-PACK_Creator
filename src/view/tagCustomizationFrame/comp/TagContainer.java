@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import listeners.TagCustomizationFrameListener;
+import listeners.tagCustomizationFrameListener.TagCustomizationFrameListener;
 import model.XmlTag;
 import net.miginfocom.swing.MigLayout;
 import view.comp.CollapsablePanel;
@@ -65,12 +65,17 @@ public class TagContainer extends JPanel{
 				
 				if(tag.getParent().equals(candidateParent)) {
 					
+					
+					int lasChildIndex = candidateParent.getSelectedChildrenArr().size();
+
+					
+					
 					//System.out.println("bella coincidono, creo il nuovo pannello");
 					newTagElement = new CollapsablePanelTagContent(tag,listener);
 					newCollPanel = new CollapsablePanel("< " + tag.getName() + " >", newTagElement);
 					
 					//System.out.println("aggiungo il nuovo pannello alla posizione " + i+1);
-					selectedChildrenPanelsArr.add(i+1 ,newCollPanel);
+					selectedChildrenPanelsArr.add(i + lasChildIndex ,newCollPanel);
 					
 					
 					

@@ -22,7 +22,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.MatteBorder;
 
 import business.Session;
-import listeners.WizardFrameListener;
+import listeners.wizardFrameListener.WizardFrameListener;
 import model.XmlTag;
 import model.pdsc.tags.Description;
 import model.pdsc.tags.License;
@@ -32,9 +32,9 @@ import model.pdsc.tags.Url;
 import model.pdsc.tags.Vendor;
 import view.comp.CustomColor;
 import view.comp.SquareButton;
-import view.wizardFrame.comp.FinalStepForm;
-import view.wizardFrame.comp.Form;
 import view.wizardFrame.comp.munuBar.MenuBar;
+import view.wizardFrame.comp.wizardForm.FinalStepForm;
+import view.wizardFrame.comp.wizardForm.Form;
 import view.wizardFrame.comp.xmlEditor.TextLineNumber;
 import view.wizardFrame.comp.xmlEditor.XmlTextPane;
 
@@ -319,7 +319,7 @@ public class WizardFrame extends JFrame {
 			/** setting up nextButton */
 			SquareButton nextButton = new SquareButton("Next >");
 			nextButton.addActionListener(listener);
-			nextButton.setActionCommand("continue");
+			nextButton.setActionCommand("next");
 		
 			/** leftPanelBottomButtonBar contains button next and back */
 			JPanel rightPanelBottomButtonBar = new JPanel();
@@ -388,7 +388,7 @@ public class WizardFrame extends JFrame {
 	private void generateTopPanel() {
 		topPanel = new JPanel(new BorderLayout());
 		topPanel.setBackground(new Color(224,224,224));
-		menuBar = new MenuBar(this, listener);
+		menuBar = new MenuBar();
 		topPanel.add(menuBar,BorderLayout.CENTER);
 	}
 	
