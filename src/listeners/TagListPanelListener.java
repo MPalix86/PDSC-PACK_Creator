@@ -7,7 +7,7 @@ import java.lang.reflect.InvocationTargetException;
 
 import business.Utils;
 import model.XmlTag;
-import view.TagCustomizationFrame;
+import view.tagCustomizationFrame.TagCustomizationFrame;
 
 public class TagListPanelListener implements ActionListener {
 

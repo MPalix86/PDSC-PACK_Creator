@@ -1,8 +1,8 @@
 package model.pdsc.tags;
 
 import model.XmlNameSpace;
+import model.XmlStandardTag;
 import model.XmlTag;
-import model.XmlTagAbstract;
 import model.pdsc.attributes.Dcore;
 import model.pdsc.attributes.Dname;
 import model.pdsc.attributes.Dvendor;
@@ -11,12 +11,16 @@ import model.pdsc.attributes.Tcompiler;
 import model.pdsc.attributes.XsnoNamespaceSchemaLocation;
 
 /** 
- * Tag definition following PDSC CMSIS standard
+ * Tag definition following PDSC CMSIS standard.
+ * 
+ * NOTE :	Package is the root element. 
+ * 			Theoretically all the others tags are children of package. 
+ * 			but to safeguard memory childrenArr was leaved null;
  * 
  * @author Mirco Palese
  */
 
-public class Package extends XmlTagAbstract {
+public class Package extends XmlStandardTag {
 	
 	
 	/** tag's name */
@@ -33,7 +37,7 @@ public class Package extends XmlTagAbstract {
 	 * Create new instance of tag. all parameter defined bottom was defined 
 	 * inside XmlTag
 	 * 
-	 * <a href="file:../XmlTagAbstract.java">XmlTagABstract</a>
+	 * <a href="file:../XmlStandardTag.java">XmlTagABstract</a>
 	 * @param required attribute's obligatoriness
 	 * @param parent this tag's parent
 	 * @param max max occurrence of this tag inside parent
@@ -50,7 +54,7 @@ public class Package extends XmlTagAbstract {
 	/**
 	 * Create new instance of tag
 	 * 
-	 * <a href="file:../XmlTagAbstract.java">XmlTagABstract</a>
+	 * <a href="file:../XmlStandardTag.java">XmlTagABstract</a>
 	 * @param required attribute's obligatoriness
 	 * @param parent this tag's parent
 	 * @param max max occurrence of this tag inside parent
@@ -69,7 +73,7 @@ public class Package extends XmlTagAbstract {
 	/**
 	 * Add all children into childrenArray defined in XmlTag
 	 * 
-	 * <a href="file:../XmlTagAbstract.java">XmlTagABstract</a>
+	 * <a href="file:../XmlStandardTag.java">XmlTagABstract</a>
 	 * @see #XmlTag
 	 * @return void
 	 */
@@ -87,7 +91,7 @@ public class Package extends XmlTagAbstract {
 	/**
 	 * Add all attributes into attrArray defined in XmlTag
 	 * 
-	 * <a href="file:../XmlTagAbstract.java">XmlTagABstract</a>
+	 * <a href="file:../XmlStandardTag.java">XmlTagABstract</a>
 	 * @see #XmlTag
 	 * @return void
 	 */
@@ -123,7 +127,18 @@ public class Package extends XmlTagAbstract {
 	 * 
 	 * @return the namespace
 	 */
+	
 	public static XmlNameSpace getNamespace() {
 		return nameSpace;
+	}
+	
+	
+	
+	
+	
+	@Override
+	public String setTagName() {
+		// TODO Auto-generated method stub
+		return name;
 	}
 }

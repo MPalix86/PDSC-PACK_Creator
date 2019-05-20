@@ -24,13 +24,18 @@ public class Utils {
 		return instance;
 	}
 	
-		
 	
-	  public static String firstLetterCaps ( String data ){
-	      String firstLetter = data.substring(0,1).toUpperCase();
-	      String restLetters = data.substring(1).toLowerCase();
-	      return firstLetter + restLetters;
-	  }
+	
+	
+	
+	public static String firstLetterCaps ( String data ){
+		String firstLetter = data.substring(0,1).toUpperCase();
+		String restLetters = data.substring(1).toLowerCase();
+		return firstLetter + restLetters;
+	}
+	  
+	  
+	  
 	  
 	  
 	/**
@@ -74,7 +79,6 @@ public class Utils {
 	    Image dimg = img.getScaledInstance(new_width, new_height,Image.SCALE_SMOOTH);
 	    return dimg;
 	}
-	
 	
 	
 	
@@ -128,5 +132,20 @@ public class Utils {
 	    Image dimg = img.getScaledInstance(new_width, new_height,Image.SCALE_SMOOTH);
 	    return dimg;
 	}
+	
+	
+	
+	
+	/**
+	 * return the number of lines in a string
+	 *
+	 * @param str
+	 */
+	
+	private static int countLines(String str){
+		   String[] lines = str.split("\r\n|\r|\n");
+		   return  lines.length;
+		}
+	
 
 }

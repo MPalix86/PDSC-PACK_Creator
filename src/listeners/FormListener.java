@@ -4,18 +4,12 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
-import java.util.ArrayList;
 
-import org.jdom2.Document;
-
-import business.FileBusiness;
 import business.Session;
-import business.WizardBusiness;
-import model.XmlTag;
-import view.Components.ModelComponents.AttributeComboBox;
-import view.Components.ModelComponents.AttributeTextField;
-import view.Components.ModelComponents.TagTextField;
-import view.Components.wizardFrameComponents.Form;
+import view.comp.AttributeComboBox;
+import view.comp.AttributeTextField;
+import view.comp.TagTextField;
+import view.wizardFrame.comp.Form;
 
 
 public class FormListener  implements FocusListener , ActionListener{
@@ -32,45 +26,39 @@ public class FormListener  implements FocusListener , ActionListener{
 	}
 	
 	
-	/* FOCUS LISTENER */
+	/* text field focus listener */
 	@Override
 	public void focusGained(FocusEvent e) {
 		setValue(e);
-		ArrayList<XmlTag> tagArr = session.getWizardFrame().getTagArr();
-		Document doc = WizardBusiness.writePdsc(tagArr); 
-		if(doc != null) {
-			String preview = FileBusiness.getDocumentPreview(doc);
-			session.getWizardFrame().updateXmlPreviewPane(preview);
-		}
-		
-		
+		session.getWizardFrame().updateXmlPreview();
 	} 
 
 	@Override
 	public void focusLost(FocusEvent e) {
 		setValue(e);
-		ArrayList<XmlTag> tagArr = session.getWizardFrame().getTagArr();
-		Document doc = WizardBusiness.writePdsc(tagArr);
-		if(doc != null) {
-			String preview = FileBusiness.getDocumentPreview(doc);
-			session.getWizardFrame().updateXmlPreviewPane(preview);
-		}
-		
+		session.getWizardFrame().updateXmlPreview();
 	}
-
+	
+	
+	/**
+	 * recovering value from attribute comboBox 
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource().getClass() == AttributeComboBox.class) {
 			AttributeComboBox comboBox = (AttributeComboBox) e.getSource();
 			comboBox.setAttrValue();
-			ArrayList<XmlTag> tagArr = session.getWizardFrame().getTagArr();
-			Document doc = WizardBusiness.writePdsc(tagArr);
-			String preview = FileBusiness.getDocumentPreview(doc);
-			session.getWizardFrame().updateXmlPreviewPane(preview);
+			session.getWizardFrame().updateXmlPreview();
 		}
 		
 	}
 	
+	
+	/**
+	 * setting text field and attribute filed value
+	 * 
+	 * @param e 
+	 */
 	private void setValue(FocusEvent e) {
 		if(e.getSource().getClass() == TagTextField.class) {
 			TagTextField textField = (TagTextField) e.getSource();

@@ -11,11 +11,11 @@ import business.Session;
 import business.TagCustomizationBusiness;
 import model.XmlAttribute;
 import model.XmlTag;
-import view.TagCustomizationFrame;
-import view.WizardFrame;
-import view.Components.ModelComponents.AttributeCheckBox;
-import view.Components.ModelComponents.TagBtn;
-import view.Components.wizardFrameComponents.Form;
+import view.comp.AttributeCheckBox;
+import view.comp.TagBtn;
+import view.tagCustomizationFrame.TagCustomizationFrame;
+import view.wizardFrame.WizardFrame;
+import view.wizardFrame.comp.Form;
 
 /**
  * TagCustomizationFrame Listener
@@ -143,8 +143,9 @@ public class TagCustomizationFrameListener implements ItemListener, ActionListen
 				/** adding tag inside tag customization frame */
 				tagCustomizationFrame.addTagPanel(newChild);
 				
-				
+				/** maximum number of possible child in the model instance is reduced by one */
 				child.setMax(child.getMax() -1);
+				
 			}
 			
 			/** if max child number is = 0, cannot add this child */
@@ -180,6 +181,9 @@ public class TagCustomizationFrameListener implements ItemListener, ActionListen
 					newTag.freeModelFields();
 					pdscWizardFrame.addStep(new Form(newTag));
 					tagCustomizationFrame.okMessage("Tag added correctly", "done");
+					
+					/** updating preview pane in wizard frame */
+					session.getInstance().getWizardFrame().updateXmlPreview();
 				}
 			}
 			
@@ -193,6 +197,8 @@ public class TagCustomizationFrameListener implements ItemListener, ActionListen
 				
 			}
 			
+			/** updating preview pane in wizard frame */
+			session.getInstance().getWizardFrame().updateXmlPreview();
 		}
 		
 		

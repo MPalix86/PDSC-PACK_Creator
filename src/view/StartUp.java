@@ -4,6 +4,8 @@ import javax.swing.JFrame;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
+import view.wizardFrame.WizardFrame;
+
 
 
 

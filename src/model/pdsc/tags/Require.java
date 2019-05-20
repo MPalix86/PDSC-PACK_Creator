@@ -1,7 +1,7 @@
 package model.pdsc.tags;
 
+import model.XmlStandardTag;
 import model.XmlTag;
-import model.XmlTagAbstract;
 import model.pdsc.attributes.Dcore;
 import model.pdsc.attributes.Dfamily;
 import model.pdsc.attributes.Dfpu;
@@ -18,7 +18,7 @@ import model.pdsc.attributes.Pname;
  * @author Mirco Palese
  */
 
-public class Require extends XmlTagAbstract {
+public class Require extends XmlStandardTag {
 	
 	/** tag's name */
 	private final static String name = "require";
@@ -29,7 +29,7 @@ public class Require extends XmlTagAbstract {
 	 * Create new instance of tag. all parameter defined bottom was defined 
 	 * inside XmlTag
 	 * 
-	 * <a href="file:../XmlTagAbstract.java">XmlTagABstract</a>
+	 * <a href="file:../XmlStandardTag.java">XmlTagABstract</a>
 	 * @param required attribute's obligatoriness
 	 * @param parent this tag's parent
 	 * @param max max occurrence of this tag inside parent
@@ -47,7 +47,7 @@ public class Require extends XmlTagAbstract {
 	/**
 	 * Create new instance of tag
 	 * 
-	 * <a href="file:../XmlTagAbstract.java">XmlTagABstract</a>
+	 * <a href="file:../XmlStandardTag.java">XmlTagABstract</a>
 	 * @param required attribute's obligatoriness
 	 * @param parent this tag's parent
 	 * @param max max occurrence of this tag inside parent
@@ -66,7 +66,7 @@ public class Require extends XmlTagAbstract {
 	/**
 	 * Add all children into childrenArray defined in XmlTag
 	 * 
-	 * <a href="file:../XmlTagAbstract.java">XmlTagABstract</a>
+	 * <a href="file:../XmlStandardTag.java">XmlTagABstract</a>
 	 * @see #XmlTag
 	 * @return void
 	 */
@@ -85,7 +85,7 @@ public class Require extends XmlTagAbstract {
 	/**
 	 * Add all attributes into attrArray defined in XmlTag
 	 * 
-	 * <a href="file:../XmlTagAbstract.java">XmlTagABstract</a>
+	 * <a href="file:../XmlStandardTag.java">XmlTagABstract</a>
 	 * @see #XmlTag
 	 * @return void
 	 */
@@ -114,6 +114,15 @@ public class Require extends XmlTagAbstract {
 	 */
 	
 	public String getName() {
+		return name;
+	}
+	
+	
+	
+	
+	@Override
+	public String setTagName() {
+		// TODO Auto-generated method stub
 		return name;
 	}
 }  

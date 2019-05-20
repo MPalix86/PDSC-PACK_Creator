@@ -3,8 +3,8 @@ package business;
 import java.io.File;
 import java.util.ArrayList;
 
-import view.WizardFrame;
-import view.TagCustomizationFrame;
+import view.tagCustomizationFrame.TagCustomizationFrame;
+import view.wizardFrame.WizardFrame;;
 
 public class Session {
 	private static File currentWorkingFile = null;

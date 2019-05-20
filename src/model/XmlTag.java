@@ -63,10 +63,11 @@ public class XmlTag{
 	 * can't have any content (tag can only contains other tags).
 	 * <p>
 	 * NOTE : if tag can't have content you can use directly constructor 
-	 *        without defaultContent value. see XmlTagAbstract  
+	 *        without defaultContent value. see XmlStandardTag  
 	 * 
-	 * <a href="file:XmlTagAbstract.java">XmlTagABstract</a>
+	 * <a href="file:XmlStandardTag.java">XmlTagABstract</a>
 	 */
+	
 	private String defaultContent;
 
 	
@@ -101,9 +102,9 @@ public class XmlTag{
 	/**
 	 * This constructor return the exact PARENTLESS copy of tag passed by parameter in a new instance
 	 * <p>
-	 * other constructor to avoid inconsistency, was defined in XmlTagAbstract
+	 * other constructor to avoid inconsistency in certain implementation, was defined in XmlStandardTag
 	 * 
-	 * <a href="file:XmlTagAbstract.java">XmlTagABstract</a>
+	 * <a href="file:XmlStandardTag.java">XmlTagABstract</a>
 	 * @param tag the tag to be copied into new instance
 	 */
 	
@@ -165,11 +166,11 @@ public class XmlTag{
 	
 	/**
 	 * This constructor return the exact copy of tag passed by parameter in a new instance.
-	 * Parent is set to parent passed by paramenter
+	 * Parent is set to the parent passed by parameter
 	 * <p>
-	 * other constructor to avoid inconsistency, was defined in XmlTagAbstract
+	 * other constructor to avoid inconsistency, was defined in XmlStandardTag
 	 * 
-	 * <a href="file:XmlTagAbstract.java">XmlTagABstract</a>
+	 * <a href="file:XmlStandardTag.java">XmlTagABstract</a>
 	 * @param tag the tag to be copied into new instance
 	 */
 	
