@@ -2,7 +2,9 @@ package view.comp;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Insets;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
 public class SquareButton extends JButton{
@@ -72,7 +74,8 @@ public class SquareButton extends JButton{
         g.fillRect(0, 0, getWidth() + 8 , getHeight() + 8);
         super.paintComponent(g);
     }
-
+    
+    
     @Override
     public void setContentAreaFilled(boolean b) {
     }
@@ -91,5 +94,15 @@ public class SquareButton extends JButton{
 
     public void setPressedBackgroundColor(Color pressedBackgroundColor) {
         this.pressedBackgroundColor = pressedBackgroundColor;
+    }
+    
+    public TagButton toIconButton(ImageIcon icon) {
+		setBorderPainted(false);
+		setBorder(null);
+		//button.setFocusable(false);
+		setMargin(new Insets(0, 0, 0, 0));
+		setContentAreaFilled(false);
+		setIcon(icon);
+		return (TagButton) this;
     }
 }

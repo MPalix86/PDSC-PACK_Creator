@@ -64,6 +64,7 @@ public class WizardFrame extends JFrame {
 	
 	private MenuBar menuBar;
 	
+	/** hidden button to update preview */
 	private JButton updatePreviewButton;
 	
 	/** JPanel's array. Contains all panels which are part of the wizard */
@@ -102,7 +103,7 @@ public class WizardFrame extends JFrame {
 	public WizardFrame() {
 		
 		/** creation of new wizard frame listener instance */
-		listener = new WizardFrameListener(this);
+		listener = new WizardFrameListener();
 		
 		/** session instance recovery */
 		session = Session.getInstance();
@@ -162,11 +163,12 @@ public class WizardFrame extends JFrame {
 		updateXmlPreview();
 		
 	}
-	
-	
-	
-	
-	
+
+
+
+
+
+
 	/**
 	 * Remove left panel from content pane, recreate and place it inside content 
 	 * pane. Finally repaint content pane.
@@ -467,8 +469,6 @@ public class WizardFrame extends JFrame {
 	 */
 	
 	public ArrayList<XmlTag> getTagArr(){
-		
-		session.setWizardFrame(this);
 		ArrayList<XmlTag> tagArr = new ArrayList<XmlTag>();
 		XmlTag tag = new XmlTag();
 		
@@ -571,6 +571,28 @@ public class WizardFrame extends JFrame {
 		}
 		else if(val == JFileChooser.CANCEL_OPTION) {}
 		return null;
+	}
+	
+	
+	
+	
+	
+	/**
+	 * @return the listener
+	 */
+	public static WizardFrameListener getListener() {
+		return listener;
+	}
+
+
+
+
+
+	/**
+	 * @param listener the listener to set
+	 */
+	public static void setListener(WizardFrameListener listener) {
+		WizardFrame.listener = listener;
 	}
 	
 	

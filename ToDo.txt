@@ -19,17 +19,19 @@ no date
 
 - see for configuration file
 
-- tag customization style
+- tag customization style ^
+
+- tag customization function (copy ecc)
 
 - begin implementation of pack creator
 
 - adjust listener comment 1/2^
 
-- adjust businees comment
+- adjust business comment
 
-- adjust tag list panel
+- adjust tag list panel ^
 
-- unify color
+- unify color ^
 
 - child of itself !!!!
 

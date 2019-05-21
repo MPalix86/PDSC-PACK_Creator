@@ -11,7 +11,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
+import javax.swing.JSpinner;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.SpinnerNumberModel;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.MatteBorder;
@@ -21,7 +23,7 @@ import business.Session;
 import listeners.tagCustomizationFrameListener.TagCustomizationFrameListener;
 import model.XmlTag;
 import view.comp.CustomColor;
-import view.comp.TagBtn;
+import view.comp.TagButton;
 import view.tagCustomizationFrame.comp.ChildrenListBar;
 import view.tagCustomizationFrame.comp.TagContainer;
 
@@ -116,7 +118,7 @@ public class TagCustomizationFrame extends JFrame {
 		centerPanel.setBorder(new EmptyBorder(0, 0, 0, 0));
 		
 		/** tagContainer initial setup */
-		tagContainer = new TagContainer(parent, listener);
+		tagContainer = new TagContainer(this);
 		
 		/** setting up centerScrollPane */
 		JScrollPane centerScrollPanel = new JScrollPane(tagContainer);
@@ -257,7 +259,7 @@ public class TagCustomizationFrame extends JFrame {
 		bottomPanel.setLayout(new BorderLayout());
 		
 		/** setting up addButton */
-		TagBtn addButton = new TagBtn (parent, "Add");
+		TagButton addButton = new TagButton (parent, "Add");
 		addButton.addActionListener(listener);
 		addButton.setActionCommand("addInWizard");
 		addButton.setBackground(Color.DARK_GRAY);
@@ -310,6 +312,26 @@ public class TagCustomizationFrame extends JFrame {
 	
 	
 	/**
+	 * @return the listener
+	 */
+	public TagCustomizationFrameListener getListener() {
+		return listener;
+	}
+
+
+
+
+	/**
+	 * @param listener the listener to set
+	 */
+	public void setListener(TagCustomizationFrameListener listener) {
+		this.listener = listener;
+	}
+
+
+
+
+	/**
 	 * Remove tagPanel from tagContainer
 	 * 
 	 * @param panel		panel to remove
@@ -348,10 +370,7 @@ public class TagCustomizationFrame extends JFrame {
 	public void warningMessage(String message) {
 		ImageIcon icon = new ImageIcon (getClass().getClassLoader().getResource("icons/warning48.png"));
 		Object[] options = { "OK"};
-		JOptionPane.showOptionDialog (null, message, "Warning", JOptionPane.OK_OPTION,
-				 JOptionPane.INFORMATION_MESSAGE,
-				 icon, options, options[0]); 
-	
+		JOptionPane.showOptionDialog (null, message, "Warning", JOptionPane.OK_OPTION, JOptionPane.INFORMATION_MESSAGE, icon, options, options[0]); 
 	}
 	
 	
@@ -367,11 +386,28 @@ public class TagCustomizationFrame extends JFrame {
 	public boolean yesNoWarningMessage(String message) {
 		ImageIcon icon = new ImageIcon (getClass().getClassLoader().getResource("icons/warning48.png"));
 		Object[] options = { "YES", "NO" };
-		int value = JOptionPane.showOptionDialog (null, message, "Warning", JOptionPane.YES_NO_OPTION,
-				 JOptionPane.INFORMATION_MESSAGE,
-				 icon, options, options[0]); 
+		int value = JOptionPane.showOptionDialog (null, message, "Warning", JOptionPane.YES_NO_OPTION,JOptionPane.INFORMATION_MESSAGE, icon, options, options[0]); 
 		if(value == 0) return true;
 		else return false;
+	}
+	
+	
+	
+	
+	/**
+	 * Clone tag option pane. Show number spinner to select number of copy
+	 * 
+	 * @return selected number of copy
+	 */
+	
+	public int cloneDialog() {
+		SpinnerNumberModel sModel = new SpinnerNumberModel(0, 0, 30, 1);
+		ImageIcon cloneIcon = new ImageIcon(getClass().getClassLoader().getResource("icons/clone40.png"));
+		JSpinner spinner = new JSpinner(sModel);
+		int option = JOptionPane.showOptionDialog(null, spinner, "Clone Tag", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, cloneIcon, null, null);
+		if (option == JOptionPane.CANCEL_OPTION) {}
+		else if (option == JOptionPane.OK_OPTION){ return (int)spinner.getValue();}
+		return -1;
 	}
 	
 	
@@ -385,7 +421,7 @@ public class TagCustomizationFrame extends JFrame {
 	 */
 	
 	public void okMessage(String message, String title) {
-		ImageIcon icon = new ImageIcon (getClass().getClassLoader().getResource("icons/ok96.png"));
+		ImageIcon icon = new ImageIcon (getClass().getClassLoader().getResource("icons/ok40.png"));
 		Object[] options = { "OK"};
 		JOptionPane.showOptionDialog (null, message, title, JOptionPane.OK_OPTION,
 				 JOptionPane.INFORMATION_MESSAGE,

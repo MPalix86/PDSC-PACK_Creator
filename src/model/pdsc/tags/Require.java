@@ -73,7 +73,7 @@ public class Require extends XmlStandardTag {
 	
 	@Override
 	protected void addChildren() {
-		this.addChild(new Accept(false, this, MAX_OCCURENCE_NUMBER));
+		this.addChild(new Accept(false, this, 4));
 		// TODO Auto-generated method stub
 		
 	}

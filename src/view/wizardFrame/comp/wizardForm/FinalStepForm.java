@@ -17,7 +17,6 @@ public class FinalStepForm extends JPanel{
 	
 	
 	
-	
 	public FinalStepForm() {
 		
 		this.listener = new FormListener(this);

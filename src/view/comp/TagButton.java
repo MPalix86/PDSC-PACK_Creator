@@ -7,7 +7,7 @@ import model.XmlTag;
  * 
  * @author mircopalese
  */
-public class TagBtn extends SquareButton{
+public class TagButton extends SquareButton{
 	
 	private XmlTag	tag;
 	
@@ -19,7 +19,7 @@ public class TagBtn extends SquareButton{
 	 * @param tag button's associated tag
 	 */
 	
-	public TagBtn(XmlTag tag ) {
+	public TagButton(XmlTag tag ) {
 		super("< " + tag.getName() + " >");
 		super.setForeground(CustomColor.TAG_COLOR);
 		this.tag = tag;
@@ -28,7 +28,7 @@ public class TagBtn extends SquareButton{
 	
 	
 	
-	public TagBtn(XmlTag tag , String text ) {
+	public TagButton(XmlTag tag , String text ) {
 		
 		super(text);
 		this.tag = tag;

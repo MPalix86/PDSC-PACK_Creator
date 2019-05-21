@@ -31,6 +31,19 @@ public class IconButton extends JButton{
 		setContentAreaFilled(false);
 		setIcon(icon);
 	}
+	
+	
+	
+	public IconButton(String url) {
+		super();
+		setBorderPainted(false);
+		setBorder(null);
+		//button.setFocusable(false);
+		setMargin(new Insets(0, 0, 0, 0));
+		ImageIcon icon = new ImageIcon(getClass().getClassLoader().getResource(url));
+		setContentAreaFilled(false);
+		setIcon(icon);
+	}
 
 
 }

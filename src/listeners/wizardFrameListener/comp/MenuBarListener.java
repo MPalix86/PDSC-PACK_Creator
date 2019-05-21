@@ -5,13 +5,14 @@ import java.awt.event.ActionListener;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
+import listeners.wizardFrameListener.WizardFrameListener;
 import model.XmlTag;
 import view.tagCustomizationFrame.TagCustomizationFrame;
 import view.wizardFrame.WizardFrame;
 import view.wizardFrame.comp.munuBar.MenuBar;
 import view.wizardFrame.comp.munuBar.comp.TagMenuItem;
 
-public class MenuBarListener implements ActionListener {
+public class MenuBarListener extends WizardFrameListener implements ActionListener {
 	
 	private WizardFrame wizardFrame;
 	

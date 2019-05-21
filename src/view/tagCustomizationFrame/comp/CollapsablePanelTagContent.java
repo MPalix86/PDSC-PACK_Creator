@@ -2,22 +2,19 @@ package view.tagCustomizationFrame.comp;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Image;
-import java.awt.Insets;
 
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.border.MatteBorder;
 
-import business.Utils;
 import listeners.tagCustomizationFrameListener.TagCustomizationFrameListener;
 import model.XmlAttribute;
 import model.XmlTag;
 import net.miginfocom.swing.MigLayout;
 import view.comp.AttributeCheckBox;
 import view.comp.CustomColor;
-import view.comp.TagBtn;
+import view.comp.TagButton;
 
 
 
@@ -100,18 +97,10 @@ public class CollapsablePanelTagContent extends JPanel{
 		buttonsPanel.setBorder(new MatteBorder(0,0,0,1,CustomColor.LIGHT_GRAY));
 
 		/** setting up children icon */
-		Image menu = Utils.getScaledImage(20, 20, 20, 20, "/icons/tag96.png");
-		ImageIcon menuIcon = new ImageIcon (menu);
+		ImageIcon tagIcon = new ImageIcon (getClass().getClassLoader().getResource("icons/tag20.png"));
 		
 		/** showChildrenButton initial setup */
-		TagBtn showChildrenButton = new TagBtn(this.tag , "");
-		showChildrenButton.setBorderPainted(false);
-		showChildrenButton.setBorder(null);
-		showChildrenButton.setFocusable(false);
-		showChildrenButton.setMargin(new Insets(0, 0, 0, 0));
-		showChildrenButton.setContentAreaFilled(false);
-		showChildrenButton.setPressedBackgroundColor(Color.WHITE);
-		showChildrenButton.setIcon(menuIcon);
+		TagButton showChildrenButton = new TagButton(this.tag , "").toIconButton(tagIcon);
 		showChildrenButton.setToolTipText("Show all chlidren");
 		
 		
@@ -126,33 +115,38 @@ public class CollapsablePanelTagContent extends JPanel{
 		buttonsPanel.add(showChildrenButton);
 		
 		/** setting up trash icon */
-		Image trash = Utils.getScaledImage(20, 20, 20, 20, "/icons/colorTrash128.png");
-		ImageIcon trashIcon = new ImageIcon (trash);
+		ImageIcon trashIcon = new ImageIcon (getClass().getClassLoader().getResource("icons/colorTrash20.png"));
 	
 		/** trashButton initial setup */
-		TagBtn trashButton = new TagBtn(this.tag, "");
-		trashButton.setBorderPainted(false);
-		trashButton.setBorder(null);
-		trashButton.setFocusable(false);
-		trashButton.setMargin(new Insets(0, 0, 0, 0));
-		trashButton.setContentAreaFilled(false);
-		trashButton.setPressedBackgroundColor(Color.WHITE);
-		trashButton.setIcon(trashIcon);
+		TagButton trashButton = new TagButton(this.tag, "").toIconButton(trashIcon);
 		trashButton.setToolTipText("Remove Tag");
 		
+		/** setting clone trash icon */
+		ImageIcon cloneIcon = new ImageIcon (getClass().getClassLoader().getResource("icons/clone20.png"));
 		
-		/** if tag is'n parent add trashButton */
+		/** cloneButton initial setup */
+		TagButton cloneButton = new TagButton(this.tag, "").toIconButton(cloneIcon);
+		cloneButton.setToolTipText("Clone This Tag");
+		
+		
 		if(tag.getParent() != null) {
 
 			/** setting button's listener */
 			trashButton.addActionListener(listener);
 			trashButton.setActionCommand("removeTagPanel");
 			
+			cloneButton.addActionListener(listener);
+			cloneButton.setActionCommand("cloneTag");
+			
 		}
-		else trashButton.setEnabled(false);
+		else {
+			trashButton.setEnabled(false);
+			cloneButton.setEnabled(false);
+		}
 		
 		
 		buttonsPanel.add(trashButton);
+		buttonsPanel.add(cloneButton);
 
 		
 		return buttonsPanel;
@@ -175,6 +169,7 @@ public class CollapsablePanelTagContent extends JPanel{
 		
 		/** add attributes */
 		if (tag.getAttrArr() != null) {
+			
 			for( int i = 0; i < tag.getAttrArr().size(); i++) {
 				
 				/** recovering attribute */
@@ -183,6 +178,21 @@ public class CollapsablePanelTagContent extends JPanel{
 				/** add attribute inside checkBox */
 				AttributeCheckBox c = new AttributeCheckBox(a , tag);   
 				c.setForeground(new Color(255, 99, 71));   
+				
+				
+				if(tag.getSelectedAttrArr() != null){
+					
+					for(int j = 0; j < tag.getSelectedAttrArr().size(); j++) {
+						XmlAttribute selectedAttr = tag.getSelectedAttrArr().get(j);
+						if(selectedAttr.getName().equals(a.getName()) &&  !a.isRequired()) {
+							
+							/** attribute is already selected */
+							c.setSelected(true);
+							
+						}
+					}
+				}
+				
 				c.addItemListener(listener);
 				
 				/** if attribute is required, check checkBox and make it non editable */

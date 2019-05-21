@@ -11,18 +11,16 @@ import listeners.tagCustomizationFrameListener.TagCustomizationFrameListener;
 import model.XmlTag;
 import net.miginfocom.swing.MigLayout;
 import view.comp.CollapsablePanel;
+import view.tagCustomizationFrame.TagCustomizationFrame;
 
 public class TagContainer extends JPanel{
-	
-	
-	private XmlTag parent;
-	
-	
+
 	private TagCustomizationFrameListener listener;
 	
 	
 	private CollapsablePanel collPanel;
 	
+	private TagCustomizationFrame tagCustomizationFrame;
 	
 	/** children panel */
 	private ArrayList<JPanel> selectedChildrenPanelsArr;
@@ -31,17 +29,18 @@ public class TagContainer extends JPanel{
 	
 	
 	
-	public TagContainer(XmlTag tag,TagCustomizationFrameListener listener) {
+	public TagContainer(TagCustomizationFrame tagCustomizationFrame) {
+		
+		this.tagCustomizationFrame = tagCustomizationFrame;
 		this.selectedChildrenPanelsArr = new ArrayList<JPanel>();
-		this.parent = tag;
-		this.listener = listener;
+		this.listener = tagCustomizationFrame.getListener();
 				
 		MigLayout layout = new MigLayout("wrap 1");
 		setLayout(layout);
 		setBorder(new EmptyBorder(0, 0, 0, 0));
 		this.setBackground(Color.WHITE);
-		CollapsablePanelTagContent tagElement = new CollapsablePanelTagContent(parent,listener);
-		collPanel = new CollapsablePanel("< " + parent.getName() + " >", tagElement);
+		CollapsablePanelTagContent tagElement = new CollapsablePanelTagContent(tagCustomizationFrame.getTagParent(),listener);
+		collPanel = new CollapsablePanel("< " + tagCustomizationFrame.getTagParent().getName() + " >", tagElement);
 		this.selectedChildrenPanelsArr.add(collPanel);
 		
 		this.add(collPanel);
@@ -50,41 +49,48 @@ public class TagContainer extends JPanel{
 	public void addTagPanel(XmlTag tag){
 		
 		if (tag.getParent() != null ) {
-			//System.out.println("c'ha il parent, ed è " + tag.getParent());
-			for (int i = 0; i < selectedChildrenPanelsArr.size(); i++) {
+			
+			if (tag.getParent().equals(tagCustomizationFrame.getTagParent())) {
+				CollapsablePanelTagContent newTagElement = new CollapsablePanelTagContent(tag,listener);
+				CollapsablePanel newCollPanel = new CollapsablePanel("< " + tag.getName() + " >", newTagElement);
 				
-				CollapsablePanel collPanel = (CollapsablePanel) selectedChildrenPanelsArr.get(i);
-				CollapsablePanelTagContent content = (CollapsablePanelTagContent) collPanel.getContentPanel();
-				
-				XmlTag candidateParent = content.getTag();
-				//System.out.println("il candidati parent è " + candidateParent.getName());
-				
-				CollapsablePanelTagContent newTagElement = null;
-				CollapsablePanel newCollPanel = null;
-				
-				
-				if(tag.getParent().equals(candidateParent)) {
+				this.selectedChildrenPanelsArr.add(newCollPanel);
+			}
+			else {
+				//System.out.println("c'ha il parent, ed è " + tag.getParent());
+				for (int i = 0; i < selectedChildrenPanelsArr.size(); i++) {
+					
+					CollapsablePanel collPanel = (CollapsablePanel) selectedChildrenPanelsArr.get(i);
+					CollapsablePanelTagContent content = (CollapsablePanelTagContent) collPanel.getContentPanel();
+					
+					XmlTag candidateParent = content.getTag();
+					//System.out.println("il candidato parent è " + candidateParent.getName());
+					
+					CollapsablePanelTagContent newTagElement = null;
+					CollapsablePanel newCollPanel = null;
 					
 					
-					int lasChildIndex = candidateParent.getSelectedChildrenArr().size();
-
-					
-					
-					//System.out.println("bella coincidono, creo il nuovo pannello");
-					newTagElement = new CollapsablePanelTagContent(tag,listener);
-					newCollPanel = new CollapsablePanel("< " + tag.getName() + " >", newTagElement);
-					
-					//System.out.println("aggiungo il nuovo pannello alla posizione " + i+1);
-					selectedChildrenPanelsArr.add(i + lasChildIndex ,newCollPanel);
-					
-					
-					
-					break;
-				}
+					if(tag.getParent().equals(candidateParent)) {
 						
+						
+						int lasChildIndex = candidateParent.getSelectedChildrenArr().size();
+
+						
+						
+						//System.out.println("bella coincidono, creo il nuovo pannello");
+						newTagElement = new CollapsablePanelTagContent(tag,listener);
+						newCollPanel = new CollapsablePanel("< " + tag.getName() + " >", newTagElement);
+						
+						//System.out.println("aggiungo il nuovo pannello alla posizione " + i+1);
+						selectedChildrenPanelsArr.add(i + lasChildIndex ,newCollPanel);
+
+						break;
+					}
+							
+				}
+				
 			}
 		}
-		System.out.println("provo a ristampare tutto");
 		placeComponents();
 	}
 	
@@ -92,7 +98,7 @@ public class TagContainer extends JPanel{
 	public void placeComponents() {
 		
 		this.removeAll();
-	
+		
 		/** scrolling vector to show to analyze tag */
 		for (int i = 0; i < selectedChildrenPanelsArr.size() ; i++) {
 			
@@ -125,16 +131,17 @@ public class TagContainer extends JPanel{
 				//System.out.println("level count augmented, now i'm analyzing tag "+ xmlTag.getName());
 			}
 			
-			/** if selected tag has no longer parent */
-			System.out.println( xmlTag.getName() + "hasn't parent , counter level :" + levelCount);
 			
+			//System.out.println( xmlTag.getName() + "hasn't parent , counter level :" + levelCount);
+			
+	
 			JPanel panel = new JPanel(new BorderLayout());
 			
 			/** calculating left border based on levelCounter */
-			int border = levelCount * 50;
+			int leftBorder = levelCount * 40;
 			
 			/** setting calculated border */
-			panel.setBorder(new EmptyBorder( 0, border, 0, 0));
+			panel.setBorder(new EmptyBorder( 0, leftBorder, 0, 0));
 			
 			/** adding panel inside container */
 			panel.add(collPanel);

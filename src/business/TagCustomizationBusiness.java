@@ -29,18 +29,6 @@ public class TagCustomizationBusiness {
 
 
 
-	/* 
-	 * Breadth first search algorithm:
-	 * it is exploited BFS algorithm to find user's selected child tag starting 
-	 * from parent
-	 * 
-	 * to find user's selected child starting from parent, it is compared every 
-	 * child's class with user's selected tag class. 
-	 * 
-	 * NOTE: name of the class that represents tag, is always the same as the 
-	 * name of the tag 
-	 * 
-	 */
 	public static XmlTag findModelChildFromSelectedChildName(XmlTag parent, String childName) {
 		ArrayList <XmlTag> children = new ArrayList();
 		children.add(parent);
@@ -167,6 +155,29 @@ public class TagCustomizationBusiness {
 			e1.printStackTrace();
 		}
 		return instance;
+	}
+	
+	
+	
+	
+	/**
+	 * make selected number of copy for selected tag
+	 * 
+	 * @return void
+	 */
+	
+	public static XmlTag cloneTag(XmlTag tag) {
+		XmlTag parent = null;
+		XmlTag clone = null;
+		if (tag.getParent() != null) {
+			parent = tag.getParent();
+			
+			clone = new XmlTag(tag,tag.getParent());
+			
+			parent.addSelectedChild(clone);
+		}	
+		
+		return clone;
 	}
 		
 		

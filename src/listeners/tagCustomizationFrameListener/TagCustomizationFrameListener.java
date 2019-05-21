@@ -12,7 +12,7 @@ import business.TagCustomizationBusiness;
 import model.XmlAttribute;
 import model.XmlTag;
 import view.comp.AttributeCheckBox;
-import view.comp.TagBtn;
+import view.comp.TagButton;
 import view.tagCustomizationFrame.TagCustomizationFrame;
 import view.wizardFrame.WizardFrame;
 import view.wizardFrame.comp.wizardForm.Form;
@@ -94,15 +94,15 @@ public class TagCustomizationFrameListener implements ItemListener, ActionListen
 		String command = e.getActionCommand();
 		
 		/** recovering TagButton instance */
-		TagBtn tagBtn = (TagBtn) e.getSource();
+		TagButton tagBtn = (TagButton) e.getSource();
 		
 		if(command == "removeTagPanel") {
 			
-			/** recovering parent of the frame : tag customization frame */
-			XmlTag parent = tagCustomizationFrame.getTagParent();
-			
 			/** recovering child that user want to remove (selected child); the instance in tag's selectedChildrenArr  */
-			XmlTag selectedChild = tagBtn.getTag();			
+			XmlTag selectedChild = tagBtn.getTag();	
+			
+			/** recovering parent of the frame : tag customization frame */
+			XmlTag parent = selectedChild.getParent();
 			
 			/** recovering model instance that contains all constraints for selected tag; i.e. the instance present in childrenArr */
 			XmlTag modelChild = TagCustomizationBusiness.findModelChildFromSelectedChildName(parent, selectedChild.getName()); 
@@ -157,6 +157,50 @@ public class TagCustomizationFrameListener implements ItemListener, ActionListen
 		}
 		
 		
+		if(command.equals("cloneTag")) {
+			
+			/** recovering tag to clone from selectedChildrendArr*/
+			XmlTag selectedTag = tagBtn.getTag();
+			
+			/** recovering parent instance for selected child */
+			XmlTag parent = selectedTag.getParent();
+			
+			/** recovering model instance for constraints check */
+			XmlTag modelTag = TagCustomizationBusiness.findModelChildFromSelectedChildName(parent, selectedTag.getName());
+			
+			/** recover copies number  */
+			int copiesNumber = this.tagCustomizationFrame.cloneDialog();
+			
+			if(copiesNumber != -1){
+				
+				System.out.println("posso fare ancora " + modelTag.getMax() + " copie");
+				/** if max child number is > copiesNumber, add selected number of clones */
+				if(modelTag.getMax() > copiesNumber) {
+					
+					/** making copies */
+					for (int i = 0; i < copiesNumber; i++) {
+						XmlTag clone = TagCustomizationBusiness.cloneTag(selectedTag);
+						this.tagCustomizationFrame.addTagPanel(clone);
+					}
+					
+				}
+				
+				
+				else {
+					if(modelTag.getMax() == 0) {
+						this.tagCustomizationFrame.warningMessage("<html><p><span style=\"font-size: 14pt; color: #333333;\"> "
+																+ " Maximum number of children reached for tag  " +tagBtn.getTag().getName() + 
+																	" </span></p></html>");
+					}
+					this.tagCustomizationFrame.warningMessage("You can make at least : " + modelTag.getMax() + " copy for tag" + modelTag.getName());
+				}
+			}
+			
+			
+		
+		}
+		
+		
 		if(command == "addInWizard") {
 			
 			/** check for missing dependency */
@@ -207,6 +251,8 @@ public class TagCustomizationFrameListener implements ItemListener, ActionListen
 			tagCustomizationFrame.updateLeftPanel(tag);
 		}
 	}
+	
+	
 
 
 

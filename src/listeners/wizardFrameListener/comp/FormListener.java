@@ -12,6 +12,7 @@ import org.jdom2.Document;
 import business.FileBusiness;
 import business.Session;
 import business.WizardBusiness;
+import listeners.wizardFrameListener.WizardFrameListener;
 import model.Response;
 import model.XmlTag;
 import view.comp.AttributeComboBox;
@@ -22,18 +23,17 @@ import view.wizardFrame.comp.wizardForm.Form;
 
 
 
-public class FormListener  implements FocusListener , ActionListener{
+public class FormListener extends WizardFrameListener implements FocusListener , ActionListener{
 	
 	private Form form;
 	
 	private FinalStepForm finalStepForm;
 	
-	private Session session;
+	private Session session = Session.getInstance();
 	
 	
 	
 	public FormListener(Form formElement){
-		session = Session.getInstance();
 		this.form = formElement;
 	}
 	
@@ -43,11 +43,8 @@ public class FormListener  implements FocusListener , ActionListener{
 	public FormListener(FinalStepForm finalStepForm){
 		this.finalStepForm = finalStepForm;
 	}
-	
-	
-	
-	
-	
+
+
 	/* text field focus listener */
 	@Override
 	public void focusGained(FocusEvent e) {

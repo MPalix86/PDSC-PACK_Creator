@@ -7,18 +7,16 @@ import java.util.ArrayList;
 import org.jdom2.Document;
 
 import business.FileBusiness;
+import business.Session;
 import business.WizardBusiness;
 import model.XmlTag;
-import view.wizardFrame.WizardFrame;
 
 public class WizardFrameListener implements ActionListener {
 
 	
-	private WizardFrame wizardFrame;
+	private Session session = Session.getInstance();
 	
-	public WizardFrameListener(WizardFrame wizardFrame) {
-		this.wizardFrame = wizardFrame;
-	}
+	public WizardFrameListener() {	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -27,23 +25,23 @@ public class WizardFrameListener implements ActionListener {
 		
 		
 		if(command.equals("next")) {
-			wizardFrame.next();
+			session.getWizardFrame().next();
 		}
 		
 		
 		
 		else if(command.equals("back")) {
-			wizardFrame.back();
+			session.getWizardFrame().back();
 		}
 		
 		
 		
 		else if(command.equals("updatePreviewPane")) {
-			ArrayList<XmlTag> tagArr = wizardFrame.getTagArr();
+			ArrayList<XmlTag> tagArr = session.getWizardFrame().getTagArr();
 			Document doc = WizardBusiness.writePdsc(tagArr); 
 			if(doc != null) {
 				String preview = FileBusiness.getDocumentPreview(doc);
-				wizardFrame.setXmlPreview(preview);
+				session.getWizardFrame().setXmlPreview(preview);
 			}
 		}
 		

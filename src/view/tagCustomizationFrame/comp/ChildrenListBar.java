@@ -9,7 +9,7 @@ import javax.swing.JPanel;
 
 import listeners.tagCustomizationFrameListener.TagCustomizationFrameListener;
 import model.XmlTag;
-import view.comp.TagBtn;
+import view.comp.TagButton;
 
 /**
  * tag's children buttons list bar
@@ -65,7 +65,7 @@ public class ChildrenListBar extends JPanel{
 				XmlTag child = children.get(i);
 				JPanel panel = new JPanel(new BorderLayout());
 			
-				TagBtn btn = new TagBtn(child);
+				TagButton btn = new TagButton(child);
 				
 				panel.add(btn);
 				panel.setMaximumSize(new Dimension(300,30));
