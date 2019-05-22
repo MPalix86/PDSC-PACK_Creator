@@ -5,8 +5,6 @@ import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
-import javax.swing.JPanel;
-
 import business.Session;
 import business.TagCustomizationBusiness;
 import model.XmlAttribute;
@@ -108,13 +106,10 @@ public class TagCustomizationFrameListener implements ItemListener, ActionListen
 			XmlTag modelChild = TagCustomizationBusiness.findModelChildFromSelectedChildName(parent, selectedChild.getName()); 
 			
 			/** removing selected child from selectedChildrenArr */
-			parent.removeSelectedChild(selectedChild); 								
-			
-			/** recovering tag panel */
-			JPanel tagPanel = (JPanel) tagBtn.getParent().getParent().getParent().getParent();	
+			parent.removeSelectedChild(selectedChild); 									
 			
 			/** removing tag panel from tag customization frame */
-			tagCustomizationFrame.removeTagPanel(tagPanel);
+			tagCustomizationFrame.getTagContainer().removeTagPanel(selectedChild);
 			
 			/** maximum number of possible child in the model instance is augmented by one */
 			modelChild.setMax(modelChild.getMax() + 1);										
@@ -139,7 +134,7 @@ public class TagCustomizationFrameListener implements ItemListener, ActionListen
 				parent.addSelectedChild(newChild);
 				
 				/** adding tag inside tag customization frame */
-				tagCustomizationFrame.addTagPanel(newChild);
+				tagCustomizationFrame.getTagContainer().addNewTagPanel(newChild);
 				
 				/** maximum number of possible child in the model instance is reduced by one */
 				child.setMax(child.getMax() -1);
@@ -173,16 +168,19 @@ public class TagCustomizationFrameListener implements ItemListener, ActionListen
 			
 			if(copiesNumber != -1){
 				
-				System.out.println("posso fare ancora " + modelTag.getMax() + " copie");
 				/** if max child number is > copiesNumber, add selected number of clones */
-				if(modelTag.getMax() > copiesNumber) {
+				if(modelTag.getMax() >= copiesNumber) {
+					
+					XmlTag clone = null;
 					
 					/** making copies */
 					for (int i = 0; i < copiesNumber; i++) {
-						XmlTag clone = TagCustomizationBusiness.cloneTag(selectedTag);
-						this.tagCustomizationFrame.addTagPanel(clone);
+						clone = TagCustomizationBusiness.cloneTag(selectedTag);
+						this.tagCustomizationFrame.getTagContainer().addClonedTag(clone);
 					}
 					
+					modelTag.setMax(modelTag.getMax() - copiesNumber);
+					this.tagCustomizationFrame.getTagContainer().updateView();
 				}
 				
 				
@@ -192,7 +190,10 @@ public class TagCustomizationFrameListener implements ItemListener, ActionListen
 																+ " Maximum number of children reached for tag  " +tagBtn.getTag().getName() + 
 																	" </span></p></html>");
 					}
-					this.tagCustomizationFrame.warningMessage("You can make at least : " + modelTag.getMax() + " copy for tag" + modelTag.getName());
+					else {
+						this.tagCustomizationFrame.warningMessage("You can make at least : " + modelTag.getMax() + " copy for tag <" + modelTag.getName() + " >");
+					}
+					
 				}
 			}
 			

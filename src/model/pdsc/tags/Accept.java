@@ -72,6 +72,7 @@ public class Accept extends XmlStandardTag{
 	
 	@Override
 	protected void addChildren() {
+		this.addChild(new Deny(false, this, MAX_OCCURENCE_NUMBER));
 		// TODO Auto-generated method stub
 	}
 	

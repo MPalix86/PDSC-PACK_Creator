@@ -296,21 +296,28 @@ public class TagCustomizationFrame extends JFrame {
 	
 	
 	
+
 	
 	/**
-	 * add tagPanel inside tagContainer
-	 * 
-	 * @param tag	new tag to add
-	 * @return void
+	 * @return the tagContainer
 	 */
-	
-	public void addTagPanel(XmlTag tag) {
-		tagContainer.addTagPanel(tag);
+	public TagContainer getTagContainer() {
+		return tagContainer;
 	}
-	
-	
-	
-	
+
+
+
+
+	/**
+	 * @param tagContainer the tagContainer to set
+	 */
+	public void setTagContainer(TagContainer tagContainer) {
+		this.tagContainer = tagContainer;
+	}
+
+
+
+
 	/**
 	 * @return the listener
 	 */
@@ -327,21 +334,6 @@ public class TagCustomizationFrame extends JFrame {
 	public void setListener(TagCustomizationFrameListener listener) {
 		this.listener = listener;
 	}
-
-
-
-
-	/**
-	 * Remove tagPanel from tagContainer
-	 * 
-	 * @param panel		panel to remove
-	 * @return void
-	 */
-	
-	public void removeTagPanel(JPanel panel) {
-		tagContainer.removeTagPanel(panel);
-	}
-	
 	
 	
 	

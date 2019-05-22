@@ -74,6 +74,7 @@ public class Require extends XmlStandardTag {
 	@Override
 	protected void addChildren() {
 		this.addChild(new Accept(false, this, 4));
+		this.addChild(new Description(false, this, 1, ""));
 		// TODO Auto-generated method stub
 		
 	}

@@ -1,8 +1,8 @@
 package view.tagCustomizationFrame.comp;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -13,156 +13,195 @@ import net.miginfocom.swing.MigLayout;
 import view.comp.CollapsablePanel;
 import view.tagCustomizationFrame.TagCustomizationFrame;
 
+
+
+/**
+ * tag container. Contains all selected tag panel and
+ * 
+ * @author Mirco Palese
+ */
 public class TagContainer extends JPanel{
 
+	
 	private TagCustomizationFrameListener listener;
-	
-	
-	private CollapsablePanel collPanel;
 	
 	private TagCustomizationFrame tagCustomizationFrame;
 	
-	/** children panel */
-	private ArrayList<JPanel> selectedChildrenPanelsArr;
+	private HashMap <XmlTag,JPanel> selectedChildrenPanelsHashMap ;
 	
 	
 	
 	
-	
+	/**
+	 * Constructor 
+	 * 
+	 * @param tagCustomizationFrame tag customization frame instance
+	 */
 	public TagContainer(TagCustomizationFrame tagCustomizationFrame) {
 		
 		this.tagCustomizationFrame = tagCustomizationFrame;
-		this.selectedChildrenPanelsArr = new ArrayList<JPanel>();
 		this.listener = tagCustomizationFrame.getListener();
-				
+		selectedChildrenPanelsHashMap = new HashMap	<XmlTag,JPanel>();	
+		
 		MigLayout layout = new MigLayout("wrap 1");
 		setLayout(layout);
 		setBorder(new EmptyBorder(0, 0, 0, 0));
 		this.setBackground(Color.WHITE);
-		CollapsablePanelTagContent tagElement = new CollapsablePanelTagContent(tagCustomizationFrame.getTagParent(),listener);
-		collPanel = new CollapsablePanel("< " + tagCustomizationFrame.getTagParent().getName() + " >", tagElement);
-		this.selectedChildrenPanelsArr.add(collPanel);
+	
+		XmlTag FrameParent = this.tagCustomizationFrame.getTagParent();
 		
-		this.add(collPanel);
+		CollapsablePanelTagContent newTagElement = new CollapsablePanelTagContent(FrameParent,listener);
+		CollapsablePanel newCollPanel = new CollapsablePanel("< " + FrameParent.getName() + " >", newTagElement);
+		this.selectedChildrenPanelsHashMap.put(FrameParent, newCollPanel);
+		
+		addNewTagPanel(this.tagCustomizationFrame.getTagParent());
+
 	}
 	
-	public void addTagPanel(XmlTag tag){
+	
+	
+	
+	/**
+	 * add panel containing new selected tag
+	 * 
+	 * @param tag tag to add 
+	 */
+	public void addNewTagPanel(XmlTag tag){
 		
 		if (tag.getParent() != null ) {
-			
-			if (tag.getParent().equals(tagCustomizationFrame.getTagParent())) {
-				CollapsablePanelTagContent newTagElement = new CollapsablePanelTagContent(tag,listener);
-				CollapsablePanel newCollPanel = new CollapsablePanel("< " + tag.getName() + " >", newTagElement);
+			CollapsablePanelTagContent newTagElement = new CollapsablePanelTagContent(tag,listener);
+			CollapsablePanel newCollPanel = new CollapsablePanel("< " + tag.getName() + " >", newTagElement);
+			this.selectedChildrenPanelsHashMap.put(tag, newCollPanel);
+		}
+
+		placeComponents();
+	}
+	
+	
+	
+	
+	
+	/**
+	 * Place all components
+	 * 
+	 * @return void
+	 */
+	public void placeComponents() {
+		this.removeAll();
+		paintTag(this.tagCustomizationFrame.getTagParent(), 0);
+		this.repaint();
+		this.revalidate();
+	}
+	
+	
+	
+	
+	
+	/**
+	 * Paint all selected tag with correct indentation.
+	 * Iterate in depth trough all selected children starting from the 
+	 * top most parent ( this.tagCustomizationFrame.getTagParent() ) to calculate
+	 * indentation level and painting it correctly: 
+	 * <p>
+	 * NOTE : uncomment all System.out.println in this function and 
+	 * 		  execute for more details;
+	 * 
+	 * 
+	 * @param tag	=  this.tagCustomizationFrame.getTagParent() i.e. the topmost parent
+	 * @param level    starting level of indentation  
+	 */
+	
+	private void paintTag(XmlTag tag, int level) {
+		
+		XmlTag parent =  tag;
+		
+		/** calculating left border based on levelCounter */
+		int leftBorder = level * 40;
+		
+		/** setting calculated border */
+		this.selectedChildrenPanelsHashMap.get(parent).setBorder(new EmptyBorder( 0, leftBorder, 0, 0));
+		
+		/** adding parent inside tagContainer */
+		this.add(this.selectedChildrenPanelsHashMap.get(parent));
+		
+		/** increases indentation level */
+		level++;
+		
+		if( parent.getSelectedChildrenArr() != null) {
+			ArrayList<XmlTag> xmlChildren = parent.getSelectedChildrenArr();
+
+			/** iterating trough selected children */
+			for(int i = 0; i < xmlChildren.size(); i++) {		
+				XmlTag child = xmlChildren.get(i);	
 				
-				this.selectedChildrenPanelsArr.add(newCollPanel);
+				/** recursion */
+				paintTag(child,level);
 			}
-			else {
-				//System.out.println("c'ha il parent, ed è " + tag.getParent());
-				for (int i = 0; i < selectedChildrenPanelsArr.size(); i++) {
-					
-					CollapsablePanel collPanel = (CollapsablePanel) selectedChildrenPanelsArr.get(i);
-					CollapsablePanelTagContent content = (CollapsablePanelTagContent) collPanel.getContentPanel();
-					
-					XmlTag candidateParent = content.getTag();
-					//System.out.println("il candidato parent è " + candidateParent.getName());
-					
-					CollapsablePanelTagContent newTagElement = null;
-					CollapsablePanel newCollPanel = null;
-					
-					
-					if(tag.getParent().equals(candidateParent)) {
-						
-						
-						int lasChildIndex = candidateParent.getSelectedChildrenArr().size();
-
-						
-						
-						//System.out.println("bella coincidono, creo il nuovo pannello");
-						newTagElement = new CollapsablePanelTagContent(tag,listener);
-						newCollPanel = new CollapsablePanel("< " + tag.getName() + " >", newTagElement);
-						
-						//System.out.println("aggiungo il nuovo pannello alla posizione " + i+1);
-						selectedChildrenPanelsArr.add(i + lasChildIndex ,newCollPanel);
-
-						break;
-					}
-							
-				}
-				
+		}
+	}
+	
+	
+	
+	
+	/**
+	 * Iterate in depth trough all selected children starting from the 
+	 * top most parent (selected tag in this case)  deleting selected tag and all
+	 * children under him recursively
+	 * 
+	 * @param tag
+	 */
+	public void removeTagPanel(XmlTag tag){
+		
+		XmlTag parent = tag;
+		if( parent.getSelectedChildrenArr() != null) {
+			ArrayList<XmlTag> xmlChildren = parent.getSelectedChildrenArr();
+			for(int i = 0; i < xmlChildren.size(); i++) {		
+				this.selectedChildrenPanelsHashMap.remove(parent);
+				XmlTag child = xmlChildren.get(i);	
+				removeTagPanel(child);
 			}
 		}
 		placeComponents();
 	}
 	
 	
-	public void placeComponents() {
+	
+	
+	/**
+	 * generate recursively one panel for every selected tag and add it inside
+	 * selectedChildrenPanelsHashMap linking it to relative tag
+	 * 
+	 * @param tag cloned tag
+	 */
+	public void addClonedTag(XmlTag tag) {
+		XmlTag parent =  tag;
 		
-		this.removeAll();
+		CollapsablePanelTagContent newTagElement = new CollapsablePanelTagContent(parent,listener);
+		CollapsablePanel newCollPanel = new CollapsablePanel("< " + parent.getName() + " >", newTagElement);
+		this.selectedChildrenPanelsHashMap.put(parent, newCollPanel);
 		
-		/** scrolling vector to show to analyze tag */
-		for (int i = 0; i < selectedChildrenPanelsArr.size() ; i++) {
-			
-			/** recovering collapsablePanel */
-			CollapsablePanel collPanel = (CollapsablePanel) selectedChildrenPanelsArr.get(i);
-			
-			/** recovering CollapsablePanelTagContent that contains selected tag*/
-			CollapsablePanelTagContent content = (CollapsablePanelTagContent) collPanel.getContentPanel();
-			
-			/** recovering tag */
-			XmlTag xmlTag = content.getTag();
-			
-			
-			//System.out.println("analyzing tag "+ xmlTag.getName());
-			
-			/** level counter to calculate indentation dynamically */
-			int levelCount = 0;
-			
-			/** scroll back from selected tag to recover all parent */
-			while(xmlTag.getParent() != null) {
+		if( parent.getSelectedChildrenArr() != null) {
+			ArrayList<XmlTag> xmlChildren = parent.getSelectedChildrenArr();
+
+			/** iterating trough selected children */
+			for(int i = 0; i < xmlChildren.size(); i++) {		
+				XmlTag child = xmlChildren.get(i);	
 				
-				//System.out.println("tag "+ xmlTag.getName() + " has parent ");
-				
-				/** if tag have parent increase levelCount */
-				levelCount += 1;
-				
-				/** set selectedTag to parent of analyzed tag */
-				xmlTag = xmlTag.getParent();
-				
-				//System.out.println("level count augmented, now i'm analyzing tag "+ xmlTag.getName());
+				/** recursion */
+				addClonedTag(child);
 			}
-			
-			
-			//System.out.println( xmlTag.getName() + "hasn't parent , counter level :" + levelCount);
-			
-	
-			JPanel panel = new JPanel(new BorderLayout());
-			
-			/** calculating left border based on levelCounter */
-			int leftBorder = levelCount * 40;
-			
-			/** setting calculated border */
-			panel.setBorder(new EmptyBorder( 0, leftBorder, 0, 0));
-			
-			/** adding panel inside container */
-			panel.add(collPanel);
-			this.add(panel);
 		}
-		
-		this.repaint();
-		this.revalidate();
 	}
 	
 	
-	public void removeTagPanel(JPanel tagPanel){
-		System.out.println(tagPanel.toString());
-		
-		CollapsablePanel selectedPanel = (CollapsablePanel)tagPanel;
-		this.selectedChildrenPanelsArr.remove(selectedPanel);
-		
-		this.remove(selectedPanel.getParent());
-		this.repaint();
-		this.revalidate();
+	
+	
+	
+	public void updateView() {
+		placeComponents();
 	}
 	
 	
+	
+
 }
