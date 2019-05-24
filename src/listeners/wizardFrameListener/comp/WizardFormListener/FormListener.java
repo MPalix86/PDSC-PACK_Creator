@@ -1,4 +1,4 @@
-package listeners.wizardFrameListener.comp;
+package listeners.wizardFrameListener.comp.WizardFormListener;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -49,13 +49,13 @@ public class FormListener extends WizardFrameListener implements FocusListener ,
 	@Override
 	public void focusGained(FocusEvent e) {
 		setValue(e);
-		session.getWizardFrame().updateXmlPreview();
+		session.getWizardFrame().updatePreview();
 	} 
 
 	@Override
 	public void focusLost(FocusEvent e) {
 		setValue(e);
-		session.getWizardFrame().updateXmlPreview();
+		session.getWizardFrame().updatePreview();
 	}
 	
 	
@@ -70,7 +70,7 @@ public class FormListener extends WizardFrameListener implements FocusListener ,
 		if(e.getSource().getClass() == AttributeComboBox.class) {
 			AttributeComboBox comboBox = (AttributeComboBox) e.getSource();
 			comboBox.setAttrValue();
-			session.getWizardFrame().updateXmlPreview();
+			session.getWizardFrame().updatePreview();
 		}
 		
 		else if(command == "generatePdsc" ) {
@@ -79,7 +79,7 @@ public class FormListener extends WizardFrameListener implements FocusListener ,
 			Response response;
 			if (destinationPath != null) {
 				
-				ArrayList<XmlTag> tagArr = session.getWizardFrame().getTagArr();
+				ArrayList<XmlTag> tagArr = session.getWizardFrame().getFormContainer().getTagArr();
 				Document doc = WizardBusiness.writePdsc(tagArr);
 				response = FileBusiness.createFile(destinationPath.toString() , "PDSC", doc);
 				

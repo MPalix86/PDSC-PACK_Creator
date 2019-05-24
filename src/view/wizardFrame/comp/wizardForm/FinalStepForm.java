@@ -9,7 +9,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
-import listeners.wizardFrameListener.comp.FormListener;
+import listeners.wizardFrameListener.comp.WizardFormListener.FormListener;
 
 public class FinalStepForm extends JPanel{
 	

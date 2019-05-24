@@ -97,7 +97,7 @@ public class CollapsablePanelTagContent extends JPanel{
 		buttonsPanel.setBorder(new MatteBorder(0,0,0,1,CustomColor.LIGHT_GRAY));
 
 		/** setting up children icon */
-		ImageIcon tagIcon = new ImageIcon (getClass().getClassLoader().getResource("icons/tag20.png"));
+		ImageIcon tagIcon = new ImageIcon (getClass().getClassLoader().getResource("icons/tagList20.png"));
 		
 		/** showChildrenButton initial setup */
 		TagButton showChildrenButton = new TagButton(this.tag , "").toIconButton(tagIcon);

@@ -13,35 +13,26 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package view.wizardFrame.comp.xmlEditor;
+package view.wizardFrame.comp.previewPane.xmlEditor;
 
-import javax.swing.text.StyledEditorKit;
+import javax.swing.text.Element;
+import javax.swing.text.View;
 import javax.swing.text.ViewFactory;
 
 
 /**
  * @author kees
- * @date 12-jan-2006
+ * @date 13-jan-2006
  *
  */
-public class XmlEditorKit extends StyledEditorKit {
+public class XmlViewFactory extends Object implements ViewFactory {
 
-    private static final long serialVersionUID = 2969169649596107757L;
-    private ViewFactory xmlViewFactory;
+    /**
+     * @see javax.swing.text.ViewFactory#create(javax.swing.text.Element)
+     */
+    public View create(Element element) {
 
-    public XmlEditorKit() {
-        xmlViewFactory = new XmlViewFactory();
-    }
-    
-    @Override
-    public ViewFactory getViewFactory() {
-        return xmlViewFactory;
+        return new XmlView(element);
     }
 
-    @Override
-    public String getContentType() {
-        return "text/xml";
-    }
-
-    
 }

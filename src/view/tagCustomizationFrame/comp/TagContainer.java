@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
@@ -29,6 +30,11 @@ public class TagContainer extends JPanel{
 	
 	private HashMap <XmlTag,JPanel> selectedChildrenPanelsHashMap ;
 	
+	private ImageIcon tagIcon = new ImageIcon (getClass().getClassLoader().getResource("icons/tagList20.png"));
+	
+	private ImageIcon trashIcon = new ImageIcon (getClass().getClassLoader().getResource("icons/colorTrash20.png"));
+	
+	private ImageIcon cloneIcon = new ImageIcon (getClass().getClassLoader().getResource("icons/clone20.png"));
 	
 	
 	
@@ -192,6 +198,7 @@ public class TagContainer extends JPanel{
 			}
 		}
 	}
+	
 	
 	
 	

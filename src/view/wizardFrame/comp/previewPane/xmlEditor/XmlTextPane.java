@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package view.wizardFrame.comp.xmlEditor;
+package view.wizardFrame.comp.previewPane.xmlEditor;
 
 import java.awt.Rectangle;
 import java.awt.event.KeyEvent;

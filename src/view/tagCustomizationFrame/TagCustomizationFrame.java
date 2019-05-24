@@ -23,6 +23,7 @@ import business.Session;
 import listeners.tagCustomizationFrameListener.TagCustomizationFrameListener;
 import model.XmlTag;
 import view.comp.CustomColor;
+import view.comp.SquareButton;
 import view.comp.TagButton;
 import view.tagCustomizationFrame.comp.ChildrenListBar;
 import view.tagCustomizationFrame.comp.TagContainer;
@@ -253,6 +254,8 @@ public class TagCustomizationFrame extends JFrame {
 	
 	private void generateBottomPanel() {
 		
+		JPanel panel = new JPanel (new BorderLayout());
+		
 		/** setting up bottomPanel */
 		bottomPanel = new JPanel();
 		bottomPanel.setBackground(Color.WHITE);
@@ -262,12 +265,26 @@ public class TagCustomizationFrame extends JFrame {
 		TagButton addButton = new TagButton (parent, "Add");
 		addButton.addActionListener(listener);
 		addButton.setActionCommand("addInWizard");
-		addButton.setBackground(Color.DARK_GRAY);
-		addButton.setForeground(Color.WHITE);
-		addButton.setPressedBackgroundColor(Color.GRAY);
+		
+		JPanel addButtonPanel = new JPanel(new BorderLayout());
+		addButtonPanel.setBorder(new MatteBorder(1,1,1,1,CustomColor.LIGHT_GRAY));
+		addButtonPanel.add(addButton, BorderLayout.CENTER);
+		
+		
+		
+		/** setting up addButton */
+		SquareButton cancelButton = new SquareButton("Cancel");
+		cancelButton.addActionListener(listener);
+		cancelButton.setActionCommand("cancel");
+		JPanel cancelButtonPanel = new JPanel(new BorderLayout());
+		cancelButtonPanel.setBorder(new MatteBorder(1,1,1,1,CustomColor.LIGHT_GRAY));
+		cancelButtonPanel.add(cancelButton, BorderLayout.CENTER);
+
+		panel.add(addButtonPanel , BorderLayout.CENTER);
+		panel.add(cancelButtonPanel ,BorderLayout.EAST);
 		
 		/** adding addButoon inside bottomPanel */
-		bottomPanel.add(addButton , BorderLayout.CENTER);
+		bottomPanel.add(panel , BorderLayout.CENTER);
 	}
 	
 	

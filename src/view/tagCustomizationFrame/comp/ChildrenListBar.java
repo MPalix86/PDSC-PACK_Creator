@@ -29,10 +29,10 @@ public class ChildrenListBar extends JPanel{
 	
 	
 	/**
-	 * Set up listener and tag parent and generate ChildrenListBar
+	 * Set up listener and tag parent and generate TagsListBar
 	 * 
 	 * @param tag parent tag
-	 * @param listener listener for the ChildrenListBar
+	 * @param listener listener for the TagsListBar
 	 */
 	
 	public ChildrenListBar(XmlTag tag, TagCustomizationFrameListener listener) {

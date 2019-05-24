@@ -24,24 +24,13 @@ public class WizardFrameListener implements ActionListener {
 		
 		
 		
-		if(command.equals("next")) {
-			session.getWizardFrame().next();
-		}
 		
-		
-		
-		else if(command.equals("back")) {
-			session.getWizardFrame().back();
-		}
-		
-		
-		
-		else if(command.equals("updatePreviewPane")) {
-			ArrayList<XmlTag> tagArr = session.getWizardFrame().getTagArr();
+		if(command.equals("updatePreview")) {
+			ArrayList<XmlTag> tagArr = session.getWizardFrame().getFormContainer().getTagArr();
 			Document doc = WizardBusiness.writePdsc(tagArr); 
 			if(doc != null) {
 				String preview = FileBusiness.getDocumentPreview(doc);
-				session.getWizardFrame().setXmlPreview(preview);
+				session.getWizardFrame().getPreviewPaneContainer().getPreviewPane().setPreview(preview);
 			}
 		}
 		

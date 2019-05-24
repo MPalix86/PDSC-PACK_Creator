@@ -11,7 +11,7 @@ import javax.swing.SwingConstants;
 import javax.swing.border.LineBorder;
 
 import business.Session;
-import listeners.wizardFrameListener.comp.FormListener;
+import listeners.wizardFrameListener.comp.WizardFormListener.FormListener;
 import model.XmlAttribute;
 import model.XmlTag;
 import view.comp.AttributeComboBox;

@@ -1,4 +1,4 @@
-package view.wizardFrame.comp.munuBar.comp;
+package view.wizardFrame.comp.toolBar.comp;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;

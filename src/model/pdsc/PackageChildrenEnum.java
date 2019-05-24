@@ -5,9 +5,9 @@ import java.util.HashMap;
 import model.pdsc.tags.Conditions;
 import model.pdsc.tags.Taxonomy;
 
-public class PackageChildEnum extends HashMap<String,Class>{
+public class PackageChildrenEnum extends HashMap<String,Class>{
 	
-	public PackageChildEnum() {
+	public PackageChildrenEnum() {
 		put("taxonomy", Taxonomy.class);
 		put("conditions", Conditions.class);
 	}

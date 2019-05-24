@@ -91,10 +91,10 @@ public class TagCustomizationFrameListener implements ItemListener, ActionListen
 		
 		String command = e.getActionCommand();
 		
-		/** recovering TagButton instance */
-		TagButton tagBtn = (TagButton) e.getSource();
-		
 		if(command == "removeTagPanel") {
+			
+			/** recovering TagButton instance */
+			TagButton tagBtn = (TagButton) e.getSource();
 			
 			/** recovering child that user want to remove (selected child); the instance in tag's selectedChildrenArr  */
 			XmlTag selectedChild = tagBtn.getTag();	
@@ -116,7 +116,10 @@ public class TagCustomizationFrameListener implements ItemListener, ActionListen
 																		
 		}																				
 		
-		if(command == "addTagPanel") {
+		else if(command == "addTagPanel") {
+			
+			/** recovering TagButton instance */
+			TagButton tagBtn = (TagButton) e.getSource();
 			
 			/** recovering model instance for selected child */
 			XmlTag child = tagBtn.getTag();
@@ -152,7 +155,10 @@ public class TagCustomizationFrameListener implements ItemListener, ActionListen
 		}
 		
 		
-		if(command.equals("cloneTag")) {
+		else if(command.equals("cloneTag")) {
+			
+			/** recovering TagButton instance */
+			TagButton tagBtn = (TagButton) e.getSource();
 			
 			/** recovering tag to clone from selectedChildrendArr*/
 			XmlTag selectedTag = tagBtn.getTag();
@@ -202,7 +208,10 @@ public class TagCustomizationFrameListener implements ItemListener, ActionListen
 		}
 		
 		
-		if(command == "addInWizard") {
+		else if(command == "addInWizard") {
+			
+			/** recovering TagButton instance */
+			TagButton tagBtn = (TagButton) e.getSource();
 			
 			/** check for missing dependency */
 			XmlTag missingDependency = TagCustomizationBusiness.dependencyCheck(tagBtn.getTag()); 
@@ -222,11 +231,11 @@ public class TagCustomizationFrameListener implements ItemListener, ActionListen
 					XmlTag tag = tagBtn.getTag();
 					XmlTag newTag = new XmlTag(tag);
 					newTag.freeModelFields();
-					wizardFrame.addStep(new Form(newTag));
+					wizardFrame.getFormContainer().addStep(new Form(newTag));
 					tagCustomizationFrame.okMessage("Tag added correctly", "done");
 					
 					/** updating preview pane in wizard frame */
-					session.getInstance().getWizardFrame().updateXmlPreview();
+					session.getWizardFrame().updatePreview();
 				}
 			}
 			
@@ -236,20 +245,30 @@ public class TagCustomizationFrameListener implements ItemListener, ActionListen
 				XmlTag newTag = new XmlTag(tag);
 				newTag.freeModelFields();
 				System.out.println("dsads" + newTag.getName());
-				wizardFrame.addStep(new Form(newTag));
+				wizardFrame.getFormContainer().addStep(new Form(newTag));
 				tagCustomizationFrame.okMessage("Tag added correctly", "done");
 				
 			}
 			
 			/** updating preview pane in wizard frame */
-			session.getInstance().getWizardFrame().updateXmlPreview();
+			session.getWizardFrame().updatePreview();
 		}
 		
 		
 		
-		if(command.equals("showChildren")) {
+		else if(command.equals("showChildren")) {
+			
+			/** recovering TagButton instance */
+			TagButton tagBtn = (TagButton) e.getSource();
+			
 			XmlTag tag = tagBtn.getTag();
 			tagCustomizationFrame.updateLeftPanel(tag);
+		}
+		
+		
+		
+		else if(command.equals("cancel")) {
+			this.tagCustomizationFrame.dispose();
 		}
 	}
 	

@@ -1,4 +1,4 @@
-package view.wizardFrame.comp.xmlEditor;
+package view.wizardFrame.comp.previewPane.xmlEditor;
 
 import java.awt.Color;
 import java.awt.Dimension;

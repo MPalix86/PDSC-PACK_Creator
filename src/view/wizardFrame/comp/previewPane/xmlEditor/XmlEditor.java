@@ -14,7 +14,7 @@
   * limitations under the License.
   */
 
-package view.wizardFrame.comp.xmlEditor;
+package view.wizardFrame.comp.previewPane.xmlEditor;
 
 import java.awt.GridLayout;
 
