@@ -4,17 +4,12 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 
 import javax.swing.BoxLayout;
-import javax.swing.ImageIcon;
 import javax.swing.JPanel;
-import javax.swing.border.MatteBorder;
 
 import listeners.tagCustomizationFrameListener.TagCustomizationFrameListener;
 import model.XmlAttribute;
 import model.XmlTag;
-import net.miginfocom.swing.MigLayout;
 import view.comp.AttributeCheckBox;
-import view.comp.CustomColor;
-import view.comp.TagButton;
 
 
 
@@ -70,88 +65,14 @@ public class CollapsablePanelTagContent extends JPanel{
 		
 		contentPane = new JPanel(new BorderLayout());
 		
-		/** generating buttonsPanel */
-		JPanel buttonsPanel = generatebuttonsPanel();
-		
 		/** generating attributesPanel */
 		JPanel attributesPanel = generateAttributesPanel();
 		
 		/** generating all panels in contentPane */
-		contentPane.add(attributesPanel, BorderLayout.CENTER);
-		contentPane.add(buttonsPanel, BorderLayout.WEST);
-		
+		contentPane.add(attributesPanel, BorderLayout.CENTER);	
 	}
 	
-	
-	
-	
-	/**
-	 * Return panel with all tag's buttons
-	 * 
-	 * @return buttons panel
-	 */
-	
-	private JPanel generatebuttonsPanel() {
-		
-		JPanel buttonsPanel = new JPanel(new MigLayout("wrap 1"));
-		buttonsPanel.setBorder(new MatteBorder(0,0,0,1,CustomColor.LIGHT_GRAY));
 
-		/** setting up children icon */
-		ImageIcon tagIcon = new ImageIcon (getClass().getClassLoader().getResource("icons/tagList20.png"));
-		
-		/** showChildrenButton initial setup */
-		TagButton showChildrenButton = new TagButton(this.tag , "").toIconButton(tagIcon);
-		showChildrenButton.setToolTipText("Show all chlidren");
-		
-		
-		/** if tag has children add showChildrenButton */
-		if(tag.getChildrenArr() != null) {
-			
-			showChildrenButton.addActionListener(listener);
-			showChildrenButton.setActionCommand("showChildren");
-		}
-		else showChildrenButton.setEnabled(false);
-		
-		buttonsPanel.add(showChildrenButton);
-		
-		/** setting up trash icon */
-		ImageIcon trashIcon = new ImageIcon (getClass().getClassLoader().getResource("icons/colorTrash20.png"));
-	
-		/** trashButton initial setup */
-		TagButton trashButton = new TagButton(this.tag, "").toIconButton(trashIcon);
-		trashButton.setToolTipText("Remove Tag");
-		
-		/** setting clone trash icon */
-		ImageIcon cloneIcon = new ImageIcon (getClass().getClassLoader().getResource("icons/clone20.png"));
-		
-		/** cloneButton initial setup */
-		TagButton cloneButton = new TagButton(this.tag, "").toIconButton(cloneIcon);
-		cloneButton.setToolTipText("Clone This Tag");
-		
-		
-		if(tag.getParent() != null) {
-
-			/** setting button's listener */
-			trashButton.addActionListener(listener);
-			trashButton.setActionCommand("removeTagPanel");
-			
-			cloneButton.addActionListener(listener);
-			cloneButton.setActionCommand("cloneTag");
-			
-		}
-		else {
-			trashButton.setEnabled(false);
-			cloneButton.setEnabled(false);
-		}
-		
-		
-		buttonsPanel.add(trashButton);
-		buttonsPanel.add(cloneButton);
-
-		
-		return buttonsPanel;
-	}
-	
 	
 	
 	

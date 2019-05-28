@@ -17,6 +17,7 @@ import model.XmlTag;
 import view.comp.AttributeComboBox;
 import view.comp.AttributeTextField;
 import view.comp.CustomColor;
+import view.comp.TagComboBox;
 import view.comp.TagTextField;
 
 
@@ -268,10 +269,28 @@ public class Form extends JPanel{
 				if( element.getSelectedChildrenArr() != null )	element.getSelectedChildrenArr().forEach((c)-> children.add(c));
 				
 				/** if element has no selected children */
-				else {	
+				else {
+					
+					/** if element has possible values */
+					if(element.getPossibleValues() != null) {
+						
+						/** setting up  TagComboBox with all possible values*/	
+						TagComboBox valuesComboBox = new TagComboBox(element);  
+						valuesComboBox.addActionListener(listener);
+						valuesComboBox.setForeground(Color.DARK_GRAY);
+						
+						/** setting up valuesComboBox position */
+						valuesComboBox.setBounds(TEXT_X, positionY, TEXT_WIDTH, TEXT_HEIGHT);
+						
+						/** calculation of the new position */
+						positionY += DELTA_TEXT_LABEL;
+						
+						/** adding valuesCombobox to the form */
+						this.add(valuesComboBox);
+					}
 					
 					/** if tag can have content */
-					if(element.getDefaultContent() != null) {
+					else if(element.getDefaultContent() != null) {
 						
 						/** setting up TagTextField valueText */
 						TagTextField valueText = new TagTextField(element);

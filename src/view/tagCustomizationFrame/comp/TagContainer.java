@@ -11,7 +11,6 @@ import javax.swing.border.EmptyBorder;
 import listeners.tagCustomizationFrameListener.TagCustomizationFrameListener;
 import model.XmlTag;
 import net.miginfocom.swing.MigLayout;
-import view.comp.CollapsablePanel;
 import view.tagCustomizationFrame.TagCustomizationFrame;
 
 
@@ -57,7 +56,7 @@ public class TagContainer extends JPanel{
 		XmlTag FrameParent = this.tagCustomizationFrame.getTagParent();
 		
 		CollapsablePanelTagContent newTagElement = new CollapsablePanelTagContent(FrameParent,listener);
-		CollapsablePanel newCollPanel = new CollapsablePanel("< " + FrameParent.getName() + " >", newTagElement);
+		CollapsablePanel newCollPanel = new CollapsablePanel("< " + FrameParent.getName() + " >", newTagElement,FrameParent,listener);
 		this.selectedChildrenPanelsHashMap.put(FrameParent, newCollPanel);
 		
 		addNewTagPanel(this.tagCustomizationFrame.getTagParent());
@@ -76,7 +75,7 @@ public class TagContainer extends JPanel{
 		
 		if (tag.getParent() != null ) {
 			CollapsablePanelTagContent newTagElement = new CollapsablePanelTagContent(tag,listener);
-			CollapsablePanel newCollPanel = new CollapsablePanel("< " + tag.getName() + " >", newTagElement);
+			CollapsablePanel newCollPanel = new CollapsablePanel("< " + tag.getName() + " >", newTagElement, tag,listener);
 			this.selectedChildrenPanelsHashMap.put(tag, newCollPanel);
 		}
 
@@ -183,7 +182,7 @@ public class TagContainer extends JPanel{
 		XmlTag parent =  tag;
 		
 		CollapsablePanelTagContent newTagElement = new CollapsablePanelTagContent(parent,listener);
-		CollapsablePanel newCollPanel = new CollapsablePanel("< " + parent.getName() + " >", newTagElement);
+		CollapsablePanel newCollPanel = new CollapsablePanel("< " + parent.getName() + " >", newTagElement ,parent ,listener);
 		this.selectedChildrenPanelsHashMap.put(parent, newCollPanel);
 		
 		if( parent.getSelectedChildrenArr() != null) {

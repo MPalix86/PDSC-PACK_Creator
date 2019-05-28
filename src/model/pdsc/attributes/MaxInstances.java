@@ -1,33 +1,27 @@
 package model.pdsc.attributes;
 
 import model.XmlAttribute;
-import model.pdsc.attributes.values.BooleanEnum;
+import model.pdsc.attributes.values.IntEnum;
 
-/** 
- * Attribute definition following PDSC CMSIS standard
- * 
- * @author Mirco Palese
- */
-
-public class Public extends XmlAttribute {
+public class MaxInstances extends XmlAttribute{
 	
 	/** attribute's name */
-	private final static String name = "public";
+	private final static String name = "maxInstances";
 	
-	/** attribute's posssible values */
-	private final static Object possibleValues = new BooleanEnum();
+	/** attribute's possible values */
+	private final static Object possibleValues = new IntEnum(1,10);
 	
 	
 	
 	
 	
 	/**
-	 * Create new instance of public attribute
+	 * Create new instance of attribute
 	 * 
 	 * @param required attribute's obligatoriness
 	 */
 	
-	public Public(boolean required) {
+	public MaxInstances(boolean required) {
 		super(name, required, possibleValues);
 	}
 	
@@ -57,4 +51,6 @@ public class Public extends XmlAttribute {
 	public static Object getPossiblevalues() {
 		return possibleValues;
 	}
+
+
 }

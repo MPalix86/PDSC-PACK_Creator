@@ -11,8 +11,8 @@ import business.Session;
 import listeners.wizardFrameListener.comp.ToolBarListener;
 import model.pdsc.PackageChildrenEnum;
 import view.comp.IconButton;
+import view.comp.TagMenuItem;
 import view.wizardFrame.comp.toolBar.comp.DropDownButton;
-import view.wizardFrame.comp.toolBar.comp.TagMenuItem;
 
 /**
  *  Menu bar creation

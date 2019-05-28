@@ -57,20 +57,20 @@ public class TagCustomizationBusiness {
 		children.add(parent);
 		while(!children.isEmpty()) {
 			XmlTag element = children.get(0);
-			System.out.println("analyzing " +  element.getName());
+			//System.out.println("analyzing " +  element.getName());
 			children.remove(element);
 			ArrayList <XmlTag> requiredChildren = new ArrayList<XmlTag>(getRequiredChildren(element));
 			if(!requiredChildren.isEmpty()) {
-				System.out.println(element.getName() + " has dependencies");
+				//System.out.println(element.getName() + " has dependencies");
 				for(int i = 0; i < requiredChildren.size(); i++) {
 					XmlTag requiredChild = requiredChildren.get(i);
-					System.out.println("check if there is the denpendency :  "  + requiredChild.getName());
+					//System.out.println("check if there is the denpendency :  "  + requiredChild.getName());
 					boolean found = false;
 					if(element.getSelectedChildrenArr() != null) {
-						System.out.println("let's see if " +  requiredChild.getName() + " is present in selected children of " +element.getName());
+						//System.out.println("let's see if " +  requiredChild.getName() + " is present in selected children of " +element.getName());
 						for(int j = 0; j < element.getSelectedChildrenArr().size(); j++) {
 							XmlTag selectedChild = element.getSelectedChildrenArr().get(j);
-							System.out.println("analizyng selected child " + selectedChild.getName());
+							//System.out.println("analizyng selected child " + selectedChild.getName());
 							
 							String requiredChildName = requiredChild.getName();
 							requiredChildName.replaceAll("\\s+","");
@@ -83,14 +83,14 @@ public class TagCustomizationBusiness {
 							if(requiredChildName.equals(selectedChildName)) {
 								found = true;
 							}
-							if( found ) { System.out.println(selectedChild .getName() + " found ");break;}
+							if( found ) { /*System.out.println(selectedChild .getName() + " found ");*/break;}
 						}
-						if(!found) {System.out.println(requiredChild.getName() + " not found ");return requiredChild;}
+						if(!found) {/*System.out.println(requiredChild.getName() + " not found ");*/return requiredChild;}
 					}
-					else {System.out.println("ou vedi che " + element.getName() + " non ha figli");System.out.println(requiredChild.getName() + " not found ");return requiredChild;}
+					else {/*System.out.println(requiredChild.getName() + " not found ");*/return requiredChild;}
 
 				}
-			}else {System.out.println(element.getName() + " has no dependencies");}
+			}else {/*System.out.println(element.getName() + " has no dependencies");*/}
 			if( element.getSelectedChildrenArr() != null ) {
 				element.getSelectedChildrenArr().forEach((c)-> children.add(c));
 			}

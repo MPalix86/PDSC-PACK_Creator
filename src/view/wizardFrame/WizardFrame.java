@@ -12,10 +12,13 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextPane;
 import javax.swing.border.EmptyBorder;
 
 import business.Session;
 import listeners.wizardFrameListener.WizardFrameListener;
+import view.wizardFrame.comp.TextPaneForm.TextPaneForm;
 import view.wizardFrame.comp.previewPane.PreviewPaneContainer;
 import view.wizardFrame.comp.tagsListBar.TagsListBarContainer;
 import view.wizardFrame.comp.toolBar.ToolBarContainer;
@@ -46,6 +49,7 @@ public class WizardFrame extends JFrame {
 	
 	private TagsListBarContainer tagsListbarContainer;
 	
+	private TextPaneForm textForm;
 	
 	
 	
@@ -102,7 +106,6 @@ public class WizardFrame extends JFrame {
 		
 		/** frame initial setup */
 		setBackground(Color.WHITE);
-
 		
 		/** contentPane initial setup */
 		contentPane = new JPanel(new BorderLayout());
@@ -110,8 +113,16 @@ public class WizardFrame extends JFrame {
 		contentPane.setBorder(new EmptyBorder(0,0,0,0));
 		setContentPane(contentPane); 
 		
+		textForm.setBorder(new EmptyBorder(0,0,0,0));
+		textForm.setBackground(Color.WHITE);
+		textForm.setEditable(false);
+		
+		JPanel p = new JPanel(new BorderLayout());
+		p.add(textForm, BorderLayout.CENTER);
+		
 		/* place all all component into contentPane */
-		contentPane.add(previewPaneContainer, BorderLayout.CENTER);
+		contentPane.add(new JScrollPane(p), BorderLayout.CENTER);
+		//contentPane.add(this.previewPaneContainer, BorderLayout.CENTER);
 		contentPane.add(toolBarContainer, BorderLayout.NORTH);
 		contentPane.add(formContainer, BorderLayout.EAST);
 		contentPane.add(tagsListbarContainer, BorderLayout.WEST);
@@ -134,6 +145,12 @@ public class WizardFrame extends JFrame {
 	
 	
 	
+	
+	/**
+	 * show - hide tag list bar
+	 * 
+	 * @return void
+	 */
 	public void ShowHideTagListBar() {
 		if (tagsListbarContainer.isVisible()) {
 			tagsListbarContainer.setVisible(false);
@@ -213,6 +230,13 @@ public class WizardFrame extends JFrame {
 	 */
 	public ToolBarContainer getToolBarContainer() {
 		return toolBarContainer;
+	}
+	
+	
+	
+	
+	public JTextPane getTextPane() {
+		return this.textPane;
 	}
 	
 	

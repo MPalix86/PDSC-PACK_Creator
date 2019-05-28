@@ -9,25 +9,25 @@ import model.pdsc.attributes.values.BooleanEnum;
  * @author Mirco Palese
  */
 
-public class Public extends XmlAttribute {
+public class IsDefaultVariant extends XmlAttribute{
 	
 	/** attribute's name */
-	private final static String name = "public";
+	private final static String name = "isDefaultVariant";
 	
-	/** attribute's posssible values */
+	/** attribute's possible values */
 	private final static Object possibleValues = new BooleanEnum();
 	
 	
 	
-	
+	   
 	
 	/**
-	 * Create new instance of public attribute
+	 * Create new instance of id attribute
 	 * 
 	 * @param required attribute's obligatoriness
 	 */
 	
-	public Public(boolean required) {
+	public IsDefaultVariant(boolean required) {
 		super(name, required, possibleValues);
 	}
 	

@@ -11,6 +11,7 @@ import model.XmlAttribute;
 import model.XmlTag;
 import view.comp.AttributeCheckBox;
 import view.comp.TagButton;
+import view.comp.TagMenuItem;
 import view.tagCustomizationFrame.TagCustomizationFrame;
 import view.wizardFrame.WizardFrame;
 import view.wizardFrame.comp.wizardForm.Form;
@@ -94,10 +95,10 @@ public class TagCustomizationFrameListener implements ItemListener, ActionListen
 		if(command == "removeTagPanel") {
 			
 			/** recovering TagButton instance */
-			TagButton tagBtn = (TagButton) e.getSource();
+			TagMenuItem tagMenuItem = (TagMenuItem) e.getSource();
 			
 			/** recovering child that user want to remove (selected child); the instance in tag's selectedChildrenArr  */
-			XmlTag selectedChild = tagBtn.getTag();	
+			XmlTag selectedChild = tagMenuItem.getTag();	
 			
 			/** recovering parent of the frame : tag customization frame */
 			XmlTag parent = selectedChild.getParent();
@@ -119,10 +120,10 @@ public class TagCustomizationFrameListener implements ItemListener, ActionListen
 		else if(command == "addTagPanel") {
 			
 			/** recovering TagButton instance */
-			TagButton tagBtn = (TagButton) e.getSource();
+			TagMenuItem tagMenuItem = (TagMenuItem) e.getSource();
 			
 			/** recovering model instance for selected child */
-			XmlTag child = tagBtn.getTag();
+			XmlTag child = tagMenuItem.getTag();
 			
 			/** recovering parent instance for selected child */
 			XmlTag parent = child.getParent();
@@ -148,7 +149,7 @@ public class TagCustomizationFrameListener implements ItemListener, ActionListen
 			else {		
 				
 				tagCustomizationFrame.warningMessage(	"<html><p><span style=\"font-size: 14pt; color: #333333;\"> "
-														+ " Maximum number of children reached for tag  " +tagBtn.getTag().getName() + 
+														+ " Maximum number of children reached for tag  " +tagMenuItem.getTag().getName() + 
 														" </span></p></html>"
 													); 
 			}
@@ -158,10 +159,10 @@ public class TagCustomizationFrameListener implements ItemListener, ActionListen
 		else if(command.equals("cloneTag")) {
 			
 			/** recovering TagButton instance */
-			TagButton tagBtn = (TagButton) e.getSource();
+			TagMenuItem tagMenuItem = (TagMenuItem) e.getSource();
 			
 			/** recovering tag to clone from selectedChildrendArr*/
-			XmlTag selectedTag = tagBtn.getTag();
+			XmlTag selectedTag = tagMenuItem.getTag();
 			
 			/** recovering parent instance for selected child */
 			XmlTag parent = selectedTag.getParent();
@@ -193,7 +194,7 @@ public class TagCustomizationFrameListener implements ItemListener, ActionListen
 				else {
 					if(modelTag.getMax() == 0) {
 						this.tagCustomizationFrame.warningMessage("<html><p><span style=\"font-size: 14pt; color: #333333;\"> "
-																+ " Maximum number of children reached for tag  " +tagBtn.getTag().getName() + 
+																+ " Maximum number of children reached for tag  " +tagMenuItem.getTag().getName() + 
 																	" </span></p></html>");
 					}
 					else {
@@ -259,10 +260,9 @@ public class TagCustomizationFrameListener implements ItemListener, ActionListen
 		else if(command.equals("showChildren")) {
 			
 			/** recovering TagButton instance */
-			TagButton tagBtn = (TagButton) e.getSource();
+			TagMenuItem tagMenuItem = (TagMenuItem) e.getSource();
 			
-			XmlTag tag = tagBtn.getTag();
-			tagCustomizationFrame.updateLeftPanel(tag);
+			XmlTag tag = tagMenuItem.getTag();
 		}
 		
 		

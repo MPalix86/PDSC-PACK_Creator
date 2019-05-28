@@ -8,9 +8,9 @@ import java.lang.reflect.InvocationTargetException;
 import business.Session;
 import listeners.wizardFrameListener.WizardFrameListener;
 import model.XmlTag;
+import view.comp.TagMenuItem;
 import view.tagCustomizationFrame.TagCustomizationFrame;
 import view.wizardFrame.comp.toolBar.ToolBar;
-import view.wizardFrame.comp.toolBar.comp.TagMenuItem;
 
 public class ToolBarListener extends WizardFrameListener implements ActionListener {
 	

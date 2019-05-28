@@ -17,6 +17,7 @@ import model.Response;
 import model.XmlTag;
 import view.comp.AttributeComboBox;
 import view.comp.AttributeTextField;
+import view.comp.TagComboBox;
 import view.comp.TagTextField;
 import view.wizardFrame.comp.wizardForm.FinalStepForm;
 import view.wizardFrame.comp.wizardForm.Form;
@@ -70,6 +71,12 @@ public class FormListener extends WizardFrameListener implements FocusListener ,
 		if(e.getSource().getClass() == AttributeComboBox.class) {
 			AttributeComboBox comboBox = (AttributeComboBox) e.getSource();
 			comboBox.setAttrValue();
+			session.getWizardFrame().updatePreview();
+		}
+		
+		else if(e.getSource().getClass() == TagComboBox.class) {
+			TagComboBox comboBox = (TagComboBox) e.getSource();
+			comboBox.setTagContent();
 			session.getWizardFrame().updatePreview();
 		}
 		

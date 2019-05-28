@@ -1,7 +1,7 @@
 package model.pdsc.attributes;
 
 import model.XmlAttribute;
-import model.pdsc.attributes.values.BooleanEnum;
+import model.pdsc.attributes.values.FileAttributeEnum;
 
 /** 
  * Attribute definition following PDSC CMSIS standard
@@ -9,25 +9,25 @@ import model.pdsc.attributes.values.BooleanEnum;
  * @author Mirco Palese
  */
 
-public class Public extends XmlAttribute {
-	
+public class Attr extends XmlAttribute {
+
 	/** attribute's name */
-	private final static String name = "public";
+	private final static String name = "attr";
 	
-	/** attribute's posssible values */
-	private final static Object possibleValues = new BooleanEnum();
-	
+	/** attribute's possible values */
+	private final static Object possibleValues = new FileAttributeEnum();
+		
 	
 	
 	
 	
 	/**
-	 * Create new instance of public attribute
+	 * Create new instance of attribute
 	 * 
 	 * @param required attribute's obligatoriness
 	 */
 	
-	public Public(boolean required) {
+	public Attr(boolean required) {
 		super(name, required, possibleValues);
 	}
 	
@@ -51,10 +51,11 @@ public class Public extends XmlAttribute {
 	/**
 	 * return attribute's possible value
 	 * 
-	 * @return the possiblevalues
+	 * @return the possible values
 	 */
 	
 	public static Object getPossiblevalues() {
 		return possibleValues;
 	}
+
 }

@@ -1,7 +1,6 @@
 package model.pdsc.attributes;
 
 import model.XmlAttribute;
-import model.pdsc.attributes.values.BooleanEnum;
 
 /** 
  * Attribute definition following PDSC CMSIS standard
@@ -9,25 +8,28 @@ import model.pdsc.attributes.values.BooleanEnum;
  * @author Mirco Palese
  */
 
-public class Public extends XmlAttribute {
-	
+public class Csub extends XmlAttribute {
+
 	/** attribute's name */
-	private final static String name = "public";
+	private final static String name = "Csub";
 	
-	/** attribute's posssible values */
-	private final static Object possibleValues = new BooleanEnum();
+	/** attribute's possible values */
+	private final static Object possibleValues = new String("");
+	
+	private final static int minLenght = 0;
+	private final static int maxLenght = 32;
 	
 	
 	
 	
 	
 	/**
-	 * Create new instance of public attribute
+	 * Create new instance of Cgroup attribute
 	 * 
 	 * @param required attribute's obligatoriness
 	 */
 	
-	public Public(boolean required) {
+	public Csub(boolean required) {
 		super(name, required, possibleValues);
 	}
 	
@@ -57,4 +59,5 @@ public class Public extends XmlAttribute {
 	public static Object getPossiblevalues() {
 		return possibleValues;
 	}
+
 }

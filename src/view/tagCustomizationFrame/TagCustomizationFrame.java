@@ -25,7 +25,6 @@ import model.XmlTag;
 import view.comp.CustomColor;
 import view.comp.SquareButton;
 import view.comp.TagButton;
-import view.tagCustomizationFrame.comp.ChildrenListBar;
 import view.tagCustomizationFrame.comp.TagContainer;
 
 
@@ -43,16 +42,9 @@ public class TagCustomizationFrame extends JFrame {
 	/** Frame content pane */
 	private JPanel contentPane;
 	
-	/** bottom panel */
 	private JPanel bottomPanel;
 	
-	/** left panel */
-	private JPanel leftPanel;
-	
 	private JPanel centerPanel;
-	
-	/** right panel */
-	private JPanel rightPanel;
 	
 	/** tag container */
 	private TagContainer tagContainer;
@@ -105,7 +97,7 @@ public class TagCustomizationFrame extends JFrame {
 	
 	
 	/** 
-	 * generate left panel with all components 
+	 * generate center panel with all components 
 	 * 
 	 * @return void
 	 */
@@ -153,49 +145,6 @@ public class TagCustomizationFrame extends JFrame {
 	
 	
 	
-	/**
-	 * GenerateRightPanel
-	 * 
-	 * @return void
-	 */
-	
-	private void generateLeftPanel(XmlTag tag){
-
-		leftPanel = new JPanel();
-		leftPanel.setLayout(new BorderLayout());
-		leftPanel.setBorder(new MatteBorder(0,0,0,1, CustomColor.LIGHT_GRAY));
-		
-		JScrollPane leftScrollPanel = new JScrollPane(new ChildrenListBar(tag, listener));
-		
-		/** creation of leftScrollPaneScrollBar. Scroll bar of LeftScrollPane */
-		JScrollBar leftScrollPanelScrollBar = new JScrollBar(){
-			
-	    	/**
-        	 * override isVisible to keep the scroll bar working even if
-        	 * it is hidden
-        	 */
-            @Override
-            public boolean isVisible() {
-                return true;
-            }
-        }; 
-        
-        /** setting up leftScrollPane */
-        leftScrollPanelScrollBar.setUnitIncrement(16);
-        leftScrollPanel.setVerticalScrollBar(leftScrollPanelScrollBar);
-        leftScrollPanel.setBorder(new EmptyBorder(0, 0, 0, 0));
-        leftScrollPanel.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-        leftScrollPanel.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
-		
-		/** adding leftPanel inside lefScrollPanel */
-        leftPanel.add(leftScrollPanel);
-		
-	
-	}
-	
-	
-	
-	
 	/** 
 	 * recovering container, setting up frame, contentPane and placing all components 
 	 * 
@@ -226,13 +175,9 @@ public class TagCustomizationFrame extends JFrame {
 		/** generating bottomPanel */
 		generateBottomPanel();
 		
-		/** generating rightPanel */
-		generateLeftPanel(parent);
-		
 		/** adding bottomPanel, leftPanel inside contentPane */
 		contentPane.add(bottomPanel, BorderLayout.SOUTH);
 		contentPane.add(centerPanel, BorderLayout.CENTER);
-		contentPane.add(leftPanel, BorderLayout.WEST);
 		
 		/** adding contentPane inside Container */
 		c.add(contentPane);
@@ -286,31 +231,6 @@ public class TagCustomizationFrame extends JFrame {
 		/** adding addButoon inside bottomPanel */
 		bottomPanel.add(panel , BorderLayout.CENTER);
 	}
-	
-	
-	
-	
-	/**
-	 * Update right Panel removing and repainting children list bar
-	 * 
-	 * @param tag for children list bar
-	 */
-	
-	public void updateLeftPanel(XmlTag tag) {
-	
-		contentPane.remove(leftPanel);
-		
-		
-		if(tag.getChildrenArr() != null) {
-			generateLeftPanel(tag);
-			contentPane.add(leftPanel, BorderLayout.WEST);
-			contentPane.repaint();
-			contentPane.revalidate();
-		}
-		
-		
-	}
-	
 	
 	
 

@@ -1,12 +1,23 @@
 package business;
 
+import java.awt.Color;
+import java.awt.Dimension;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.StringReader;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import javax.swing.JButton;
+import javax.swing.JTextField;
+import javax.swing.JTextPane;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.Style;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyledDocument;
 
 import org.jdom2.Attribute;
 import org.jdom2.Document;
@@ -29,11 +40,6 @@ public class WizardBusiness {
 	 */
 	//--------------------------------------------------------------------------writePdsc()
 	public static Document writePdsc(ArrayList<XmlTag> tagArr) {
-		System.out.println("");
-		System.out.println("");
-		System.out.println("");
-		System.out.println("");
-		System.out.println("");
 		doc = new Document();	
 		for(int i = 0 ; i < tagArr.size(); i++) { 
 			XmlTag xmlTag = tagArr.get(i);
@@ -160,7 +166,7 @@ public class WizardBusiness {
 	
 	
 	//--------------------------------------------------------------------------readPdsc()
-	private static void readPdsc() throws IOException {
+	public static void readPdsc(Document doc) throws IOException {
 		File file = new File("/Users/mircopalese/Desktop/pdsctest.pdsc");
 		BufferedReader reader = new BufferedReader(new FileReader(file));
 		StringBuilder stringBuilder = new StringBuilder();
@@ -187,6 +193,66 @@ public class WizardBusiness {
 	}
 	
 	
+	
+	//--------------------------------------------------------------------------readPdsc()
+	public static void readPdscString(String doc, JTextPane tp) throws IOException, BadLocationException {
+		BufferedReader reader = new BufferedReader(new StringReader(doc));
+		StringBuilder stringBuilder = new StringBuilder();
+		String inputLine;
+		
+		StyledDocument tpDoc = tp.getStyledDocument();
+		
+		
+		while ((inputLine = reader.readLine()) != null) {
+		    stringBuilder.append(inputLine);
+		}
+		String pageContent = stringBuilder.toString();
+		Pattern pattern = Pattern.compile("<(?!!)(?!/)\\s*([a-zA-Z0-9]+)(.*?)>");
+		Matcher matcher = pattern.matcher(pageContent);
+		while (matcher.find()) {
+		    String tagName = matcher.group(1);
+		    String attributes = matcher.group(2);
+		    System.out.println("tag name: " + tagName);
+		    System.out.println("     rest of the tag: " + attributes);
+		    Pattern attributePattern = Pattern.compile("(\\S+)=['\"]{1}([^>]*?)['\"]{1}");
+		    Matcher attributeMatcher = attributePattern.matcher(attributes);
+		    
+		    Style style = tp.addStyle("I'm a Style", null);
+	        StyleConstants.setForeground(style, Color.blue);
+	        
+	        tpDoc.insertString(tpDoc.getLength(), "<" +  tagName + " " , style);
+	        tp.setCaretPosition(tp.getDocument().getLength());
+		    
+		    
+		    
+		    while(attributeMatcher.find()) {
+		        String attributeName = attributeMatcher.group(1);
+		        String attributeValue = attributeMatcher.group(2);
+		     
+		        StyleConstants.setForeground(style, Color.red);
+		        JButton b = new JButton(attributeName);
+		       
+		        
+		        tp.setCaretPosition(tp.getDocument().getLength());
+		        tp.insertComponent(b);
+		        
+		        tpDoc.insertString(tpDoc.getLength(), " \" ", style);
+		        tp.setCaretPosition(tp.getDocument().getLength());
+		        JTextField t = new JTextField ("");
+		        t.setVisible(true);
+		        t.setMinimumSize(new Dimension(40,20));
+		        t.setForeground(Color.GRAY);
+	            tp.insertComponent(t);
+	            tpDoc.insertString(tpDoc.getLength(), " \" ", style);
+	            
+	            
+		    }
+		    StyleConstants.setForeground(style, Color.blue);
+		    tpDoc.insertString(tpDoc.getLength(), "> ", style);
+		    tpDoc.insertString(tpDoc.getLength(), "< /" + tagName + "> \n", style);
+		}
+		
+	}
 
 	
 	

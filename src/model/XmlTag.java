@@ -69,6 +69,10 @@ public class XmlTag{
 	 */
 	
 	private String defaultContent;
+	
+	
+	
+	private Object possibleValues;
 
 	
 	
@@ -157,6 +161,8 @@ public class XmlTag{
 		
 		if(tag.getMax() != null) this.max = tag.getMax();
 		
+		if(tag.getPossibleValues() != null) this.possibleValues = tag.getPossibleValues();
+		
 		this.required = tag.isRequired();
 		
 	}
@@ -222,6 +228,8 @@ public class XmlTag{
 		if(tag.getName() != null) this.name = new String(tag.getName());
 		
 		if(tag.getMax() != null) this.max = tag.getMax();
+		
+		if(tag.getPossibleValues() != null) this.possibleValues = tag.getPossibleValues();
 		
 		this.required = tag.isRequired();
 		
@@ -463,6 +471,32 @@ public class XmlTag{
 	public void setNameSpace(XmlNameSpace nameSpace) {
 		this.nameSpace = nameSpace;
 	}
+	
+	
+	
+	
+	/**
+	 * set tag's possible values
+	 * 
+	 * @param possibleValues the possibleValues to set
+	 */
+	
+	public void setPossibleValues(Object o) {
+		this.possibleValues = o;
+	}
+	
+	
+	
+	
+	/**
+	 * get tag's possible values
+	 * 
+	 * @return the possibleValues 
+	 */
+	
+	public Object getPossibleValues() {
+		return this.possibleValues;
+	}
 
 	
 	
@@ -626,6 +660,7 @@ public class XmlTag{
 		this.parent = null;
 		this.nameSpace = null;
 		this.defaultContent = null;
+		this.possibleValues = null;
 		
 	}
 	

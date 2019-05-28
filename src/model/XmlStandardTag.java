@@ -45,7 +45,7 @@ public abstract class XmlStandardTag extends XmlTag{
 	 * 
 	 * @param required attribute's obligatoriness
 	 * @param parent this tag's parent
-	 * @param max max occurrence of this tag inside paren
+	 * @param max max occurrence of this tag inside parent
 	 */
 	
 	public XmlStandardTag(boolean required, XmlTag parent, int max) {
