@@ -8,7 +8,7 @@ import javax.swing.JPopupMenu;
 import javax.swing.JToolBar;
 
 import business.Session;
-import listeners.wizardFrameListener.comp.ToolBarListener;
+import listeners.wizardFrameListeners.comp.ToolBarListener;
 import model.pdsc.PackageChildrenEnum;
 import view.comp.IconButton;
 import view.comp.TagMenuItem;

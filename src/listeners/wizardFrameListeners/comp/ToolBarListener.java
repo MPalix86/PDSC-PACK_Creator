@@ -1,4 +1,4 @@
-package listeners.wizardFrameListener.comp;
+package listeners.wizardFrameListeners.comp;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -6,7 +6,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 
 import business.Session;
-import listeners.wizardFrameListener.WizardFrameListener;
+import listeners.wizardFrameListeners.WizardFrameListener;
 import model.XmlTag;
 import view.comp.TagMenuItem;
 import view.tagCustomizationFrame.TagCustomizationFrame;

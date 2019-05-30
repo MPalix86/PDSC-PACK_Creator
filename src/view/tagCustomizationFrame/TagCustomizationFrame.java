@@ -20,7 +20,7 @@ import javax.swing.border.MatteBorder;
 import javax.swing.plaf.ColorUIResource;
 
 import business.Session;
-import listeners.tagCustomizationFrameListener.TagCustomizationFrameListener;
+import listeners.tagCustomizationFrameListeners.TagCustomizationFrameListener;
 import model.XmlTag;
 import view.comp.CustomColor;
 import view.comp.SquareButton;

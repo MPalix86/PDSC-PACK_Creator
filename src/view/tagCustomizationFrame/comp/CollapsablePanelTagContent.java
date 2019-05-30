@@ -6,7 +6,7 @@ import java.awt.Color;
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 
-import listeners.tagCustomizationFrameListener.TagCustomizationFrameListener;
+import listeners.tagCustomizationFrameListeners.TagCustomizationFrameListener;
 import model.XmlAttribute;
 import model.XmlTag;
 import view.comp.AttributeCheckBox;

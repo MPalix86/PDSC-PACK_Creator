@@ -10,7 +10,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import listeners.wizardFrameListener.comp.ChildrenListBarListener;
+import listeners.wizardFrameListeners.comp.ChildrenListBarListener;
 import model.pdsc.PackageChildrenEnum;
 import view.wizardFrame.comp.tagsListBar.comp.ListBarButton;
 

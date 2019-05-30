@@ -1,4 +1,4 @@
-package listeners.tagCustomizationFrameListener;
+package listeners.tagCustomizationFrameListeners;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -14,7 +14,6 @@ import view.comp.TagButton;
 import view.comp.TagMenuItem;
 import view.tagCustomizationFrame.TagCustomizationFrame;
 import view.wizardFrame.WizardFrame;
-import view.wizardFrame.comp.wizardForm.Form;
 
 /**
  * TagCustomizationFrame Listener
@@ -232,7 +231,7 @@ public class TagCustomizationFrameListener implements ItemListener, ActionListen
 					XmlTag tag = tagBtn.getTag();
 					XmlTag newTag = new XmlTag(tag);
 					newTag.freeModelFields();
-					wizardFrame.getFormContainer().addStep(new Form(newTag));
+					wizardFrame.getFormPanelContainer().getFormPanel().addTag(newTag);
 					tagCustomizationFrame.okMessage("Tag added correctly", "done");
 					
 					/** updating preview pane in wizard frame */
@@ -246,7 +245,7 @@ public class TagCustomizationFrameListener implements ItemListener, ActionListen
 				XmlTag newTag = new XmlTag(tag);
 				newTag.freeModelFields();
 				System.out.println("dsads" + newTag.getName());
-				wizardFrame.getFormContainer().addStep(new Form(newTag));
+				wizardFrame.getFormPanelContainer().getFormPanel().addTag(newTag);
 				tagCustomizationFrame.okMessage("Tag added correctly", "done");
 				
 			}
@@ -254,18 +253,7 @@ public class TagCustomizationFrameListener implements ItemListener, ActionListen
 			/** updating preview pane in wizard frame */
 			session.getWizardFrame().updatePreview();
 		}
-		
-		
-		
-		else if(command.equals("showChildren")) {
-			
-			/** recovering TagButton instance */
-			TagMenuItem tagMenuItem = (TagMenuItem) e.getSource();
-			
-			XmlTag tag = tagMenuItem.getTag();
-		}
-		
-		
+
 		
 		else if(command.equals("cancel")) {
 			this.tagCustomizationFrame.dispose();

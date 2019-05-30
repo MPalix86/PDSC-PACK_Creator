@@ -24,7 +24,7 @@ import javax.swing.JPanel;
 import javax.swing.JPopupMenu;
 import javax.swing.border.EmptyBorder;
 
-import listeners.tagCustomizationFrameListener.TagCustomizationFrameListener;
+import listeners.tagCustomizationFrameListeners.TagCustomizationFrameListener;
 import model.XmlTag;
 import view.comp.TagMenuItem;
 import view.wizardFrame.comp.toolBar.comp.DropDownButton;
@@ -51,6 +51,7 @@ public class CollapsablePanel extends JPanel {
         JPopupMenu editMenu;
         TagMenuItem copyItem;
         TagMenuItem deleteItem;
+        TagMenuItem fillDependenciesItem;
         JMenu childrenMenu;
         DropDownButton dropDownButton;
  
@@ -76,7 +77,11 @@ public class CollapsablePanel extends JPanel {
     		if(tag.getChildrenArr() != null) {
     			for (int i =0;  i < tag.getChildrenArr().size(); i++){
     				XmlTag child = tag.getChildrenArr().get(i);
-    				TagMenuItem childMenuItem = new TagMenuItem("< "+ child.getName() + " >",child);
+    				
+    				TagMenuItem childMenuItem;
+    				if(child.isRequired()) childMenuItem = new TagMenuItem("< "+ child.getName() + " > *",child);
+    				else  childMenuItem = new TagMenuItem("< "+ child.getName() + " >",child);
+    				
     				childMenuItem.addActionListener(listener);
     				childMenuItem.setActionCommand("addTagPanel");
     				childrenMenu.add(childMenuItem);
@@ -92,7 +97,8 @@ public class CollapsablePanel extends JPanel {
         	ImageIcon eidtIcon = new ImageIcon (getClass().getClassLoader().getResource("icons/edit20.png"));
             dropDownButton = new DropDownButton(editMenu,eidtIcon);
             dropDownButton.setBounds(5, 0, 20, 20);
-        	this.add(this.dropDownButton);
+        	
+            this.add(this.dropDownButton);
         	
     		if(tag.getParent() != null) {
 

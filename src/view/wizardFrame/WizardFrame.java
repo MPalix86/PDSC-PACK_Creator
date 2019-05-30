@@ -12,17 +12,14 @@ import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextPane;
 import javax.swing.border.EmptyBorder;
 
 import business.Session;
-import listeners.wizardFrameListener.WizardFrameListener;
-import view.wizardFrame.comp.TextPaneForm.TextPaneForm;
+import listeners.wizardFrameListeners.WizardFrameListener;
+import view.wizardFrame.comp.TextPaneForm.FormPanelContainer;
 import view.wizardFrame.comp.previewPane.PreviewPaneContainer;
 import view.wizardFrame.comp.tagsListBar.TagsListBarContainer;
 import view.wizardFrame.comp.toolBar.ToolBarContainer;
-import view.wizardFrame.comp.wizardForm.FormContainer;
 
 /**
  * Wizard frame. Main frame of PDSC creator. 
@@ -31,13 +28,10 @@ import view.wizardFrame.comp.wizardForm.FormContainer;
  */
 
 public class WizardFrame extends JFrame {
-	
-	
+
 	private static JPanel contentPane;	
 
 	private ToolBarContainer toolBarContainer;
-	
-	private FormContainer formContainer;
 	
 	private PreviewPaneContainer previewPaneContainer;
 	
@@ -49,8 +43,7 @@ public class WizardFrame extends JFrame {
 	
 	private TagsListBarContainer tagsListbarContainer;
 	
-	private TextPaneForm textForm;
-	
+	private FormPanelContainer formPanelContainer;
 	
 	
 	
@@ -74,7 +67,7 @@ public class WizardFrame extends JFrame {
 		/** session instance recovery */
 		session = Session.getInstance();
 	
-		formContainer = new FormContainer();
+		formPanelContainer = new FormPanelContainer();
 		toolBarContainer = new ToolBarContainer();
 		previewPaneContainer = new PreviewPaneContainer();
 		tagsListbarContainer = new TagsListBarContainer();  
@@ -113,18 +106,12 @@ public class WizardFrame extends JFrame {
 		contentPane.setBorder(new EmptyBorder(0,0,0,0));
 		setContentPane(contentPane); 
 		
-		textForm.setBorder(new EmptyBorder(0,0,0,0));
-		textForm.setBackground(Color.WHITE);
-		textForm.setEditable(false);
-		
-		JPanel p = new JPanel(new BorderLayout());
-		p.add(textForm, BorderLayout.CENTER);
-		
 		/* place all all component into contentPane */
-		contentPane.add(new JScrollPane(p), BorderLayout.CENTER);
+//		contentPane.add(textFormContainer, BorderLayout.CENTER);
+		contentPane.add(formPanelContainer, BorderLayout.CENTER);
 		//contentPane.add(this.previewPaneContainer, BorderLayout.CENTER);
 		contentPane.add(toolBarContainer, BorderLayout.NORTH);
-		contentPane.add(formContainer, BorderLayout.EAST);
+		//contentPane.add(formContainer, BorderLayout.EAST);
 		contentPane.add(tagsListbarContainer, BorderLayout.WEST);
 		
 		/* repaint ContentPane */
@@ -198,8 +185,8 @@ public class WizardFrame extends JFrame {
 	/**
 	 * @return the formContainer
 	 */
-	public FormContainer getFormContainer() {
-		return formContainer;
+	public FormPanelContainer getFormPanelContainer() {
+		return formPanelContainer;
 	}
 
 	
@@ -231,15 +218,6 @@ public class WizardFrame extends JFrame {
 	public ToolBarContainer getToolBarContainer() {
 		return toolBarContainer;
 	}
-	
-	
-	
-	
-	public JTextPane getTextPane() {
-		return this.textPane;
-	}
-	
-	
 	
 
 	

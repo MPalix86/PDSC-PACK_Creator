@@ -8,7 +8,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import listeners.tagCustomizationFrameListener.TagCustomizationFrameListener;
+import listeners.tagCustomizationFrameListeners.TagCustomizationFrameListener;
 import model.XmlTag;
 import net.miginfocom.swing.MigLayout;
 import view.tagCustomizationFrame.TagCustomizationFrame;

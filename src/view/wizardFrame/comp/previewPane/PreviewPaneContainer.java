@@ -7,7 +7,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
 
-import listeners.wizardFrameListener.comp.previewPaneListener.PreviewPaneContainerListener;
+import listeners.wizardFrameListeners.comp.previewPaneListeners.PreviewPaneContainerListener;
 
 public class PreviewPaneContainer extends JPanel{
 	

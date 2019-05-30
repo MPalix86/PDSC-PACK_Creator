@@ -80,7 +80,6 @@ public class Package extends XmlStandardTag {
 	
 	@Override
 	protected void addChildren() {
-		// TODO Auto-generated method stub
 		
 	}
 	

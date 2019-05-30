@@ -17,6 +17,17 @@ public class AttributeTextField extends JTextField{
 		
 	}
 	
+	public AttributeTextField(XmlAttribute attr,String text,int size) {
+		super(text,size);
+		this.attr = attr;
+		attr.setValue("");
+		if(attr.getDefaultValue() != null) {
+			this.setText(attr.getDefaultValue());
+			attr.setValue(attr.getDefaultValue());
+		}
+		
+	}
+	
 	public void setAttrValue() {
 		attr.setValue(this.getText());
 	}
@@ -24,4 +35,6 @@ public class AttributeTextField extends JTextField{
 	public XmlAttribute getAttribute() {
 		return this.attr;
 	}
+	
+
 }

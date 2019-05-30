@@ -1,4 +1,4 @@
-package listeners.wizardFrameListener.comp;
+package listeners.wizardFrameListeners.comp;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
