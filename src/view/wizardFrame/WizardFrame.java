@@ -7,6 +7,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.io.File;
 
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
@@ -16,10 +17,11 @@ import javax.swing.border.EmptyBorder;
 
 import business.Session;
 import listeners.wizardFrameListeners.WizardFrameListener;
-import view.wizardFrame.comp.TextPaneForm.FormPanelContainer;
+import view.wizardFrame.comp.TabContainer;
 import view.wizardFrame.comp.previewPane.PreviewPaneContainer;
 import view.wizardFrame.comp.tagsListBar.TagsListBarContainer;
 import view.wizardFrame.comp.toolBar.ToolBarContainer;
+import view.wizardFrame.comp.xmlForm.XmlFormContainer;
 
 /**
  * Wizard frame. Main frame of PDSC creator. 
@@ -43,7 +45,9 @@ public class WizardFrame extends JFrame {
 	
 	private TagsListBarContainer tagsListbarContainer;
 	
-	private FormPanelContainer formPanelContainer;
+	private XmlFormContainer formPanelContainer;
+	
+	private TabContainer tabContainer;
 	
 	
 	
@@ -67,10 +71,11 @@ public class WizardFrame extends JFrame {
 		/** session instance recovery */
 		session = Session.getInstance();
 	
-		formPanelContainer = new FormPanelContainer();
+		formPanelContainer = new XmlFormContainer();
 		toolBarContainer = new ToolBarContainer();
 		previewPaneContainer = new PreviewPaneContainer();
-		tagsListbarContainer = new TagsListBarContainer();  
+		tagsListbarContainer = new TagsListBarContainer();
+		tabContainer = new TabContainer();
 	
 		/* generate and place all component */
 		placeComponent();
@@ -97,6 +102,11 @@ public class WizardFrame extends JFrame {
 		updatePreviewButton.setActionCommand("updatePreview");
 		updatePreviewButton.setVisible(false);
 		
+		tabContainer.addTab("Form",new ImageIcon(getClass().getResource("/icons/form64.png")),formPanelContainer);
+		tabContainer.addTab("PDSC Preview",new ImageIcon(getClass().getResource("/icons/document64.png")),previewPaneContainer);
+
+
+		
 		/** frame initial setup */
 		setBackground(Color.WHITE);
 		
@@ -108,7 +118,7 @@ public class WizardFrame extends JFrame {
 		
 		/* place all all component into contentPane */
 //		contentPane.add(textFormContainer, BorderLayout.CENTER);
-		contentPane.add(formPanelContainer, BorderLayout.CENTER);
+		contentPane.add(tabContainer, BorderLayout.CENTER);
 		//contentPane.add(this.previewPaneContainer, BorderLayout.CENTER);
 		contentPane.add(toolBarContainer, BorderLayout.NORTH);
 		//contentPane.add(formContainer, BorderLayout.EAST);
@@ -185,7 +195,7 @@ public class WizardFrame extends JFrame {
 	/**
 	 * @return the formContainer
 	 */
-	public FormPanelContainer getFormPanelContainer() {
+	public XmlFormContainer getFormPanelContainer() {
 		return formPanelContainer;
 	}
 

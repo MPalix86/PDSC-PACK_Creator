@@ -38,7 +38,7 @@ public class ToolBarListener extends WizardFrameListener implements ActionListen
 				e1.printStackTrace();
 			}
 			try {
-				TagCustomizationFrame f = new TagCustomizationFrame((XmlTag) c.newInstance(true,null,1) );
+				TagCustomizationFrame f = new TagCustomizationFrame((XmlTag) c.newInstance(false,null,1) );
 			} catch (InstantiationException | IllegalAccessException | IllegalArgumentException	| InvocationTargetException e1) {
 				e1.printStackTrace();
 			}

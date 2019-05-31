@@ -14,7 +14,6 @@ public class AttributeComboBox extends JComboBox<String>{
 		this.attr = attr;
 		ArrayList<String> values = (ArrayList<String>) attr.getPossibleValues();
 		this.setModel(new DefaultComboBoxModel(values.toArray()));
-		this.attr.setValue("");
 	}
 	
 	public void setAttrValue() {
@@ -24,5 +23,7 @@ public class AttributeComboBox extends JComboBox<String>{
 	public XmlAttribute  getAttr() {
 		return this.attr;
 	}
+	
+	
 
 }

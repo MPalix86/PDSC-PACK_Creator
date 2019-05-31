@@ -24,7 +24,7 @@
 //
 //
 //
-//public class FormListener extends WizardFrameListener implements FocusListener , ActionListener{
+//public class XmlFormListener extends WizardFrameListener implements FocusListener , ActionListener{
 //	
 //	private Form form;
 //	
@@ -34,14 +34,14 @@
 //	
 //	
 //	
-//	public FormListener(Form formElement){
+//	public XmlFormListener(Form formElement){
 //		this.form = formElement;
 //	}
 //	
 //	
 //	
 //	
-//	public FormListener(FinalStepForm finalStepForm){
+//	public XmlFormListener(FinalStepForm finalStepForm){
 //		this.finalStepForm = finalStepForm;
 //	}
 //

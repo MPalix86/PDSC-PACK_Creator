@@ -1,4 +1,4 @@
-package view.wizardFrame.comp.TextPaneForm.comp;
+package view.wizardFrame.comp.xmlForm.comp;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -18,6 +18,22 @@ public class TagFormTextField extends TagTextField implements DocumentListener, 
 	
 	public TagFormTextField(XmlTag tag, TagRow row) {
 		super(tag);
+		this.row = row;
+		this.setForeground(Color.DARK_GRAY);
+		this.setBorder(new MatteBorder (0,0,1,0,CustomColor.LIGHT_GRAY));
+		
+
+		if(this.getText().length() == 0) {
+			this.setPreferredSize(new Dimension(50,this.getPreferredSize().height));
+		}
+		this.getDocument().addDocumentListener(this);
+		this.addFocusListener(this);
+	}
+	
+	
+	
+	public TagFormTextField(XmlTag tag, TagRow row, String text) {
+		super(tag,text);
 		this.row = row;
 		this.setForeground(Color.DARK_GRAY);
 		this.setBorder(new MatteBorder (0,0,1,0,CustomColor.LIGHT_GRAY));
@@ -75,7 +91,7 @@ public class TagFormTextField extends TagTextField implements DocumentListener, 
 	private void updateSize() {
 		if(this.getText().length()>0) {
 			int width = this.getGraphics().getFontMetrics().stringWidth(this.getText());
-			this.setPreferredSize(new Dimension(width,this.getPreferredSize().height));
+			this.setPreferredSize(new Dimension(width+1,this.getPreferredSize().height));
 		}
 		else {
 			this.setPreferredSize(new Dimension(50,this.getPreferredSize().height));

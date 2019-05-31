@@ -1,4 +1,4 @@
-package view.wizardFrame.comp.TextPaneForm.comp;
+package view.wizardFrame.comp.xmlForm.comp;
 
 import javax.swing.JLabel;
 
@@ -18,5 +18,13 @@ public class TagLabel extends JLabel{
 	
 	private void customize() {
 		this.setForeground(CustomColor.TAG_COLOR);
+	}
+
+
+	/**
+	 * @return the tag
+	 */
+	public XmlTag getTag() {
+		return tag;
 	}
 }

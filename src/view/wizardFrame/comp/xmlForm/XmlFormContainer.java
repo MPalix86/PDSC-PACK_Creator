@@ -1,4 +1,4 @@
-package view.wizardFrame.comp.TextPaneForm;
+package view.wizardFrame.comp.xmlForm;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -8,12 +8,12 @@ import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
 
-public class FormPanelContainer extends JPanel{
-	private FormPanel formPanel;
+public class XmlFormContainer extends JPanel{
+	private XmlForm formPanel;
 	private JScrollPane scrollPane;
 	
-	public FormPanelContainer() {
-		this.formPanel = new FormPanel();
+	public XmlFormContainer() {
+		this.formPanel = new XmlForm();
 		placeComponents();
 	}
 	
@@ -33,7 +33,9 @@ public class FormPanelContainer extends JPanel{
 		scrollPane.setHorizontalScrollBar(horizontalScrollBar);
 		scrollPane.setVerticalScrollBar(verticalScrollBar);
 		scrollPane.setBorder(new EmptyBorder(0,0,0,0));
+		
 		this.add(scrollPane,BorderLayout.CENTER);
+		
 	}
 	
 	
@@ -41,7 +43,7 @@ public class FormPanelContainer extends JPanel{
 	/**
 	 * @return the formPanel
 	 */
-	public FormPanel getFormPanel() {
+	public XmlForm getFormPanel() {
 		return formPanel;
 	}
 

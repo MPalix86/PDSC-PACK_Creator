@@ -50,7 +50,7 @@
 //	private final static int DELTA_TITLE = 36;
 //	
 //	
-//	private FormListener listener;
+//	private XmlFormListener listener;
 //	
 //	
 //	private int positionY = 49;
@@ -70,7 +70,7 @@
 //	public Form(ArrayList<XmlTag> tagArr ) {
 //		
 //		/** setting up listener */
-//		this.listener = new FormListener(this);
+//		this.listener = new XmlFormListener(this);
 //		
 //		session = Session.getInstance();
 //		
@@ -95,7 +95,7 @@
 //	 * @param listener	listener for Form
 //	 */
 //	
-//	public Form(ArrayList<XmlTag> tagArr, FormListener listener) {
+//	public Form(ArrayList<XmlTag> tagArr, XmlFormListener listener) {
 //		
 //		/** setting up listener */
 //		this.listener = listener;
@@ -123,7 +123,7 @@
 //	public Form(XmlTag tag) {
 //		
 //		/** setting up listener */
-//		this.listener = new FormListener(this);
+//		this.listener = new XmlFormListener(this);
 //		
 //		/** stting up tagArr */
 //		this.tagArr = new ArrayList<XmlTag>();

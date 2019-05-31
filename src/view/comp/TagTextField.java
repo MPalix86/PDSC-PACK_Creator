@@ -10,12 +10,23 @@ public class TagTextField extends JTextField {
 	public TagTextField(XmlTag tag){
 		super();
 		this.tag = tag;
-		this.tag.setContent("");
 		if(tag.getDefaultContent() != null) {
 			this.setText(tag.getDefaultContent());
 			tag.setContent(tag.getDefaultContent());
 		}
 	}
+	
+	
+	
+	public TagTextField(XmlTag tag,String text){
+		super(text);
+		this.tag = tag;
+		if(tag.getDefaultContent() != null) {
+			this.setText(tag.getDefaultContent());
+			tag.setContent(tag.getDefaultContent());
+		}
+	}
+	
 	
 	public void setTagContent(){
 		tag.setContent(this.getText());

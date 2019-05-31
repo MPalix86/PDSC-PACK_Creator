@@ -1,11 +1,13 @@
-package view.wizardFrame.comp.TextPaneForm;
+package view.wizardFrame.comp.xmlForm;
 
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import listeners.wizardFrameListeners.comp.xmlForm.XmlFormListener;
 import model.XmlTag;
 import model.pdsc.tags.Description;
 import model.pdsc.tags.License;
@@ -14,23 +16,28 @@ import model.pdsc.tags.Package;
 import model.pdsc.tags.Url;
 import model.pdsc.tags.Vendor;
 import net.miginfocom.swing.MigLayout;
-import view.wizardFrame.comp.TextPaneForm.comp.TagRow;
+import view.wizardFrame.comp.xmlForm.comp.TagRow;
 
-public class FormPanel extends JPanel{
+public class XmlForm extends JPanel{
 	
 	private ArrayList<XmlTag> tagArr;
 	
+	private HashMap<JPanel,JPanel> openCloseTagRowHashMap;
+	private HashMap<XmlTag,JPanel> tagRowHashMap;
+
+	private XmlFormListener listener = new XmlFormListener(this);
 	private XmlTag root = new Package(true, null, 1);
+	
 	private final static int PADDING = 25;
 	
-	public FormPanel() {
+	public XmlForm() {
 		
 		this.tagArr = new ArrayList<XmlTag>();
 		root.setSelectedAttrArr(root.getAttrArr());
 		root.addSelectedChild(new Vendor(true, null, 1, "STMicroelectronics"));
-		root.addSelectedChild(new Name(true, null, 1, ""));
-		root.addSelectedChild(new Description(true, null, 1, ""));
-		root.addSelectedChild(new License(true, null, 1, ""));
+		root.addSelectedChild(new Name(true, null, 1));
+		root.addSelectedChild(new Description(true, null, 1));
+		root.addSelectedChild(new License(true, null, 1));
 		root.addSelectedChild(new Url(true, null, 1,"http://sw-center.st.com/packs/x-cube/"));
 		tagArr.add(root);
 
@@ -54,17 +61,22 @@ public class FormPanel extends JPanel{
 	
 	private void paintTag(XmlTag tag, int level) {
 		
+		tagRowHashMap.clear();
+		openCloseTagRowHashMap.clear();
+		
 		XmlTag parent =  tag;
 		
 		/** calculating left border based on levelCounter */
 		int leftBorder = level * PADDING;
 		
-		TagRow row = new TagRow(parent);
+		TagRow openRow = new TagRow(parent);
+		
+		tagRowHashMap.put(parent, openRow);
 		
 		/** setting calculated border */
-		row.setBorder(new EmptyBorder( 0, leftBorder, 0, 0));
+		openRow.setBorder(new EmptyBorder( 0, leftBorder, 0, 0));
 		
-		this.add(row.open());
+		this.add(openRow.open());
 		
 		
 		int parentLevel = level;
@@ -87,33 +99,57 @@ public class FormPanel extends JPanel{
 			/** calculating left border based on parentLevelCounter for closing tag*/
 			leftBorder = parentLevel * PADDING;
 			
-			row = new TagRow(parent);
+			TagRow closeRow = new TagRow(parent);
+			
+			openCloseTagRowHashMap.put(openRow, closeRow);
 			
 			/** setting calculated border */
-			row.setBorder(new EmptyBorder( 0, leftBorder, 0, 0));
+			closeRow.setBorder(new EmptyBorder( 0, leftBorder, 0, 0));
 			
-			this.add(row.close());
+			this.add(closeRow.close());
 		}
 		
 		
 	}
-	
-	
-	
-	
+
+
 	public void addTag(XmlTag tag) {
-		
 		this.root.addSelectedChild(tag);
-		paintTag(tag,1);
-		this.repaint();
-		this.revalidate();
+		tag.setParent(root);
+		tag.setRequired(false);
+		placeComponents();
 	}
+	
+	
+	public void removeTag() {
+		placeComponents();
+	}
+	
 	
 	public ArrayList<XmlTag> getTagArr() {
 		return this.tagArr;
 	}
 	
 	
+	
+	
+	
+	/**
+	 * @return the openCloseTagRowHashMap
+	 */
+	public HashMap<JPanel, JPanel> getOpenCloseTagRowHashMap() {
+		return openCloseTagRowHashMap;
+	}
+
+
+
+	/**
+	 * @return the tagRowHashMap
+	 */
+	public HashMap<XmlTag, JPanel> getTagRowHashMap() {
+		return tagRowHashMap;
+	}
+
 	
 	
 }

@@ -1,4 +1,4 @@
-package view.wizardFrame.comp.TextPaneForm.comp;
+package view.wizardFrame.comp.xmlForm.comp;
 
 import model.XmlAttribute;
 import view.comp.AttributeButton;

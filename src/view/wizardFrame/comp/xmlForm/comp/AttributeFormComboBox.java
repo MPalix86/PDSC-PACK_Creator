@@ -1,4 +1,4 @@
-package view.wizardFrame.comp.TextPaneForm.comp;
+package view.wizardFrame.comp.xmlForm.comp;
 
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;

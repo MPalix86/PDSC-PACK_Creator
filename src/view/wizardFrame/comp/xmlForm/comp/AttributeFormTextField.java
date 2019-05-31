@@ -1,4 +1,4 @@
-package view.wizardFrame.comp.TextPaneForm.comp;
+package view.wizardFrame.comp.xmlForm.comp;
 
 import java.awt.Dimension;
 import java.awt.event.FocusEvent;
@@ -18,6 +18,23 @@ public class AttributeFormTextField extends AttributeTextField implements Docume
 
 	public AttributeFormTextField(XmlAttribute attr, TagRow row) {
 		super(attr);
+		this.row = row;
+		this.setForeground(CustomColor.ATTR_VALUE_COLOR);
+		this.setBorder(new MatteBorder (0,0,1,0,CustomColor.LIGHT_GRAY));
+		
+
+		if(this.getText().length() == 0) {
+			this.setPreferredSize(new Dimension(50,this.getPreferredSize().height));
+		}
+		
+		this.getDocument().addDocumentListener(this);
+		this.addFocusListener(this);
+	}
+	
+	
+	
+	public AttributeFormTextField(XmlAttribute attr, TagRow row,String text) {
+		super(attr,text);
 		this.row = row;
 		this.setForeground(CustomColor.ATTR_VALUE_COLOR);
 		this.setBorder(new MatteBorder (0,0,1,0,CustomColor.LIGHT_GRAY));
@@ -65,7 +82,7 @@ public class AttributeFormTextField extends AttributeTextField implements Docume
 	private void updateSize() {
 		if(this.getText().length()>0) {
 			int width = this.getGraphics().getFontMetrics().stringWidth(this.getText());
-			this.setPreferredSize(new Dimension(width,this.getPreferredSize().height));
+			this.setPreferredSize(new Dimension(width+1,this.getPreferredSize().height));
 		}
 		else {
 			this.setPreferredSize(new Dimension(50,this.getPreferredSize().height));

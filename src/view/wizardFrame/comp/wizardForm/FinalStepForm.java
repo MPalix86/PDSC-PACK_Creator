@@ -13,13 +13,13 @@
 //
 //public class FinalStepForm extends JPanel{
 //	
-//	private FormListener listener;
+//	private XmlFormListener listener;
 //	
 //	
 //	
 //	public FinalStepForm() {
 //		
-//		this.listener = new FormListener(this);
+//		this.listener = new XmlFormListener(this);
 //		
 //		placeComponent();
 //		
