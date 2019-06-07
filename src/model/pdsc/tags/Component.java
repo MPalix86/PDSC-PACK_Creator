@@ -99,18 +99,17 @@ public class Component extends XmlStandardTag{
 	
 	@Override
 	protected void addAttributes() {
-		this.addAttr(new Cvendor(false));
-		this.addAttr(new Cclass(true));
-		this.addAttr(new Cgroup(true));
-		this.addAttr(new Csub(false));
-		this.addAttr(new Cvariant(false));
-		this.addAttr(new Cversion(true));
-		this.addAttr(new Capiversion(false));  
-		this.addAttr(new Condition(false)); 
-		this.addAttr(new MaxInstances(false));
-		this.addAttr(new IsDefaultVariant(false));
-		this.addAttr(new Generator(false));
-		
+		this.addAttr(new Cvendor(false,this));
+		this.addAttr(new Cclass(true,this));
+		this.addAttr(new Cgroup(true,this));
+		this.addAttr(new Csub(false,this));
+		this.addAttr(new Cvariant(false,this));
+		this.addAttr(new Cversion(true,this));
+		this.addAttr(new Capiversion(false,this));  
+		this.addAttr(new Condition(false,this)); 
+		this.addAttr(new MaxInstances(false,this));
+		this.addAttr(new IsDefaultVariant(false,this));
+		this.addAttr(new Generator(false,this));
 	}
 	
 	

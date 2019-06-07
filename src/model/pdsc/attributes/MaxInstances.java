@@ -1,6 +1,7 @@
 package model.pdsc.attributes;
 
 import model.XmlAttribute;
+import model.XmlTag;
 import model.pdsc.attributes.values.IntEnum;
 
 public class MaxInstances extends XmlAttribute{
@@ -21,8 +22,8 @@ public class MaxInstances extends XmlAttribute{
 	 * @param required attribute's obligatoriness
 	 */
 	
-	public MaxInstances(boolean required) {
-		super(name, required, possibleValues);
+	public MaxInstances(boolean required, XmlTag tag) {
+		super(name, required, possibleValues, tag);
 	}
 	
 	

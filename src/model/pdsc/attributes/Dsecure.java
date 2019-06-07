@@ -1,6 +1,7 @@
 package model.pdsc.attributes;
 
 import model.XmlAttribute;
+import model.XmlTag;
 import model.pdsc.attributes.values.DsecureEnum;
 
 /** 
@@ -27,8 +28,8 @@ public class Dsecure extends XmlAttribute{
 	 * @param required attribute's obligatoriness
 	 */
 	
-	public Dsecure(boolean required) {
-		super(name, required, possibleValues);
+	public Dsecure(boolean required, XmlTag tag) {
+		super(name, required, possibleValues, tag);
 	}
 	
 	

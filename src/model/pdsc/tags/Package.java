@@ -32,7 +32,6 @@ public class Package extends XmlStandardTag {
 	
 	
 	
-	
 	/**
 	 * Create new instance of tag. all parameter defined bottom was defined 
 	 * inside XmlTag
@@ -97,12 +96,12 @@ public class Package extends XmlStandardTag {
 	
 	@Override
 	protected void addAttributes() {
-		this.addAttr(new SchemaVersion(true));
-		this.addAttr(new XsnoNamespaceSchemaLocation(true));
-		this.addAttr(new Dcore(false));
-		this.addAttr(new Dvendor(false));
-		this.addAttr(new Dname(false));
-		this.addAttr(new Tcompiler(false));
+		this.addAttr(new SchemaVersion(true,this));
+		this.addAttr(new XsnoNamespaceSchemaLocation(true,this));
+		this.addAttr(new Dcore(false,this));
+		this.addAttr(new Dvendor(false,this));
+		this.addAttr(new Dname(false,this));
+		this.addAttr(new Tcompiler(false,this));
 	}
 	
 	
@@ -127,7 +126,7 @@ public class Package extends XmlStandardTag {
 	 * @return the namespace
 	 */
 	
-	public static XmlNameSpace getNamespace() {
+	public  XmlNameSpace getNameSpace() {
 		return nameSpace;
 	}
 	

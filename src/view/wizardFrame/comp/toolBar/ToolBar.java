@@ -59,6 +59,9 @@ public class ToolBar extends JToolBar{
 		
 		ImageIcon createPackIcon = new ImageIcon(this.getClass().getResource("/icons/pack20.png"));  
 		createPackButton = new IconButton(createPackIcon);
+		createPackButton.addActionListener(listener);
+		createPackButton.setActionCommand("createPack");
+		createPackButton.setToolTipText("createPack");
 	
 		ImageIcon saveAsIcon = new ImageIcon(this.getClass().getResource("/icons/saveAs20.png"));  
 		saveAsButton = new IconButton(saveAsIcon);

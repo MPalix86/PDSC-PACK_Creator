@@ -8,7 +8,7 @@ import javax.swing.JComboBox;
 import model.XmlAttribute;
 
 public class AttributeComboBox extends JComboBox<String>{
-	private XmlAttribute attr;
+	protected XmlAttribute attr;
 	
 	public AttributeComboBox(XmlAttribute attr) { 
 		this.attr = attr;

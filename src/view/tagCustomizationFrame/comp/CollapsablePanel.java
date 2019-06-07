@@ -51,7 +51,7 @@ public class CollapsablePanel extends JPanel {
         JPopupMenu editMenu;
         TagMenuItem copyItem;
         TagMenuItem deleteItem;
-        TagMenuItem fillDependenciesItem;
+        TagMenuItem addRequiredTagsItem;
         JMenu childrenMenu;
         DropDownButton dropDownButton;
  
@@ -70,6 +70,7 @@ public class CollapsablePanel extends JPanel {
             
             editMenu = new JPopupMenu();
     		copyItem = new TagMenuItem("Copy Tag",this.tag);
+    		addRequiredTagsItem = new TagMenuItem("Add Requirede Tags",this.tag);
     		deleteItem = new TagMenuItem("Delete",this.tag);
     		
     		/** if tag has children add showChildrenButton */
@@ -114,9 +115,13 @@ public class CollapsablePanel extends JPanel {
     			deleteItem.setEnabled(false);
     			copyItem.setEnabled(false);
     		}
+    		addRequiredTagsItem.addActionListener(listener);
+    		addRequiredTagsItem.setActionCommand("addRequiredTags");
+    		
     		
      		editMenu.add(copyItem);
     		editMenu.add(deleteItem);
+    		editMenu.add(addRequiredTagsItem);
         	
  
             try {

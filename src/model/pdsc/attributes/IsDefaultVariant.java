@@ -1,6 +1,7 @@
 package model.pdsc.attributes;
 
 import model.XmlAttribute;
+import model.XmlTag;
 import model.pdsc.attributes.values.BooleanEnum;
 
 /** 
@@ -27,8 +28,8 @@ public class IsDefaultVariant extends XmlAttribute{
 	 * @param required attribute's obligatoriness
 	 */
 	
-	public IsDefaultVariant(boolean required) {
-		super(name, required, possibleValues);
+	public IsDefaultVariant(boolean required, XmlTag tag) {
+		super(name, required, possibleValues, tag);
 	}
 	
 	

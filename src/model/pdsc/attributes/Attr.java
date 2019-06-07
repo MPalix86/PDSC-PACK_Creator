@@ -1,6 +1,7 @@
 package model.pdsc.attributes;
 
 import model.XmlAttribute;
+import model.XmlTag;
 import model.pdsc.attributes.values.FileAttributeEnum;
 
 /** 
@@ -27,8 +28,8 @@ public class Attr extends XmlAttribute {
 	 * @param required attribute's obligatoriness
 	 */
 	
-	public Attr(boolean required) {
-		super(name, required, possibleValues);
+	public Attr(boolean required,XmlTag tag) {
+		super(name, required, possibleValues, tag);
 	}
 	
 	

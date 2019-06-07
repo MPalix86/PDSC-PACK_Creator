@@ -19,11 +19,17 @@ public class TagOptionMenu extends JPopupMenu {
 		TagMenuItem deleteTagItem = new TagMenuItem("Delete",tag);
 		deleteTagItem.addActionListener(listener);
 		deleteTagItem.setActionCommand("deleteTag");
+		
 		if (tag.isRequired()) {
 			deleteTagItem.setEnabled(false);
 		}
 		
+		TagMenuItem openInTagCustomizationFrame = new TagMenuItem("Customize",tag);
+		openInTagCustomizationFrame.addActionListener(listener);
+		openInTagCustomizationFrame.setActionCommand("customize");
+		
 		add(deleteTagItem);
+		add(openInTagCustomizationFrame);
 
 	}
 	

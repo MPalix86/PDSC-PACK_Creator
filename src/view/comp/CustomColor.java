@@ -10,6 +10,8 @@ public class CustomColor extends Color{
 	
 	public final static Color TAG_COLOR = new Color(0, 0, 128);
 	
+	public final static Color TAG_COLOR_BRIGHTER = new Color(51, 153, 255);
+	
 	public final static Color ATTR_VALUE_COLOR = new Color(201,59, 128);
 	
 	public final static Color LIGHT_GRAY = new Color(224,224,224);

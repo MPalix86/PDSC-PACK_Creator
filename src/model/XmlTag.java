@@ -119,7 +119,7 @@ public class XmlTag{
 			this.attrArr = new ArrayList<XmlAttribute>(); 
 			
 			/** for each attribute add new instance inside attrArr */
-			tag.getAttrArr().forEach((a)->this.attrArr.add(new XmlAttribute(a)));
+			tag.getAttrArr().forEach((a)->this.attrArr.add(new XmlAttribute(a,this)));
 		}
 
 		if(tag.getSelectedAttrArr() != null) {
@@ -127,7 +127,7 @@ public class XmlTag{
 			this.selectedAttrArr = new ArrayList<XmlAttribute>(); 
 			
 			/** for each selected attribute add new instance inside attrArr */
-			tag.getSelectedAttrArr().forEach((a)-> this.selectedAttrArr.add(new XmlAttribute(a)));
+			tag.getSelectedAttrArr().forEach((a)-> this.selectedAttrArr.add(new XmlAttribute(a,this)));
 		}
 		
 		
@@ -187,7 +187,7 @@ public class XmlTag{
 			this.attrArr = new ArrayList<XmlAttribute>(); 
 			
 			/** for each attribute add new instance inside attrArr */
-			tag.getAttrArr().forEach((a)->this.attrArr.add(new XmlAttribute(a)));
+			tag.getAttrArr().forEach((a)->this.attrArr.add(new XmlAttribute(a,this)));
 		}
 
 		if(tag.getSelectedAttrArr() != null) {
@@ -195,7 +195,7 @@ public class XmlTag{
 			this.selectedAttrArr = new ArrayList<XmlAttribute>(); 
 			
 			/** for each selected attribute add new instance inside attrArr */
-			tag.getSelectedAttrArr().forEach((a)-> this.selectedAttrArr.add(new XmlAttribute(a)));
+			tag.getSelectedAttrArr().forEach((a)-> this.selectedAttrArr.add(new XmlAttribute(a,this)));
 		}
 		
 		

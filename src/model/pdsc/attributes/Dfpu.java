@@ -1,6 +1,7 @@
 package model.pdsc.attributes;
 
 import model.XmlAttribute;
+import model.XmlTag;
 import model.pdsc.attributes.values.DfpuEnum;
 
 /** 
@@ -27,8 +28,8 @@ public class Dfpu extends XmlAttribute{
 	 * @param required attribute's obligatoriness
 	 */
 	
-	public Dfpu(boolean required) {
-		super(name, required, possibleValues);
+	public Dfpu(boolean required, XmlTag tag) {
+		super(name, required, possibleValues, tag);
 	}
 	
 	

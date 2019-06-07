@@ -1,6 +1,7 @@
 package model.pdsc.attributes;
 
 import model.XmlAttribute;
+import model.XmlTag;
 import model.pdsc.attributes.values.BooleanEnum;
 
 /** 
@@ -27,8 +28,8 @@ public class Public extends XmlAttribute {
 	 * @param required attribute's obligatoriness
 	 */
 	
-	public Public(boolean required) {
-		super(name, required, possibleValues);
+	public Public(boolean required, XmlTag tag) {
+		super(name, required, possibleValues, tag);
 	}
 	
 	

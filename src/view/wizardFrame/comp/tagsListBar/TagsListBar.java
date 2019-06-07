@@ -12,6 +12,7 @@ import javax.swing.border.EmptyBorder;
 
 import listeners.wizardFrameListeners.comp.ChildrenListBarListener;
 import model.pdsc.PackageChildrenEnum;
+import view.comp.CustomColor;
 import view.wizardFrame.comp.tagsListBar.comp.ListBarButton;
 
 /**
@@ -53,6 +54,7 @@ public class TagsListBar extends JPanel{
 	    	panel.setMaximumSize(new Dimension(300,30));
 	    	
 	        ListBarButton btn = new ListBarButton( "< " + (String)child.getKey() + " >"  ,(Class) child.getValue());
+	        btn.setForeground(CustomColor.TAG_COLOR);
 	        
 	        btn.addActionListener(listener);
 			btn.setActionCommand("addPackageChild");

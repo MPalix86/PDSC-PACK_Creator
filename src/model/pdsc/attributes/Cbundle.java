@@ -1,6 +1,7 @@
 package model.pdsc.attributes;
 
 import model.XmlAttribute;
+import model.XmlTag;
 
 public class Cbundle extends XmlAttribute{
 	
@@ -20,8 +21,8 @@ public class Cbundle extends XmlAttribute{
 	 * @param required attribute's obligatoriness
 	 */
 	
-	public Cbundle(boolean required) {
-		super(name, required, possibleValues);
+	public Cbundle(boolean required,XmlTag tag) {
+		super(name, required, possibleValues, tag);
 	}
 	
 	

@@ -17,11 +17,9 @@ import view.wizardFrame.comp.xmlForm.comp.AttributeOptionMenu;
 import view.wizardFrame.comp.xmlForm.comp.TagFormTextField;
 import view.wizardFrame.comp.xmlForm.comp.TagLabel;
 import view.wizardFrame.comp.xmlForm.comp.TagOptionMenu;
-import view.wizardFrame.comp.xmlForm.comp.TagRow;
 
 public class XmlFormListener implements FocusListener, MouseListener{
 	
-	private TagRow tagRow;
 	
 	private XmlForm xmlForm;
 	
@@ -31,13 +29,11 @@ public class XmlFormListener implements FocusListener, MouseListener{
 	
 	
 	
+	
 	public XmlFormListener (XmlForm xmlForm) {
 		this.xmlForm = xmlForm;
 	}
 	
-	public XmlFormListener (TagRow tagRow) {
-		this.tagRow = tagRow;
-	}
 	
 	public XmlFormListener () {
 	}
@@ -66,30 +62,24 @@ public class XmlFormListener implements FocusListener, MouseListener{
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		// TODO Auto-generated method stub
-		
+		 if(e.getSource().getClass().equals(TagLabel.class)) {
+			 TagLabel label = (TagLabel) e.getSource();
+				XmlTag tag = label.getTag();
+				new TagOptionMenu(tag).show(e.getComponent(), e.getX(), e.getY());
+
+			}
+			else if(e.getSource().getClass().equals(AttributeLabel.class)) {
+				AttributeLabel label = (AttributeLabel) e.getSource();
+				XmlAttribute attr = label.getAttr();
+				System.out.println(attr.getValue());
+				new AttributeOptionMenu(attr).show(e.getComponent(), e.getX(), e.getY());
+				System.out.println(attr.getName());
+			}
 	}
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		 if (e.isPopupTrigger()) {
-			 if(e.getSource().getClass().equals(TagLabel.class)) {
-				 TagLabel label = (TagLabel) e.getSource();
-					XmlTag tag = label.getTag();
-					new TagOptionMenu(tag).show(e.getComponent(), e.getX(), e.getY());
 
-				}
-				else if(e.getSource().getClass().equals(AttributeLabel.class)) {
-					AttributeLabel label = (AttributeLabel) e.getSource();
-					XmlAttribute attr = label.getAttr();
-					new AttributeOptionMenu(attr).show(e.getComponent(), e.getX(), e.getY());
-					System.out.println(attr.getName());
-				}
-		 }
-	           
-
-			
-		
 	}
 
 	@Override
@@ -97,13 +87,22 @@ public class XmlFormListener implements FocusListener, MouseListener{
 		// TODO Auto-generated method stub
 		
 	}
-
+	
+	
 	@Override
 	public void mouseEntered(MouseEvent e) {
 		if(e.getSource().getClass().equals(TagLabel.class)) {
-			TagLabel label = (TagLabel) e.getSource();
-			label.setForeground(label.getForeground().brighter());
 			
+			/** recovering tag label */
+			TagLabel label = (TagLabel) e.getSource();
+
+			
+			/** recovering tag */
+			XmlTag tag = label.getTag();
+
+			xmlForm.setTagLabeBrighter(tag);
+			
+			xmlForm.drawOpenCloseTagLine(tag);		
 		}
 		else if(e.getSource().getClass().equals(AttributeLabel.class)) {
 			AttributeLabel label = (AttributeLabel) e.getSource();
@@ -116,9 +115,16 @@ public class XmlFormListener implements FocusListener, MouseListener{
 	public void mouseExited(MouseEvent e) {
 		
 		if(e.getSource().getClass().equals(TagLabel.class)) {
-			TagLabel label = (TagLabel) e.getSource();
-			label.setForeground(CustomColor.TAG_COLOR);
 			
+			/** recovering tag label */
+			TagLabel label = (TagLabel) e.getSource();
+			
+			/** recovering tag */
+			XmlTag tag = label.getTag();
+			
+			xmlForm.unsetTagLabeBrighter(tag);
+			
+			xmlForm.removeLine(tag);
 		}
 		else if(e.getSource().getClass().equals(AttributeLabel.class)) {
 			AttributeLabel label = (AttributeLabel) e.getSource();

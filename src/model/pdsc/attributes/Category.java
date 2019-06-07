@@ -1,6 +1,7 @@
 package model.pdsc.attributes;
 
 import model.XmlAttribute;
+import model.XmlTag;
 import model.pdsc.attributes.values.FileCategoryEnum;
 
 public class Category extends XmlAttribute{
@@ -21,8 +22,8 @@ public class Category extends XmlAttribute{
 	 * @param required attribute's obligatoriness
 	 */
 	
-	public Category(boolean required) {
-		super(name, required, possibleValues);
+	public Category(boolean required,XmlTag tag) {
+		super(name, required, possibleValues, tag);
 	}
 	
 	

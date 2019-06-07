@@ -90,15 +90,15 @@ public class Accept extends XmlStandardTag{
 	
 	@Override
 	protected void addAttributes() {
-		this.addAttr(new Dvendor(false));
-		this.addAttr(new Dfamily(false));
-		this.addAttr(new DsubFamily(false));
-		this.addAttr(new Dname(false));
-		this.addAttr(new Dvariant(false));
-		this.addAttr(new Pname(false));
-		this.addAttr(new Dcore(false));
-		this.addAttr(new Dfpu(false));
-		this.addAttr(new Dmpu(false));
+		this.addAttr(new Dvendor(false,this));
+		this.addAttr(new Dfamily(false,this));
+		this.addAttr(new DsubFamily(false,this));
+		this.addAttr(new Dname(false,this));
+		this.addAttr(new Dvariant(false,this));
+		this.addAttr(new Pname(false,this));
+		this.addAttr(new Dcore(false,this));
+		this.addAttr(new Dfpu(false,this));
+		this.addAttr(new Dmpu(false,this));
 	}
 	
 	

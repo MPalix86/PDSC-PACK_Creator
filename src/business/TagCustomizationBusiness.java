@@ -2,6 +2,7 @@ package business;
 
 import java.util.ArrayList;
 
+import model.XmlAttribute;
 import model.XmlTag;
 
 public class TagCustomizationBusiness {
@@ -29,9 +30,9 @@ public class TagCustomizationBusiness {
 
 
 
-	public static XmlTag findModelChildFromSelectedChildName(XmlTag parent, String childName) {
+	public static XmlTag findModelChildFromSelectedChildName(XmlTag root, String childName) {
 		ArrayList <XmlTag> children = new ArrayList();
-		children.add(parent);
+		children.add(root);
 		while(!children.isEmpty()) {
 			XmlTag element = children.get(0);
 			children.remove(element);
@@ -44,6 +45,10 @@ public class TagCustomizationBusiness {
 		}
 		return null;
 	}
+	
+	
+	
+
 	
 	
 	
@@ -96,6 +101,91 @@ public class TagCustomizationBusiness {
 			}
 		}
 		return null;
+	}
+	
+	
+	
+	
+	/* 
+	 * dependencies research on xml tag (graph).
+	 * uncomment all Sytem.out.println(), run program and press add button on 
+	 * tag customization frame to see how it works (based on Breadth first search)
+	 */
+	public static void addRequiredTags(XmlTag parent) {
+		ArrayList <XmlTag> children = new ArrayList();
+		children.add(parent);
+		while(!children.isEmpty()) {
+			XmlTag element = children.get(0);
+			//System.out.println("analyzing " +  element.getName());
+			children.remove(element);
+			ArrayList <XmlTag> requiredChildren = new ArrayList<XmlTag>(getRequiredChildren(element));
+			if(!requiredChildren.isEmpty()) {
+				//System.out.println(element.getName() + " has dependencies");
+				for(int i = 0; i < requiredChildren.size(); i++) {
+					XmlTag requiredChild = requiredChildren.get(i);
+					//System.out.println("check if there is the denpendency :  "  + requiredChild.getName());
+					boolean found = false;
+					if(element.getSelectedChildrenArr() != null) {
+						//System.out.println("let's see if " +  requiredChild.getName() + " is present in selected children of " +element.getName());
+						for(int j = 0; j < element.getSelectedChildrenArr().size(); j++) {
+							XmlTag selectedChild = element.getSelectedChildrenArr().get(j);
+							//System.out.println("analizyng selected child " + selectedChild.getName());
+							
+							String requiredChildName = requiredChild.getName();
+							requiredChildName.replaceAll("\\s+","");
+							
+							String selectedChildName = selectedChild.getName();
+							selectedChildName.replaceAll("\\s+","");
+							
+							//WTF requiredChildName == requiredChildName don't work !!!!
+							
+							if(requiredChildName.equals(selectedChildName)) {
+								found = true;
+							}
+							if( found ) { /*System.out.println(selectedChild .getName() + " found ");*/break;}
+						}
+						if(!found) {
+							/** if max child number is > 0, add child */
+							if(requiredChild.getMax() > 0 ) {
+								
+								/** creating new child instance of selected child with parent , passed parent */
+								XmlTag newChild;
+								if(requiredChild.getParent() != null) newChild = new XmlTag(requiredChild, requiredChild.getParent());
+								else newChild = new XmlTag(requiredChild);
+								
+								/** adding new child in selectedChildArr of new parent */
+								requiredChild.getParent().addSelectedChild(newChild);
+								
+								/** maximum number of possible child in the model instance is reduced by one */
+								requiredChild.setMax(requiredChild.getMax() -1);
+								
+							}
+						}
+					}
+					else {
+						/** if max child number is > 0, add child */
+						if(requiredChild.getMax() > 0 ) {
+							
+							/** creating new child instance of selected child with parent , passed parent */
+							XmlTag newChild;
+							if(requiredChild.getParent() != null) newChild = new XmlTag(requiredChild, requiredChild.getParent());
+							else newChild = new XmlTag(requiredChild);
+							
+							/** adding new child in selectedChildArr of new parent */
+							requiredChild.getParent().addSelectedChild(newChild);
+							
+							/** maximum number of possible child in the model instance is reduced by one */
+							requiredChild.setMax(requiredChild.getMax() -1);
+							
+						}
+					}
+
+				}
+			}else {/*System.out.println(element.getName() + " has no dependencies");*/}
+			if( element.getSelectedChildrenArr() != null ) {
+				element.getSelectedChildrenArr().forEach((c)-> children.add(c));
+			}
+		}
 	}
 	
 	
@@ -181,6 +271,18 @@ public class TagCustomizationBusiness {
 	}
 		
 		
+	public static boolean tagHasAttribute(XmlTag tag, XmlAttribute attr){
+		if(tag.getSelectedAttrArr() != null) {
+			for(int i = 0; i < tag.getSelectedAttrArr().size(); i++) {
+				XmlAttribute selectedAttr = tag.getSelectedAttrArr().get(i);
+				if (attr.getName().equals(selectedAttr.getName())) {
+					return true;
+				}
+			}
+		}
+		
+		return false;
+	}
 			
 		
 

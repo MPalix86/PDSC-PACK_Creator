@@ -207,7 +207,7 @@ public class TagCustomizationFrame extends JFrame {
 		bottomPanel.setLayout(new BorderLayout());
 		
 		/** setting up addButton */
-		TagButton addButton = new TagButton (parent, "Add");
+		TagButton addButton = new TagButton (parent, "Add New");
 		addButton.addActionListener(listener);
 		addButton.setActionCommand("addInWizard");
 		
@@ -216,14 +216,13 @@ public class TagCustomizationFrame extends JFrame {
 		addButtonPanel.add(addButton, BorderLayout.CENTER);
 		
 		
-		
-		/** setting up addButton */
 		SquareButton cancelButton = new SquareButton("Cancel");
 		cancelButton.addActionListener(listener);
 		cancelButton.setActionCommand("cancel");
 		JPanel cancelButtonPanel = new JPanel(new BorderLayout());
 		cancelButtonPanel.setBorder(new MatteBorder(1,1,1,1,CustomColor.LIGHT_GRAY));
 		cancelButtonPanel.add(cancelButton, BorderLayout.CENTER);
+
 
 		panel.add(addButtonPanel , BorderLayout.CENTER);
 		panel.add(cancelButtonPanel ,BorderLayout.EAST);
@@ -241,17 +240,6 @@ public class TagCustomizationFrame extends JFrame {
 	public TagContainer getTagContainer() {
 		return tagContainer;
 	}
-
-
-
-
-	/**
-	 * @param tagContainer the tagContainer to set
-	 */
-	public void setTagContainer(TagContainer tagContainer) {
-		this.tagContainer = tagContainer;
-	}
-
 
 
 

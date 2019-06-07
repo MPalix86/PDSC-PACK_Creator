@@ -1,6 +1,7 @@
 package model.pdsc.attributes;
 
 import model.XmlAttribute;
+import model.XmlTag;
 import model.pdsc.attributes.values.DtzEnum;
 
 /** 
@@ -27,8 +28,8 @@ public class Dtz extends XmlAttribute{
 	 * @param required attribute's obligatoriness
 	 */
 	
-	public Dtz(boolean required) {
-		super(name, required, possibleValues);
+	public Dtz(boolean required, XmlTag tag) {
+		super(name, required, possibleValues, tag);
 	}
 	
 	

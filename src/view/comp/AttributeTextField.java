@@ -5,15 +5,16 @@ import javax.swing.JTextField;
 import model.XmlAttribute;
 
 public class AttributeTextField extends JTextField{
-	private XmlAttribute attr;
+	protected XmlAttribute attr;
 	
 	public AttributeTextField(XmlAttribute attr) {
 		this.attr = attr;
-		if(attr.getDefaultValue() != null) {
-			this.setText(attr.getDefaultValue());
-			attr.setValue(attr.getDefaultValue());
+		if(attr.getValue() != null) {
+			if(attr.getDefaultValue() != null) {
+				this.setText(attr.getDefaultValue());
+				attr.setValue(attr.getDefaultValue());
+			}
 		}
-		
 	}
 	
 	
@@ -21,11 +22,12 @@ public class AttributeTextField extends JTextField{
 	public AttributeTextField(XmlAttribute attr,String text) {
 		super(text);
 		this.attr = attr;
-		if(attr.getDefaultValue() != null) {
-			this.setText(attr.getDefaultValue());
-			attr.setValue(attr.getDefaultValue());
+		if(attr.getValue() != null) {
+			if(attr.getDefaultValue() != null) {
+				this.setText(attr.getDefaultValue());
+				attr.setValue(attr.getDefaultValue());
+			}
 		}
-		
 	}
 	
 	
@@ -33,12 +35,13 @@ public class AttributeTextField extends JTextField{
 	public AttributeTextField(XmlAttribute attr,String text,int size) {
 		super(text,size);
 		this.attr = attr;
-		attr.setValue("");
-		if(attr.getDefaultValue() != null) {
-			this.setText(attr.getDefaultValue());
-			attr.setValue(attr.getDefaultValue());
+		this.attr = attr;
+		if(attr.getValue() != null) {
+			if(attr.getDefaultValue() != null) {
+				this.setText(attr.getDefaultValue());
+				attr.setValue(attr.getDefaultValue());
+			}
 		}
-		
 	}
 	
 	public void setAttrValue() {

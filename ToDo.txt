@@ -45,3 +45,5 @@ no date
 
 - implementare controllo tag no testo no attr
 
+- namespacelistener 
+

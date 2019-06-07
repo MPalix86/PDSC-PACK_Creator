@@ -3,26 +3,15 @@ package view.comp;
 import javax.swing.JCheckBox;
 
 import model.XmlAttribute;
-import model.XmlTag;
 
 public class AttributeCheckBox extends JCheckBox{
-	private XmlTag tag;
 	private XmlAttribute attr;
 	
-	public AttributeCheckBox( XmlAttribute attr, XmlTag tag) {
+	public AttributeCheckBox( XmlAttribute attr) {
 		super();
-		this.tag = tag;
 		this.attr = attr;
 		super.setText(attr.getName());
 		
-	}
-
-	public XmlTag getTag() {
-		return tag;
-	}
-
-	public void setTag(XmlTag tag) {
-		this.tag = tag;
 	}
 
 	public XmlAttribute getAttr() {

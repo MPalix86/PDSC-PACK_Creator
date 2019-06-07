@@ -8,24 +8,27 @@ import javax.swing.border.MatteBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
+import business.Session;
 import model.XmlAttribute;
 import view.comp.AttributeTextField;
 import view.comp.CustomColor;
 
 public class AttributeFormTextField extends AttributeTextField implements DocumentListener, FocusListener{
 	
+	private Session session = Session.getInstance();
+	
 	private TagRow row;
 
-	public AttributeFormTextField(XmlAttribute attr, TagRow row) {
+	public AttributeFormTextField(XmlAttribute attr , TagRow row) {
 		super(attr);
-		this.row = row;
 		this.setForeground(CustomColor.ATTR_VALUE_COLOR);
 		this.setBorder(new MatteBorder (0,0,1,0,CustomColor.LIGHT_GRAY));
 		
+		this.row = row;
 
 		if(this.getText().length() == 0) {
 			this.setPreferredSize(new Dimension(50,this.getPreferredSize().height));
-		}
+		} 
 		
 		this.getDocument().addDocumentListener(this);
 		this.addFocusListener(this);
@@ -33,12 +36,12 @@ public class AttributeFormTextField extends AttributeTextField implements Docume
 	
 	
 	
-	public AttributeFormTextField(XmlAttribute attr, TagRow row,String text) {
+	public AttributeFormTextField(XmlAttribute attr,String text,TagRow row) {
 		super(attr,text);
-		this.row = row;
 		this.setForeground(CustomColor.ATTR_VALUE_COLOR);
 		this.setBorder(new MatteBorder (0,0,1,0,CustomColor.LIGHT_GRAY));
 		
+		this.row = row;
 
 		if(this.getText().length() == 0) {
 			this.setPreferredSize(new Dimension(50,this.getPreferredSize().height));
@@ -51,7 +54,7 @@ public class AttributeFormTextField extends AttributeTextField implements Docume
 	@Override
 	public void insertUpdate(DocumentEvent e) {
 		updateSize();
-
+		
 	}
 		
 

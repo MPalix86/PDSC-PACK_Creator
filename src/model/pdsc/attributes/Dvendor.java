@@ -1,6 +1,7 @@
 package model.pdsc.attributes;
 
 import model.XmlAttribute;
+import model.XmlTag;
 import model.pdsc.attributes.values.DeviceVendorEnum;
 
 /** 
@@ -27,8 +28,8 @@ public class Dvendor extends XmlAttribute{
 	 * @param required attribute's obligatoriness
 	 */
 	
-	public Dvendor(boolean required) {
-		super(name, required, possibleValues);
+	public Dvendor(boolean required, XmlTag tag) {
+		super(name, required, possibleValues, tag);
 	}
 	
 	

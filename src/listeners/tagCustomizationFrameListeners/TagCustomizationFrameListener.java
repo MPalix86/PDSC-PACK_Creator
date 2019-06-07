@@ -66,11 +66,16 @@ public class TagCustomizationFrameListener implements ItemListener, ActionListen
 		
 		AttributeCheckBox c = (AttributeCheckBox) e.getItem();
 		XmlAttribute attr =  c.getAttr();
-		XmlTag tag = c.getTag();
+		XmlTag tag = attr.getTag();
 		
 		/** if attribute was selected */
 		if(c.isSelected()) {
-			tag.addSelectedAttr(new XmlAttribute(attr));
+			
+			/** if the attribute has not already been added */
+			if(!TagCustomizationBusiness.tagHasAttribute(tag,attr)) {
+				tag.addSelectedAttr(new XmlAttribute(attr,tag));
+			}
+			
 		}
 		else {
 			tag.removeSelectedAttr(attr);
@@ -136,8 +141,7 @@ public class TagCustomizationFrameListener implements ItemListener, ActionListen
 				/** adding new child in selectedChildArr of new parent */
 				parent.addSelectedChild(newChild);
 				
-				/** adding tag inside tag customization frame */
-				tagCustomizationFrame.getTagContainer().addNewTagPanel(newChild);
+				tagCustomizationFrame.getTagContainer().updateView();
 				
 				/** maximum number of possible child in the model instance is reduced by one */
 				child.setMax(child.getMax() -1);
@@ -182,7 +186,7 @@ public class TagCustomizationFrameListener implements ItemListener, ActionListen
 					/** making copies */
 					for (int i = 0; i < copiesNumber; i++) {
 						clone = TagCustomizationBusiness.cloneTag(selectedTag);
-						this.tagCustomizationFrame.getTagContainer().addClonedTag(clone);
+						this.tagCustomizationFrame.getTagContainer().updateView();
 					}
 					
 					modelTag.setMax(modelTag.getMax() - copiesNumber);
@@ -227,10 +231,13 @@ public class TagCustomizationFrameListener implements ItemListener, ActionListen
 				/** if user want to continue */
 				if(response) {
 					
-					/** add step inside wizard frame */
+					/** add tag in wizard frame */
 					XmlTag tag = tagBtn.getTag();
-					XmlTag newTag = new XmlTag(tag);
-					newTag.freeModelFields();
+					
+					XmlTag newTag;
+					if(tag.getParent() != null) newTag = new XmlTag(tag,tag.getParent());
+					else newTag = new XmlTag(tag);
+					
 					wizardFrame.getFormPanelContainer().getFormPanel().addTag(newTag);
 					tagCustomizationFrame.okMessage("Tag added correctly", "done");
 					
@@ -242,9 +249,11 @@ public class TagCustomizationFrameListener implements ItemListener, ActionListen
 			/** if there aren't missing dependency */
 			else {
 				XmlTag tag = tagBtn.getTag();
-				XmlTag newTag = new XmlTag(tag);
-				newTag.freeModelFields();
-				System.out.println("dsads" + newTag.getName());
+				
+				XmlTag newTag;
+				if(tag.getParent() != null) newTag = new XmlTag(tag,tag.getParent());
+				else newTag = new XmlTag(tag);
+				
 				wizardFrame.getFormPanelContainer().getFormPanel().addTag(newTag);
 				tagCustomizationFrame.okMessage("Tag added correctly", "done");
 				
@@ -253,8 +262,20 @@ public class TagCustomizationFrameListener implements ItemListener, ActionListen
 			/** updating preview pane in wizard frame */
 			session.getWizardFrame().updatePreview();
 		}
-
 		
+		else if (command.equals("addRequiredTags")) {
+			TagMenuItem tagMenuItem = (TagMenuItem) e.getSource();
+			XmlTag tag = tagMenuItem.getTag();
+			TagCustomizationBusiness.addRequiredTags(tag);
+			tagCustomizationFrame.getTagContainer().updateView();
+
+			
+		
+			
+			
+		}
+
+		  
 		else if(command.equals("cancel")) {
 			this.tagCustomizationFrame.dispose();
 		}

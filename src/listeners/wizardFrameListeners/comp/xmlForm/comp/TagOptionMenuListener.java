@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 import business.Session;
 import model.XmlTag;
 import view.comp.TagMenuItem;
+import view.tagCustomizationFrame.TagCustomizationFrame;
 
 public class TagOptionMenuListener implements ActionListener{
 	
@@ -14,13 +15,20 @@ public class TagOptionMenuListener implements ActionListener{
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		String command = e.getActionCommand();
+		
+		TagMenuItem item = (TagMenuItem) e.getSource();
+		XmlTag tag = item.getTag();
+		
 		if(command.equals("deleteTag")) {
-			TagMenuItem item = (TagMenuItem) e.getSource();
-			XmlTag tag = item.getTag();
+			
 			XmlTag parent = tag.getParent();
 			parent.removeSelectedChild(tag);
-			session.getWizardFrame().getFormPanelContainer().getFormPanel().removeTag();
+			session.getWizardFrame().getFormPanelContainer().getFormPanel().UpdateView();
 			session.getWizardFrame().updatePreview();
+		}
+		
+		else if(command.equals("customize")) {
+			new TagCustomizationFrame(tag);
 		}
 		
 	}

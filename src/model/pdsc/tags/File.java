@@ -91,15 +91,15 @@ public class File extends XmlStandardTag {
 	
 	@Override
 	protected void addAttributes() {
-		this.addAttr(new Name(true));    
-		this.addAttr(new Path(false));  
-		this.addAttr(new Category(true));  
-		this.addAttr(new Attr(false));  
-		this.addAttr(new Condition(false));
-		this.addAttr(new Select(false));  
-		this.addAttr(new Source(false));  
-		this.addAttr(new Version(false));  
-		this.addAttr(new Public(false));  
+		this.addAttr(new Name(true,this));    
+		this.addAttr(new Path(false,this));  
+		this.addAttr(new Category(true,this));  
+		this.addAttr(new Attr(false,this));  
+		this.addAttr(new Condition(false,this));
+		this.addAttr(new Select(false,this));  
+		this.addAttr(new Source(false,this));  
+		this.addAttr(new Version(false,this));  
+		this.addAttr(new Public(false,this));  
 		
 	}
 	

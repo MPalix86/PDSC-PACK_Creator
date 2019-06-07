@@ -97,7 +97,7 @@ public class CollapsablePanelTagContent extends JPanel{
 				XmlAttribute a = tag.getAttrArr().get(i);
 				
 				/** add attribute inside checkBox */
-				AttributeCheckBox c = new AttributeCheckBox(a , tag);   
+				AttributeCheckBox c = new AttributeCheckBox(a);   
 				c.setForeground(new Color(255, 99, 71));   
 				
 				

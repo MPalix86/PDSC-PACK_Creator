@@ -87,10 +87,10 @@ public class Bundle extends XmlStandardTag{
 	
 	@Override
 	protected void addAttributes() {
-		this.addAttr(new Cbundle(true));
-		this.addAttr(new Cvendor(false));  
-		this.addAttr(new Cclass(true));
-		this.addAttr(new Cversion(true));  
+		this.addAttr(new Cbundle(true,this));
+		this.addAttr(new Cvendor(false,this));  
+		this.addAttr(new Cclass(true,this));
+		this.addAttr(new Cversion(true,this));  
 
 	}
 	

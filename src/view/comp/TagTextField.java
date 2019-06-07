@@ -5,7 +5,7 @@ import javax.swing.JTextField;
 import model.XmlTag;
 
 public class TagTextField extends JTextField {
-	private XmlTag tag;
+	protected XmlTag tag;
 	
 	public TagTextField(XmlTag tag){
 		super();

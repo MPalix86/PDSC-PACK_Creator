@@ -1,6 +1,7 @@
 package model.pdsc.attributes;
 
 import model.XmlAttribute;
+import model.XmlTag;
 
 /** 
  * Attribute definition following PDSC CMSIS standard
@@ -26,8 +27,8 @@ public class Cgroup extends XmlAttribute {
 	 * @param required attribute's obligatoriness
 	 */
 	
-	public Cgroup(boolean required) {
-		super(name, required, possibleValues);
+	public Cgroup(boolean required,XmlTag tag) {
+		super(name, required, possibleValues, tag);
 	}
 	
 	

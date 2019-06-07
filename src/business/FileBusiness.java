@@ -5,6 +5,8 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.jdom2.Document;
 import org.jdom2.output.Format;
@@ -109,6 +111,51 @@ public class FileBusiness {
 		}
 		else return "";
 	}
+	
+	
+	
+	
+	public static boolean isFilePath(String path) {
+		Pattern windowsPath = Pattern.compile("([a-zA-Z]:)?(\\\\[a-zA-Z0-9_.-]+)+\\\\?");
+		
+		Pattern linuxPath = Pattern.compile("^(.+)/([^/]+)$");
+		Matcher m = windowsPath.matcher(path);  
+		
+		if  (m.matches()) return true;
+		
+		if(path.length() > 0) {
+			if( path.substring(path.length()-1).equals("/")){
+				 path = path.substring(0, path.length() - 1);
+			}
+		}
+		
+		m = linuxPath.matcher(path);  
+		
+		if  (m.matches()) return true;
+		
+		return false;
+	}
+	
+	
+	
+	
+	 /**
+	   * Remove file information from a filename returning only its path component
+	   * 
+	   * @param filename
+	   *            The filename
+	   * @return The path information
+	   */
+	
+	  public static String pathComponent(String filename) {
+	      int i = filename.lastIndexOf(File.separator);
+	      return (i > -1) ? filename.substring(0, i) : filename;
+	  }
+	
+	
+	
+	
+
 	
 
 }

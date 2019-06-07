@@ -2,6 +2,7 @@ package model.pdsc.attributes;
 
 import model.XmlAttribute;
 import model.XmlNameSpace;
+import model.XmlTag;
 
 /** 
  * Attribute definition following PDSC CMSIS standard
@@ -29,8 +30,8 @@ public class XsnoNamespaceSchemaLocation extends XmlAttribute{
 	 * @param required attribute's obligatoriness
 	 */
 	
-	public XsnoNamespaceSchemaLocation(boolean required) {
-		super(name, required, possibleValues);
+	public XsnoNamespaceSchemaLocation(boolean required, XmlTag tag) {
+		super(name, required, possibleValues, tag);
 	}
 	
 	

@@ -1,6 +1,7 @@
 package model.pdsc.attributes;
 
 import model.XmlAttribute;
+import model.XmlTag;
 import model.pdsc.attributes.values.DcoreEnum;
 
 /** 
@@ -27,8 +28,8 @@ public class Dcore extends XmlAttribute {
 	 * @param required attribute's obligatoriness
 	 */
 	
-	public Dcore(boolean required) {
-		super(name, required, possibleValues);
+	public Dcore(boolean required, XmlTag tag) {
+		super(name, required, possibleValues, tag);
 	}
 	
 	

@@ -17,6 +17,7 @@ import javax.swing.border.EmptyBorder;
 
 import business.Session;
 import listeners.wizardFrameListeners.WizardFrameListener;
+import model.pdsc.Pack;
 import view.wizardFrame.comp.TabContainer;
 import view.wizardFrame.comp.previewPane.PreviewPaneContainer;
 import view.wizardFrame.comp.tagsListBar.TagsListBarContainer;
@@ -49,6 +50,8 @@ public class WizardFrame extends JFrame {
 	
 	private TabContainer tabContainer;
 	
+	private Pack pack;
+	
 	
 	
 	/**
@@ -63,14 +66,17 @@ public class WizardFrame extends JFrame {
 		
 		/* setting up default close operation */
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-		this.setExtendedState(JFrame.MAXIMIZED_BOTH); 
+		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		
 		/** creation of new wizard frame listener instance */
 		listener = new WizardFrameListener();
 		
+		
 		/** session instance recovery */
 		session = Session.getInstance();
-	
+		
+		pack = new Pack();
+		
 		formPanelContainer = new XmlFormContainer();
 		toolBarContainer = new ToolBarContainer();
 		previewPaneContainer = new PreviewPaneContainer();
@@ -171,14 +177,15 @@ public class WizardFrame extends JFrame {
 	 * @return chosen destination path 
 	 */
 	
-	public File showNewFileFrame() {
+	public File showChooseDirectoryFrame() {
 		
 		/** setting up fileChooser */
 		JFileChooser fileChooser = new JFileChooser();
 		fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
+		fileChooser.setDialogTitle("Select destination folder");
 		
 		/** handling user's choice */
-		int val = fileChooser.showSaveDialog(this);
+		int val = fileChooser.showOpenDialog(this);
 		if(val == JFileChooser.APPROVE_OPTION) {
 			File destinationPath = fileChooser.getSelectedFile();
 			return destinationPath;
@@ -192,6 +199,76 @@ public class WizardFrame extends JFrame {
 	}
 	
 	
+	
+	
+	
+	/**
+	 * Show browse file frame.
+	 *
+	 * @return chosen path 
+	 */
+	
+	public File showChooseFileFrame() {
+		
+		/** setting up fileChooser */
+		JFileChooser fileChooser = new JFileChooser();
+		fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+		
+		if(session.getLastDirectoryOpenPath() != null) {
+			fileChooser.setCurrentDirectory(session.getLastDirectoryOpenPath());
+		}
+		
+		/** handling user's choice */
+		int val = fileChooser.showOpenDialog(this);
+		if(val == JFileChooser.APPROVE_OPTION) {
+			File destinationPath = fileChooser.getSelectedFile();
+			session.setLastDirectoryOpenPath(destinationPath);
+			return destinationPath;
+		}
+		else if(val == JFileChooser.ERROR_OPTION) {  
+			JOptionPane.showMessageDialog(this, "Some error occurred", "Error", JOptionPane.ERROR_MESSAGE);
+			return null;
+		}
+		else if(val == JFileChooser.CANCEL_OPTION) {}
+		return null;
+	}
+	
+	
+	
+	
+
+	/**
+	 * Show option pane warning message with "yes-no" option
+	 * 
+	 * @param message	message to show inside option pane
+	 * @return true if yes was selected, false otherwise
+	 */
+	
+	public boolean yesNoWarningMessage(String message) {
+		ImageIcon icon = new ImageIcon (getClass().getClassLoader().getResource("icons/warning48.png"));
+		Object[] options = { "YES", "NO" };
+		int value = JOptionPane.showOptionDialog (null, message, "Warning", JOptionPane.YES_NO_OPTION,JOptionPane.INFORMATION_MESSAGE, icon, options, options[0]); 
+		if(value == 0) return true;
+		else return false;
+	}
+	
+	
+	
+	
+	/**
+	 * Show option pane warning message with only "ok" option
+	 * 
+	 * @param message	message to show inside option pane
+	 * @return void
+	 */
+	
+	public void warningMessage(String message) {
+		ImageIcon icon = new ImageIcon (getClass().getClassLoader().getResource("icons/warning48.png"));
+		Object[] options = { "OK"};
+		JOptionPane.showOptionDialog (null, message, "Warning", JOptionPane.OK_OPTION, JOptionPane.INFORMATION_MESSAGE, icon, options, options[0]); 
+	}
+
+
 	/**
 	 * @return the formContainer
 	 */
@@ -229,6 +306,13 @@ public class WizardFrame extends JFrame {
 		return toolBarContainer;
 	}
 	
+	
+	/**
+	 * @return the pack
+	 */
+	public Pack getPack() {
+		return pack;
+	}
 
 	
 }

@@ -1,6 +1,7 @@
 package model.pdsc.attributes;
 
 import model.XmlAttribute;
+import model.XmlTag;
 import model.pdsc.attributes.values.DmpuEnum;
 
 /** 
@@ -27,8 +28,8 @@ public class Dmpu extends XmlAttribute{
 	 * @param required attribute's obligatoriness
 	 */
 	
-	public Dmpu(boolean required) {
-		super(name, required, possibleValues);
+	public Dmpu(boolean required, XmlTag tag) {
+		super(name, required, possibleValues, tag);
 	}
 	
 	

@@ -87,7 +87,7 @@ public class Conditions extends XmlStandardTag{
 	
 	@Override
 	protected void addAttributes() {
-		this.addAttr(new Id(true));
+		this.addAttr(new Id(true,this));
 	}
 	
 	

@@ -1,6 +1,7 @@
 package model.pdsc.attributes;
 
 import model.XmlAttribute;
+import model.XmlTag;
 import model.pdsc.attributes.values.CompilerEnum;
 
 /** 
@@ -27,8 +28,8 @@ public class Tcompiler extends XmlAttribute {
 	 * @param required attribute's obligatoriness
 	 */
 	
-	public Tcompiler(boolean required) {
-		super(name, required, possibleValues);
+	public Tcompiler(boolean required, XmlTag tag) {
+		super(name, required, possibleValues, tag);
 	}
 	
 	

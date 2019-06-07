@@ -28,6 +28,9 @@ public class XmlAttribute {
 	/** attribute's name space */
 	protected XmlNameSpace nameSpace ;
 	
+	/** tag's owner of this attribute*/
+	protected XmlTag tag;
+	
 	
 	/** 
 	 * builder pattern constructor
@@ -47,6 +50,40 @@ public class XmlAttribute {
 	
 	
 	
+//	/** 
+//	 * Return new Attribute instance
+//	 * 
+//	 * @param name attribute's name
+//	 * @param required attribute's obligatoriness
+//	 * @param possibleValues attribute's possibleVlaues
+//	 */
+//	
+//	public XmlAttribute(String name, boolean required, Object possibleValues) {
+//		this.name = name;
+//		this.required = required;
+//		this.possibleValues = possibleValues;
+//	}
+	
+	
+	
+	
+//	/** 
+//	 * Return new Attribute instance
+//	 * 
+//	 * @param name attribute's name
+//	 * @param required attribute's obligatoriness
+//	 * @param possibleValues attribute's possibleVlaues
+//	 * @param defaultValue attribute's defaultValue
+//	 */
+//	
+//	public XmlAttribute(String name, boolean required, Object possibleValues, String defaultValue) {
+//		this.name = name;
+//		this.required = required;
+//		this.possibleValues = possibleValues;
+//	}
+	
+	
+	
 	/** 
 	 * Return new Attribute instance
 	 * 
@@ -55,10 +92,11 @@ public class XmlAttribute {
 	 * @param possibleValues attribute's possibleVlaues
 	 */
 	
-	public XmlAttribute(String name, boolean required, Object possibleValues) {
+	public XmlAttribute(String name, boolean required, Object possibleValues,XmlTag tag) {
 		this.name = name;
 		this.required = required;
 		this.possibleValues = possibleValues;
+		this.tag = tag;
 	}
 	
 	
@@ -71,24 +109,46 @@ public class XmlAttribute {
 	 * @param required attribute's obligatoriness
 	 * @param possibleValues attribute's possibleVlaues
 	 * @param defaultValue attribute's defaultValue
+	 * @param tag tag attribute's owner (or parent)
 	 */
 	
-	public XmlAttribute(String name, boolean required, Object possibleValues, String defaultValue) {
+	public XmlAttribute(String name, boolean required, Object possibleValues, String defaultValue, XmlTag tag) {
 		this.name = name;
 		this.required = required;
 		this.possibleValues = possibleValues;
+		this.tag = tag;
 	}
 	
 	
 	
 	
+//	/** 
+//	 * Return PARENTLESS new Attribute instance copying passed instance of XmlAttribute. 
+//	 * 
+//	 * @param attribute to be copied
+//	 */
+//	
+//	public XmlAttribute(XmlAttribute attr) {
+//		if ( attr.getName() != null ) this.name = attr.getName();
+//		
+//		this.required = attr.isRequired();
+//		
+//		if ( attr.getPossibleValues() != null ) this.possibleValues = attr.getPossibleValues();
+//		if ( attr.getValue() != null) this.value = new String(attr.getValue());
+//		if ( attr.getDefaultValue() != null) this.defaultValue = new String(attr.getDefaultValue());
+//		if ( attr.getNameSpace() != null) this.nameSpace = new XmlNameSpace(attr.getNameSpace());
+//	}
+	
+	
+	
 	/** 
-	 * Return new Attribute instance copying passed instance of XmlAttribute
+	 * Return new Attribute instance copying passed instance of XmlAttribute. 
+	 * Tag parent is set to passed tag.
 	 * 
 	 * @param attribute to be copied
 	 */
 	
-	public XmlAttribute(XmlAttribute attr) {
+	public XmlAttribute(XmlAttribute attr,XmlTag tag) {
 		if ( attr.getName() != null ) this.name = attr.getName();
 		
 		this.required = attr.isRequired();
@@ -97,6 +157,7 @@ public class XmlAttribute {
 		if ( attr.getValue() != null) this.value = new String(attr.getValue());
 		if ( attr.getDefaultValue() != null) this.defaultValue = new String(attr.getDefaultValue());
 		if ( attr.getNameSpace() != null) this.nameSpace = new XmlNameSpace(attr.getNameSpace());
+		this.tag=tag;
 	}
 	
 	
@@ -275,6 +336,32 @@ public class XmlAttribute {
 	
 	public void setNameSpace(XmlNameSpace nameSpace) {
 		this.nameSpace = nameSpace;
+	}
+	
+	
+	
+	
+	/**
+	 * set tag attribute's owner
+	 * 
+	 * @param tag the tag to set
+	 */
+	
+	public void setTag(XmlTag tag) {
+		this.tag = tag;
+	}
+	
+	
+	
+	
+	/**
+	 * get tag attribute's owner
+	 * 
+	 * @return tag attribute's owner
+	 */
+	
+	public XmlTag getTag() {
+		return this.tag;
 	}
 	
 	
