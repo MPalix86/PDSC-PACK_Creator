@@ -4,18 +4,19 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.geom.Line2D;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import dao.XmlTagDao;
 import listeners.wizardFrameListeners.comp.xmlForm.XmlFormListener;
 import model.XmlTag;
 import model.pdsc.tags.Description;
 import model.pdsc.tags.License;
 import model.pdsc.tags.Name;
-import model.pdsc.tags.Package;
 import model.pdsc.tags.Url;
 import model.pdsc.tags.Vendor;
 import net.miginfocom.swing.MigLayout;
@@ -29,13 +30,18 @@ public class XmlForm extends JPanel{
 	private HashMap<XmlTag,TagRow> tagOpenRowHashMap;
 	private HashMap<XmlTag,TagRow> tagCloseRowHashMap;
 	private HashMap<XmlTag,Line2D> OpenCloseTagsLinesHashMap; 
-
+	private XmlTagDao tagDao =  XmlTagDao.getInstance();
 	private XmlFormListener listener;
-	private XmlTag root = new Package(true, null, 1);
+	private XmlTag root;
 	
 	private final static int PADDING = 25;
 	
 	public XmlForm() {
+		try {
+			root = tagDao.getRootTag();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 		this.OpenCloseTagsLinesHashMap = new HashMap<XmlTag,Line2D>();
 		this.tagOpenRowHashMap = new HashMap<XmlTag, TagRow>();
 		this.tagCloseRowHashMap = new HashMap<XmlTag, TagRow>();

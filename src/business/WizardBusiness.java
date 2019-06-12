@@ -132,7 +132,9 @@ public class WizardBusiness {
 				XmlAttribute xmlAttr = xmlAttrArr.get(j);
 				
 				/** conversion from XmlAttribute to JDom attribute */
-				Attribute attribute = new Attribute((String) xmlAttr.getName(),(String)  xmlAttr.getValue());
+				Attribute attribute ;
+				if(xmlAttr.getValue() != null )  attribute = new Attribute( xmlAttr.getName(),xmlAttr.getValue());
+				else attribute = new Attribute( xmlAttr.getName(),"");
 				
 				/** check attribute's value */
 				if( xmlAttr.getValue() == "" || xmlAttr == null ) {		

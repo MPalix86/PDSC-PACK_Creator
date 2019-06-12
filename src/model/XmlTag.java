@@ -29,8 +29,9 @@ public class XmlTag{
  * LOCAL FIELDS
  * ==================================
  */
+	
 	/** tag's content */
-	protected String content;
+	protected String content; 
 
 	
 	/** true if tag is mandatory, false otherwise */
@@ -46,7 +47,7 @@ public class XmlTag{
 	
 	
 	/** tag's parent */
-	private XmlTag parent;
+	private XmlTag parent; 
 	
 	
 	/** tag's max occurrence number in parent */
@@ -54,7 +55,7 @@ public class XmlTag{
 	
 	
 	/** tag's name space */
-	private XmlNameSpace nameSpace;
+	private XmlNameSpace nameSpace; 
 	
 	
 	/**
@@ -68,7 +69,7 @@ public class XmlTag{
 	 * <a href="file:XmlStandardTag.java">XmlTagABstract</a>
 	 */
 	
-	private String defaultContent;
+	private String defaultContent; 
 	
 	
 	
@@ -81,6 +82,15 @@ public class XmlTag{
  * MODEL'S FIELD
  * ==================================
  */
+	
+	/** relation tag id (id of tags_tags_relations table on db)*/
+	protected Integer relId; 
+	
+
+	/** tag id (id of tags table on db)*/
+	protected Integer tagId;
+	
+	
 	/** tag's name */
 	private String name;
 
@@ -103,6 +113,23 @@ public class XmlTag{
 	
 	
 	
+	public XmlTag(Integer tagId,Integer relId, String name, boolean required, XmlTag parent, int max, Object possibleValues, String defaultContent,XmlNameSpace nameSpace) {
+		this.name = name;
+		this.required = required;
+		this.parent = parent;
+		this.max = max;
+		this.possibleValues = possibleValues;
+		this.defaultContent = defaultContent;
+		this.nameSpace = nameSpace;
+		this.tagId = tagId;
+		this.relId = relId;
+	}
+
+
+
+
+
+
 	/**
 	 * This constructor return the exact PARENTLESS copy of tag passed by parameter in a new instance
 	 * <p>
@@ -162,6 +189,10 @@ public class XmlTag{
 		if(tag.getMax() != null) this.max = tag.getMax();
 		
 		if(tag.getPossibleValues() != null) this.possibleValues = tag.getPossibleValues();
+		
+		if(tag.getRelId() != null) this.relId = tag.getRelId();
+		
+		if(tag.getTagId() != null) this.tagId = tag.getTagId();
 		
 		this.required = tag.isRequired();
 		
@@ -230,6 +261,10 @@ public class XmlTag{
 		if(tag.getMax() != null) this.max = tag.getMax();
 		
 		if(tag.getPossibleValues() != null) this.possibleValues = tag.getPossibleValues();
+		
+		if(tag.getRelId() != null) this.relId = tag.getRelId();
+		
+		if(tag.getTagId() != null) this.tagId = tag.getTagId();
 		
 		this.required = tag.isRequired();
 		
@@ -749,5 +784,65 @@ public class XmlTag{
 	public void removeSelectedAttr(XmlAttribute attr) {
 		this.selectedAttrArr.remove(attr);
 	}
+	
+	
+	
+	
+	
+	/**
+	 * Return relId
+	 * 
+	 * @return the tagId
+	 */
+	public Integer getRelId() {
+		return relId;
+	}
+	
+	
+	
+	
+	/**
+	 * Set RelId
+	 * 
+	 * @param relId the relId to set
+	 * @return void
+	 */
+	public void setRelId(Integer relId) {
+		this.relId = relId;
+	}
+	
+	
+	
+	
+	
+	/**
+	 * Return tagId
+	 * 
+	 * @return the tagId
+	 */
+	public Integer getTagId() {
+		return tagId;
+	}
+	
+	
+	
+	
+	
+	/**
+	 * Set tagId
+	 * 
+	 * @param tagId the tagId to set
+	 * @return void
+	 */
+	public void setTagId(Integer tagId) {
+		this.tagId = tagId;
+	}
+
+
+
+
+
+
+
 
 }

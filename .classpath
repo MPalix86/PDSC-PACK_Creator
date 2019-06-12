@@ -9,5 +9,6 @@
 	<classpathentry kind="lib" path="/Users/mircopalese/eclipse-workspace/PDSC/libraries/miglayout-core-5.2.jar"/>
 	<classpathentry kind="lib" path="/Users/mircopalese/eclipse-workspace/PDSC/libraries/miglayout-swing-5.2.jar"/>
 	<classpathentry kind="lib" path="/Users/mircopalese/eclipse-workspace/PDSC/libraries/jdom-2.0.6.jar"/>
+	<classpathentry kind="lib" path="/Users/mircopalese/eclipse-workspace/PDSC/libraries/sqlite-jdbc-3.27.2.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

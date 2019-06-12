@@ -1,7 +1,5 @@
 package model;
 
-import model.builders.AttributeBuilder;
-
 /**
  * Xml attribute abstraction 
  * 
@@ -9,6 +7,12 @@ import model.builders.AttributeBuilder;
  */
 
 public class XmlAttribute {
+	
+	/** attribute id (id of attributes table on db ) */
+	private Integer attrId;
+	
+	/** attribute relId (id of attributes_tags_relations table on db ) */
+	private Integer relId;
 	
 	/** attribute's name */
 	private String name;
@@ -20,7 +24,7 @@ public class XmlAttribute {
 	protected Object possibleValues;
 	
 	/** attribute's value */
-	protected String value = "";
+	protected String value ;
 	
 	/** attribute's default value */
 	protected String defaultValue;
@@ -32,58 +36,12 @@ public class XmlAttribute {
 	protected XmlTag tag;
 	
 	
-	/** 
-	 * builder pattern constructor
-	 * 
-	 * @param builder attribute builder builder pattern
-	 */
 	
-	public XmlAttribute(AttributeBuilder builder) {
-		this.name = builder.getName();
-		this.value = builder.getValue();
-		this.defaultValue = builder.getDefaultValue();
-		this.required = builder.isRequired();
-		this.possibleValues = builder.getPossibleValues();
-		this.nameSpace = builder.getNameSpace();
-	}
-	
-	
-	
-	
-//	/** 
-//	 * Return new Attribute instance
-//	 * 
-//	 * @param name attribute's name
-//	 * @param required attribute's obligatoriness
-//	 * @param possibleValues attribute's possibleVlaues
-//	 */
-//	
-//	public XmlAttribute(String name, boolean required, Object possibleValues) {
-//		this.name = name;
-//		this.required = required;
-//		this.possibleValues = possibleValues;
-//	}
-	
-	
-	
-	
-//	/** 
-//	 * Return new Attribute instance
-//	 * 
-//	 * @param name attribute's name
-//	 * @param required attribute's obligatoriness
-//	 * @param possibleValues attribute's possibleVlaues
-//	 * @param defaultValue attribute's defaultValue
-//	 */
-//	
-//	public XmlAttribute(String name, boolean required, Object possibleValues, String defaultValue) {
-//		this.name = name;
-//		this.required = required;
-//		this.possibleValues = possibleValues;
-//	}
-	
-	
-	
+
+
+
+
+
 	/** 
 	 * Return new Attribute instance
 	 * 
@@ -97,6 +55,20 @@ public class XmlAttribute {
 		this.required = required;
 		this.possibleValues = possibleValues;
 		this.tag = tag;
+	}
+	
+	
+
+	
+	public XmlAttribute(Integer attrId, Integer relId, String name, boolean required, Object possibleValues,String defaultValue,XmlNameSpace nameSpace,XmlTag tag) {
+		this.name = name;
+		this.required = required;
+		this.possibleValues = possibleValues;
+		this.tag = tag;
+		this.nameSpace = nameSpace;
+		this.defaultValue = defaultValue;
+		this.attrId = attrId;
+		this.relId = relId;
 	}
 	
 	
@@ -122,24 +94,6 @@ public class XmlAttribute {
 	
 	
 	
-//	/** 
-//	 * Return PARENTLESS new Attribute instance copying passed instance of XmlAttribute. 
-//	 * 
-//	 * @param attribute to be copied
-//	 */
-//	
-//	public XmlAttribute(XmlAttribute attr) {
-//		if ( attr.getName() != null ) this.name = attr.getName();
-//		
-//		this.required = attr.isRequired();
-//		
-//		if ( attr.getPossibleValues() != null ) this.possibleValues = attr.getPossibleValues();
-//		if ( attr.getValue() != null) this.value = new String(attr.getValue());
-//		if ( attr.getDefaultValue() != null) this.defaultValue = new String(attr.getDefaultValue());
-//		if ( attr.getNameSpace() != null) this.nameSpace = new XmlNameSpace(attr.getNameSpace());
-//	}
-	
-	
 	
 	/** 
 	 * Return new Attribute instance copying passed instance of XmlAttribute. 
@@ -157,19 +111,10 @@ public class XmlAttribute {
 		if ( attr.getValue() != null) this.value = new String(attr.getValue());
 		if ( attr.getDefaultValue() != null) this.defaultValue = new String(attr.getDefaultValue());
 		if ( attr.getNameSpace() != null) this.nameSpace = new XmlNameSpace(attr.getNameSpace());
+		if ( attr.getAttrId() != null) this.attrId = attr.getAttrId();
+		if ( attr.getRelId() != null) this.relId = attr.getRelId();
 		this.tag=tag;
 	}
-	
-	
-	
-	
-	/** 
-	 * void constructor
-	 * 
-	 * @return new void instance
-	 */
-	
-	//public XmlAttribute() {	}
 	
 	
 	
@@ -362,6 +307,59 @@ public class XmlAttribute {
 	
 	public XmlTag getTag() {
 		return this.tag;
+	}
+	
+	
+	
+	
+	
+	/**
+	 * Return attrID
+	 * 
+	 * @return the attrId
+	 */
+	
+	public Integer getAttrId() {
+		return attrId;
+	}
+
+
+
+
+	/**
+	 * Set attrId
+	 * 
+	 * @param attrId the attrId to set
+	 */
+	
+	public void setAttrId(Integer attrId) {
+		this.attrId = attrId;
+	}
+
+
+
+
+	/**
+	 * Return relId
+	 * 
+	 * @return the relId
+	 */
+	
+	public Integer getRelId() {
+		return relId;
+	}
+
+
+
+
+	/**
+	 * Set relID
+	 * 
+	 * @param relId the relId to set
+	 */
+	
+	public void setRelId(Integer relId) {
+		this.relId = relId;
 	}
 	
 	

@@ -92,11 +92,16 @@ public class TagRow extends JPanel{
 				else {
 					AttributeFormComboBox valuesComboBox = new AttributeFormComboBox(attr,this);  
 					
+					if (attr.getDefaultValue() != null && attr.getValue() == null ) {
+						valuesComboBox.setSelectedItem(attr.getDefaultValue());
+					}
+					
 					/** if attribute have value set */
-					if (attr.getValue() != null) valuesComboBox.setSelectedItem(attr.getValue());
+					else if (attr.getValue() != null) valuesComboBox.setSelectedItem(attr.getValue());
 					
 					valuesComboBox.setForeground(Color.DARK_GRAY);
 					valuesComboBox.addFocusListener(listener);
+					
 					this.add(valuesComboBox);
 				}
 				

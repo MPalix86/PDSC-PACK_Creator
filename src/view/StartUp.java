@@ -35,7 +35,17 @@ public class StartUp extends JFrame {
 	       // handle exception
 	    }
 		  WizardFrame frame = new WizardFrame(); 
+		
+
+
+//		XmlTagDao tagDao = XmlTagDao.getInstance();
+//		XmlTag root = tagDao.getRootTag();
+//		XmlTag components = tagDao.getTagFromIdAndParent(11, root);
+//		XmlTagBusiness.printTag(components, 0);
+		
 	}
+		
+		
 		
 
 	
