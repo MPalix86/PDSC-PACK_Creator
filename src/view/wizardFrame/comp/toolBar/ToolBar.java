@@ -1,15 +1,15 @@
 package view.wizardFrame.comp.toolBar;
 
-import java.util.Iterator;
-import java.util.Map;
+import java.util.ArrayList;
 
 import javax.swing.ImageIcon;
 import javax.swing.JPopupMenu;
 import javax.swing.JToolBar;
 
 import business.Session;
+import business.XmlTagBusiness;
 import listeners.wizardFrameListeners.comp.ToolBarListener;
-import model.pdsc.PackageChildrenEnum;
+import model.XmlTag;
 import view.comp.IconButton;
 import view.comp.TagMenuItem;
 import view.wizardFrame.comp.toolBar.comp.DropDownButton;
@@ -91,29 +91,22 @@ public class ToolBar extends JToolBar{
 	
 	
 
-	/**
-	 * Generate tags menu
-	 * 
-	 * @return void
-	 */
-	private void generateTagsMenu(){
+	private void generateTagsMenu() {
 		
 		ImageIcon showTagsIcon = new ImageIcon(this.getClass().getResource("/icons/tagList.png"));
 		
-		PackageChildrenEnum packageChildEnum = new PackageChildrenEnum();
+		XmlTag root = XmlTagBusiness.getRoot();
+		ArrayList<XmlTag> rootChildren = XmlTagBusiness.getNotRequiredChildren(root);
 		
 		JPopupMenu tagsMenu = new JPopupMenu();
 		
-		/** packageChildEnum iteration */
-		Iterator it = packageChildEnum.entrySet().iterator();
-	    while (it.hasNext()) {
+	  	for(int i = 0; i < rootChildren.size(); i++) {
+	  		XmlTag tag = rootChildren.get(i);
 	    	
-	        Map.Entry child = (Map.Entry)it.next();
-	        TagMenuItem menuItem = new TagMenuItem( "new < " + (String)child.getKey() + " >"  ,(Class) child.getValue());
+	        TagMenuItem menuItem = new TagMenuItem( "new < " + tag.getName() + " >"  , tag);
 	        menuItem.addActionListener(listener);
-	        menuItem.setActionCommand("addPackageChild");
+	        menuItem.setActionCommand("addRootChild");
 	        tagsMenu.add(menuItem);
-	        
 	    }
 	    
 		dropDownTagsButton = new DropDownButton(tagsMenu,showTagsIcon );

@@ -17,12 +17,15 @@ import javax.swing.border.EmptyBorder;
 
 import business.Session;
 import listeners.wizardFrameListeners.WizardFrameListener;
+import model.XmlTag;
 import model.pdsc.Pack;
 import view.wizardFrame.comp.TabContainer;
 import view.wizardFrame.comp.previewPane.PreviewPaneContainer;
 import view.wizardFrame.comp.tagsListBar.TagsListBarContainer;
 import view.wizardFrame.comp.toolBar.ToolBarContainer;
+import view.wizardFrame.comp.xmlForm.XmlForm;
 import view.wizardFrame.comp.xmlForm.XmlFormContainer;
+import view.wizardFrame.comp.xmlForm.comp.TagRow;
 
 /**
  * Wizard frame. Main frame of PDSC creator. 
@@ -267,6 +270,17 @@ public class WizardFrame extends JFrame {
 		Object[] options = { "OK"};
 		JOptionPane.showOptionDialog (null, message, "Warning", JOptionPane.OK_OPTION, JOptionPane.INFORMATION_MESSAGE, icon, options, options[0]); 
 	}
+	
+	
+	
+	
+
+	public String showInputDialog(String title, String fieldLabelText) {
+        ImageIcon icon = new ImageIcon("src/images/turtle32.png");
+        String n = (String)JOptionPane.showInputDialog(null, fieldLabelText, title, JOptionPane.QUESTION_MESSAGE, icon, null, null);
+        return n;
+	}
+
 
 
 	/**
@@ -313,6 +327,18 @@ public class WizardFrame extends JFrame {
 	public Pack getPack() {
 		return pack;
 	}
+	
+	
+	
+	public XmlForm getFormPanel() {
+		return this.formPanelContainer.getFormPanel();
+	}
+	
+	
+	public TagRow getTagRow(XmlTag tag) {
+		return  this.getFormPanelContainer().getFormPanel().getTagOpenRowHashMap().get(tag);
+	}
+	
 
 	
 }

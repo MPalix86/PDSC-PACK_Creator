@@ -2,6 +2,8 @@ package view.wizardFrame.comp.xmlForm.comp;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 
@@ -9,32 +11,27 @@ import javax.swing.border.MatteBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
+import business.Session;
 import model.XmlTag;
 import view.comp.CustomColor;
 import view.comp.TagTextField;
 
-public class TagFormTextField extends TagTextField implements DocumentListener, FocusListener{
-	private TagRow row;
+public class TagFormTextField extends TagTextField implements DocumentListener, FocusListener, ActionListener{
 	
-	public TagFormTextField(XmlTag tag, TagRow row) {
+	public TagFormTextField(XmlTag tag) {
 		super(tag);
-		this.row = row;
-		this.setForeground(Color.DARK_GRAY);
-		this.setBorder(new MatteBorder (0,0,1,0,CustomColor.LIGHT_GRAY));
-		
-
-		if(this.getText().length() == 0) {
-			this.setPreferredSize(new Dimension(50,this.getPreferredSize().height));
-		}
-		this.getDocument().addDocumentListener(this);
-		this.addFocusListener(this);
+		setup();
 	}
 	
 	
 	
-	public TagFormTextField(XmlTag tag, TagRow row, String text) {
+	public TagFormTextField(XmlTag tag, String text) {
 		super(tag,text);
-		this.row = row;
+		setup();
+	}
+	
+	
+	private void setup() {
 		this.setForeground(Color.DARK_GRAY);
 		this.setBorder(new MatteBorder (0,0,1,0,CustomColor.LIGHT_GRAY));
 		
@@ -44,8 +41,8 @@ public class TagFormTextField extends TagTextField implements DocumentListener, 
 		}
 		this.getDocument().addDocumentListener(this);
 		this.addFocusListener(this);
+		this.addActionListener(this);
 	}
-	
 
 
 	
@@ -69,8 +66,8 @@ public class TagFormTextField extends TagTextField implements DocumentListener, 
 
 	@Override
 	public void focusGained(FocusEvent e) {
-		row.scrollRectToVisible(this.getBounds());
-		
+		TagRow row =  Session.getInstance().getWizardFrame().getTagRow(tag);
+		row.scrollRectToVisible(this.getBounds());	
 	}
 
 
@@ -78,20 +75,42 @@ public class TagFormTextField extends TagTextField implements DocumentListener, 
 
 	@Override
 	public void focusLost(FocusEvent e) {
-		// TODO Auto-generated method stub
+		TagRow row =  Session.getInstance().getWizardFrame().getTagRow(tag);
+		row.scrollRectToVisible(this.getBounds());
+	}
+	
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		/** 
+		 * Generate event when enter was pressed
+		 * assume that if enter was pressed in textfield (this) user want to add new line
+		 */
+		TagTextField field = (TagTextField) e.getSource();
+		XmlTag tag = field.getTag();
 		
+		/** adding new line inside tag content */
+		tag.setContent(field.getText() + System.lineSeparator());
+		
+		/** recovering tagRow */
+		TagRow row =  Session.getInstance().getWizardFrame().getTagRow(tag);
+		
+		/** updating TagRow */
+		row.update();
+		
+		/** adjust focus on row*/
+		row.setFocusOnTagContentField();
 	}
 	
 	
-	
-	
-	
-	
-	
+	/**
+	 * Update textField (this) width based on String length
+	 */
 	private void updateSize() {
+		TagRow row =  Session.getInstance().getWizardFrame().getTagRow(tag);
 		if(this.getText().length()>0) {
 			int width = this.getGraphics().getFontMetrics().stringWidth(this.getText());
-			this.setPreferredSize(new Dimension(width+1,this.getPreferredSize().height));
+			this.setPreferredSize(new Dimension(width+2,this.getPreferredSize().height));
 		}
 		else {
 			this.setPreferredSize(new Dimension(50,this.getPreferredSize().height));
@@ -100,4 +119,7 @@ public class TagFormTextField extends TagTextField implements DocumentListener, 
 		row.repaint();
 		row.revalidate();
 	}
+
+
+
 }

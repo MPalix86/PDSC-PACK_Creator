@@ -18,7 +18,7 @@ import model.XmlTag;
 public class Pack {
 	private String name;
 	private String vendor;
-	private HashMap <String,String> destinationSourcePathFilesHashMap;
+	private HashMap <XmlAttribute,String> pathFilesHashMap;
 	
 	public static final int PACK_CREATED_CORRECTLY = 0;
 	public static final int REQUIRED_FIELDS_MISSING	 = 1;
@@ -27,7 +27,7 @@ public class Pack {
 	private static final String MAIN_DIR_NAME = "PDSC";
 	
 	public Pack() {
-		if(destinationSourcePathFilesHashMap == null) destinationSourcePathFilesHashMap = new HashMap<String, String> ();
+		if(pathFilesHashMap == null) pathFilesHashMap = new HashMap<XmlAttribute, String> ();
 	}
 	
 
@@ -65,6 +65,7 @@ public class Pack {
 		
 		/** log file beginning string */
 		log = "pack " + completePathString + "...\n creation time : " +  dateFormat.format(date) + "\n\n";
+		System.out.println("loggodata");
 		writer.write(log.getBytes());
 		
 		/** breadth first search */
@@ -89,28 +90,30 @@ public class Pack {
 						File destinationFile = new File(completePathString + attr.getValue());
 						
 						/** if destination file has associated source file */
-						if (destinationSourcePathFilesHashMap.containsKey(attr.getValue())) {
+						if (pathFilesHashMap.containsKey(attr)) {
 							
 							/** recovering source file */
-							File srcFile = new File( (String) destinationSourcePathFilesHashMap.get(attr.getValue()) ) ;	
+							File srcFile = new File( (String) pathFilesHashMap.get(attr) ) ;	
 							
 							/** making destination directories */
 							destinationPath.mkdirs();
 							
 							/** copy file in destination directory */
-							Files.copy(srcFile.toPath(), destinationFile.toPath());
-							
-							/** write log */
-							log = srcFile.getPath() + " ----> " + destinationFile.getPath() + " ADDED CORRECTLY \n";
+							if(destinationFile.exists()) {
+								log = " FILE ALREADY INSERTED 	" + srcFile.getPath() + " ----> " + destinationFile.getPath() + "\n";
+							}
+							else {
+								Files.copy(srcFile.toPath(), destinationFile.toPath());
+								log = " FILE ADDED CORRECTLY 	" + srcFile.getPath() + " ----> " + destinationFile.getPath() + "\n";
+							}
 						}
 						/** if destination file has't associated source file */
 						else {
 							destinationPath.mkdirs();
-							log = "NO SOURCE FILE, PATH CREATED WITHOUTH FILE ----> " + destinationPath.getPath() + "PATH CREATED WITHOUT ANY FILE \n";
+							log = "NO SOURCE FILE 	PATH CREATED WITHOUTH FILE ----> " + destinationPath.getPath() + "\n";
 						}
+						writer.write(log.getBytes());
 					}
-					/** write log */
-					writer.write(log.getBytes());
 				}
 				
 			}
@@ -156,20 +159,18 @@ public class Pack {
 	
 	
 	
-	
-	
 	/**
-	 * @return the destinationSourcePathFilesHashMap
+	 * @return the destinationSourcepathFilesHashMap
 	 */
-	public HashMap<String, String> getDestinationSourcePathFilesHashMap() {
-		return this.destinationSourcePathFilesHashMap;
+	public HashMap<XmlAttribute, String> getPathFilesHashMap() {
+		return this.pathFilesHashMap;
 	}
 	
 	/**
-	 * @param destinationSourcePathFilesHashMap the destinationSourcePathFilesHashMap to set
+	 * @param destinationSourcepathFilesHashMap the destinationSourcepathFilesHashMap to set
 	 */
-	public void setDestinationSourcePathFilesHashMap(HashMap<String, String> destinationSourcePathFilesHashMap) {
-		this.destinationSourcePathFilesHashMap = destinationSourcePathFilesHashMap;
+	public void setPathFilesHashMap(HashMap<XmlAttribute, String> pathFilesHashMap) {
+		this.pathFilesHashMap = pathFilesHashMap;
 	}
 	/**
 	 * @return the name

@@ -37,6 +37,15 @@ public class XmlAttribute {
 	
 	
 	
+	
+	public final static  int ALREADY_PRESENT = 1;
+	public final static  int IS_STANDARD_FOR_TAG = 2;
+	public final static  int IS_GENRAL_PDSC = 3;
+	public final static  int IS_NEW = 4;
+	public final static  int INVALID_NAME = 5;
+	
+	
+	
 
 
 
@@ -58,6 +67,21 @@ public class XmlAttribute {
 	}
 	
 	
+	
+	
+	/** 
+	 * Return new Attribute instance
+	 * 
+	 * @param name attribute's name
+	 */
+	
+	public XmlAttribute(String name,XmlTag tag) {
+		this.name = name;
+		this.tag = tag;
+		this.required = false;
+	}
+	
+	
 
 	
 	public XmlAttribute(Integer attrId, Integer relId, String name, boolean required, Object possibleValues,String defaultValue,XmlNameSpace nameSpace,XmlTag tag) {
@@ -69,6 +93,18 @@ public class XmlAttribute {
 		this.defaultValue = defaultValue;
 		this.attrId = attrId;
 		this.relId = relId;
+	}
+	
+	
+	
+	public XmlAttribute(Integer attrId, String name, boolean required, Object possibleValues,String defaultValue,XmlTag tag) {
+		this.name = name;
+		this.required = required;
+		this.possibleValues = possibleValues;
+		this.tag = tag;
+		this.nameSpace = nameSpace;
+		this.defaultValue = defaultValue;
+		this.attrId = attrId;
 	}
 	
 	

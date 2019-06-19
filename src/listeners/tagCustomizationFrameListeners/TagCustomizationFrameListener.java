@@ -7,6 +7,7 @@ import java.awt.event.ItemListener;
 
 import business.Session;
 import business.TagCustomizationBusiness;
+import business.XmlTagBusiness;
 import model.XmlAttribute;
 import model.XmlTag;
 import view.comp.AttributeCheckBox;
@@ -78,7 +79,8 @@ public class TagCustomizationFrameListener implements ItemListener, ActionListen
 			
 		}
 		else {
-			tag.removeSelectedAttr(attr);
+			XmlAttribute selectedAttr = XmlTagBusiness.findChildSelectedAttrFromName(attr.getTag(), attr.getName());
+			tag.removeSelectedAttr(selectedAttr);
 		}	
 	}
 	
@@ -108,16 +110,27 @@ public class TagCustomizationFrameListener implements ItemListener, ActionListen
 			XmlTag parent = selectedChild.getParent();
 			
 			/** recovering model instance that contains all constraints for selected tag; i.e. the instance present in childrenArr */
-			XmlTag modelChild = TagCustomizationBusiness.findModelChildFromSelectedChildName(parent, selectedChild.getName()); 
+			XmlTag modelChild = XmlTagBusiness.findModelChildFromSelectedChildName(parent, selectedChild.getName()); 
+
+			int tagOccurrenceInParent = XmlTagBusiness.findChildOccurrenceNumber(parent,selectedChild.getName());
 			
-			/** removing selected child from selectedChildrenArr */
-			parent.removeSelectedChild(selectedChild); 									
+			boolean response = true;
+			if (modelChild.isRequired() && tagOccurrenceInParent <= 1 ) {
+				response = tagCustomizationFrame.yesNoWarningMessage("Following PDSC standard : \n < " + parent.getName() + "> must contain at least one tag < " + modelChild.getName() + " > \n Do you want to continue ?");
+			}
 			
-			/** removing tag panel from tag customization frame */
-			tagCustomizationFrame.getTagContainer().removeTagPanel(selectedChild);
+			if(response) {
+				/** removing selected child from selectedChildrenArr */
+				parent.removeSelectedChild(selectedChild); 									
+				
+				/** removing tag panel from tag customization frame */
+				tagCustomizationFrame.getTagContainer().removeTagPanel(selectedChild);
+				
+				/** maximum number of possible child in the model instance is augmented by one */
+				modelChild.setMax(modelChild.getMax() + 1);					
+			}
 			
-			/** maximum number of possible child in the model instance is augmented by one */
-			modelChild.setMax(modelChild.getMax() + 1);										
+							
 																		
 		}																				
 		
@@ -171,7 +184,7 @@ public class TagCustomizationFrameListener implements ItemListener, ActionListen
 			XmlTag parent = selectedTag.getParent();
 			
 			/** recovering model instance for constraints check */
-			XmlTag modelTag = TagCustomizationBusiness.findModelChildFromSelectedChildName(parent, selectedTag.getName());
+			XmlTag modelTag = XmlTagBusiness.findModelChildFromSelectedChildName(parent, selectedTag.getName());
 			
 			/** recover copies number  */
 			int copiesNumber = this.tagCustomizationFrame.cloneDialog();

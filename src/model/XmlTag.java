@@ -733,7 +733,7 @@ public class XmlTag{
 	
 	
 	/**
-	 * Add attribute inside selctedChildrenArr
+	 * Add child inside selctedChildrenArr
 	 * 
 	 * @return void
 	 * @param child the child to add
@@ -742,6 +742,20 @@ public class XmlTag{
 	public void addSelectedChild(XmlTag child) {
 		if (selectedChildrenArr == null) selectedChildrenArr = new ArrayList<XmlTag>();
 		this.selectedChildrenArr.add(child);
+	}
+	
+	
+	
+	/**
+	 * Add child inside selctedChildrenArr at specified index
+	 * 
+	 * @return void
+	 * @param child the child to add
+	 */
+	
+	public void addSelectedChildAtIndex(XmlTag child, int index) {
+		if (selectedChildrenArr == null) selectedChildrenArr = new ArrayList<XmlTag>();
+		this.selectedChildrenArr.add(index , child);
 	}
 	
 	
@@ -757,6 +771,21 @@ public class XmlTag{
 	public void addSelectedAttr(XmlAttribute attr) {
 		if (selectedAttrArr == null) selectedAttrArr = new ArrayList<XmlAttribute>();
 		this.selectedAttrArr.add(attr);
+	}
+	
+	
+	
+	
+	/**
+	 * Add attribute inside selectedAttrArr at specified index
+	 * 
+	 * @return void
+	 * @param attr the attribute to add
+	 */
+	
+	public void addSelectedAttrAtIndex(XmlAttribute attr,int index) {
+		if (selectedAttrArr == null) selectedAttrArr = new ArrayList<XmlAttribute>();
+		this.selectedAttrArr.add(index,attr);
 	}
 	
 	

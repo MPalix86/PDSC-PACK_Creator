@@ -9,18 +9,18 @@ import javax.imageio.ImageIO;
 
 
 /**
- * Utils class of stati fuinctions
+ * CustomUtils class of stati fuinctions
  * 
  * @author Mirco Palese
  */
-public class Utils {
-	private static Utils instance;
+public class CustomUtils {
+	private static CustomUtils instance;
 	
 	
 	/** singleton pattern */
-	public static synchronized Utils getInstance(){
+	public static synchronized CustomUtils getInstance(){
 		if(instance==null)
-			instance = new Utils();
+			instance = new CustomUtils();
 		return instance;
 	}
 	
@@ -50,7 +50,7 @@ public class Utils {
 	public static Image getScaledImage(Dimension imgSize, Dimension boundary, String path) {
 		BufferedImage img = null; 
 		try {
-		    img = ImageIO.read(Utils.class.getResource(path));
+		    img = ImageIO.read(CustomUtils.class.getResource(path));
 		} catch (IOException e) {
 		    e.printStackTrace();
 		} 
@@ -103,7 +103,7 @@ public class Utils {
 		
 		BufferedImage img = null; 
 		try {
-		    img = ImageIO.read(Utils.class.getResource(path));
+		    img = ImageIO.read(CustomUtils.class.getResource(path));
 		} catch (IOException e) {
 		    e.printStackTrace();
 		} 
@@ -142,10 +142,39 @@ public class Utils {
 	 * @param str
 	 */
 	
-	private static int countLines(String str){
-		   String[] lines = str.split("\r\n|\r|\n");
+	public static boolean thereAreMoreLinesInString(String str) {
+	    if(str == null || str.isEmpty())
+	    {
+	        return false;
+	    }
+	    int lines = 1;
+	    int pos = 0;
+	    while ((pos = str.indexOf("\n", pos) + 1) != 0) {
+	        lines++;
+	        if(lines > 1) return true;
+	    }
+	    return false;
+	}
+	
+	public static int countLinesInString(String str){
+		   String[] lines = str.split(System.lineSeparator());
 		   return  lines.length;
 		}
+	
+	
+	public static String[] separateText (String text , String letter) {
+		String[] tokens = text.split(letter);
+		return tokens;
+	}
+	
+	public static Object reverseArray(Object[] array) {
+	    for (int i = 0; i < array.length / 2; i++) {
+	        Object temp = array[i];
+	        array[i] = array[array.length - 1 - i];
+	        array[array.length - 1 - i] = temp;
+	    }
+	    return array;
+	}
 	
 
 }

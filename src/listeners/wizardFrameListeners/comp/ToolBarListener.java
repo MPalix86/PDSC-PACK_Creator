@@ -4,11 +4,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 
 import business.Session;
+import business.XmlTagBusiness;
 import listeners.wizardFrameListeners.WizardFrameListener;
 import model.XmlTag;
 import model.pdsc.Pack;
@@ -32,20 +31,11 @@ public class ToolBarListener extends WizardFrameListener implements ActionListen
 		
 		String command = e.getActionCommand();
 		
-		if(command == "addPackageChild") {
+		if(command == "addRootChild") {
 			TagMenuItem item = (TagMenuItem) e.getSource();
-			Class tagClass = item.getTagClass();
-			Constructor<?> c = null;
-			try {
-				c = tagClass.getConstructor(boolean.class, XmlTag.class, int.class);
-			} catch (NoSuchMethodException | SecurityException e1) {
-				e1.printStackTrace();
-			}
-			try {
-				TagCustomizationFrame f = new TagCustomizationFrame((XmlTag) c.newInstance(false,null,1) );
-			} catch (InstantiationException | IllegalAccessException | IllegalArgumentException	| InvocationTargetException e1) {
-				e1.printStackTrace();
-			}
+			XmlTag tag = item.getTag();
+			tag = XmlTagBusiness.getCompleteTag(tag);
+			TagCustomizationFrame f = new TagCustomizationFrame(new XmlTag(tag));
 		}
 		
 		

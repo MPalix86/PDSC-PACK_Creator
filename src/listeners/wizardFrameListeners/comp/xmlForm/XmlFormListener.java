@@ -14,6 +14,8 @@ import view.wizardFrame.comp.xmlForm.comp.AttributeFormComboBox;
 import view.wizardFrame.comp.xmlForm.comp.AttributeFormTextField;
 import view.wizardFrame.comp.xmlForm.comp.AttributeLabel;
 import view.wizardFrame.comp.xmlForm.comp.AttributeOptionMenu;
+import view.wizardFrame.comp.xmlForm.comp.TagFormComboBox;
+import view.wizardFrame.comp.xmlForm.comp.TagFormTextArea;
 import view.wizardFrame.comp.xmlForm.comp.TagFormTextField;
 import view.wizardFrame.comp.xmlForm.comp.TagLabel;
 import view.wizardFrame.comp.xmlForm.comp.TagOptionMenu;
@@ -25,17 +27,8 @@ public class XmlFormListener implements FocusListener, MouseListener{
 	
 	private Session session = Session.getInstance();
 	
-	
-	
-	
-	
-	
 	public XmlFormListener (XmlForm xmlForm) {
 		this.xmlForm = xmlForm;
-	}
-	
-	
-	public XmlFormListener () {
 	}
 	
 	@Override
@@ -57,6 +50,14 @@ public class XmlFormListener implements FocusListener, MouseListener{
 			TagFormTextField textField = (TagFormTextField) e.getSource();
 			textField.setTagContent();
 		}
+		else if(e.getSource().getClass().equals(TagFormTextArea.class)) {
+			TagFormTextArea textArea = (TagFormTextArea) e.getSource();
+			textArea.setTagContent();
+		}
+		else if(e.getSource().getClass().equals(TagFormComboBox.class)) {
+			TagFormComboBox comboBox = (TagFormComboBox) e.getSource();
+			comboBox.setTagContent();
+		}
 		session.getWizardFrame().updatePreview();
 	}
 
@@ -71,9 +72,7 @@ public class XmlFormListener implements FocusListener, MouseListener{
 			else if(e.getSource().getClass().equals(AttributeLabel.class)) {
 				AttributeLabel label = (AttributeLabel) e.getSource();
 				XmlAttribute attr = label.getAttr();
-				System.out.println(attr.getValue());
-				new AttributeOptionMenu(attr).show(e.getComponent(), e.getX(), e.getY());
-				System.out.println(attr.getName());
+				new AttributeOptionMenu(attr,label).show(e.getComponent(), e.getX(), e.getY());
 			}
 	}
 
@@ -132,4 +131,7 @@ public class XmlFormListener implements FocusListener, MouseListener{
 		}
 		
 	}
+
+
+
 }

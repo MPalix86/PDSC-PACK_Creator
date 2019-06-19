@@ -3,17 +3,17 @@ package view.wizardFrame.comp.tagsListBar;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.ArrayList;
 
 import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import listeners.wizardFrameListeners.comp.ChildrenListBarListener;
-import model.pdsc.PackageChildrenEnum;
+import business.XmlTagBusiness;
+import listeners.wizardFrameListeners.comp.TagListBarListener;
+import model.XmlTag;
 import view.comp.CustomColor;
-import view.wizardFrame.comp.tagsListBar.comp.ListBarButton;
+import view.wizardFrame.comp.tagsListBar.comp.TagListBarButton;
 
 /**
  * tag's children buttons list bar
@@ -23,15 +23,11 @@ import view.wizardFrame.comp.tagsListBar.comp.ListBarButton;
 
 public class TagsListBar extends JPanel{
 	
-	
-	private PackageChildrenEnum packChildrenEnum;
-	
-	private ChildrenListBarListener listener;
+	private TagListBarListener listener;
 	
 
 	public TagsListBar() {
-		this.packChildrenEnum = new PackageChildrenEnum();
-		this.listener = new ChildrenListBarListener(this);
+		this.listener = new TagListBarListener(this);
 		placeComponents();
 	}
 	
@@ -39,30 +35,29 @@ public class TagsListBar extends JPanel{
 	
 
 	private void placeComponents() {
-		
+
 		this.setBorder(new EmptyBorder(0,0,0,0));
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 		this.setBackground(Color.WHITE);
 
-		/** packageChildEnum iteration */
-		Iterator it = packChildrenEnum.entrySet().iterator();
-	    while (it.hasNext()) {
-	    	
-	    	Map.Entry child = (Map.Entry)it.next();
-	    	
-	    	JPanel panel = new JPanel(new BorderLayout());
+		XmlTag root = XmlTagBusiness.getRoot();
+		ArrayList<XmlTag> rootChildren = XmlTagBusiness.getNotRequiredChildren(root);
+		
+	  	for(int i = 0; i < rootChildren.size(); i++) {
+	  		XmlTag tag = rootChildren.get(i);
+	  		
+	  		JPanel panel = new JPanel(new BorderLayout());
 	    	panel.setMaximumSize(new Dimension(300,30));
 	    	
-	        ListBarButton btn = new ListBarButton( "< " + (String)child.getKey() + " >"  ,(Class) child.getValue());
+	    	TagListBarButton btn = new TagListBarButton( "< " + tag.getName() + " >"  ,  tag);
 	        btn.setForeground(CustomColor.TAG_COLOR);
 	        
 	        btn.addActionListener(listener);
-			btn.setActionCommand("addPackageChild");
+			btn.setActionCommand("addRootChild");
 	        
 	    	panel.add(btn);
-	    	this.add(panel);
+	    	this.add(panel);	
 	    }
-
 	}
 		
 

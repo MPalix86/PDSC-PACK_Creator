@@ -1,5 +1,7 @@
 package view.comp;
 
+import javax.swing.ImageIcon;
+
 import model.XmlTag;
 
 /**
@@ -25,6 +27,7 @@ public class TagButton extends SquareButton{
 		this.tag = tag;
 		
 	}
+	
 	
 	
 	
@@ -59,5 +62,13 @@ public class TagButton extends SquareButton{
 	
 	public void setTag(XmlTag tag) {
 		this.tag = tag;
+	}
+	
+	
+	
+	
+	public TagButton toIconButton(ImageIcon icon) {
+		super.toIconButton(icon);
+		return this;
 	}
 }

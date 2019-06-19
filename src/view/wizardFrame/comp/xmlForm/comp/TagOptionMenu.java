@@ -20,16 +20,26 @@ public class TagOptionMenu extends JPopupMenu {
 		deleteTagItem.addActionListener(listener);
 		deleteTagItem.setActionCommand("deleteTag");
 		
-		if (tag.isRequired()) {
-			deleteTagItem.setEnabled(false);
-		}
-		
 		TagMenuItem openInTagCustomizationFrame = new TagMenuItem("Customize",tag);
 		openInTagCustomizationFrame.addActionListener(listener);
 		openInTagCustomizationFrame.setActionCommand("customize");
 		
+		TagMenuItem addAttributeItem = new TagMenuItem("Add Attributes",tag);
+		addAttributeItem.addActionListener(listener);
+		addAttributeItem.setActionCommand("addAttribute");
+		if(tag.getAttrArr() == null) addAttributeItem.setEnabled(false);
+		else System.out.println("c'è qualcosa");
+			
+		TagMenuItem addCustomAttributeItem = new TagMenuItem("Add Custom Attribute",tag);
+		addCustomAttributeItem.addActionListener(listener);
+		addCustomAttributeItem.setActionCommand("addCustomAttribute");
+		
+	
+		
 		add(deleteTagItem);
 		add(openInTagCustomizationFrame);
+		add(addAttributeItem);
+		add(addCustomAttributeItem);
 
 	}
 	

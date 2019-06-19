@@ -3,21 +3,29 @@ package view.wizardFrame.comp.xmlForm.comp;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 
+import business.Session;
 import model.XmlAttribute;
 import view.comp.AttributeComboBox;
 
 public class AttributeFormComboBox  extends AttributeComboBox implements FocusListener{
-	private TagRow row;
 
-	public AttributeFormComboBox(XmlAttribute attr, TagRow row) {
+	private Session session;
+
+	public AttributeFormComboBox(XmlAttribute attr) {
 		super(attr);
-		this.row = row;
+		session = Session.getInstance();
 		this.addFocusListener(this);
 	}
 
 	@Override
 	public void focusGained(FocusEvent e) {
-		row.scrollRectToVisible(this.getBounds());
+		TagRow row = session.getWizardFrame().getFormPanel().getTagOpenRowHashMap().get(attr.getTag());
+		try {
+			row.scrollRectToVisible(this.getBounds());
+		}catch(Exception ex) {
+			
+		}
+		
 		
 	}
 

@@ -10,10 +10,7 @@ public class TagTextField extends JTextField {
 	public TagTextField(XmlTag tag){
 		super();
 		this.tag = tag;
-		if(tag.getDefaultContent() != null) {
-			this.setText(tag.getDefaultContent());
-			tag.setContent(tag.getDefaultContent());
-		}
+
 	}
 	
 	
@@ -21,10 +18,7 @@ public class TagTextField extends JTextField {
 	public TagTextField(XmlTag tag,String text){
 		super(text);
 		this.tag = tag;
-		if(tag.getDefaultContent() != null) {
-			this.setText(tag.getDefaultContent());
-			tag.setContent(tag.getDefaultContent());
-		}
+
 	}
 	
 	

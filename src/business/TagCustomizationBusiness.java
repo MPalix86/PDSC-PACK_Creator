@@ -24,27 +24,6 @@ public class TagCustomizationBusiness {
 	public void setModel(XmlTag model) {
 		this.model = model;
 	}
-
-
-
-
-
-
-	public static XmlTag findModelChildFromSelectedChildName(XmlTag root, String childName) {
-		ArrayList <XmlTag> children = new ArrayList();
-		children.add(root);
-		while(!children.isEmpty()) {
-			XmlTag element = children.get(0);
-			children.remove(element);
-			if(element.getName().equals(childName)) {	
-				return element;
-			}
-			if( element.getChildrenArr() != null ) {
-				element.getChildrenArr().forEach((c)-> children.add(c));
-			}
-		}
-		return null;
-	}
 	
 	
 	

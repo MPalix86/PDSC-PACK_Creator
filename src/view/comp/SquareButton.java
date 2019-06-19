@@ -96,13 +96,13 @@ public class SquareButton extends JButton{
         this.pressedBackgroundColor = pressedBackgroundColor;
     }
     
-    public TagButton toIconButton(ImageIcon icon) {
+    public SquareButton toIconButton(ImageIcon icon) {
 		setBorderPainted(false);
 		setBorder(null);
 		//button.setFocusable(false);
 		setMargin(new Insets(0, 0, 0, 0));
 		setContentAreaFilled(false);
 		setIcon(icon);
-		return (TagButton) this;
+		return (SquareButton) this;
     }
 }

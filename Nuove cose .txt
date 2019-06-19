@@ -1,0 +1,9 @@
+ new features implemenmted
+ - add attribute option
+ - add custom attribute option
+ - add custom attribute control : if attr is already present
+ - add delete tag control : if tag is required
+ - add delete attr control se l'attr è richiesto
+ - database
+ - chiedere la cosa dell'attr standard su un tag che non richede quell'attr
+ - file indipendenti

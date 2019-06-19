@@ -148,8 +148,11 @@ public class FileBusiness {
 	   */
 	
 	  public static String pathComponent(String filename) {
-	      int i = filename.lastIndexOf(File.separator);
-	      return (i > -1) ? filename.substring(0, i) : filename;
+		  if(filename != null) {
+			  int i = filename.lastIndexOf(File.separator);
+		      return (i > -1) ? filename.substring(0, i) : filename;
+		  }
+	      return "";
 	  }
 	
 	
