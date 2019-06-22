@@ -6,12 +6,11 @@ import model.XmlAttribute;
 
 public class AttributeMenuItem extends JMenuItem{
 	
-	private Class attrClass;
 	private XmlAttribute attr;
+
 	
-	public AttributeMenuItem(String text, Class attrClass) {
+	public AttributeMenuItem(String text) {
 		super(text);
-		this.attrClass = attrClass;
 	}
 	
 	public AttributeMenuItem(String text, XmlAttribute attr) {
@@ -24,14 +23,6 @@ public class AttributeMenuItem extends JMenuItem{
 	 */
 	public XmlAttribute getAttr() {
 		return attr;
-	}
-	
-	
-	/**
-	 * @return the tagClass
-	 */
-	public Class getAttrClass() {
-		return attrClass;
 	}
 
 

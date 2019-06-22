@@ -10,9 +10,9 @@ import business.Session;
 import business.XmlTagBusiness;
 import listeners.wizardFrameListeners.comp.ToolBarListener;
 import model.XmlTag;
+import view.comp.DropDownButton;
 import view.comp.IconButton;
 import view.comp.TagMenuItem;
-import view.wizardFrame.comp.toolBar.comp.DropDownButton;
 
 /**
  *  Menu bar creation
@@ -41,7 +41,6 @@ public class ToolBar extends JToolBar{
 	
 	public ToolBar() {
 		this.listener = new ToolBarListener(this) ;
-		
 		session = Session.getInstance();
 		
 		placeComponents();
@@ -56,7 +55,7 @@ public class ToolBar extends JToolBar{
 	 * @return void
 	 */
 	private void placeComponents() {
-		
+
 		ImageIcon createPackIcon = new ImageIcon(this.getClass().getResource("/icons/pack20.png"));  
 		createPackButton = new IconButton(createPackIcon);
 		createPackButton.addActionListener(listener);

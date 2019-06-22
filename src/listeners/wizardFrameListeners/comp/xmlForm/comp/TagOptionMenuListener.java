@@ -25,10 +25,11 @@ public class TagOptionMenuListener implements ActionListener{
 		
 		TagMenuItem item = (TagMenuItem) e.getSource();
 		XmlTag tag = item.getTag();
+		XmlTag root = session.getWizardFrame().getFormPanel().getRoot();
 		
 		if(command.equals("deleteTag")) {
 			
-			if(tag.getParent() != null) {
+			if(tag.getParent() != root) {
 				XmlTag parent = tag.getParent();
 				int tagOccurrenceInParent = XmlTagBusiness.findChildOccurrenceNumber(parent,tag.getName());
 				boolean response = true;
@@ -56,36 +57,37 @@ public class TagOptionMenuListener implements ActionListener{
 		
 		else if(command.equals("addCustomAttribute")) {
 			
-			String attrNames = Session.getInstance().getWizardFrame().showInputDialog("Add Custom Attribute", "Add one or more attributes separated by a comma \n attr1,attr2, ...");
+			String attrNames = Session.getInstance().getWizardFrame().showInputDialog("Add Custom Attribute", "Add one or more attributes separated by space \n attr1 attr2 ...");
 			
-			/** removing spaces */
-			attrNames  = attrNames.replaceAll("\\s+","");
-			
-			/** separating string by comma */
-			String[] tokens = CustomUtils.separateText(attrNames, ",");
-			
-			/** reverse array */
-			tokens = (String[]) CustomUtils.reverseArray(tokens);
-			
-			
-			String errorMessage = "";
-			
-			for (String name : tokens){
+			if (attrNames != null){
+				/** separating string by comma */
+				String[] names = CustomUtils.separateText(attrNames, " ");
 				
-				Response response = XmlAttributeBusiness.verifyAttributeFromName(tag, name);
+				/** reverse array */
+				names = (String[]) CustomUtils.reverseArray(names);
 				
-				if(response.getStatus() == XmlAttribute.INVALID_NAME) errorMessage += " '" + name + "' Invalid name \n";
-				else if (response.getStatus() == XmlAttribute.ALREADY_PRESENT) errorMessage += "Attribute \" " + name  + " \" is already present \n" ;
-				else {
-					XmlAttribute attr = (XmlAttribute) response.getObject();
-					attr.setTag(tag);
-					tag.addSelectedAttrAtIndex(attr, 0);
-					TagRow row = session.getWizardFrame().getTagRow(tag);
-					row.update();
+				
+				String errorMessage = "";
+				
+				for (String name : names){
+					
+					Response response = XmlAttributeBusiness.verifyAttributeFromName(tag, name);
+					
+					if(response.getStatus() == XmlAttribute.INVALID_NAME) errorMessage += " '" + name + "' Invalid name \n";
+					else if (response.getStatus() == XmlAttribute.ALREADY_PRESENT) errorMessage += "Attribute \" " + name  + " \" is already present \n" ;
+					else {
+						XmlAttribute attr = (XmlAttribute) response.getObject();
+						attr.setTag(tag);
+						tag.addSelectedAttrAtIndex(attr, 0);
+						TagRow row = session.getWizardFrame().getTagRow(tag);
+						row.update();
+						session.getWizardFrame().updatePreview();
+					}
 				}
+				if(!errorMessage.contentEquals("")) session.getWizardFrame().warningMessage(errorMessage);
+					 
 			}
-			if(!errorMessage.contentEquals("")) session.getWizardFrame().warningMessage(errorMessage);
-				 
+			
 
 			
 			

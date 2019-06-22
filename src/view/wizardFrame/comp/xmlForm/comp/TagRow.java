@@ -2,7 +2,8 @@ package view.wizardFrame.comp.xmlForm.comp;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.util.HashMap;
+import java.awt.Component;
+import java.util.ArrayList;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -24,7 +25,6 @@ public class TagRow extends JPanel{
 	
 	private XmlTag tag;
 	private AttributeLabel attrLabel0;
-	private HashMap<JLabel,Object> labelFieldHashMap;
 	private TagLabel tagLabel0;
 	private TagLabel tagLabel1 ;
 	private TagLabel tagLabel2;
@@ -33,19 +33,23 @@ public class TagRow extends JPanel{
 	private int leftBorder;
 	private XmlForm form;
 	private int option;
+	private int rowNumber;
+	public boolean hasFocus = false;
+	ArrayList<AttributeLabel> attrLabelArr ;
 	
 	private final static int OPEN_ROW = 0;
-	private final static int CLOSE_ROW = 0;
-
+	private final static int CLOSE_ROW = 1;
+	
+	
 
 	public TagRow(XmlTag tag, XmlForm form) {
 		this.form = form;
 		this.tag = tag;
-		labelFieldHashMap = new HashMap<JLabel,Object>();
+		attrLabelArr = new ArrayList<AttributeLabel>();
 		listener = new XmlFormListener(form);
 		this.setLayout(new MigLayout(
 					"nogrid", // Layout Constraints
-					"", // Column constraints
+					"",       // Column constraints
 				 	"[]0[]")); // row constraints
 		this.setBackground(Color.WHITE);
 	}
@@ -53,6 +57,7 @@ public class TagRow extends JPanel{
 	
 	
 	public TagRow open() {
+		attrLabelArr.clear();
 		
 		option = OPEN_ROW;
 		
@@ -79,18 +84,21 @@ public class TagRow extends JPanel{
 		if(tag.getSelectedAttrArr() != null) {
 			for(int i = 0; i < tag.getSelectedAttrArr().size(); i++) {
 				XmlAttribute attr = tag.getSelectedAttrArr().get(i);  
+			
 				
 //				/** if attribute have nameSpace */
 //				if (attr.getNameSpace() != null) attrLabel0 = new AttributeLabel(attr.getNameSpace().getPrefix()+":"+ attr.getName() + " = \" ", attr);
 //				else 
-					attrLabel0 = new AttributeLabel(" " + attr.getName() + " = \" ", attr);
-					labelFieldHashMap.put(attrLabel0, null);
+				
+				attrLabel0 = new AttributeLabel(" " + attr.getName() + " = \" ", attr);
+				
+				attrLabelArr.add(attrLabel0);
 				
 				attrLabel0.addMouseListener(listener);
 				this.add(attrLabel0);
 				
 				/** if attribute have no possible values */
-
+			
 				if(attr.getPossibleValues() == null) {
 					AttributeFormTextField textField ;
 					
@@ -98,16 +106,12 @@ public class TagRow extends JPanel{
 					if(attr.getValue() != null) textField = new AttributeFormTextField(attr, attr.getValue());
 					else textField = new AttributeFormTextField(attr);
 					
-					labelFieldHashMap.replace(attrLabel0, textField);
-					
 					textField.addFocusListener(listener);
 					this.add(textField);
 				}
 				/** if attribute have possible values */
 				else {
 					AttributeFormComboBox valuesComboBox = new AttributeFormComboBox(attr);  
-					
-					labelFieldHashMap.replace(attrLabel0, valuesComboBox);
 					
 					if (attr.getDefaultValue() != null && attr.getValue() == null ) {
 						valuesComboBox.setSelectedItem(attr.getDefaultValue());
@@ -117,9 +121,7 @@ public class TagRow extends JPanel{
 					/** if attribute have value set */
 					else if (attr.getValue() != null) valuesComboBox.setSelectedItem(attr.getValue());
 					
-					valuesComboBox.setForeground(Color.DARK_GRAY);
 					valuesComboBox.addFocusListener(listener);
-					
 					this.add(valuesComboBox);
 				}
 				
@@ -143,10 +145,13 @@ public class TagRow extends JPanel{
 		/** if tag have no children */
 		if(tag.getSelectedChildrenArr() == null) {
 
+			/** if tag haven't possible values */
 			if(tag.getPossibleValues() == null) {
 
 				/** if tag have content set */
+				
 				if(tag.getContent() != null ) {
+					
 					/** if content have more than one line */
 					if(CustomUtils.thereAreMoreLinesInString(tag.getContent())){
 						
@@ -164,7 +169,7 @@ public class TagRow extends JPanel{
 						this.add(panel ,"wrap");
 					}
 					
-					/** if content have't more than one line */
+					/** if content haven't more than one line */
 					else {
 						/** add texfield with content set */
 						tagTextField = new TagFormTextField(tag,tag.getContent());
@@ -173,16 +178,29 @@ public class TagRow extends JPanel{
 					}
 				}
 				
-				/** if tag have't content set */
+				/** if tag have't content set but have default content */
+				else if (tag.getDefaultContent() != null) {
+					
+					/** add textfield with default content set  */
+					tagTextField = new TagFormTextField(tag , tag.getDefaultContent());
+					tagTextField.addFocusListener(listener);
+					tag.setContent(tag.getDefaultContent());
+					this.add(tagTextField);
+				}
+				
 				else {
 					/** add textfield without content set  */
 					tagTextField = new TagFormTextField(tag);
 					tagTextField.addFocusListener(listener);
 					this.add(tagTextField);
 				}
+				
+				
 
 				
 			}
+			
+			/** if tag have possible value  */
 			else {
 				TagFormComboBox contentComboBox = new TagFormComboBox(tag);
 
@@ -208,7 +226,7 @@ public class TagRow extends JPanel{
 	}
 	
 
-
+	/** generate close tag row */
 	public TagRow close() {
 		option = CLOSE_ROW;
 		tagLabel2 = new TagLabel("</  " + tag.getName() + "  >",tag);
@@ -232,26 +250,40 @@ public class TagRow extends JPanel{
 	}
 	
 	
+	/** 
+	 * used when switching from TagTextField and tagTextArea and vice versa
+	 * to avoid the focus lost
+	 */
 	public void setFocusOnTagContentField() {
-		if(tagTextArea != null) {
-			tagTextArea.requestFocusInWindow();
-			SwingUtilities.invokeLater( new Runnable() { 
-				public void run() { 
-					tagTextArea.setCaretPosition(tagTextArea.getText().length());
-				    } 
-				} );
-		}
+		if(tagTextArea != null) tagTextArea.requestFocusInWindow();
+		if(tagTextField != null) tagTextField.requestFocusInWindow();
+	}
+	
+	
+	/** 
+	 * used when switching from TagTextField and tagTextArea and vice versa
+	 * to avoid the change on caret position
+	 */
+	public void setTagContentFieldCaretPosition(int caretPosition) {
+		if(tagTextArea != null) tagTextArea.setCaretPosition(caretPosition);
 		if(tagTextField != null) {
-			tagTextField.requestFocusInWindow();
-			SwingUtilities.invokeLater( new Runnable() { 
-				public void run() { 
-					tagTextField.setCaretPosition(tagTextField.getText().length());
-				    } 
-				} );
+			SwingUtilities.invokeLater(new Runnable() {
+		        @Override
+		        public void run() {
+		        	
+		        	try {
+		        		tagTextField.setCaretPosition(caretPosition);
+		        		} catch (Exception ignore) { }
+		        }
+		    });
 		}
 	}
 	
 	
+	
+	/**
+	 * update row
+	 */
 	public void update(){
 		this.removeAll();
 		if(option == OPEN_ROW) open();
@@ -261,6 +293,44 @@ public class TagRow extends JPanel{
 	}
 	
 	
+	public void highlightBckGround() {
+		this.setBackground(new Color(178,215,255));
+		for (Component comp : this.getComponents()) {
+			comp.setBackground(new Color(178,215,255));
+		}
+	}
+	
+	
+	
+	public void unsetHighlightBackGround() {
+		this.setBackground(CustomColor.WHITE);
+		for (Component comp : this.getComponents()) {
+			comp.setBackground(CustomColor.WHITE);
+		}
+	}
+	
+	
+	
+	public void hideComp() {
+		for (Component comp : this.getComponents()) {
+			comp.setVisible(false);
+		}
+		repaint();
+		revalidate();
+	}
+	
+	
+	
+	public void showComp() {
+		for (Component comp : this.getComponents()) {
+			comp.setVisible(true);
+		}
+		repaint();
+		revalidate();
+	}
+	
+	
+	
 	
 	/**
 	 * @return the tagLabel0
@@ -268,6 +338,17 @@ public class TagRow extends JPanel{
 	public TagLabel getTagLabel0() {
 		return tagLabel0;
 	}
+	
+	
+	
+	
+	/**
+	 * @return the tagTextArea
+	 */
+	public TagFormTextArea getTagTextArea() {
+		return tagTextArea;
+	}
+
 
 
 
@@ -305,13 +386,20 @@ public class TagRow extends JPanel{
 	}
 	
 	
-	/**
-	 * @return the labelFieldHashMap
-	 */
-	public HashMap<JLabel, Object> getLabelFieldHashMap() {
-		return labelFieldHashMap;
+	
+	public void setRowNumber(int i) {
+		this.rowNumber = i;
 	}
-
+	
+	
+	public int getRowNumber() {
+		return this.rowNumber;
+	}
+	
+	public boolean hasFocus() {
+		if(hasFocus) return true;
+		return false;
+	}
 	
 
 }

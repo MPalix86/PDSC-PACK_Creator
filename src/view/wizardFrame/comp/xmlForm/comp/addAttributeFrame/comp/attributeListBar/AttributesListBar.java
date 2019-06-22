@@ -40,37 +40,45 @@ public class AttributesListBar extends JPanel{
 
 		this.setBorder(new EmptyBorder(0,0,0,0));
 		this.setLayout(new BorderLayout());
-		this.setBackground(Color.WHITE);
-
-		ArrayList<XmlAttribute> attrArr = XmlAttributeBusiness.getNotSelectedAttributes(tag);
+		
+		ArrayList<XmlAttribute> attrArr = null;
+		if (tag.getAttrArr() != null) attrArr = XmlAttributeBusiness.getNotSelectedAttributes(tag);
+		
 		
 		JPanel panel = new JPanel(new BorderLayout());
 		
   		JPanel panel1 = new JPanel();
   		panel1.setLayout(new MigLayout("wrap 2"));
-  
+  		
+  		panel1.setBackground(Color.WHITE);
   		
   		panel1.setMaximumSize(new Dimension(300,40));
 		
-	  	for(int i = 0; i < attrArr.size(); i++) {
-	  		XmlAttribute attr = attrArr.get(i);
-	    	
-	    	AttributeCheckBox checkBox = new AttributeCheckBox(attr);
-	    	checkBox.setForeground(CustomColor.ATTR_COLOR);
-	    	checkBox.addItemListener(listener);
-	    	
-	    	panel1.add(checkBox);
-	        
-	        ImageIcon infoIcon = new ImageIcon(getClass().getResource("/icons/info16.png"));
-	        AttributeButton showDescriptionButton = new AttributeButton(attr).toIconButton(infoIcon);
-	        
-	        panel1.add(showDescriptionButton);
-	        
-	        
-//	        btn.addActionListener(listener);
-//			btn.setActionCommand("addRootChild");
-	        	
-	    }
+  		if(attrArr != null) {
+
+  		  	for(int i = 0; i < attrArr.size(); i++) {
+  		  		XmlAttribute attr = attrArr.get(i);
+  		    	
+  		    	AttributeCheckBox checkBox = new AttributeCheckBox(attr);
+  		    	checkBox.setForeground(CustomColor.ATTR_COLOR);
+  		    	checkBox.addItemListener(listener);
+  		    	
+  		    	panel1.add(checkBox);
+  		        
+  		        ImageIcon infoIcon = new ImageIcon(getClass().getResource("/icons/info16.png"));
+  		        AttributeButton showDescriptionButton = new AttributeButton(attr).toIconButton(infoIcon);
+  		        showDescriptionButton.addActionListener(listener);
+  		        showDescriptionButton.setActionCommand("showDescription");
+  		        
+  		        panel1.add(showDescriptionButton);
+  		        
+  		        
+//  		        btn.addActionListener(listener);
+//  				btn.setActionCommand("addRootChild");
+  		        	
+  		    }
+  		}
+
     	panel.add(panel1,BorderLayout.CENTER);
     	
     	this.add(panel,BorderLayout.CENTER);

@@ -14,6 +14,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.plaf.basic.BasicTabbedPaneUI;
 
 import business.Session;
 import listeners.wizardFrameListeners.WizardFrameListener;
@@ -111,8 +112,9 @@ public class WizardFrame extends JFrame {
 		updatePreviewButton.setActionCommand("updatePreview");
 		updatePreviewButton.setVisible(false);
 		
-		tabContainer.addTab("Form",new ImageIcon(getClass().getResource("/icons/form64.png")),formPanelContainer);
-		tabContainer.addTab("PDSC Preview",new ImageIcon(getClass().getResource("/icons/document64.png")),previewPaneContainer);
+		tabContainer.setUI(new BasicTabbedPaneUI());
+		tabContainer.addTab("Form",formPanelContainer);
+		tabContainer.addTab("PDSC Preview",previewPaneContainer);
 
 
 		

@@ -51,9 +51,10 @@ public class TagFormTextArea extends JTextArea implements DocumentListener, Focu
 	public void insertUpdate(DocumentEvent e) {
 		/** if there is only one line in document */
 		if(!CustomUtils.thereAreMoreLinesInString(this.getText())){
+			int position = this.getCaretPosition();
 			TagRow row = Session.getInstance().getWizardFrame().getTagRow(tag);
+			tag.setContent(this.getText());
 			row.update();
-			row.setFocusOnTagContentField();
 		}
 		else updateSize();			
 	}
@@ -63,15 +64,18 @@ public class TagFormTextArea extends JTextArea implements DocumentListener, Focu
 	public void removeUpdate(DocumentEvent e) {
 		/** if there is only one line in document */
 		if(!CustomUtils.thereAreMoreLinesInString(this.getText())){
-			//Session.getInstance().getWizardFrame().getFormPanel().UpdateView();
+			int position = this.getCaretPosition();
+			tag.setContent(this.getText());
 			TagRow row =  Session.getInstance().getWizardFrame().getTagRow(tag);
 			row.update();
-			SwingUtilities.invokeLater( new Runnable() { 
-				public void run() { 
-					row.setFocusOnTagContentField();
-				    } 
-				} );
-			
+			row.setFocusOnTagContentField();
+			SwingUtilities.invokeLater(new Runnable() {
+		        @Override
+		        public void run() {
+		        	if (position < tag.getContent().length()) 	row.setTagContentFieldCaretPosition(position - 1);
+		        	else row.setTagContentFieldCaretPosition(tag.getContent().length());
+		        }
+		    });
 		}
 		else updateSize();	
 	}
@@ -134,6 +138,11 @@ public class TagFormTextArea extends JTextArea implements DocumentListener, Focu
 		row.scrollRectToVisible(this.getBounds());
 		row.repaint();
 		row.revalidate();
+	}
+	
+	
+	public XmlTag getTag() {
+		return this.tag;
 	}
 
 }

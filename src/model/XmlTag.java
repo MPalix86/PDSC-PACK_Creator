@@ -695,8 +695,7 @@ public class XmlTag{
 		this.parent = null;
 		this.nameSpace = null;
 		this.defaultContent = null;
-		this.possibleValues = null;
-		
+		this.possibleValues = null;	
 	}
 	
 	
@@ -810,6 +809,7 @@ public class XmlTag{
 	 * @param attr attr the attribute to remove
 	 * @return void
 	 */
+	
 	public void removeSelectedAttr(XmlAttribute attr) {
 		this.selectedAttrArr.remove(attr);
 	}

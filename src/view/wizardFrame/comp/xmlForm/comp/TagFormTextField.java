@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 
+import javax.swing.SwingUtilities;
 import javax.swing.border.MatteBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
@@ -86,11 +87,15 @@ public class TagFormTextField extends TagTextField implements DocumentListener, 
 		 * Generate event when enter was pressed
 		 * assume that if enter was pressed in textfield (this) user want to add new line
 		 */
-		TagTextField field = (TagTextField) e.getSource();
-		XmlTag tag = field.getTag();
+		int position = this.getCaretPosition();
 		
-		/** adding new line inside tag content */
-		tag.setContent(field.getText() + System.lineSeparator());
+		String text = this.getText();
+		
+		final String textBeforeNewLine = text.substring(0, position) + System.lineSeparator();
+		
+		String textAfterNewLine = text.substring(position, text.length());
+
+		tag.setContent(textBeforeNewLine + textAfterNewLine);
 		
 		/** recovering tagRow */
 		TagRow row =  Session.getInstance().getWizardFrame().getTagRow(tag);
@@ -100,6 +105,17 @@ public class TagFormTextField extends TagTextField implements DocumentListener, 
 		
 		/** adjust focus on row*/
 		row.setFocusOnTagContentField();
+		
+		SwingUtilities.invokeLater(new Runnable() {
+	        @Override
+	        public void run() {
+	        	if(textBeforeNewLine.length() < tag.getContent().length()) {
+	        		row.setTagContentFieldCaretPosition(textBeforeNewLine.length());
+	        	}
+	        	else row.setTagContentFieldCaretPosition(row.getTagTextArea().getDocument().getLength());
+	        }
+	    });
+		
 	}
 	
 	

@@ -7,6 +7,9 @@ import javax.swing.JPanel;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.MatteBorder;
+
+import view.comp.CustomColor;
 
 public class XmlFormContainer extends JPanel{
 	private XmlForm formPanel;
@@ -19,7 +22,7 @@ public class XmlFormContainer extends JPanel{
 	
 	private void placeComponents() {
 		this.setBackground(Color.WHITE);
-		this.setBorder(new EmptyBorder(0,0,0,0));
+		this.setBorder(new MatteBorder(8,0,0,0,CustomColor.LIGHT_GRAY));
 		this.setLayout(new BorderLayout());
 		
 		JScrollBar horizontalScrollBar = new JScrollBar(JScrollBar.HORIZONTAL);

@@ -2,35 +2,39 @@ package view.comp;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Insets;
 
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.border.EmptyBorder;
 
 public class SquareButton extends JButton{
     
-    private Color background = Color.WHITE;
+    private Color backGround = Color.WHITE;
     
-    private Color foreground = Color.DARK_GRAY;
+    private Color foreGround = Color.DARK_GRAY;
     
-    private Color pressedBackgroundColor = new Color(224,224,224); 
+    private Color pressedBackGroundColor = CustomColor.LIGHT_GRAY;
     
-    private Color hoverBackgroundColor;
+    private Color hoverBackGroundColor = Color.GRAY;
+    
+    public final static Color BACKGROUND_COLOR = Color.WHITE;
+    
+    public final static Color FOREGROUND_COLOR = Color.DARK_GRAY;
+    
+    public final static Color PRESSED_BACKGROUND_COLOR = Color.GRAY;
+    
+    public final static Color HOVER_BACKGROUND_COLOR = CustomColor.LIGHT_GRAY;
 
     public SquareButton() {
-        this(null);
+        setup();
     }
-
     
     
     
     public SquareButton(String text) {
         super(text);
-        this.setBackground(background);
-    	this.setForeground(foreground);
-    	this.setPressedBackgroundColor(pressedBackgroundColor);
-        super.setBorderPainted(false);
-        
+        setup();
+
     }
     
     
@@ -38,10 +42,7 @@ public class SquareButton extends JButton{
     
     public SquareButton(String text, Color background, Color foreground) {
     	super(text);
-    	this.setBackground(background);
-    	this.setForeground(foreground);
-    	this.setPressedBackgroundColor(this.getBackground().brighter());
-        super.setBorderPainted(false);
+    	setup();
         
     }
     
@@ -50,59 +51,65 @@ public class SquareButton extends JButton{
     
     public SquareButton(String text, Color background, Color foreground, Color pressedBackgroundColor) {
     	super(text);
-    	this.setBackground(background);
-    	this.setForeground(foreground);
-    	this.setPressedBackgroundColor(pressedBackgroundColor);
-        super.setBorderPainted(false);
-        
+    	setup();
     }
     
     
     
+    private void setup() {
+    	setBorder(new EmptyBorder(9,9,9,9));
+        setBackground(this.BACKGROUND_COLOR);
+        setHoverBackGroundColor(this.HOVER_BACKGROUND_COLOR);
+        setForeground(this.FOREGROUND_COLOR);
+        setPressedBackGroundColor(Color.PINK);
+    }
     
-
-
+    
+    
     @Override
     protected void paintComponent(Graphics g) {
         if (getModel().isPressed()) {
-            g.setColor(pressedBackgroundColor);
+            g.setColor(pressedBackGroundColor);
         } else if (getModel().isRollover()) {
-            g.setColor(hoverBackgroundColor);
+            g.setColor(hoverBackGroundColor);
         } else {
             g.setColor(getBackground());
         }
-        g.fillRect(0, 0, getWidth() + 8 , getHeight() + 8);
+        g.fillRect(0, 0, getWidth(), getHeight());
         super.paintComponent(g);
     }
-    
-    
+
     @Override
     public void setContentAreaFilled(boolean b) {
     }
 
-    public Color getHoverBackgroundColor() {
-        return hoverBackgroundColor;
+    public Color getHoverBackGroundColor() {
+        return hoverBackGroundColor;
     }
 
-    public void setHoverBackgroundColor(Color hoverBackgroundColor) {
-        this.hoverBackgroundColor = hoverBackgroundColor;
+    public void setHoverBackGroundColor(Color hoverBackGroundColor) {
+        this.hoverBackGroundColor = hoverBackGroundColor;
     }
 
-    public Color getPressedBackgroundColor() {
-        return pressedBackgroundColor;
+    public Color getPressedBackGroundColor() {
+        return pressedBackGroundColor;
     }
 
-    public void setPressedBackgroundColor(Color pressedBackgroundColor) {
-        this.pressedBackgroundColor = pressedBackgroundColor;
+    public void setPressedBackGroundColor(Color pressedBackGroundColor) {
+        this.pressedBackGroundColor = pressedBackGroundColor;
     }
+
     
     public SquareButton toIconButton(ImageIcon icon) {
-		setBorderPainted(false);
-		setBorder(null);
-		//button.setFocusable(false);
-		setMargin(new Insets(0, 0, 0, 0));
+    	setBorder(new EmptyBorder(9,9,9,9));
+        setBackground(this.BACKGROUND_COLOR);
+        setHoverBackGroundColor(this.HOVER_BACKGROUND_COLOR);
+        setForeground(this.FOREGROUND_COLOR);
+        setPressedBackGroundColor(Color.PINK);
 		setContentAreaFilled(false);
 		setIcon(icon);
 		return (SquareButton) this;
     }
+    
+
 }

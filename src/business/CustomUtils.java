@@ -6,6 +6,7 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
+import javax.swing.UIManager;
 
 
 /**
@@ -156,7 +157,20 @@ public class CustomUtils {
 	    return false;
 	}
 	
-	public static int countLinesInString(String str){
+	public static String getlongestString(String[] array) {
+		if (array != null) {
+			String string =  array[0];
+			for(int i=1; i< array.length ; i++) {
+			    if(array[i].length() > string.length()) {
+			        string = array[i];
+			    }
+			}
+			return string;
+		}
+		return null;
+	}
+	
+	public static int countNewLinesInString(String str){
 		   String[] lines = str.split(System.lineSeparator());
 		   return  lines.length;
 		}
@@ -175,6 +189,24 @@ public class CustomUtils {
 	    }
 	    return array;
 	}
+	
+	public static boolean invertBooleanValue(boolean val) {
+		if(val == true) return false;
+		else	return true;
+	}
+	
+	/** set font for all LAF */
+	public static void setUIFont (javax.swing.plaf.FontUIResource f){
+	    java.util.Enumeration keys = UIManager.getDefaults().keys();
+	    while (keys.hasMoreElements()) {
+	      Object key = keys.nextElement();
+	      Object value = UIManager.get (key);
+	      if (value instanceof javax.swing.plaf.FontUIResource)
+	        UIManager.put (key, f);
+	      }
+	    } 
+	
+	
 	
 
 }

@@ -11,6 +11,7 @@ public class AttributeCheckBox extends JCheckBox{
 		super();
 		this.attr = attr;
 		super.setText(attr.getName());
+		setup();
 		
 	}
 
@@ -20,6 +21,10 @@ public class AttributeCheckBox extends JCheckBox{
 
 	public void setAttr(XmlAttribute attr) {
 		this.attr = attr;
+	}
+	
+	private void setup() {
+		this.setContentAreaFilled(false);
 	}
 }
 

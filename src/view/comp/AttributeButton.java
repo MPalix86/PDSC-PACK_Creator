@@ -20,4 +20,8 @@ public class AttributeButton extends SquareButton{
 		super.toIconButton(icon);
 		return this;
 	}
+	
+	public XmlAttribute getAttribute() {
+		return this.attr;
+	}
 }

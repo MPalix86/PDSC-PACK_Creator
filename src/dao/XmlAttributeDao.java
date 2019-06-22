@@ -36,7 +36,7 @@ public class XmlAttributeDao {
 		Integer relId;
 		String name = null;
 		String defaultValue = null;
-		Object possibleValues = null;
+		XmlEnum possibleValues = null;
 		boolean required = false;
 		XmlNameSpace nameSpace = null;
 		ArrayList<XmlAttribute> attrArr = null;
@@ -71,7 +71,9 @@ public class XmlAttributeDao {
 			
 			if(record.get("prefix") != null && record.get("url") != null) nameSpace = new XmlNameSpace(record.get("prefix"), record.get("url"));
 			else nameSpace = null;
-			if(record.get("possible_values_type_id") != null) possibleValues = getAttrPossibleValuesFromAttrId(attrId);
+			if(record.get("possible_values_type_id") != null) {
+				possibleValues = getAttrPossibleValuesFromAttrId(attrId);
+			}
 			else possibleValues = null;
 			
 			XmlAttribute attr = new XmlAttribute(attrId,relId,name,required,possibleValues,defaultValue,nameSpace,parent);

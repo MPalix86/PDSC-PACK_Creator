@@ -27,21 +27,28 @@ public class XmlAttributeBusiness {
 	public static ArrayList<XmlAttribute> getNotSelectedAttributes(XmlTag tag){
 		ArrayList<XmlAttribute> attrArr = tag.getAttrArr();
 		ArrayList<XmlAttribute> selectedAttrArr = tag.getSelectedAttrArr();
-		ArrayList<XmlAttribute> notSelectedAttrArr = new ArrayList<XmlAttribute>();
+		ArrayList<XmlAttribute> notSelectedAttrArr = new ArrayList<XmlAttribute>();;
 		
 		boolean attrIsSelected = false;
-		
-		for(int i = 0; i < attrArr.size(); i++) {
-			attrIsSelected = false;
-			XmlAttribute attr = attrArr.get(i);
-			for(int j = 0; j < selectedAttrArr.size(); j ++) {
-				XmlAttribute selectedAttr = selectedAttrArr.get(j);
-				if(attr.getName().equals(selectedAttr.getName())) {
-					attrIsSelected = true;
+		if (attrArr != null) {
+			for(int i = 0; i < attrArr.size(); i++) {
+				attrIsSelected = false;
+				XmlAttribute attr = attrArr.get(i);
+				if(selectedAttrArr != null) {
+					
+					for(int j = 0; j < selectedAttrArr.size(); j ++) {
+						XmlAttribute selectedAttr = selectedAttrArr.get(j);
+						if(attr.getName().equals(selectedAttr.getName())) {
+							attrIsSelected = true;
+						}
+					}
 				}
+				
+				if(!attrIsSelected) notSelectedAttrArr.add(new XmlAttribute(attr,tag));
 			}
-			if(!attrIsSelected) notSelectedAttrArr.add(new XmlAttribute(attr,tag));
 		}
+		
+		if (notSelectedAttrArr.size() == 0) return null;
 		return notSelectedAttrArr;
 	}
 	
@@ -59,8 +66,7 @@ public class XmlAttributeBusiness {
 					.message(" invalid name " )
 					.build();
 		}
-		
-		attrName  = attrName.replaceAll("\\s+","");
+	
 		
 		if(attrName != null) {
 			
@@ -122,6 +128,7 @@ public class XmlAttributeBusiness {
 	
 	
 	
+	
 	public static XmlAttribute getAttributeWithPossibleValuesFromName(String name) {
 		XmlAttribute attr = XmlAttributeDao.getInstance().getAttributeFromName(name);
 		
@@ -137,7 +144,7 @@ public class XmlAttributeBusiness {
 	}
 	
 	public static boolean verifyName(String name) {
-		name  = name.replaceAll("\\s+","");
+		
 		if (name.equals(null) || name.equals("")) return false;
 		return true;
 	}

@@ -4,11 +4,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.util.ArrayList;
 
+import business.Session;
 import business.TagCustomizationBusiness;
 import business.XmlTagBusiness;
 import model.XmlAttribute;
 import model.XmlTag;
+import view.comp.AttributeButton;
 import view.comp.AttributeCheckBox;
 import view.wizardFrame.comp.xmlForm.comp.addAttributeFrame.AddAttributeFrame;
 
@@ -23,11 +26,29 @@ public class AddAttributeFrameListener implements ActionListener , ItemListener{
 	public void actionPerformed(ActionEvent e) {
 		String command = e.getActionCommand();
 		
-		if(command.equals("addAttribute")) {
-			System.out.println("AddAttributeFrame");
+		if(command.equals("addAttributes")) {
+			ArrayList<XmlAttribute> newSelectedAttr = frame.getAddeAttrArr();
+			XmlTag tag = frame.geTtag();
+			if(newSelectedAttr != null) newSelectedAttr.forEach(a -> tag.addSelectedAttrAtIndex(a, 0));
+			frame.dispose();
+			Session.getInstance().getWizardFrame().getTagRow(tag).update();
+
+				
+			
 		}
 		
+		else if(command.equals("showDescription")) {
+			AttributeButton b = (AttributeButton) e.getSource();
+			XmlAttribute attr = b.getAttribute();
+			frame.updateDescription(attr.getName() , "EHHHHHHHHHHHH");
+		}
+		
+		else if(command.equals("cancel")) {
+			frame.dispose();
+		}
 	}
+
+	
 
 	@Override
 	public void itemStateChanged(ItemEvent e) {
@@ -40,14 +61,13 @@ public class AddAttributeFrameListener implements ActionListener , ItemListener{
 			
 			/** if the attribute has not already been added */
 			if(!TagCustomizationBusiness.tagHasAttribute(tag,attr)) {
-				tag.addSelectedAttr(new XmlAttribute(attr,tag));
+				frame.getAddeAttrArr().add(new XmlAttribute(attr,tag));
 			}
 			
 		}
 		else {
-			System.out.println("rimosso");
 			XmlAttribute selectedAttr = XmlTagBusiness.findChildSelectedAttrFromName(attr.getTag(), attr.getName());
-			tag.removeSelectedAttr(selectedAttr);
+			frame.getAddeAttrArr().remove(selectedAttr);
 		}	
 	}
 }

@@ -51,6 +51,8 @@ public class TagsListBar extends JPanel{
 	    	
 	    	TagListBarButton btn = new TagListBarButton( "< " + tag.getName() + " >"  ,  tag);
 	        btn.setForeground(CustomColor.TAG_COLOR);
+	      
+	
 	        
 	        btn.addActionListener(listener);
 			btn.setActionCommand("addRootChild");

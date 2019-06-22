@@ -135,11 +135,12 @@ public class XmlTagBusiness {
 	
 	public static XmlAttribute findChildSelectedAttrFromName(XmlTag parent, String attrName) {
 		ArrayList<XmlAttribute> selectedAttrArr = parent.getSelectedAttrArr();
-		
-		for(int i = 0; i < selectedAttrArr.size(); i++ ) {
-			XmlAttribute attr = selectedAttrArr.get(i);
-			if(attr.getName().equals(attrName) ){
-				return attr;
+		if (selectedAttrArr != null) {
+			for(int i = 0; i < selectedAttrArr.size(); i++ ) {
+				XmlAttribute attr = selectedAttrArr.get(i);
+				if(attr.getName().equals(attrName) ){
+					return attr;
+				}
 			}
 		}
 		return null;

@@ -73,7 +73,7 @@ public class Pack {
 			XmlTag child = children.get(0);
 			children.remove(0);
 			
-			/** if find tag file and parent tag == files */
+			/** if find tag file , and parent tag == files */
 			if(child.getName().equals("file") && child.getParent().getName().equals("files")) {
 				
 				/** keep attributes */

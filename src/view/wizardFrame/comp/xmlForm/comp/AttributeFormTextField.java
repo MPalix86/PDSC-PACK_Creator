@@ -81,7 +81,7 @@ public class AttributeFormTextField extends AttributeTextField implements Docume
 		TagRow row = session.getWizardFrame().getFormPanelContainer().getFormPanel().getTagOpenRowHashMap().get(attr.getTag());
 		if(this.getText().length()>0) {
 			int width = this.getGraphics().getFontMetrics().stringWidth(this.getText());
-			this.setPreferredSize(new Dimension(width+1,this.getPreferredSize().height));
+			this.setPreferredSize(new Dimension(width+2,this.getPreferredSize().height));
 		}
 		else {
 			this.setPreferredSize(new Dimension(50,this.getPreferredSize().height));

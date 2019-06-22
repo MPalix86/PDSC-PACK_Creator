@@ -1,9 +1,11 @@
 package view;
 
+import java.awt.Font;
+
 import javax.swing.JFrame;
 import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 
+import business.CustomUtils;
 import view.wizardFrame.WizardFrame;
 
 
@@ -16,24 +18,15 @@ public class StartUp extends JFrame {
 		
 
 		
-		
-		  try {
-	            // Set System L&F
-	        UIManager.setLookAndFeel(
-	            UIManager.getSystemLookAndFeelClassName());
-	    } 
-	    catch (UnsupportedLookAndFeelException e) {
-	       // handle exception
-	    }
-	    catch (ClassNotFoundException e) {
-	       // handle exception
-	    }
-	    catch (InstantiationException e) {
-	       // handle exception
-	    }
-	    catch (IllegalAccessException e) {
-	       // handle exception
-	    }
+		 try {
+		      UIManager.setLookAndFeel(UIManager.getCrossPlatformLookAndFeelClassName());
+		      new SetUiManager();
+		    } catch (Exception e) {
+		      System.err.println("Look and feel not set.");
+		    }
+		 
+		 CustomUtils.setUIFont(new javax.swing.plaf.FontUIResource("SansSerif",Font.PLAIN,14));
+
 		  WizardFrame frame = new WizardFrame(); 
 		
 

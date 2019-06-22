@@ -58,7 +58,7 @@ public class WizardBusiness {
 				
 				for(int j = 0 ; j < xmlAttrArr.size(); j++) {
 					
-					if (xmlAttrArr.get(j).getValue() != null) {
+					if (xmlAttrArr.get(j).getValue() != null &&  xmlAttrArr.get(j).getNameSpace() == null) {
 						Attribute attribute = new Attribute (xmlAttrArr.get(j).getName(), xmlAttrArr.get(j).getValue());
 						el.setAttribute(attribute);	
 					}

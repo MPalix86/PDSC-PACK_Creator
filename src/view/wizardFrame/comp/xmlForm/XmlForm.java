@@ -10,6 +10,7 @@ import java.util.HashMap;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import business.OSValidator;
 import business.XmlTagBusiness;
 import listeners.wizardFrameListeners.comp.xmlForm.XmlFormListener;
 import model.XmlTag;
@@ -26,11 +27,17 @@ public class XmlForm extends JPanel{
 	private HashMap<XmlTag,Line2D> OpenCloseTagsLinesHashMap;
 	private XmlFormListener listener;
 	private XmlTag root;
-
-
-	private final static int PADDING = 25;
+	protected Integer rowCounter;
+	private final static int LEFT_PADDING = 25;
+	
+	
+	private static int INNER_ROW_PADDIND;
 
 	public XmlForm() {
+		
+		if(OSValidator.isWindows()) INNER_ROW_PADDIND = -8;
+		else INNER_ROW_PADDIND = -13;
+		
 		root = XmlTagBusiness.getRoot();
 		root.addSelectedChild(XmlTagBusiness.getCompleteTagFromNameAndParent("vendor", root));
 		root.addSelectedChild(XmlTagBusiness.getCompleteTagFromNameAndParent("name", root));
@@ -57,36 +64,46 @@ public class XmlForm extends JPanel{
 		this.setBorder(new EmptyBorder(0,0,0,0));
 		this.setBackground(Color.WHITE);
 		this.setLayout(new MigLayout("wrap 1" , "" , "[] 0 []"));
-
+		rowCounter = 0;
 		tagOpenRowHashMap.clear();
 		tagCloseRowHashMap.clear();
-
 		this.tagArr.forEach((t)->paintTag(t,0));
-
 		this.repaint();
 		this.revalidate();
 	}
 
 
-
+	/**
+	 * create tag open and close row for every tag and set indentation
+	 * 
+	 * @param tag
+	 * @param level starting indentation level (usually 0)
+	 */
 	private void paintTag(XmlTag tag, int level) {
+		
 
 		XmlTag parent =  tag;
 
 		/** calculating left border based on levelCounter */
-		int leftBorder = level * PADDING;
+		int leftBorder = level * LEFT_PADDING;
 
 		TagRow openRow = new TagRow(parent,this);
 
 		tagOpenRowHashMap.put(parent, openRow);
+		
+		rowCounter++;
+		
+		openRow.setRowNumber(rowCounter);
 
 		/** setting calculated border */
-		openRow.setBorder(new EmptyBorder( -15, leftBorder, -15, 0));
+		openRow.setBorder(new EmptyBorder( INNER_ROW_PADDIND, leftBorder, INNER_ROW_PADDIND, 0));
 		
 		/** saving left border that represent indentation inside row */
 		openRow.setLeftBorder(leftBorder);
 
+
 		this.add(openRow.open());
+		
 
 		int parentLevel = level;
 
@@ -106,25 +123,33 @@ public class XmlForm extends JPanel{
 			}
 
 			/** calculating left border based on parentLevelCounter for closing tag*/
-			leftBorder = parentLevel * PADDING;
+			leftBorder = parentLevel * LEFT_PADDING;
 
 			TagRow closeRow = new TagRow(parent,this);
 
 			tagCloseRowHashMap.put(parent,closeRow);
+			
+			rowCounter++;
+			
+			closeRow.setRowNumber(rowCounter);
 
 			/** setting calculated border */
-			closeRow.setBorder(new EmptyBorder( -10, leftBorder, -10, 0));
+			closeRow.setBorder(new EmptyBorder( INNER_ROW_PADDIND, leftBorder, INNER_ROW_PADDIND, 0));
 			
 			/** saving left border that represent indentation inside row */
 			closeRow.setLeftBorder(leftBorder);
-
+			
 			this.add(closeRow.close());
 		}
 	}
 
-
+	
+	
+	/**
+	 * adding tag inside XmlForm
+	 * @param tag
+	 */
 	public void addTag(XmlTag tag) {
-
 		if (tag.getParent() == null) {
 			this.root.addSelectedChild(tag);
 			tag.setParent(root);
@@ -133,26 +158,24 @@ public class XmlForm extends JPanel{
 		else {
 			tag.getParent().addSelectedChild(tag);
 		}
-
-
 		placeComponents();
 	}
-
-
+	
+	
+	
 	public void UpdateView() {
 		placeComponents();
 	}
 
 
 
-	public ArrayList<XmlTag> getTagArr() {
-		return this.tagArr;
-	}
 
-
-
+	/**
+	 * used For generating line that matches open and close row of tag 
+	 * 
+	 * @param tag 
+	 */
 	public void drawOpenCloseTagLine(XmlTag tag) {
-		int empiricalCorrection = 15;
 		TagRow closeRow = getTagCloseRow(tag);
 		if (closeRow != null) {
 			Graphics g = this.getGraphics();
@@ -160,10 +183,11 @@ public class XmlForm extends JPanel{
 			g.setColor(CustomColor.LIGHT_GRAY);
 			TagRow openRow = getTagOpenRow(tag);
 			Line2D line = new Line2D.Double(
-					openRow.getX() + openRow.getLeftBorder() + empiricalCorrection, 
-					openRow.getY() + openRow.getHeight()/2  + 4 , 
-					closeRow.getX() + closeRow.getLeftBorder() + empiricalCorrection ,
-					closeRow.getY() + closeRow.getHeight() - empiricalCorrection);
+					openRow.getX() + openRow.getLeftBorder() + 15, 
+					openRow.getY()  + openRow.getHeight(), 
+					closeRow.getX() + closeRow.getLeftBorder() + 15,
+					closeRow.getY()
+			);
 			g2.draw(line);
 			OpenCloseTagsLinesHashMap.put(tag, line);
 		}
@@ -180,39 +204,9 @@ public class XmlForm extends JPanel{
 
 
 
-	public void setTagLabeBrighter(XmlTag tag) {
-		/** recovering open row */
-		TagRow openRow = getTagOpenRow(tag);
-
-		if(getTagCloseRow(tag) != null) {
-			TagRow closeRow = getTagCloseRow(tag) ;
-
-			openRow.setTagLabelBrighter();
-			closeRow.setTagLabelBrighter();
-		}
-		else openRow.setTagLabelBrighter();
-	}
 
 
-
-	public void unsetTagLabeBrighter(XmlTag tag) {
-		/** recovering open row */
-		TagRow openRow = getTagOpenRow(tag);
-
-		if(getTagCloseRow(tag) != null) {
-			TagRow closeRow = getTagCloseRow(tag) ;
-
-			openRow.unsetTagLabelBrighter();
-			closeRow.unsetTagLabelBrighter();
-		}
-		else openRow.unsetTagLabelBrighter();
-	}
-
-
-
-
-
-	private TagRow getTagOpenRow(XmlTag tag) {
+	public TagRow getTagOpenRow(XmlTag tag) {
 		return getTagOpenRowHashMap().get(tag);
 	}
 
@@ -220,17 +214,12 @@ public class XmlForm extends JPanel{
 
 
 
-	private TagRow getTagCloseRow(XmlTag tag) {
+	public TagRow getTagCloseRow(XmlTag tag) {
 		if(tagCloseRowHashMap.containsKey(tag)) {
 			return tagCloseRowHashMap.get(tag);
 
 		}
 		else return null;
-	}
-
-	public void repaintTagRow(XmlTag tag) {
-		tagOpenRowHashMap.get(tag).repaint();
-		tagOpenRowHashMap.get(tag).revalidate();
 	}
 
 
@@ -258,5 +247,18 @@ public class XmlForm extends JPanel{
 	public XmlTag getRoot() {
 		return root;
 	}
+
+
+
+	public ArrayList<XmlTag> getTagArr() {
+		return this.tagArr;
+	}
+	
+	
+	public int getRowCounter() {
+		return this.rowCounter;
+	}
+	
+	
 
 }

@@ -8,10 +8,20 @@ import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.xml.XMLConstants;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
+import javax.xml.validation.Validator;
+
 import org.jdom2.Document;
+import org.jdom2.JDOMException;
+import org.jdom2.output.DOMOutputter;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
+import org.xml.sax.SAXException;
 
+import model.LoggingErrorHandler;
 import model.Response;
 
 public class FileBusiness {
@@ -35,7 +45,7 @@ public class FileBusiness {
 				}
 
 				Format format = Format.getPrettyFormat();
-				format.setIndent("	");
+				//format.setIndent("	");
 				XMLOutputter xmlOutputter = new XMLOutputter(format);
 		        xmlOutputter.output(doc, new FileOutputStream(file));
 		        Response response = new Response.ResponseBuilder().status(FILE_CREATED_CORRECTLY).message("file created correctly").build();
@@ -103,8 +113,12 @@ public class FileBusiness {
 	
 		
 		Format format = Format.getPrettyFormat();
-		format.setIndent("        ");
+		format.setIndent("    ");
+		format.setLineSeparator(System.lineSeparator());
+		format.setTextMode(Format.TextMode.NORMALIZE);
+		
 		XMLOutputter xmlOutputter = new XMLOutputter(format);
+		
 		String preview = xmlOutputter.outputString(doc);
 		if(preview != null) {
 			return xmlOutputter.outputString(doc);
@@ -155,8 +169,53 @@ public class FileBusiness {
 	      return "";
 	  }
 	
-	
-	
+	  
+	  
+	  
+	  
+	  
+   public static boolean validateXMLSchema(String xsdPath, Document doc){
+	   xsdPath = "/Users/mircopalese/Desktop/pdscdescriptor1.xsd";
+	      try {
+	         SchemaFactory factory =
+	            SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+	         	File file = new File(xsdPath);
+	            Schema schema = factory.newSchema(file);
+	            Validator validator = schema.newValidator();
+	            
+	            LoggingErrorHandler errorHandler = new LoggingErrorHandler();
+	            validator.setErrorHandler(errorHandler);
+	            
+	            
+	            DOMOutputter output = new DOMOutputter();
+	            org.w3c.dom.Document dom = null;
+				try {
+					dom = output.output(doc);
+				} catch (JDOMException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+	            
+	            
+	            createFile("/Users/mircopalese/Desktop/prova", "xml", doc);
+	            validator.validate(new DOMSource(dom));
+	            
+	            
+	  
+	            
+	            
+	      } catch (IOException e){
+	         System.out.println("Exception: "+e.getMessage());
+	         return false;
+	      }catch(SAXException e1){
+	         System.out.println("SAX Exception: "+e1.getMessage());
+	         return false;
+	      }
+			
+	      return true;
+	 }
+   
+ 
 	
 
 	

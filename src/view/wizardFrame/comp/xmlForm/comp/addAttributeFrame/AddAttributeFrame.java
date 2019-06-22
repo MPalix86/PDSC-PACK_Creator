@@ -3,34 +3,36 @@ package view.wizardFrame.comp.xmlForm.comp.addAttributeFrame;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.awt.GridLayout;
+import java.awt.Toolkit;
+import java.awt.Window;
+import java.util.ArrayList;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
+import javax.swing.border.EmptyBorder;
 import javax.swing.border.MatteBorder;
 
 import listeners.wizardFrameListeners.comp.xmlForm.comp.AddAttributeFrameListener;
 import model.XmlAttribute;
 import model.XmlTag;
-import view.comp.AttributeButton;
 import view.comp.CustomColor;
 import view.comp.SquareButton;
 import view.wizardFrame.comp.xmlForm.comp.addAttributeFrame.comp.attributeListBar.AttributesListBarContainer;
 
 public class AddAttributeFrame extends JFrame{
 	
-	private JPanel descriptionPanel;
+	private JPanel contentPane;
 	private AttributesListBarContainer bar;
 	private JTextArea descriptionTextArea;
 	private JPanel buttonsPanel;
 	private AddAttributeFrameListener listener;
 	private XmlAttribute selectedAttr;
-	private JPanel DescriptionHeaderPanel;
 	private XmlTag tag;
+	private JLabel selectedAttrlabel;
+	private ArrayList<XmlAttribute> addedAttr;
 	
 	
 	/**
@@ -41,72 +43,112 @@ public class AddAttributeFrame extends JFrame{
 	}
 
 	public AddAttributeFrame(XmlTag tag) {
+		this.tag = tag;
+		addedAttr = new ArrayList<XmlAttribute>();
+		
+		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+		this.setMinimumSize(new Dimension(600,450));
+		
 		listener = new AddAttributeFrameListener(this);
 		bar = new AttributesListBarContainer(tag,listener);
-		this.tag = tag;
 		
 		placeComponents();
+		centreWindow(this);
+		this.setVisible(true);
 	}
 	
 	private void placeComponents() {
 		
+	
+		descriptionTextArea = new JTextArea();
+		descriptionTextArea.setBackground(Color.WHITE );
+		descriptionTextArea.setEditable(false);
+		
 		this.setBackground(Color.WHITE);
 		
-		descriptionTextArea = new JTextArea();
-		descriptionPanel = new JPanel();
+
+		contentPane = new JPanel();
 		buttonsPanel = new JPanel();
 		
-		generateDescriptionHeaderPanel();
+		JPanel contentPane1 = new JPanel(new BorderLayout());
+		contentPane1.setBackground(Color.WHITE);
 		
-		descriptionPanel.setLayout(new BorderLayout());
-		descriptionPanel.add(descriptionTextArea,BorderLayout.CENTER);
-		descriptionPanel.add(DescriptionHeaderPanel);
-		descriptionPanel.setBackground(Color.WHITE);
-		
-		buttonsPanel.setBackground(Color.WHITE);
-		buttonsPanel.setLayout(new GridLayout(1,2));
-		buttonsPanel.setBorder(new MatteBorder(0,0,0,1, CustomColor.LIGHT_GRAY));
-	
+			JPanel panel1 = new JPanel(new BorderLayout());
+			panel1.setBackground(Color.WHITE);
+			
+				JLabel tagLabel = new JLabel("<html> <font size = 20> " + tag.getName() + " <br> </font> </html>");
+				tagLabel.setBorder(new EmptyBorder(0,10,0,0));
+				tagLabel.setForeground(CustomColor.TAG_COLOR);
 
+				
+			panel1.add(tagLabel,BorderLayout.WEST);
+			panel1.setBorder(new MatteBorder(0,0,0,0, CustomColor.LIGHT_GRAY));
+			
+			JPanel contentPane2 = new JPanel(new BorderLayout());
+			contentPane2.setBackground(Color.WHITE);
+			
+				JPanel panel2 = new JPanel(new BorderLayout());
+				panel2.setBackground(Color.WHITE);
+				panel2.setBorder(new MatteBorder(0,0,1,0, CustomColor.LIGHT_GRAY));
+					selectedAttrlabel = new JLabel("<html> <font size = 5> </font> </html>");
+					selectedAttrlabel.setForeground(CustomColor.ATTR_COLOR);
+					selectedAttrlabel.setBorder(new EmptyBorder(10,10,10,10));
+				panel2.add(selectedAttrlabel, BorderLayout.CENTER);
+			
+			contentPane2.add(panel2,BorderLayout.NORTH);
+			contentPane2.add(descriptionTextArea, BorderLayout.CENTER);
+			
+			buttonsPanel.setBackground(Color.WHITE);
+			buttonsPanel.setLayout(new GridLayout(1,2));
+			buttonsPanel.setBorder(new MatteBorder(1,0,0,0, CustomColor.LIGHT_GRAY));
+
+			
+			SquareButton addBtn = new SquareButton("Add");
+			addBtn.addActionListener(listener);
+			addBtn.setActionCommand("addAttributes");
+			SquareButton cancelBtn = new SquareButton("Cancel");
+			cancelBtn.addActionListener(listener);
+			cancelBtn.setActionCommand("cancel");
+			
+			buttonsPanel.add(cancelBtn);
+			buttonsPanel.add(addBtn);
+			
+		contentPane1.add(panel1, BorderLayout.NORTH);
+		contentPane1.add(contentPane2 , BorderLayout.CENTER);
+		contentPane1.add(buttonsPanel,BorderLayout.SOUTH);
 		
-		descriptionTextArea.setBackground(Color.WHITE);
+		contentPane.setLayout(new BorderLayout());
 		
-		AttributeButton addBtn = new AttributeButton("Add" , null);
-		SquareButton cancelBtn = new SquareButton("Cancel");
+		contentPane.add(bar,BorderLayout.WEST);
+		contentPane.add(contentPane1,BorderLayout.CENTER);
 		
-		buttonsPanel.add(cancelBtn);
-		buttonsPanel.add(addBtn);
 		
-		descriptionPanel.add(buttonsPanel,BorderLayout.SOUTH);
+
+		this.add(contentPane , BorderLayout.CENTER);
 		
-		this.getContentPane().add(descriptionPanel, BorderLayout.CENTER);
-		this.getContentPane().add(bar, BorderLayout.WEST);
-		
-		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-		this.setMinimumSize(new Dimension(600,450));
-		this.setVisible(true);
+	
 	}
 	
 	
-	private void generateDescriptionHeaderPanel() {
-		
-		DescriptionHeaderPanel = new JPanel(new GridBagLayout());
-		GridBagConstraints c = new GridBagConstraints();
-		DescriptionHeaderPanel.setBackground(Color.WHITE);
-		
-		JLabel tagLabel = new JLabel("< " + tag.getName() + " <" );
-		tagLabel.setForeground(CustomColor.TAG_COLOR);
-		
-		DescriptionHeaderPanel.add(tagLabel,c);
-		
-	}
-	
-	
-	
-	public void updateDescription(String text){
+	public void updateDescription(String atrtName , String text){
+		this.selectedAttrlabel.setText(atrtName);
 		this.descriptionTextArea.setText(text);
 	}
-
+	
+	public static void centreWindow(Window frame) {
+	    Dimension dimension = Toolkit.getDefaultToolkit().getScreenSize();
+	    int x = (int) ((dimension.getWidth() - frame.getWidth()) / 2);
+	    int y = (int) ((dimension.getHeight() - frame.getHeight()) / 2);
+	    frame.setLocation(x, y);
+	}
+	
+	public XmlTag geTtag() {
+		return this.tag;
+	}
+	
+	public ArrayList<XmlAttribute> getAddeAttrArr(){
+		return this.addedAttr;
+	}
 }
 
 

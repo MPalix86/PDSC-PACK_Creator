@@ -26,8 +26,8 @@ import javax.swing.border.EmptyBorder;
 
 import listeners.tagCustomizationFrameListeners.TagCustomizationFrameListener;
 import model.XmlTag;
+import view.comp.DropDownButton;
 import view.comp.TagMenuItem;
-import view.wizardFrame.comp.toolBar.comp.DropDownButton;
 
 
 public class CollapsablePanel extends JPanel {
@@ -75,6 +75,7 @@ public class CollapsablePanel extends JPanel {
     		
     		/** if tag has children add showChildrenButton */
     		childrenMenu = new JMenu("Children Tag");
+    		
     		if(tag.getChildrenArr() != null) {
     			for (int i =0;  i < tag.getChildrenArr().size(); i++){
     				XmlTag child = tag.getChildrenArr().get(i);

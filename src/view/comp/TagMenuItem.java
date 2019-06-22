@@ -6,7 +6,6 @@ import model.XmlTag;
 
 public class TagMenuItem extends JMenuItem {
 	
-	private Class tagClass;
 	private XmlTag tag;
 	
 	

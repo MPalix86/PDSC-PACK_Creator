@@ -26,6 +26,7 @@ public class WizardFrameListener implements ActionListener {
 			ArrayList<XmlTag> tagArr = session.getWizardFrame().getFormPanelContainer().getFormPanel().getTagArr();
 			Document doc = WizardBusiness.writePdsc(tagArr); 
 			if(doc != null) {
+				FileBusiness.validateXMLSchema(null, doc);
 				String preview = FileBusiness.getDocumentPreview(doc);
 				session.getWizardFrame().getPreviewPaneContainer().getPreviewPane().setPreview(preview);
 			}
