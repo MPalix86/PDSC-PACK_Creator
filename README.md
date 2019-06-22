@@ -1,2 +1,3 @@
-# PDSC
-PDSC file creator programm (java) following CMSIS standard
+# PDSC / PACK CREATOR
+Java programm for PDSC document and pack creation following CMSIS (ARM) standard
+
