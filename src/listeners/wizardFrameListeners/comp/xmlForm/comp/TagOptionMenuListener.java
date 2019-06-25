@@ -10,6 +10,7 @@ import business.XmlTagBusiness;
 import model.Response;
 import model.XmlAttribute;
 import model.XmlTag;
+import view.comp.DialogUtils;
 import view.comp.TagMenuItem;
 import view.tagCustomizationFrame.TagCustomizationFrame;
 import view.wizardFrame.comp.xmlForm.comp.TagRow;
@@ -34,7 +35,7 @@ public class TagOptionMenuListener implements ActionListener{
 				int tagOccurrenceInParent = XmlTagBusiness.findChildOccurrenceNumber(parent,tag.getName());
 				boolean response = true;
 				if(tag.isRequired() && tagOccurrenceInParent <= 1) {
-					response = session.getWizardFrame().yesNoWarningMessage("Following PDSC standard : \n < " + parent.getName() + "> must contain at least one tag < " + tag.getName() + " > \n Do you want to continue ?");
+					response = DialogUtils.yesNoWarningMessage("Following PDSC standard : \n < " + parent.getName() + "> must contain at least one tag < " + tag.getName() + " > \n Do you want to continue ?");
 				}
 				if(response) {
 					XmlTag modelTag = XmlTagBusiness.findModelChildFromSelectedChildName(parent, tag.getName());
@@ -57,7 +58,7 @@ public class TagOptionMenuListener implements ActionListener{
 		
 		else if(command.equals("addCustomAttribute")) {
 			
-			String attrNames = Session.getInstance().getWizardFrame().showInputDialog("Add Custom Attribute", "Add one or more attributes separated by space \n attr1 attr2 ...");
+			String attrNames = DialogUtils.showInputDialog("Add Custom Attribute", "Add one or more attributes separated by space \n attr1 attr2 ...");
 			
 			if (attrNames != null){
 				/** separating string by comma */
@@ -84,7 +85,7 @@ public class TagOptionMenuListener implements ActionListener{
 						session.getWizardFrame().updatePreview();
 					}
 				}
-				if(!errorMessage.contentEquals("")) session.getWizardFrame().warningMessage(errorMessage);
+				if(!errorMessage.contentEquals("")) DialogUtils.warningMessage(errorMessage);
 					 
 			}
 			

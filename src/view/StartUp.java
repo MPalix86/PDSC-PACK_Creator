@@ -27,7 +27,7 @@ public class StartUp extends JFrame {
 		 
 		 CustomUtils.setUIFont(new javax.swing.plaf.FontUIResource("SansSerif",Font.PLAIN,14));
 
-		  WizardFrame frame = new WizardFrame(); 
+		 new WizardFrame().overviewLayout(); 
 		
 
 

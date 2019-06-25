@@ -1,17 +1,14 @@
 package view.comp;
 
 import java.awt.Color;
-import java.awt.Graphics;
+import java.awt.Insets;
 
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.border.EmptyBorder;
 
 public class SquareButton extends JButton{
-    
-    private Color backGround = Color.WHITE;
-    
-    private Color foreGround = Color.DARK_GRAY;
     
     private Color pressedBackGroundColor = CustomColor.LIGHT_GRAY;
     
@@ -59,56 +56,24 @@ public class SquareButton extends JButton{
     private void setup() {
     	setBorder(new EmptyBorder(9,9,9,9));
         setBackground(this.BACKGROUND_COLOR);
-        setHoverBackGroundColor(this.HOVER_BACKGROUND_COLOR);
         setForeground(this.FOREGROUND_COLOR);
-        setPressedBackGroundColor(Color.PINK);
-    }
-    
-    
-    
-    @Override
-    protected void paintComponent(Graphics g) {
-        if (getModel().isPressed()) {
-            g.setColor(pressedBackGroundColor);
-        } else if (getModel().isRollover()) {
-            g.setColor(hoverBackGroundColor);
-        } else {
-            g.setColor(getBackground());
-        }
-        g.fillRect(0, 0, getWidth(), getHeight());
-        super.paintComponent(g);
-    }
-
-    @Override
-    public void setContentAreaFilled(boolean b) {
-    }
-
-    public Color getHoverBackGroundColor() {
-        return hoverBackGroundColor;
-    }
-
-    public void setHoverBackGroundColor(Color hoverBackGroundColor) {
-        this.hoverBackGroundColor = hoverBackGroundColor;
-    }
-
-    public Color getPressedBackGroundColor() {
-        return pressedBackGroundColor;
-    }
-
-    public void setPressedBackGroundColor(Color pressedBackGroundColor) {
-        this.pressedBackGroundColor = pressedBackGroundColor;
     }
 
     
     public SquareButton toIconButton(ImageIcon icon) {
-    	setBorder(new EmptyBorder(9,9,9,9));
-        setBackground(this.BACKGROUND_COLOR);
-        setHoverBackGroundColor(this.HOVER_BACKGROUND_COLOR);
-        setForeground(this.FOREGROUND_COLOR);
-        setPressedBackGroundColor(Color.PINK);
 		setContentAreaFilled(false);
+		setBorderPainted(false);
+		setMargin(new Insets(0,0,0,0));
 		setIcon(icon);
-		return (SquareButton) this;
+		return this;
+    }
+    
+    
+    public SquareButton toIconButton(Icon icon) {
+    	
+		setMargin(new Insets(0,0,0,0));
+		setIcon(icon);
+		return this;
     }
     
 

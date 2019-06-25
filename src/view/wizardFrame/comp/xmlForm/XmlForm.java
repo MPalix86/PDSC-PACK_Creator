@@ -11,7 +11,6 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import business.OSValidator;
-import business.XmlTagBusiness;
 import listeners.wizardFrameListeners.comp.xmlForm.XmlFormListener;
 import model.XmlTag;
 import net.miginfocom.swing.MigLayout;
@@ -19,8 +18,6 @@ import view.comp.CustomColor;
 import view.wizardFrame.comp.xmlForm.comp.TagRow;
 
 public class XmlForm extends JPanel{
-
-	private ArrayList<XmlTag> tagArr;
 
 	private HashMap<XmlTag,TagRow> tagOpenRowHashMap;
 	private HashMap<XmlTag,TagRow> tagCloseRowHashMap;
@@ -33,23 +30,15 @@ public class XmlForm extends JPanel{
 	
 	private static int INNER_ROW_PADDIND;
 
-	public XmlForm() {
+	public XmlForm( XmlTag root ) {
 		
+		this.root = root;
 		if(OSValidator.isWindows()) INNER_ROW_PADDIND = -8;
 		else INNER_ROW_PADDIND = -13;
-		
-		root = XmlTagBusiness.getRoot();
-		root.addSelectedChild(XmlTagBusiness.getCompleteTagFromNameAndParent("vendor", root));
-		root.addSelectedChild(XmlTagBusiness.getCompleteTagFromNameAndParent("name", root));
-		root.addSelectedChild(XmlTagBusiness.getCompleteTagFromNameAndParent("description", root));
-		root.addSelectedChild(XmlTagBusiness.getCompleteTagFromNameAndParent("license", root));
-		root.addSelectedChild(XmlTagBusiness.getCompleteTagFromNameAndParent("url", root));
+	
 		this.OpenCloseTagsLinesHashMap = new HashMap<XmlTag,Line2D>();
 		this.tagOpenRowHashMap = new HashMap<XmlTag, TagRow>();
 		this.tagCloseRowHashMap = new HashMap<XmlTag, TagRow>();
-		this.tagArr = new ArrayList<XmlTag>();
-		root.setSelectedAttrArr(root.getAttrArr());
-		tagArr.add(root);
 
 		listener = new XmlFormListener(this);
 
@@ -67,7 +56,7 @@ public class XmlForm extends JPanel{
 		rowCounter = 0;
 		tagOpenRowHashMap.clear();
 		tagCloseRowHashMap.clear();
-		this.tagArr.forEach((t)->paintTag(t,0));
+		paintTag(root,0);
 		this.repaint();
 		this.revalidate();
 	}
@@ -246,12 +235,6 @@ public class XmlForm extends JPanel{
 	 */
 	public XmlTag getRoot() {
 		return root;
-	}
-
-
-
-	public ArrayList<XmlTag> getTagArr() {
-		return this.tagArr;
 	}
 	
 	

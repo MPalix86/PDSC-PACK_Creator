@@ -5,25 +5,27 @@ package view.wizardFrame;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.io.File;
+import java.awt.Component;
 
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
-import javax.swing.JFileChooser;
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JSplitPane;
 import javax.swing.border.EmptyBorder;
-import javax.swing.plaf.basic.BasicTabbedPaneUI;
 
 import business.Session;
 import listeners.wizardFrameListeners.WizardFrameListener;
 import model.XmlTag;
 import model.pdsc.Pack;
+import view.comp.IconUtils;
 import view.wizardFrame.comp.TabContainer;
+import view.wizardFrame.comp.descriptionPane.DescriptionPaneContainer;
+import view.wizardFrame.comp.menuBar.Menu;
+import view.wizardFrame.comp.overviewPane.OverviewPane;
 import view.wizardFrame.comp.previewPane.PreviewPaneContainer;
 import view.wizardFrame.comp.tagsListBar.TagsListBarContainer;
 import view.wizardFrame.comp.toolBar.ToolBarContainer;
+import view.wizardFrame.comp.validatorPane.ValidatorContainer;
 import view.wizardFrame.comp.xmlForm.XmlForm;
 import view.wizardFrame.comp.xmlForm.XmlFormContainer;
 import view.wizardFrame.comp.xmlForm.comp.TagRow;
@@ -52,7 +54,16 @@ public class WizardFrame extends JFrame {
 	
 	private XmlFormContainer formPanelContainer;
 	
-	private TabContainer tabContainer;
+	private TabContainer tabContainerCenter;
+	
+	private TabContainer tabContainerSouth;
+	
+	private ValidatorContainer validatorContainer;
+	
+	private JSplitPane splitPane;
+	
+	private DescriptionPaneContainer descriptionPaneContainer;
+	
 	
 	private Pack pack;
 	
@@ -85,15 +96,18 @@ public class WizardFrame extends JFrame {
 		toolBarContainer = new ToolBarContainer();
 		previewPaneContainer = new PreviewPaneContainer();
 		tagsListbarContainer = new TagsListBarContainer();
-		tabContainer = new TabContainer();
+		tabContainerCenter = new TabContainer();
+		tabContainerSouth = new TabContainer();
+		validatorContainer = new ValidatorContainer();
+		descriptionPaneContainer =  new DescriptionPaneContainer();
 	
 		/* generate and place all component */
-		placeComponent();
+		//placeComponent();
 			
 		/* save frame in session */
 		session.setWizardFrame(this);
 		
-		updatePreview();
+		//updatePreview();
 		
 		this.setVisible(true);
 	}
@@ -107,19 +121,17 @@ public class WizardFrame extends JFrame {
 	
 	private void placeComponent() {
 		
+	
+		setBackground(Color.WHITE);
+		
+		/** hidden button to update preview */
 		updatePreviewButton = new JButton();
 		updatePreviewButton.addActionListener(listener);
 		updatePreviewButton.setActionCommand("updatePreview");
 		updatePreviewButton.setVisible(false);
 		
-		tabContainer.setUI(new BasicTabbedPaneUI());
-		tabContainer.addTab("Form",formPanelContainer);
-		tabContainer.addTab("PDSC Preview",previewPaneContainer);
-
-
 		
-		/** frame initial setup */
-		setBackground(Color.WHITE);
+	
 		
 		/** contentPane initial setup */
 		contentPane = new JPanel(new BorderLayout());
@@ -127,17 +139,54 @@ public class WizardFrame extends JFrame {
 		contentPane.setBorder(new EmptyBorder(0,0,0,0));
 		setContentPane(contentPane); 
 		
-		/* place all all component into contentPane */
-//		contentPane.add(textFormContainer, BorderLayout.CENTER);
-		contentPane.add(tabContainer, BorderLayout.CENTER);
-		//contentPane.add(this.previewPaneContainer, BorderLayout.CENTER);
-		contentPane.add(toolBarContainer, BorderLayout.NORTH);
-		//contentPane.add(formContainer, BorderLayout.EAST);
+		
+		tabContainerCenter.addTab(" Form   ",IconUtils.FAgetAlignLeftIcon(20),formPanelContainer);
+		tabContainerCenter.addTab(" PDSC Preview   ", IconUtils.FAgetFileCodeIcon(20) , previewPaneContainer);
+		
+		
+		tabContainerSouth.addTab(" XSD Validator   ", IconUtils.FAgetDesktopIcon(20), this.validatorContainer);
+		tabContainerSouth.addTab(" Description   ", IconUtils.FAgetInfoCircleIcon(20), this.descriptionPaneContainer);
+		
+		splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT,tabContainerCenter, tabContainerSouth);	
+		splitPane.setResizeWeight(0.8); // equal weights to top and bottom			
+		
+		contentPane.add(splitPane, BorderLayout.CENTER);
+		
+		JPanel northPanel = new JPanel(new BorderLayout());
+
+		contentPane.add(northPanel, BorderLayout.NORTH);
+
 		contentPane.add(tagsListbarContainer, BorderLayout.WEST);
+		
+
+	
+
+
+		
+		northPanel.add(new Menu(),BorderLayout.NORTH);
+		northPanel.add(toolBarContainer,BorderLayout.SOUTH);
+		
+		
 		
 		/* repaint ContentPane */
 		contentPane.repaint();
 		contentPane.revalidate();
+	}
+	
+	
+	
+	public WizardFrame overviewLayout() {
+		
+
+		/** contentPane initial setup */
+		contentPane = new JPanel(new BorderLayout());
+		contentPane.setBackground(Color.WHITE);
+		contentPane.setBorder(new EmptyBorder(0,0,0,0));
+		setContentPane(contentPane); 
+		
+		contentPane.add(new OverviewPane(),BorderLayout.CENTER);
+		
+		return this;
 	}
 	
 
@@ -159,6 +208,7 @@ public class WizardFrame extends JFrame {
 	 * 
 	 * @return void
 	 */
+	
 	public void ShowHideTagListBar() {
 		if (tagsListbarContainer.isVisible()) {
 			tagsListbarContainer.setVisible(false);
@@ -174,114 +224,128 @@ public class WizardFrame extends JFrame {
 	}
 	
 	
-	
-	
 	/**
-	 * Show new file creation frame.
-	 *
-	 * @return chosen destination path 
-	 */
-	
-	public File showChooseDirectoryFrame() {
-		
-		/** setting up fileChooser */
-		JFileChooser fileChooser = new JFileChooser();
-		fileChooser.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-		fileChooser.setDialogTitle("Select destination folder");
-		
-		/** handling user's choice */
-		int val = fileChooser.showOpenDialog(this);
-		if(val == JFileChooser.APPROVE_OPTION) {
-			File destinationPath = fileChooser.getSelectedFile();
-			return destinationPath;
-		}
-		else if(val == JFileChooser.ERROR_OPTION) {  
-			JOptionPane.showMessageDialog(this, "Some error occurred", "Error", JOptionPane.ERROR_MESSAGE);
-			return null;
-		}
-		else if(val == JFileChooser.CANCEL_OPTION) {}
-		return null;
-	}
-	
-	
-	
-	
-	
-	/**
-	 * Show browse file frame.
-	 *
-	 * @return chosen path 
-	 */
-	
-	public File showChooseFileFrame() {
-		
-		/** setting up fileChooser */
-		JFileChooser fileChooser = new JFileChooser();
-		fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-		
-		if(session.getLastDirectoryOpenPath() != null) {
-			fileChooser.setCurrentDirectory(session.getLastDirectoryOpenPath());
-		}
-		
-		/** handling user's choice */
-		int val = fileChooser.showOpenDialog(this);
-		if(val == JFileChooser.APPROVE_OPTION) {
-			File destinationPath = fileChooser.getSelectedFile();
-			session.setLastDirectoryOpenPath(destinationPath);
-			return destinationPath;
-		}
-		else if(val == JFileChooser.ERROR_OPTION) {  
-			JOptionPane.showMessageDialog(this, "Some error occurred", "Error", JOptionPane.ERROR_MESSAGE);
-			return null;
-		}
-		else if(val == JFileChooser.CANCEL_OPTION) {}
-		return null;
-	}
-	
-	
-	
-	
-
-	/**
-	 * Show option pane warning message with "yes-no" option
+	 * show tag list bar
 	 * 
-	 * @param message	message to show inside option pane
-	 * @return true if yes was selected, false otherwise
-	 */
-	
-	public boolean yesNoWarningMessage(String message) {
-		ImageIcon icon = new ImageIcon (getClass().getClassLoader().getResource("icons/warning48.png"));
-		Object[] options = { "YES", "NO" };
-		int value = JOptionPane.showOptionDialog (null, message, "Warning", JOptionPane.YES_NO_OPTION,JOptionPane.INFORMATION_MESSAGE, icon, options, options[0]); 
-		if(value == 0) return true;
-		else return false;
-	}
-	
-	
-	
-	
-	/**
-	 * Show option pane warning message with only "ok" option
-	 * 
-	 * @param message	message to show inside option pane
 	 * @return void
 	 */
 	
-	public void warningMessage(String message) {
-		ImageIcon icon = new ImageIcon (getClass().getClassLoader().getResource("icons/warning48.png"));
-		Object[] options = { "OK"};
-		JOptionPane.showOptionDialog (null, message, "Warning", JOptionPane.OK_OPTION, JOptionPane.INFORMATION_MESSAGE, icon, options, options[0]); 
+	public void ShowTagListBar() {
+		if (!tagsListbarContainer.isVisible()) {
+			tagsListbarContainer.setVisible(true);
+		}
+		contentPane.repaint();
+		contentPane.revalidate();
 	}
 	
 	
 	
 	
+	/**
+	 * add validator frame in southTabContainer
+	 */
+	public void addValidatorPane() {
+		boolean validatorFound = false;
+		boolean tabContainerFound = false;
+		
+		if(tabContainerSouth == null) tabContainerSouth = new TabContainer();
+		if(validatorContainer == null) 	validatorContainer = new ValidatorContainer();
+		
+		/** recovering all component from splitpane */
+		Component[] compList = splitPane.getComponents();
+		for(Component component : compList) {
+			
+			/** if component  == tabContainerSouth */
+			if(component == tabContainerSouth) {
+				tabContainerFound = true;
+				
+				/** search between all tabs */
+				for (int i = 0; i < tabContainerSouth.getTabCount(); i++) {
+					Component c = tabContainerSouth.getTabComponentAt(i);
+					if(c != null) {
+						
+						/** if tab == validatorContainer */
+						if(c.equals(validatorContainer)) {
+							
+							validatorFound =true;
+							break;
+						}
+					}
+					
+				}
+				break;
+			}
+		}
+		
+		
+		if(!validatorFound && !tabContainerFound) {
+			tabContainerSouth.addTab(" XSD Validator   ", IconUtils.FAgetDesktopIcon(20), this.validatorContainer);
+			splitPane.add(tabContainerSouth);
+			splitPane.repaint();
+		}
+		
+		
+		if(!validatorFound && tabContainerFound) {
+			tabContainerSouth.addTab(" XSD Validator   ", IconUtils.FAgetDesktopIcon(20), this.validatorContainer);
+			splitPane.repaint();
+		}
+		
+	}
+	
+	
+	
+	
+	/**
+	 * add Description frame in southTabContainer
+	 */
+	public void addDescriptionPane() {
+		boolean descriptionPaneFound = false;
+		boolean tabContainerFound = false;
+		
+		if(tabContainerSouth == null) tabContainerSouth = new TabContainer();
+		if(descriptionPaneContainer == null) 	descriptionPaneContainer = new DescriptionPaneContainer();
+		
+		/** recovering all component from splitpane */
+		Component[] compList = splitPane.getComponents();
+		for(Component component : compList) {
+			
+			/** if component  == tabContainerSouth */
+			if(component == tabContainerSouth) {
+				tabContainerFound = true;
+				
+				/** search between all tabs */
+				for (int i = 0; i < tabContainerSouth.getTabCount(); i++) {
+					Component c = tabContainerSouth.getTabComponentAt(i);
+					if(c != null) {
+						
+						/** if tab == validatorContainer */
+						if(c.equals(descriptionPaneContainer)) {
+							
+							descriptionPaneFound =true;
+							break;
+						}
+					}
+					
+				}
+				break;
+			}
+		}
+		
+		
+		if(!descriptionPaneFound && !tabContainerFound) {
+			tabContainerSouth.addTab(" Description   ", IconUtils.FAgetInfoCircleIcon(20), this.descriptionPaneContainer);
+			splitPane.add(tabContainerSouth);
+			splitPane.repaint();
+		}
+		
+		
+		if(!descriptionPaneFound && tabContainerFound) {
+			tabContainerSouth.addTab(" Description   ", IconUtils.FAgetInfoCircleIcon(20), this.descriptionPaneContainer);
+			splitPane.repaint();
+		}
+		
+	}
 
-	public String showInputDialog(String title, String fieldLabelText) {
-        ImageIcon icon = new ImageIcon("src/images/turtle32.png");
-        String n = (String)JOptionPane.showInputDialog(null, fieldLabelText, title, JOptionPane.QUESTION_MESSAGE, icon, null, null);
-        return n;
-	}
 
 
 
@@ -340,6 +404,11 @@ public class WizardFrame extends JFrame {
 	public TagRow getTagRow(XmlTag tag) {
 		return  this.getFormPanelContainer().getFormPanel().getTagOpenRowHashMap().get(tag);
 	}
+	
+	public void setValidatorText(String text) {
+		this.validatorContainer.getValidator().setText(text);
+	}
+
 	
 
 	

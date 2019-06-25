@@ -1,4 +1,4 @@
-package view.wizardFrame.comp.xmlForm;
+package view.wizardFrame.comp.validatorPane;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -8,16 +8,13 @@ import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
 
-public class XmlFormContainer extends JPanel{
-	private XmlForm formPanel;
+public class ValidatorContainer extends JPanel{
+	
 	private JScrollPane scrollPane;
-	
-	public XmlFormContainer() {
-		this.formPanel = new XmlForm();
-		placeComponents();
-	}
-	
-	private void placeComponents() {
+	private Validator validator;
+
+	public ValidatorContainer() {
+		validator = new Validator();
 		this.setBackground(Color.WHITE);
 		this.setLayout(new BorderLayout());
 		
@@ -27,23 +24,18 @@ public class XmlFormContainer extends JPanel{
 		JScrollBar verticalScrollBar = new JScrollBar(JScrollBar.VERTICAL);
 		verticalScrollBar.setUnitIncrement(40);
 
-		this.scrollPane = new JScrollPane(formPanel);
+		this.scrollPane = new JScrollPane(validator);
 		
 		scrollPane.setHorizontalScrollBar(horizontalScrollBar);
 		scrollPane.setVerticalScrollBar(verticalScrollBar);
 		scrollPane.setBorder(new EmptyBorder(0,0,0,0));
 		
 		this.add(scrollPane,BorderLayout.CENTER);
-		
 	}
 	
 	
-	
-	/**
-	 * @return the formPanel
-	 */
-	public XmlForm getFormPanel() {
-		return formPanel;
+	public Validator getValidator() {
+		return this.validator;
 	}
 
 }

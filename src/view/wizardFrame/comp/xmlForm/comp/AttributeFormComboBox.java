@@ -3,8 +3,6 @@ package view.wizardFrame.comp.xmlForm.comp;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 
-import javax.swing.UIManager;
-
 import business.Session;
 import model.XmlAttribute;
 import view.comp.AttributeComboBox;
@@ -16,9 +14,7 @@ public class AttributeFormComboBox  extends AttributeComboBox implements FocusLi
 
 	public AttributeFormComboBox(XmlAttribute attr) {
 		super(attr);
-	    UIManager.put("ComboBox.foreground", CustomColor.ATTR_VALUE_COLOR);
-	    UIManager.put("ComboBox.selectionForeground", CustomColor.ATTR_VALUE_COLOR);
-	    String text  =  (String) this.getSelectedItem();
+	    this.setForeground(CustomColor.ATTR_VALUE_COLOR);
 		session = Session.getInstance();
 		this.addFocusListener(this);
 	}

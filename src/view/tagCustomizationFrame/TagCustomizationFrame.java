@@ -5,15 +5,11 @@ import java.awt.Color;
 import java.awt.Container;
 import java.util.ArrayList;
 
-import javax.swing.ImageIcon;
 import javax.swing.JFrame;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
-import javax.swing.JSpinner;
 import javax.swing.ScrollPaneConstants;
-import javax.swing.SpinnerNumberModel;
 import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.MatteBorder;
@@ -275,76 +271,7 @@ public class TagCustomizationFrame extends JFrame {
 	
 	
 	
-	
-	
-	/**
-	 * Show option pane warning message with only "ok" option
-	 * 
-	 * @param message	message to show inside option pane
-	 * @return void
-	 */
-	
-	public void warningMessage(String message) {
-		ImageIcon icon = new ImageIcon (getClass().getClassLoader().getResource("icons/warning48.png"));
-		Object[] options = { "OK"};
-		JOptionPane.showOptionDialog (null, message, "Warning", JOptionPane.OK_OPTION, JOptionPane.INFORMATION_MESSAGE, icon, options, options[0]); 
-	}
-	
-	
-	
-	
-	/**
-	 * Show option pane warning message with "yes-no" option
-	 * 
-	 * @param message	message to show inside option pane
-	 * @return true if yes was selected, false otherwise
-	 */
-	
-	public boolean yesNoWarningMessage(String message) {
-		ImageIcon icon = new ImageIcon (getClass().getClassLoader().getResource("icons/warning48.png"));
-		Object[] options = { "YES", "NO" };
-		int value = JOptionPane.showOptionDialog (null, message, "Warning", JOptionPane.YES_NO_OPTION,JOptionPane.INFORMATION_MESSAGE, icon, options, options[0]); 
-		if(value == 0) return true;
-		else return false;
-	}
-	
-	
-	
-	
-	/**
-	 * Clone tag option pane. Show number spinner to select number of copy
-	 * 
-	 * @return selected number of copy
-	 */
-	
-	public int cloneDialog() {
-		SpinnerNumberModel sModel = new SpinnerNumberModel(0, 0, 30, 1);
-		ImageIcon cloneIcon = new ImageIcon(getClass().getClassLoader().getResource("icons/clone40.png"));
-		JSpinner spinner = new JSpinner(sModel);
-		int option = JOptionPane.showOptionDialog(null, spinner, "Clone Tag", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, cloneIcon, null, null);
-		if (option == JOptionPane.CANCEL_OPTION) {}
-		else if (option == JOptionPane.OK_OPTION){ return (int)spinner.getValue();}
-		return -1;
-	}
-	
-	
-	
-	
-	/**
-	 * Show option pane warning message with only "ok" option
-	 * 
-	 * @param message	message to show inside option pane
-	 * @return void
-	 */
-	
-	public void okMessage(String message, String title) {
-		ImageIcon icon = new ImageIcon (getClass().getClassLoader().getResource("icons/ok40.png"));
-		Object[] options = { "OK"};
-		JOptionPane.showOptionDialog (null, message, title, JOptionPane.OK_OPTION,
-				 JOptionPane.INFORMATION_MESSAGE,
-				 icon, options, options[0]); 
-	
-	}
+
 	
 	
 	

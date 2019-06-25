@@ -10,6 +10,7 @@ import model.XmlAttribute;
 import model.XmlEnum;
 import model.XmlTag;
 import view.comp.AttributeMenuItem;
+import view.comp.DialogUtils;
 import view.wizardFrame.comp.xmlForm.comp.AttributeOptionMenu;
 import view.wizardFrame.comp.xmlForm.comp.TagRow;
 
@@ -26,7 +27,7 @@ public class AttributeOptionMenuListener implements ActionListener{
 		XmlTag tag = attr.getTag();
 		if(command.equals("deleteAttribute")) {
 			boolean response = true;
-			if(attr.isRequired()) response = session.getWizardFrame().yesNoWarningMessage("Following PDSC Standard ' " + attr.getName() + " ' is required for tag <" + tag.getName() + "> \n do you want to delete it ?");
+			if(attr.isRequired()) response = DialogUtils.yesNoWarningMessage("Following PDSC Standard ' " + attr.getName() + " ' is required for tag <" + tag.getName() + "> \n do you want to delete it ?");
 			if(response) {
 				tag.removeSelectedAttr(attr);
 			}
@@ -34,7 +35,7 @@ public class AttributeOptionMenuListener implements ActionListener{
 		}
 		
 		else if (command.equals("addPath")) {
-			File file = session.getWizardFrame().showChooseFileFrame();
+			File file = DialogUtils.showChooseFileFrame();
 			if(file != null) {
 				attr.setValue(attr.getValue() + file.getName()) ;
 				HashMap<XmlAttribute,String> pathFileHashMap = session.getWizardFrame().getPack().getPathFilesHashMap();
@@ -46,7 +47,7 @@ public class AttributeOptionMenuListener implements ActionListener{
 		
 		
 		else if (command.contentEquals("addCustomValue")) {
-			String value = session.getWizardFrame().showInputDialog("Add Value", "Insert Value");
+			String value = DialogUtils.showInputDialog("Add Value", "Insert Value");
 			
 			if( value != null && value != "") {
 				XmlEnum possibleValues = (XmlEnum) attr.getPossibleValues();

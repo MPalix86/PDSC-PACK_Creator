@@ -1,0 +1,30 @@
+package view.wizardFrame.comp.validatorPane;
+
+import java.awt.BorderLayout;
+import java.awt.Color;
+
+import javax.swing.JPanel;
+import javax.swing.JTextArea;
+import javax.swing.border.EmptyBorder;
+
+public class Validator extends JPanel{
+	private JTextArea textArea;
+	
+	public Validator() {
+		textArea = new JTextArea();
+		textArea.setLineWrap(true);
+		textArea.setBorder(new EmptyBorder(10,0,0,0));
+		textArea.setEditable(false);
+		this.setBackground(Color.WHITE);
+		this.setLayout(new BorderLayout());
+		this.add(textArea,BorderLayout.CENTER);
+
+		
+	}
+	
+	
+	public void setText(String text) {
+		this.textArea.setText(text);
+	}
+
+}

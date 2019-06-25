@@ -11,7 +11,8 @@ import business.XmlTagBusiness;
 import listeners.wizardFrameListeners.comp.ToolBarListener;
 import model.XmlTag;
 import view.comp.DropDownButton;
-import view.comp.IconButton;
+import view.comp.IconUtils;
+import view.comp.SquareButton;
 import view.comp.TagMenuItem;
 
 /**
@@ -23,13 +24,13 @@ import view.comp.TagMenuItem;
 public class ToolBar extends JToolBar{
 	
 	
-	private IconButton  createPackButton;
+	private SquareButton  createPackButton;
 	
-	private IconButton  saveAsButton;
+	private SquareButton  saveAsButton;
 	
 	private DropDownButton dropDownTagsButton;
 	
-	private IconButton showHideTagsListButton;
+	private SquareButton showHideTagsListButton;
 
 	private ToolBarListener listener;
 	
@@ -56,20 +57,24 @@ public class ToolBar extends JToolBar{
 	 */
 	private void placeComponents() {
 
-		ImageIcon createPackIcon = new ImageIcon(this.getClass().getResource("/icons/pack20.png"));  
-		createPackButton = new IconButton(createPackIcon);
+		createPackButton = new SquareButton().toIconButton(IconUtils.getPackIcon(20));
 		createPackButton.addActionListener(listener);
 		createPackButton.setActionCommand("createPack");
 		createPackButton.setToolTipText("createPack");
 	
-		ImageIcon saveAsIcon = new ImageIcon(this.getClass().getResource("/icons/saveAs20.png"));  
-		saveAsButton = new IconButton(saveAsIcon);
 
-		ImageIcon showHideChildrenListIcon = new ImageIcon(this.getClass().getResource("/icons/hideList20.png"));  
-		showHideTagsListButton = new IconButton(showHideChildrenListIcon);
+	
+		showHideTagsListButton = new SquareButton().toIconButton(IconUtils.getHideChildrenListIcon(20));
 		showHideTagsListButton.addActionListener(listener);
 		showHideTagsListButton.setToolTipText("Hide tags list");
 		showHideTagsListButton.setActionCommand("showHideTagsListBar");
+		
+
+
+		SquareButton validateXsd = new SquareButton().toIconButton(IconUtils.getPlayIcon(20));
+		validateXsd.setToolTipText("Validate with XSD");
+		validateXsd.addActionListener(listener);
+		validateXsd.setActionCommand("validateXSD");
 		
 		
 		generateTagsMenu();
@@ -80,8 +85,9 @@ public class ToolBar extends JToolBar{
 		
 		this.addSeparator();
 		
+		this.add(validateXsd);
 		this.add(createPackButton);
-		this.add(saveAsButton);
+
 
 		this.setRollover(true);
 	
@@ -92,7 +98,7 @@ public class ToolBar extends JToolBar{
 
 	private void generateTagsMenu() {
 		
-		ImageIcon showTagsIcon = new ImageIcon(this.getClass().getResource("/icons/tagList.png"));
+		ImageIcon showTagsIcon = IconUtils.getChildrenListIArrowIcon(20);
 		
 		XmlTag root = XmlTagBusiness.getRoot();
 		ArrayList<XmlTag> rootChildren = XmlTagBusiness.getNotRequiredChildren(root);
@@ -114,8 +120,9 @@ public class ToolBar extends JToolBar{
 	
 	
 	
+	/** change imageIcon (show) tag list bar */
 	public void setShowIconShowHideTagsListButton() {
-		ImageIcon showTagsIcon = new ImageIcon(this.getClass().getResource("/icons/showList20.png"));
+		ImageIcon showTagsIcon = IconUtils.getShowChildrenListIcon(20);
 		showHideTagsListButton.setIcon(showTagsIcon);
 		showHideTagsListButton.setToolTipText("Show tags list");
 		showHideTagsListButton.repaint();
@@ -123,9 +130,9 @@ public class ToolBar extends JToolBar{
 	}
 	
 	
-	
+	/** change imageIcon (hide) tag list bar */
 	public void setHideIconShowHideTagsListButton() {
-		ImageIcon hideTagsIcon = new ImageIcon(this.getClass().getResource("/icons/hideList20.png"));
+		ImageIcon hideTagsIcon = IconUtils.getHideChildrenListIcon(20);
 		showHideTagsListButton.setIcon(hideTagsIcon);
 		showHideTagsListButton.setToolTipText("Hide tags list");
 		showHideTagsListButton.repaint();
@@ -134,43 +141,6 @@ public class ToolBar extends JToolBar{
 	
 	
 	
-	/**
-	 * @return the createPackButton
-	 */
-	public IconButton getCreatePackButton() {
-		return createPackButton;
-	}
-
-
-
-
-	/**
-	 * @return the saveAsButton
-	 */
-	public IconButton getSaveAsButton() {
-		return saveAsButton;
-	}
-
-
-
-
-	/**
-	 * @return the dropDownTagsButton
-	 */
-	public DropDownButton getDropDownTagsButton() {
-		return dropDownTagsButton;
-	}
-
-
-
-
-	/**
-	 * @return the showHideTagsListButton
-	 */
-	public IconButton getshowHideTagsListButton() {
-		return showHideTagsListButton;
-	}
-
 
 
 
@@ -190,6 +160,7 @@ public class ToolBar extends JToolBar{
 	public Session getSession() {
 		return session;
 	}
+	
 	
 }
 

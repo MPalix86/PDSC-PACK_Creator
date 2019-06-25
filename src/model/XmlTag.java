@@ -124,6 +124,16 @@ public class XmlTag{
 		this.tagId = tagId;
 		this.relId = relId;
 	}
+	
+	
+	
+	
+	public XmlTag(String name, boolean required, XmlTag parent, int max) {
+		this.name = name;
+		this.required = required;
+		this.parent = parent;
+		this.max = max;
+	}
 
 
 

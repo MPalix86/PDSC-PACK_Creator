@@ -5,7 +5,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.util.ArrayList;
 
-import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
@@ -17,6 +16,7 @@ import net.miginfocom.swing.MigLayout;
 import view.comp.AttributeButton;
 import view.comp.AttributeCheckBox;
 import view.comp.CustomColor;
+import view.comp.IconUtils;
 
 
 public class AttributesListBar extends JPanel{
@@ -65,8 +65,7 @@ public class AttributesListBar extends JPanel{
   		    	
   		    	panel1.add(checkBox);
   		        
-  		        ImageIcon infoIcon = new ImageIcon(getClass().getResource("/icons/info16.png"));
-  		        AttributeButton showDescriptionButton = new AttributeButton(attr).toIconButton(infoIcon);
+  		        AttributeButton showDescriptionButton = (AttributeButton) new AttributeButton(attr).toIconButton(IconUtils.FAgetInfoCircleIcon(20));
   		        showDescriptionButton.addActionListener(listener);
   		        showDescriptionButton.setActionCommand("showDescription");
   		        

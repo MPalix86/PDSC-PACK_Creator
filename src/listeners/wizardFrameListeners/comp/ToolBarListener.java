@@ -6,11 +6,16 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import org.jdom2.Document;
+
+import business.FileBusiness;
 import business.Session;
+import business.WizardBusiness;
 import business.XmlTagBusiness;
 import listeners.wizardFrameListeners.WizardFrameListener;
 import model.XmlTag;
 import model.pdsc.Pack;
+import view.comp.DialogUtils;
 import view.comp.TagMenuItem;
 import view.tagCustomizationFrame.TagCustomizationFrame;
 import view.wizardFrame.comp.toolBar.ToolBar;
@@ -43,10 +48,16 @@ public class ToolBarListener extends WizardFrameListener implements ActionListen
 			session.getWizardFrame().ShowHideTagListBar();
 		}
 		
+		else if(command.equals("validateXSD")) {
+			Document doc = WizardBusiness.writePdsc(session.getWizardFrame().getFormPanel().getTagArr());
+			String message = FileBusiness.validateXMLSchema(doc);
+			session.getWizardFrame().setValidatorText(message);;
+		}
+		
 		else if (command.equals("createPack")) {
 			ArrayList<XmlTag> tagArr = session.getWizardFrame().getFormPanelContainer().getFormPanel().getTagArr();
 			XmlTag root = tagArr.get(0);
-			File path = session.getWizardFrame().showChooseDirectoryFrame();
+			File path = DialogUtils.showChooseDirectoryFrame();
 			if (path != null) {
 				try {
 					int status = session.getWizardFrame().getPack().createPack(root , path);
@@ -54,7 +65,7 @@ public class ToolBarListener extends WizardFrameListener implements ActionListen
 						
 					}
 					else if (status == Pack.REQUIRED_FIELDS_MISSING) {
-						session.getWizardFrame().warningMessage("Required Fields Missing");
+						DialogUtils.warningMessage("Required Fields Missing");
 					}
 					
 				} catch (IOException e1) {

@@ -1,10 +1,13 @@
 package view.wizardFrame.comp;
 
-import javax.swing.JTabbedPane;
+import java.awt.Color;
 
-public class TabContainer extends JTabbedPane{
+import view.comp.ClosableTabbedPane;
+
+public class TabContainer extends ClosableTabbedPane{
 	
 	public void TabContainer() {
+		this.setBackground(Color.WHITE);
 	}
 
 

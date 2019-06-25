@@ -23,66 +23,6 @@ public class WizardBusiness {
 	
 	
 	
-	/* CAUTION 
-	 * this function use XmlTag XmlAttribute XmlTagContent defined 
-	 * in model/xmlComponents. To write file with JDOM library need to
-	 * to convert xmlTag into JDOM Element;
-	 */
-	//--------------------------------------------------------------------------writePdsc()
-	public static Document writePdsc(ArrayList<XmlTag> tagArr) {
-		doc = new Document();	
-		for(int i = 0 ; i < tagArr.size(); i++) { 
-			XmlTag xmlTag = tagArr.get(i);
-			ArrayList<XmlAttribute> xmlAttrArr = null;
-			try { xmlAttrArr = xmlTag.getSelectedAttrArr();} 			// if attrArr != null
-			catch(Exception e) {}
-			Element el = new Element(xmlTag.getName());							// conversion of XmlTag into JDOM Element
-			if(xmlTag.getNameSpace() != null) {
-				XmlNameSpace xmlNs= xmlTag.getNameSpace();
-				Namespace ns = Namespace.getNamespace(xmlNs.getPrefix(), xmlNs.getUrl());
-				el.addNamespaceDeclaration(ns);
-			}
-	
-			if (xmlTag.getSelectedChildrenArr() != null) {							// if element contains other tag
-				if( !xmlTag.getSelectedChildrenArr().isEmpty() ) {
-					el = addChild(xmlTag);
-				}
-			}
-			else if (xmlTag.getContent() != null) {	
-				el.setText(xmlTag.getContent());
-			}
-
-			
-			if(xmlAttrArr != null) {											// if tag contains attributes
-				
-				
-				for(int j = 0 ; j < xmlAttrArr.size(); j++) {
-					
-					if (xmlAttrArr.get(j).getValue() != null &&  xmlAttrArr.get(j).getNameSpace() == null) {
-						Attribute attribute = new Attribute (xmlAttrArr.get(j).getName(), xmlAttrArr.get(j).getValue());
-						el.setAttribute(attribute);	
-					}
-								
-				}
-			}
-			
-			
-			if( i == 0) { 														// element root
-				doc.setRootElement(el);
-			}
-			else {		
-				doc.getRootElement().addContent(el);
-			}
-			
-		}
-		
-		return doc;
-		
-	}
-	
-	
-	
-	
 	
 	/**
 	 * Add all XmlTag's selected children with respective attributes inside 
@@ -92,20 +32,36 @@ public class WizardBusiness {
 	 * @return
 	 */
 	
-	private static Element addChild(XmlTag tag) {
-		Element parent = new Element(tag.getName());
+	public static Document genratePDSCDocument(XmlTag xmlTag, Document doc) {
 		
-		addAttribute(tag,parent);
+		Element parent = new Element(xmlTag.getName());
+		addAttribute(xmlTag,parent);
 		
-		if( tag.getSelectedChildrenArr() != null) {								
-			ArrayList<XmlTag> xmlChildren = tag.getSelectedChildrenArr();
+		
+		if(xmlTag.getNameSpace() != null) {
+			XmlNameSpace xmlNs= xmlTag.getNameSpace();
+			Namespace ns = Namespace.getNamespace(xmlNs.getPrefix(), xmlNs.getUrl());
+			parent.addNamespaceDeclaration(ns);
+		}
+		
+		if(xmlTag.getContent() != null) parent.setText(xmlTag.getContent());
+		
+		if(xmlTag.getParent() == null && doc == null) {
+			doc = new Document();	
+			doc.setRootElement(parent);
+		}
+		else doc.getRootElement().addContent(parent);
+		
+		
+		if( xmlTag.getSelectedChildrenArr() != null) {								
+			ArrayList<XmlTag> xmlChildren = xmlTag.getSelectedChildrenArr();
 			for(int i = 0; i < xmlChildren.size(); i++) {						
 				XmlTag child = xmlChildren.get(i);	
-					parent.addContent( addChild(child));		
+				genratePDSCDocument(child, doc);		
 			}
 		}
-		if(tag.getContent() != null) parent.setText(tag.getContent());	
-		return parent;
+			
+		return doc;
 	}
 	
 	

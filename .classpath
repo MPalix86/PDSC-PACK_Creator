@@ -10,5 +10,9 @@
 	<classpathentry kind="lib" path="/Users/mircopalese/eclipse-workspace/PDSC/libraries/miglayout-swing-5.2.jar"/>
 	<classpathentry kind="lib" path="/Users/mircopalese/eclipse-workspace/PDSC/libraries/jdom-2.0.6.jar"/>
 	<classpathentry kind="lib" path="/Users/mircopalese/eclipse-workspace/PDSC/libraries/sqlite-jdbc-3.27.2.1.jar"/>
+	<classpathentry kind="lib" path="/Users/mircopalese/eclipse-workspace/PDSC/libraries/jiconfont-font_awesome-4.7.0.1.jar"/>
+	<classpathentry kind="lib" path="/Users/mircopalese/eclipse-workspace/PDSC/libraries/jiconfont-swing-1.0.1.jar"/>
+	<classpathentry kind="lib" path="/Users/mircopalese/eclipse-workspace/PDSC/libraries/jiconfont-1.0.0.jar"/>
+	<classpathentry kind="lib" path="/Users/mircopalese/eclipse-workspace/PDSC/libraries/commons-io-2.6.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

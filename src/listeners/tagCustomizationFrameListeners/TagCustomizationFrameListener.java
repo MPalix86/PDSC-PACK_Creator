@@ -11,6 +11,7 @@ import business.XmlTagBusiness;
 import model.XmlAttribute;
 import model.XmlTag;
 import view.comp.AttributeCheckBox;
+import view.comp.DialogUtils;
 import view.comp.TagButton;
 import view.comp.TagMenuItem;
 import view.tagCustomizationFrame.TagCustomizationFrame;
@@ -116,7 +117,7 @@ public class TagCustomizationFrameListener implements ItemListener, ActionListen
 			
 			boolean response = true;
 			if (modelChild.isRequired() && tagOccurrenceInParent <= 1 ) {
-				response = tagCustomizationFrame.yesNoWarningMessage("Following PDSC standard : \n < " + parent.getName() + "> must contain at least one tag < " + modelChild.getName() + " > \n Do you want to continue ?");
+				response = DialogUtils.yesNoWarningMessage("Following PDSC standard : \n < " + parent.getName() + "> must contain at least one tag < " + modelChild.getName() + " > \n Do you want to continue ?");
 			}
 			
 			if(response) {
@@ -164,7 +165,7 @@ public class TagCustomizationFrameListener implements ItemListener, ActionListen
 			/** if max child number is = 0, cannot add this child */
 			else {		
 				
-				tagCustomizationFrame.warningMessage(	"<html><p><span style=\"font-size: 14pt; color: #333333;\"> "
+				DialogUtils.warningMessage(	"<html><p><span style=\"font-size: 14pt; color: #333333;\"> "
 														+ " Maximum number of children reached for tag  " +tagMenuItem.getTag().getName() + 
 														" </span></p></html>"
 													); 
@@ -187,7 +188,7 @@ public class TagCustomizationFrameListener implements ItemListener, ActionListen
 			XmlTag modelTag = XmlTagBusiness.findModelChildFromSelectedChildName(parent, selectedTag.getName());
 			
 			/** recover copies number  */
-			int copiesNumber = this.tagCustomizationFrame.cloneDialog();
+			int copiesNumber = DialogUtils.cloneDialog();
 			
 			if(copiesNumber != -1){
 				
@@ -209,12 +210,12 @@ public class TagCustomizationFrameListener implements ItemListener, ActionListen
 				
 				else {
 					if(modelTag.getMax() == 0) {
-						this.tagCustomizationFrame.warningMessage("<html><p><span style=\"font-size: 14pt; color: #333333;\"> "
+						DialogUtils.warningMessage("<html><p><span style=\"font-size: 14pt; color: #333333;\"> "
 																+ " Maximum number of children reached for tag  " +tagMenuItem.getTag().getName() + 
 																	" </span></p></html>");
 					}
 					else {
-						this.tagCustomizationFrame.warningMessage("You can make at least : " + modelTag.getMax() + " copy for tag <" + modelTag.getName() + " >");
+						DialogUtils.warningMessage("You can make at least : " + modelTag.getMax() + " copy for tag <" + modelTag.getName() + " >");
 					}
 					
 				}
@@ -237,7 +238,7 @@ public class TagCustomizationFrameListener implements ItemListener, ActionListen
 			if(missingDependency != null) {
 				
 				/** warn the user */ 
-				boolean response = tagCustomizationFrame.yesNoWarningMessage(	"<html><p><span style=\"font-size: 14pt; color: #333333;\"> "
+				boolean response = DialogUtils.yesNoWarningMessage(	"<html><p><span style=\"font-size: 14pt; color: #333333;\"> "
 																				+ " Missing dependency : " + missingDependency.getName() + 
 																				" </p><br><p> Do you want to continue </span></p></html>"
 																			); 
@@ -250,9 +251,10 @@ public class TagCustomizationFrameListener implements ItemListener, ActionListen
 					XmlTag newTag;
 					if(tag.getParent() != null) newTag = new XmlTag(tag,tag.getParent());
 					else newTag = new XmlTag(tag);
+				
 					
 					wizardFrame.getFormPanelContainer().getFormPanel().addTag(newTag);
-					tagCustomizationFrame.okMessage("Tag added correctly", "done");
+					DialogUtils.okMessage("Tag added correctly", "done");
 					
 					/** updating preview pane in wizard frame */
 					session.getWizardFrame().updatePreview();
@@ -268,7 +270,7 @@ public class TagCustomizationFrameListener implements ItemListener, ActionListen
 				else newTag = new XmlTag(tag);
 				
 				wizardFrame.getFormPanelContainer().getFormPanel().addTag(newTag);
-				tagCustomizationFrame.okMessage("Tag added correctly", "done");
+				DialogUtils.okMessage("Tag added correctly", "done");
 				
 			}
 			

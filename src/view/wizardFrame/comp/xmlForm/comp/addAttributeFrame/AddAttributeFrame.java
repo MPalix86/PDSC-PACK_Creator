@@ -3,6 +3,7 @@ package view.wizardFrame.comp.xmlForm.comp.addAttributeFrame;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.Window;
@@ -76,7 +77,9 @@ public class AddAttributeFrame extends JFrame{
 			JPanel panel1 = new JPanel(new BorderLayout());
 			panel1.setBackground(Color.WHITE);
 			
-				JLabel tagLabel = new JLabel("<html> <font size = 20> " + tag.getName() + " <br> </font> </html>");
+				JLabel tagLabel = new JLabel("<html> Selected Tag : " + tag.getName() + " <br> </html>");
+				Font labelFont = tagLabel.getFont();
+				tagLabel.setFont(new Font(labelFont.getName(),Font.PLAIN,16));
 				tagLabel.setBorder(new EmptyBorder(0,10,0,0));
 				tagLabel.setForeground(CustomColor.TAG_COLOR);
 
@@ -90,8 +93,10 @@ public class AddAttributeFrame extends JFrame{
 				JPanel panel2 = new JPanel(new BorderLayout());
 				panel2.setBackground(Color.WHITE);
 				panel2.setBorder(new MatteBorder(0,0,1,0, CustomColor.LIGHT_GRAY));
-					selectedAttrlabel = new JLabel("<html> <font size = 5> </font> </html>");
-					selectedAttrlabel.setForeground(CustomColor.ATTR_COLOR);
+					selectedAttrlabel = new JLabel("ClicK info button for attribute description ");
+					selectedAttrlabel.setForeground(CustomColor.GRAY);
+					Font selectedAttrlabelFont = selectedAttrlabel.getFont();
+					selectedAttrlabel.setFont(new Font(selectedAttrlabelFont.getName(),Font.PLAIN,10));
 					selectedAttrlabel.setBorder(new EmptyBorder(10,10,10,10));
 				panel2.add(selectedAttrlabel, BorderLayout.CENTER);
 			
@@ -133,6 +138,9 @@ public class AddAttributeFrame extends JFrame{
 	public void updateDescription(String atrtName , String text){
 		this.selectedAttrlabel.setText(atrtName);
 		this.descriptionTextArea.setText(text);
+		Font selectedAttrlabelFont = selectedAttrlabel.getFont();
+		selectedAttrlabel.setFont(new Font(selectedAttrlabelFont.getName(),Font.PLAIN,14));
+		selectedAttrlabel.setForeground(CustomColor.ATTR_COLOR);
 	}
 	
 	public static void centreWindow(Window frame) {
