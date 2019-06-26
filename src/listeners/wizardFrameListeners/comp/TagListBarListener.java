@@ -3,6 +3,7 @@ package listeners.wizardFrameListeners.comp;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import business.Session;
 import business.XmlTagBusiness;
 import model.XmlTag;
 import view.tagCustomizationFrame.TagCustomizationFrame;
@@ -12,10 +13,12 @@ import view.wizardFrame.comp.tagsListBar.comp.TagListBarButton;
 public class TagListBarListener implements ActionListener{
 	
 	private TagsListBar childrenListBar;
+	private Session session;
 
 	
 	public TagListBarListener(TagsListBar childrenListBar) {
 		this.childrenListBar = childrenListBar;
+		session = Session.getInstance();
 	}
 	
 	

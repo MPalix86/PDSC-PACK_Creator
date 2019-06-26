@@ -27,14 +27,10 @@ public class StartUp extends JFrame {
 		 
 		 CustomUtils.setUIFont(new javax.swing.plaf.FontUIResource("SansSerif",Font.PLAIN,14));
 
-		 new WizardFrame().overviewLayout(); 
+		 new WizardFrame(); 
 		
 
 
-//		XmlTagDao tagDao = XmlTagDao.getInstance();
-//		XmlTag root = tagDao.getRootTag();
-//		XmlTag components = tagDao.getTagFromIdAndParent(11, root);
-//		XmlTagBusiness.printTag(components, 0);
 		
 	}
 		

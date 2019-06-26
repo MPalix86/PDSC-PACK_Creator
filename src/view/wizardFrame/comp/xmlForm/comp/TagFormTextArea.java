@@ -12,22 +12,24 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import business.CustomUtils;
-import business.Session;
 import model.XmlTag;
 import view.comp.CustomColor;
  
 public class TagFormTextArea extends JTextArea implements DocumentListener, FocusListener{
 	private XmlTag tag;
+	private TagRow row;
 	
-	public TagFormTextArea(XmlTag tag) {
+	public TagFormTextArea(XmlTag tag, TagRow row) {
 		this.tag = tag;
+		this.row = row;
 		setup();
 	}
 	
 	
 	
-	public TagFormTextArea(XmlTag tag, String text) {
+	public TagFormTextArea(XmlTag tag, String text,TagRow row) {
 		super(text);
+		this.row = row;
 		this.tag = tag;
 		setup();
 	}
@@ -52,7 +54,6 @@ public class TagFormTextArea extends JTextArea implements DocumentListener, Focu
 		/** if there is only one line in document */
 		if(!CustomUtils.thereAreMoreLinesInString(this.getText())){
 			int position = this.getCaretPosition();
-			TagRow row = Session.getInstance().getWizardFrame().getTagRow(tag);
 			tag.setContent(this.getText());
 			row.update();
 		}
@@ -66,7 +67,6 @@ public class TagFormTextArea extends JTextArea implements DocumentListener, Focu
 		if(!CustomUtils.thereAreMoreLinesInString(this.getText())){
 			int position = this.getCaretPosition();
 			tag.setContent(this.getText());
-			TagRow row =  Session.getInstance().getWizardFrame().getTagRow(tag);
 			row.update();
 			row.setFocusOnTagContentField();
 			SwingUtilities.invokeLater(new Runnable() {
@@ -89,7 +89,9 @@ public class TagFormTextArea extends JTextArea implements DocumentListener, Focu
 
 	@Override
 	public void focusGained(FocusEvent e) {
-		TagRow row =  Session.getInstance().getWizardFrame().getTagRow(tag);
+		/**
+		 * follow user selected element on screen
+		 */
 		row.scrollRectToVisible(this.getBounds());
 		
 	}
@@ -115,8 +117,6 @@ public class TagFormTextArea extends JTextArea implements DocumentListener, Focu
 	 * Update textArea (this) width based on longest string in text
 	 */
 	private void updateSize() {
-		
-		TagRow row =  Session.getInstance().getWizardFrame().getTagRow(tag);
 		
 		String lines[] = CustomUtils.separateText(this.getText(), "\n");
 		

@@ -16,26 +16,28 @@ import view.comp.CustomColor;
 public class AttributeFormTextField extends AttributeTextField implements DocumentListener, FocusListener{
 	
 	private Session session = Session.getInstance();
+	private TagRow row;
 	
 	
-	public AttributeFormTextField(XmlAttribute attr ) {
-		super(attr);
-		this.setForeground(CustomColor.ATTR_VALUE_COLOR);
-		this.setBorder(new MatteBorder (0,0,1,0,CustomColor.LIGHT_GRAY));
-
-
-		if(this.getText().length() == 0) {
-			this.setPreferredSize(new Dimension(50,this.getPreferredSize().height));
-		} 
+	public AttributeFormTextField(XmlAttribute attr , TagRow row) {
 		
-		this.getDocument().addDocumentListener(this);
-		this.addFocusListener(this);
+		super(attr);
+		this.row = row;
+		setup();
 	}
 	
 	
 	
-	public AttributeFormTextField(XmlAttribute attr,String text) {
+	public AttributeFormTextField(XmlAttribute attr,String text,TagRow row) {
 		super(attr,text);
+		this.row = row;
+		setup();
+	}
+
+	
+	
+	private void setup() {
+		
 		this.setForeground(CustomColor.ATTR_VALUE_COLOR);
 		this.setBorder(new MatteBorder (0,0,1,0,CustomColor.LIGHT_GRAY));
 		
@@ -46,7 +48,10 @@ public class AttributeFormTextField extends AttributeTextField implements Docume
 		
 		this.getDocument().addDocumentListener(this);
 		this.addFocusListener(this);
+		
 	}
+	
+	
 
 	@Override
 	public void insertUpdate(DocumentEvent e) {
@@ -57,6 +62,7 @@ public class AttributeFormTextField extends AttributeTextField implements Docume
 
 	@Override
 	public void removeUpdate(DocumentEvent e) {
+		
 		updateSize();
 	}
 
@@ -68,7 +74,9 @@ public class AttributeFormTextField extends AttributeTextField implements Docume
 
 	@Override
 	public void focusGained(FocusEvent e) {
-		TagRow row = session.getWizardFrame().getFormPanelContainer().getFormPanel().getTagOpenRowHashMap().get(attr.getTag());
+		/**
+		 * follow user selected element on screen
+		 */
 		row.scrollRectToVisible(this.getBounds());
 	}
 
@@ -78,7 +86,6 @@ public class AttributeFormTextField extends AttributeTextField implements Docume
 	
 	
 	private void updateSize() {
-		TagRow row = session.getWizardFrame().getFormPanelContainer().getFormPanel().getTagOpenRowHashMap().get(attr.getTag());
 		if(this.getText().length()>0) {
 			int width = this.getGraphics().getFontMetrics().stringWidth(this.getText());
 			this.setPreferredSize(new Dimension(width+2,this.getPreferredSize().height));

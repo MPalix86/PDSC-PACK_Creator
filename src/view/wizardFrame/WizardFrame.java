@@ -15,20 +15,18 @@ import javax.swing.border.EmptyBorder;
 
 import business.Session;
 import listeners.wizardFrameListeners.WizardFrameListener;
-import model.XmlTag;
+import listeners.wizardFrameListeners.comp.TabContainerListener;
 import model.pdsc.Pack;
 import view.comp.IconUtils;
 import view.wizardFrame.comp.TabContainer;
 import view.wizardFrame.comp.descriptionPane.DescriptionPaneContainer;
 import view.wizardFrame.comp.menuBar.Menu;
 import view.wizardFrame.comp.overviewPane.OverviewPane;
-import view.wizardFrame.comp.previewPane.PreviewPaneContainer;
 import view.wizardFrame.comp.tagsListBar.TagsListBarContainer;
 import view.wizardFrame.comp.toolBar.ToolBarContainer;
 import view.wizardFrame.comp.validatorPane.ValidatorContainer;
 import view.wizardFrame.comp.xmlForm.XmlForm;
 import view.wizardFrame.comp.xmlForm.XmlFormContainer;
-import view.wizardFrame.comp.xmlForm.comp.TagRow;
 
 /**
  * Wizard frame. Main frame of PDSC creator. 
@@ -42,8 +40,6 @@ public class WizardFrame extends JFrame {
 
 	private ToolBarContainer toolBarContainer;
 	
-	private PreviewPaneContainer previewPaneContainer;
-	
 	private JButton updatePreviewButton;
 	
 	private static WizardFrameListener listener;
@@ -51,8 +47,6 @@ public class WizardFrame extends JFrame {
 	private Session session; 
 	
 	private TagsListBarContainer tagsListbarContainer;
-	
-	private XmlFormContainer formPanelContainer;
 	
 	private TabContainer tabContainerCenter;
 	
@@ -92,22 +86,22 @@ public class WizardFrame extends JFrame {
 		
 		pack = new Pack();
 		
-		formPanelContainer = new XmlFormContainer();
 		toolBarContainer = new ToolBarContainer();
-		previewPaneContainer = new PreviewPaneContainer();
 		tagsListbarContainer = new TagsListBarContainer();
 		tabContainerCenter = new TabContainer();
 		tabContainerSouth = new TabContainer();
 		validatorContainer = new ValidatorContainer();
 		descriptionPaneContainer =  new DescriptionPaneContainer();
+		
+		tabContainerCenter.addChangeListener(new TabContainerListener());
+		tabContainerSouth.addChangeListener(new TabContainerListener());
 	
 		/* generate and place all component */
-		//placeComponent();
+		placeComponent();
 			
 		/* save frame in session */
 		session.setWizardFrame(this);
-		
-		//updatePreview();
+	
 		
 		this.setVisible(true);
 	}
@@ -138,17 +132,20 @@ public class WizardFrame extends JFrame {
 		contentPane.setBackground(Color.WHITE);
 		contentPane.setBorder(new EmptyBorder(0,0,0,0));
 		setContentPane(contentPane); 
+
+		
+		if (session.getSelectedForm() == null ) {
+			tabContainerCenter.addTab(" Overview   ",IconUtils.FAgetPlusCircleIcon(20,null),new OverviewPane());
+		}
+
 		
 		
-		tabContainerCenter.addTab(" Form   ",IconUtils.FAgetAlignLeftIcon(20),formPanelContainer);
-		tabContainerCenter.addTab(" PDSC Preview   ", IconUtils.FAgetFileCodeIcon(20) , previewPaneContainer);
-		
-		
-		tabContainerSouth.addTab(" XSD Validator   ", IconUtils.FAgetDesktopIcon(20), this.validatorContainer);
-		tabContainerSouth.addTab(" Description   ", IconUtils.FAgetInfoCircleIcon(20), this.descriptionPaneContainer);
+		tabContainerSouth.addTab(" XSD Validator   ", IconUtils.getScreeIcon(20), this.validatorContainer);
+		tabContainerSouth.addTab(" Description   ", IconUtils.FAgetInfoCircleIcon(20,null), this.descriptionPaneContainer);
 		
 		splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT,tabContainerCenter, tabContainerSouth);	
-		splitPane.setResizeWeight(0.8); // equal weights to top and bottom			
+		splitPane.setResizeWeight(0.8); 
+				
 		
 		contentPane.add(splitPane, BorderLayout.CENTER);
 		
@@ -158,48 +155,13 @@ public class WizardFrame extends JFrame {
 
 		contentPane.add(tagsListbarContainer, BorderLayout.WEST);
 		
-
-	
-
-
-		
 		northPanel.add(new Menu(),BorderLayout.NORTH);
 		northPanel.add(toolBarContainer,BorderLayout.SOUTH);
-		
-		
 		
 		/* repaint ContentPane */
 		contentPane.repaint();
 		contentPane.revalidate();
 	}
-	
-	
-	
-	public WizardFrame overviewLayout() {
-		
-
-		/** contentPane initial setup */
-		contentPane = new JPanel(new BorderLayout());
-		contentPane.setBackground(Color.WHITE);
-		contentPane.setBorder(new EmptyBorder(0,0,0,0));
-		setContentPane(contentPane); 
-		
-		contentPane.add(new OverviewPane(),BorderLayout.CENTER);
-		
-		return this;
-	}
-	
-
-
-	/**
-	 * Update xmlpreviewPane
-	 * 
-	 * @return void
-	 */
-	public void updatePreview() {
-		this.updatePreviewButton.doClick();
-	}
-	
 	
 	
 	
@@ -279,14 +241,14 @@ public class WizardFrame extends JFrame {
 		
 		
 		if(!validatorFound && !tabContainerFound) {
-			tabContainerSouth.addTab(" XSD Validator   ", IconUtils.FAgetDesktopIcon(20), this.validatorContainer);
+			tabContainerSouth.addTab(" XSD Validator   ", IconUtils.getScreeIcon(20), this.validatorContainer);
 			splitPane.add(tabContainerSouth);
 			splitPane.repaint();
 		}
 		
 		
 		if(!validatorFound && tabContainerFound) {
-			tabContainerSouth.addTab(" XSD Validator   ", IconUtils.FAgetDesktopIcon(20), this.validatorContainer);
+			tabContainerSouth.addTab(" XSD Validator   ", IconUtils.getScreeIcon(20), this.validatorContainer);
 			splitPane.repaint();
 		}
 		
@@ -331,41 +293,54 @@ public class WizardFrame extends JFrame {
 			}
 		}
 		
-		
 		if(!descriptionPaneFound && !tabContainerFound) {
-			tabContainerSouth.addTab(" Description   ", IconUtils.FAgetInfoCircleIcon(20), this.descriptionPaneContainer);
+			tabContainerSouth.addTab(" Description   ", IconUtils.FAgetInfoCircleIcon(20,null), this.descriptionPaneContainer);
 			splitPane.add(tabContainerSouth);
 			splitPane.repaint();
 		}
 		
 		
 		if(!descriptionPaneFound && tabContainerFound) {
-			tabContainerSouth.addTab(" Description   ", IconUtils.FAgetInfoCircleIcon(20), this.descriptionPaneContainer);
+			tabContainerSouth.addTab(" Description   ", IconUtils.FAgetInfoCircleIcon(20,null), this.descriptionPaneContainer);
 			splitPane.repaint();
 		}
 		
 	}
-
-
-
-
-	/**
-	 * @return the formContainer
-	 */
-	public XmlFormContainer getFormPanelContainer() {
-		return formPanelContainer;
+	
+	
+	
+	
+	
+	public void addXmlFormTab(XmlForm form) {
+		XmlFormContainer formContainer = new XmlFormContainer(form);
+		tabContainerCenter.addTab("  New PDSC  ", IconUtils.FAgetAlignLeftIcon(20,null) , formContainer);
+		splitPane.repaint();
 	}
+	
+	
+	
+	
 
 	
 	
-	/**
-	 * @return the previewPaneContainer
-	 */
-	public PreviewPaneContainer getPreviewPaneContainer() {
-		return previewPaneContainer;
+	public void setValidatorText(String text) {
+		if(validatorContainer != null) {
+			validatorContainer.getValidator().setText(text);
+			validatorContainer.getValidator().repaint();
+			validatorContainer.getValidator().revalidate();
+		}
 	}
-
-
+	
+	
+	
+	
+	public void setDescriptionText(String text) {
+		if(descriptionPaneContainer != null) {
+			descriptionPaneContainer.getDescriptionPane().setText(text);
+			descriptionPaneContainer.getDescriptionPane().repaint();
+			descriptionPaneContainer.getDescriptionPane().revalidate();
+		}
+	}
 
 	
 
@@ -395,19 +370,7 @@ public class WizardFrame extends JFrame {
 	}
 	
 	
-	
-	public XmlForm getFormPanel() {
-		return this.formPanelContainer.getFormPanel();
-	}
-	
-	
-	public TagRow getTagRow(XmlTag tag) {
-		return  this.getFormPanelContainer().getFormPanel().getTagOpenRowHashMap().get(tag);
-	}
-	
-	public void setValidatorText(String text) {
-		this.validatorContainer.getValidator().setText(text);
-	}
+
 
 	
 

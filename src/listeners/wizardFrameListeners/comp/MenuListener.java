@@ -9,9 +9,10 @@ import org.jdom2.Document;
 
 import business.FileBusiness;
 import business.Session;
-import business.WizardBusiness;
 import model.Response;
+import model.XmlTag;
 import view.comp.DialogUtils;
+import view.wizardFrame.comp.xmlForm.XmlForm;
 
 public class MenuListener implements ActionListener {
 	
@@ -43,7 +44,8 @@ public class MenuListener implements ActionListener {
 			if (pdscFile != null) {
 				System.out.println(FilenameUtils.getExtension(pdscFile.getName()));
 				if( FilenameUtils.getExtension(pdscFile.getName()).equals("PDSC") || FilenameUtils.getExtension(pdscFile.getName()).equals("pdsc")) {
-					FileBusiness.ReadPDSCFile(null,pdscFile);
+					XmlTag root = FileBusiness.ReadPDSCFile(null,null,pdscFile);
+					session.getWizardFrame().addXmlFormTab(new XmlForm(root));
 				}
 				else DialogUtils.warningMessage(" Select PDSC File ");
 			}
@@ -54,7 +56,7 @@ public class MenuListener implements ActionListener {
 		else if(command.equals("savePDSCAs")) {
 			File folder = DialogUtils.showSaveFileFrame();
 			if(folder != null) {
-				Document doc = WizardBusiness.genratePDSCDocument(session.getWizardFrame().getFormPanel().getRoot(), null);
+				Document doc = FileBusiness.genratePDSCDocument(session.getSelectedForm().getRoot());
 				Response response = FileBusiness.createFile(folder.toString(), "PDSC", doc);
 				if (response != null) {
 					if (response.getStatus() == FileBusiness.FILE_ALREADY_EXIST) {

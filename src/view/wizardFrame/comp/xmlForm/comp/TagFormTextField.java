@@ -12,22 +12,26 @@ import javax.swing.border.MatteBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import business.Session;
 import model.XmlTag;
 import view.comp.CustomColor;
 import view.comp.TagTextField;
 
 public class TagFormTextField extends TagTextField implements DocumentListener, FocusListener, ActionListener{
 	
-	public TagFormTextField(XmlTag tag) {
+	
+	private TagRow row;
+	
+	public TagFormTextField(XmlTag tag, TagRow row) {
 		super(tag);
+		this.row = row;
 		setup();
 	}
 	
 	
 	
-	public TagFormTextField(XmlTag tag, String text) {
+	public TagFormTextField(XmlTag tag, String text,TagRow row) {
 		super(tag,text);
+		this.row = row;
 		setup();
 	}
 	
@@ -67,7 +71,9 @@ public class TagFormTextField extends TagTextField implements DocumentListener, 
 
 	@Override
 	public void focusGained(FocusEvent e) {
-		TagRow row =  Session.getInstance().getWizardFrame().getTagRow(tag);
+		/**
+		 * follow user selected element on screen
+		 */
 		row.scrollRectToVisible(this.getBounds());	
 	}
 
@@ -76,7 +82,6 @@ public class TagFormTextField extends TagTextField implements DocumentListener, 
 
 	@Override
 	public void focusLost(FocusEvent e) {
-		TagRow row =  Session.getInstance().getWizardFrame().getTagRow(tag);
 		row.scrollRectToVisible(this.getBounds());
 	}
 	
@@ -97,8 +102,6 @@ public class TagFormTextField extends TagTextField implements DocumentListener, 
 
 		tag.setContent(textBeforeNewLine + textAfterNewLine);
 		
-		/** recovering tagRow */
-		TagRow row =  Session.getInstance().getWizardFrame().getTagRow(tag);
 		
 		/** updating TagRow */
 		row.update();
@@ -123,7 +126,6 @@ public class TagFormTextField extends TagTextField implements DocumentListener, 
 	 * Update textField (this) width based on String length
 	 */
 	private void updateSize() {
-		TagRow row =  Session.getInstance().getWizardFrame().getTagRow(tag);
 		if(this.getText().length()>0) {
 			int width = this.getGraphics().getFontMetrics().stringWidth(this.getText());
 			this.setPreferredSize(new Dimension(width+2,this.getPreferredSize().height));

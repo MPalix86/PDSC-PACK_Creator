@@ -120,12 +120,16 @@ public class XmlAttributeDao {
 		ArrayList<TableRecord> result = conn.query(query);
 		Iterator<TableRecord> i = result.iterator();
 		if(i.hasNext()) {
-			possibleValues = new XmlEnum();
-			possibleValues.add("");
+			if(result.get(0).get("value") != "null" && result.get(0).get("value")!= null) {
+				possibleValues = new XmlEnum();
+				possibleValues.add("");
+			}
 		}
+
 		while (i.hasNext()) {
 			TableRecord record = i.next();
-			possibleValues.add(record.get("value"));
+			if(possibleValues != null)
+				possibleValues.add(record.get("value"));
 	    }
 		return possibleValues;
 	}
@@ -169,6 +173,7 @@ public class XmlAttributeDao {
 			defaultValue		= record.get("default_value");
 			name 				= record.get("name");
 	    }
+		
 		attr = new XmlAttribute(attrId,name,required,possibleValues,defaultValue,null);
 		return attr;
 	}

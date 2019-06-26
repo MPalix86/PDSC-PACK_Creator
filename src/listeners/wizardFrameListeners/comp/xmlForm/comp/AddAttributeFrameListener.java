@@ -17,9 +17,11 @@ import view.wizardFrame.comp.xmlForm.comp.addAttributeFrame.AddAttributeFrame;
 
 public class AddAttributeFrameListener implements ActionListener , ItemListener{
 	private AddAttributeFrame frame;
+	private Session session;
 	
 	public AddAttributeFrameListener(AddAttributeFrame frame) {
 		this.frame = frame;
+		session = Session.getInstance();
 	}
 	
 	@Override
@@ -31,10 +33,8 @@ public class AddAttributeFrameListener implements ActionListener , ItemListener{
 			XmlTag tag = frame.geTtag();
 			if(newSelectedAttr != null) newSelectedAttr.forEach(a -> tag.addSelectedAttrAtIndex(a, 0));
 			frame.dispose();
-			Session.getInstance().getWizardFrame().getTagRow(tag).update();
+			session.getSelectedForm().getTagOpenRow(tag).update();
 
-				
-			
 		}
 		
 		else if(command.equals("showDescription")) {

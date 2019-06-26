@@ -12,7 +12,6 @@ import model.XmlAttribute;
 import model.XmlTag;
 import view.comp.DialogUtils;
 import view.comp.TagMenuItem;
-import view.tagCustomizationFrame.TagCustomizationFrame;
 import view.wizardFrame.comp.xmlForm.comp.TagRow;
 import view.wizardFrame.comp.xmlForm.comp.addAttributeFrame.AddAttributeFrame;
 
@@ -26,11 +25,10 @@ public class TagOptionMenuListener implements ActionListener{
 		
 		TagMenuItem item = (TagMenuItem) e.getSource();
 		XmlTag tag = item.getTag();
-		XmlTag root = session.getWizardFrame().getFormPanel().getRoot();
 		
 		if(command.equals("deleteTag")) {
 			
-			if(tag.getParent() != root) {
+			if(tag.getParent() != null) {
 				XmlTag parent = tag.getParent();
 				int tagOccurrenceInParent = XmlTagBusiness.findChildOccurrenceNumber(parent,tag.getName());
 				boolean response = true;
@@ -44,9 +42,9 @@ public class TagOptionMenuListener implements ActionListener{
 				}
 			}
 			else {
-				session.getWizardFrame().getFormPanel().getRoot().removeSelectedChild(tag);
+				session.getSelectedForm().getRoot().removeSelectedChild(tag);
 			}
-			session.getWizardFrame().getFormPanel().UpdateView();
+			session.getSelectedForm().UpdateView();
 		}
 		
 		
@@ -80,22 +78,13 @@ public class TagOptionMenuListener implements ActionListener{
 						XmlAttribute attr = (XmlAttribute) response.getObject();
 						attr.setTag(tag);
 						tag.addSelectedAttrAtIndex(attr, 0);
-						TagRow row = session.getWizardFrame().getTagRow(tag);
+						TagRow row = session.getSelectedForm().getTagOpenRow(tag);
 						row.update();
-						session.getWizardFrame().updatePreview();
 					}
 				}
 				if(!errorMessage.contentEquals("")) DialogUtils.warningMessage(errorMessage);
 					 
 			}
-			
-
-			
-			
-		}
-		
-		else if(command.equals("customize")) {
-			new TagCustomizationFrame(tag);
 		}
 		
 	}

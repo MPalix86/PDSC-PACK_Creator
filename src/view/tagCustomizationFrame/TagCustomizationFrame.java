@@ -10,18 +10,16 @@ import javax.swing.JPanel;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.ScrollPaneConstants;
-import javax.swing.UIManager;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.MatteBorder;
-import javax.swing.plaf.ColorUIResource;
 
-import business.Session;
 import listeners.tagCustomizationFrameListeners.TagCustomizationFrameListener;
 import model.XmlTag;
 import view.comp.CustomColor;
 import view.comp.SquareButton;
 import view.comp.TagButton;
 import view.tagCustomizationFrame.comp.TagContainer;
+import view.wizardFrame.comp.xmlForm.XmlForm;
 
 
 
@@ -45,9 +43,6 @@ public class TagCustomizationFrame extends JFrame {
 	/** tag container */
 	private TagContainer tagContainer;
 	
-	/** session */
-	private Session session;
-	
 	/** tag customization frame listener */
 	private TagCustomizationFrameListener listener;
 	
@@ -55,6 +50,8 @@ public class TagCustomizationFrame extends JFrame {
 	private XmlTag parent;
 	
 	private ArrayList<JPanel> childrenPanelArr;
+	
+	private XmlForm form;
 	
 	
 	
@@ -68,10 +65,8 @@ public class TagCustomizationFrame extends JFrame {
 	
 	public TagCustomizationFrame(XmlTag parent) {
 		
-		/** setting up JOptionPane color */
-		UIManager UI=new UIManager();
-		UI.put("OptionPane.background",new ColorUIResource(255,255,255));   
-		UI.put("Panel.background",new ColorUIResource(255,255,255));
+		/** recovenring parent tag */
+		this.parent = parent;
 		
 		/** recovenring parent tag */
 		this.parent = parent;
@@ -79,14 +74,10 @@ public class TagCustomizationFrame extends JFrame {
 		/** setting up listener */
 		listener = new TagCustomizationFrameListener(this);
 		
-		/** recovering session instance */
-		session = Session.getInstance();
-		
 		/** setting up default close operation */
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		placeComponents();
-		//generateCenterPanel();
 	}
 	
 	

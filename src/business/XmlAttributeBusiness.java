@@ -117,6 +117,7 @@ public class XmlAttributeBusiness {
 						.build();
 			}
 		}
+		
 		return 	new Response.ResponseBuilder()
 				.flag(true)
 				.status(XmlAttribute.IS_NEW)

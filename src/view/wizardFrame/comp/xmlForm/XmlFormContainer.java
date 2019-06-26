@@ -8,12 +8,25 @@ import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
 
+import model.XmlTag;
+
 public class XmlFormContainer extends JPanel{
 	private XmlForm formPanel;
 	private JScrollPane scrollPane;
 	
 	public XmlFormContainer() {
 		this.formPanel = new XmlForm();
+		placeComponents();
+	}
+	
+	
+	public XmlFormContainer(XmlTag root) {
+		this.formPanel = new XmlForm(root);
+		placeComponents();
+	}
+	
+	public XmlFormContainer(XmlForm form) {
+		this.formPanel = form;
 		placeComponents();
 	}
 	

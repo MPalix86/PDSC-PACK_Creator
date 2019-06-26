@@ -24,7 +24,7 @@ public class Menu extends JMenuBar {
 		JMenuItem validator = new JMenuItem(" Validator");
 		validator.addActionListener(listener);
 		validator.setActionCommand("showValidator");
-		validator.setIcon(IconUtils.FAgetDesktopIcon(16));
+		validator.setIcon(IconUtils.getScreeIcon(16));
 		
 		JMenuItem tagsList = new JMenuItem(" Tags List");
 		tagsList.addActionListener(listener);
@@ -34,7 +34,7 @@ public class Menu extends JMenuBar {
 		JMenuItem DescriptionPane = new JMenuItem(" Description Panel");
 		DescriptionPane.addActionListener(listener);
 		DescriptionPane.setActionCommand("showDescriptionPane");
-		DescriptionPane.setIcon(IconUtils.FAgetInfoCircleIcon(16));
+		DescriptionPane.setIcon(IconUtils.FAgetInfoCircleIcon(16,null));
 		
 		
 		
@@ -43,15 +43,15 @@ public class Menu extends JMenuBar {
 		openPDSCFile.addActionListener(listener);
 		openPDSCFile.setActionCommand("openPDSCFile");
 		
-		JMenuItem exportPDSCFile = new JMenuItem(" Save PDSC As");
-		exportPDSCFile.addActionListener(listener);
-		exportPDSCFile.setActionCommand("savePDSCAs");
-		
+		JMenuItem savePDSCAs = new JMenuItem(" Save PDSC As");
+		savePDSCAs.addActionListener(listener);
+		savePDSCAs.setActionCommand("savePDSCAs");
+		savePDSCAs.setIcon(IconUtils.getSaveAsIcon(16));
 
 		
 		
 		
-		file.add(exportPDSCFile);
+		file.add(savePDSCAs);
 		file.add(openPDSCFile);
 		
 		window.add(tagsList);

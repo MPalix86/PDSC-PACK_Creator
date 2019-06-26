@@ -3,6 +3,7 @@ package view.wizardFrame.comp.xmlForm.comp;
 import javax.swing.JLabel;
 import javax.swing.JPopupMenu;
 
+import business.Session;
 import listeners.wizardFrameListeners.comp.xmlForm.comp.AttributeOptionMenuListener;
 import model.XmlAttribute;
 import view.comp.AttributeMenuItem;
@@ -41,7 +42,15 @@ public class AttributeOptionMenu extends JPopupMenu{
 		}
 
 		
-
+		/**
+		 * IMPORTANT
+		 * to avoid scrollbar reset caused from method : row.scrollRectToVisible(this.getBounds()); 
+		 * present in TagFormTextField, TagFormTextArea, TagFormCombobox, 
+		 * AttributeFormCombobox, AttributeFormTextField
+		 * 
+		 * must to remove focus when jpopupmenu is called;
+		 */
+		Session.getInstance().getSelectedForm().getTagOpenRow(attr.getTag()).grabFocus();
 	
 	
 	}

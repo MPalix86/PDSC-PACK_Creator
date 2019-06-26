@@ -103,23 +103,35 @@ public class TagRow extends JPanel{
 					AttributeFormTextField textField ;
 					
 					/** if attribute have value set */
-					if(attr.getValue() != null) textField = new AttributeFormTextField(attr, attr.getValue());
-					else textField = new AttributeFormTextField(attr);
+					if(attr.getValue() != null) textField = new AttributeFormTextField(attr, attr.getValue(),this);
+					else textField = new AttributeFormTextField(attr,this);
 					
 					textField.addFocusListener(listener);
 					this.add(textField);
 				}
 				/** if attribute have possible values */
 				else {
-					AttributeFormComboBox valuesComboBox = new AttributeFormComboBox(attr);  
+					AttributeFormComboBox valuesComboBox = new AttributeFormComboBox(attr,this);  
 					
+					/** if attribute have possible values and attributes have no value set */
 					if (attr.getDefaultValue() != null && attr.getValue() == null ) {
 						valuesComboBox.setSelectedItem(attr.getDefaultValue());
 						attr.setValue(attr.getDefaultValue());
 					}
 					
 					/** if attribute have value set */
-					else if (attr.getValue() != null) valuesComboBox.setSelectedItem(attr.getValue());
+					if (attr.getValue() != null) {
+			
+						/** if combobox contains attrValue in list */
+						if(valuesComboBox.containsItem(attr.getValue())) {
+							valuesComboBox.setSelectedItem(attr.getValue());
+						}
+						else {
+							valuesComboBox.addItem(attr.getValue());
+							valuesComboBox.setSelectedItem(attr.getValue());
+						}
+					}
+					
 					
 					valuesComboBox.addFocusListener(listener);
 					this.add(valuesComboBox);
@@ -158,7 +170,7 @@ public class TagRow extends JPanel{
 						/** add textArea with content set */
 						JPanel panel = new JPanel(new BorderLayout());
 						
-						tagTextArea = new TagFormTextArea(tag,tag.getContent());
+						tagTextArea = new TagFormTextArea(tag,tag.getContent(),this);
 						tagTextArea.addFocusListener(listener);
 						
 						/** set border to get indentation */
@@ -172,7 +184,7 @@ public class TagRow extends JPanel{
 					/** if content haven't more than one line */
 					else {
 						/** add texfield with content set */
-						tagTextField = new TagFormTextField(tag,tag.getContent());
+						tagTextField = new TagFormTextField(tag,tag.getContent(),this);
 						tagTextField.addFocusListener(listener);
 						this.add(tagTextField);
 					}
@@ -182,7 +194,7 @@ public class TagRow extends JPanel{
 				else if (tag.getDefaultContent() != null) {
 					
 					/** add textfield with default content set  */
-					tagTextField = new TagFormTextField(tag , tag.getDefaultContent());
+					tagTextField = new TagFormTextField(tag , tag.getDefaultContent(),this);
 					tagTextField.addFocusListener(listener);
 					tag.setContent(tag.getDefaultContent());
 					this.add(tagTextField);
@@ -190,7 +202,7 @@ public class TagRow extends JPanel{
 				
 				else {
 					/** add textfield without content set  */
-					tagTextField = new TagFormTextField(tag);
+					tagTextField = new TagFormTextField(tag,this);
 					tagTextField.addFocusListener(listener);
 					this.add(tagTextField);
 				}
@@ -202,7 +214,7 @@ public class TagRow extends JPanel{
 			
 			/** if tag have possible value  */
 			else {
-				TagFormComboBox contentComboBox = new TagFormComboBox(tag);
+				TagFormComboBox contentComboBox = new TagFormComboBox(tag,this);
 
 				if (tag.getDefaultContent() != null && tag.getContent() == null ) {
 					contentComboBox.setSelectedItem(tag.getDefaultContent());

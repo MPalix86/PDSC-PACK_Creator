@@ -19,6 +19,8 @@ public class SetUiManager {
 		UIManager.put("TabbedPane.background", new Color(235,235,235));
 		UIManager.put("TabbedPane.foreground", Color.DARK_GRAY);
 		UIManager.put("TabbedPane.selected", CustomColor.WHITE);
+		UIManager.put("TabbedPane.borderHightlightColor", Color.DARK_GRAY);
+		
 		
 		
 
@@ -46,14 +48,15 @@ public class SetUiManager {
 	    UIManager.put("ComboBox.selectionBackground", CustomColor.LIGHT_GRAY);
 	    
 	    
-
+	    UIManager.put("OptionPane.background",Color.WHITE);
+	    UIManager.put("Panel.background",Color.WHITE);
 	  
 
 	    UIManager.put("Button.focus", CustomColor.LIGHT_GRAY);
 	    UIManager.put("Button.select", CustomColor.LIGHT_GRAY);
 
 
-		UIManager.put("MenuBar.selectionBackground", Color.GREEN);
+		UIManager.put("MenuBar.selectionBackground", Color.WHITE);
 		UIManager.put("MenuBar.selectionForeground", Color.BLUE);
 	}
 	

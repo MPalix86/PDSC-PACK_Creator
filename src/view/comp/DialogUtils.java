@@ -92,6 +92,15 @@ public class DialogUtils {
 		
 		/** handling user's choice */
 		int val = fileChooser.showOpenDialog(null);
+		
+		 try {
+				UIManager.setLookAndFeel(previousLF);
+			} catch (UnsupportedLookAndFeelException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		 
+		 
 		if(val == JFileChooser.APPROVE_OPTION) {
 			File destinationPath = fileChooser.getSelectedFile();
 			Session.getInstance().setLastDirectoryOpenPath(destinationPath);
@@ -128,6 +137,13 @@ public class DialogUtils {
 		
 		/** handling user's choice */
 		int val = fileChooser.showSaveDialog(null);
+		
+		 try {
+				UIManager.setLookAndFeel(previousLF);
+			} catch (UnsupportedLookAndFeelException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		if(val == JFileChooser.APPROVE_OPTION) {
 			File destinationPath = fileChooser.getSelectedFile();
 			Session.getInstance().setLastDirectoryOpenPath(destinationPath);

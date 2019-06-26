@@ -3,23 +3,23 @@ package view.wizardFrame.comp.xmlForm.comp;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 
-import business.Session;
 import model.XmlTag;
 import view.comp.TagComboBox;
 
 public class TagFormComboBox extends TagComboBox implements FocusListener{
 	
 	private TagRow row;
-	private Session session;
 	
-	public TagFormComboBox(XmlTag tag) {
+	public TagFormComboBox(XmlTag tag, TagRow row) {
 		super(tag);
-		session = Session.getInstance();
-		row = session.getWizardFrame().getFormPanel().getTagOpenRowHashMap().get(tag) ;
+		this.row = row;
 	}
 	
 	@Override
 	public void focusGained(FocusEvent e) {
+		/**
+		 * follow user selected element on screen
+		 */
 		row.scrollRectToVisible(this.getBounds());
 		
 	}

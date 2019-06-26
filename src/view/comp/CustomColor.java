@@ -18,6 +18,8 @@ public class CustomColor extends Color{
 	
 	public final static Color LIGHT_GRAY = new Color(224,224,224);
 	
+	public final static Color ICON_BLUE = new Color(30,127,226);
+	
 	public final static Color SYSTEM_BLUE_COLOR_LIGHT = new Color(10,132,255);
 	
 	public final static Color SYSTEM_BLUE_COLOR_DARK = new Color(0,122,255);

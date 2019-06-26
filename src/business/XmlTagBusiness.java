@@ -39,6 +39,29 @@ public class XmlTagBusiness {
 	
 	
 	
+//	public XmlTag addChildInSelectecChild(XmlTag parent , XmlTag child) {
+//		
+//		XmlTag ModelChild = 
+//		
+//		/** if max child number is > 0, add child */
+//		if(child.getMax() > 0 ) {
+//			
+//			/** creating new child instance of selected child with parent , passed parent */
+//			XmlTag newChild = new XmlTag(child, parent);
+//			
+//			/** adding new child in selectedChildArr of new parent */
+//			parent.addSelectedChild(newChild);
+//			
+//			/** maximum number of possible child in the model instance is reduced by one */
+//			child.setMax(child.getMax() -1);
+//			
+//		}
+//		
+//		return parent;
+//	}
+	
+	
+	
 	public static void printModelTag(XmlTag tag,int level) {
 		
 		System.out.println("");
@@ -164,7 +187,8 @@ public class XmlTagBusiness {
 
 	public static XmlTag getCompleteTagFromNameAndParent(String name , XmlTag parent) {
 		XmlTag tag = XmlTagDao.getInstance().getTagFromNameAndParent(name, parent);
-		return getCompleteTag(tag);
+		if(tag != null) return getCompleteTag(tag);
+		return null;
 	}
 	
 	

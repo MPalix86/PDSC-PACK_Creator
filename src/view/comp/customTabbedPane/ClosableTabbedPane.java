@@ -1,4 +1,4 @@
-package view.comp;
+package view.comp.customTabbedPane;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -12,10 +12,9 @@ import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
 
 import javax.swing.JSplitPane;
-import javax.swing.JTabbedPane;
 
 
-public class ClosableTabbedPane extends JTabbedPane{
+public class ClosableTabbedPane extends DnDTabbedPane{
 	private TabCloseUI closeUI = new TabCloseUI(this);
 	
 	public void paint(Graphics g){

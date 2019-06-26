@@ -5,7 +5,6 @@ import java.awt.event.FocusListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-import business.Session;
 import model.XmlAttribute;
 import model.XmlTag;
 import view.comp.CustomColor;
@@ -26,7 +25,6 @@ public class XmlFormListener implements FocusListener, MouseListener{
 	
 	private XmlForm xmlForm;
 	
-	private Session session = Session.getInstance();
 	
 	public XmlFormListener (XmlForm xmlForm) {
 		this.xmlForm = xmlForm;
@@ -117,7 +115,6 @@ public class XmlFormListener implements FocusListener, MouseListener{
 			if(closeRow != null) closeRow.unsetTagLabelBrighter();
 		}
 		
-		session.getWizardFrame().updatePreview();
 	}
 
 	

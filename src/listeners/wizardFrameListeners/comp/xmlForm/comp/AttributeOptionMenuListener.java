@@ -58,7 +58,7 @@ public class AttributeOptionMenuListener implements ActionListener{
 		
 			}
 		}
-		TagRow row = session.getWizardFrame().getTagRow(tag);
+		TagRow row = session.getSelectedForm().getTagOpenRow(tag);
 		row.update();
 	}
 }

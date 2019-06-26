@@ -4,13 +4,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 
 import org.jdom2.Document;
 
 import business.FileBusiness;
 import business.Session;
-import business.WizardBusiness;
 import business.XmlTagBusiness;
 import listeners.wizardFrameListeners.WizardFrameListener;
 import model.XmlTag;
@@ -49,14 +47,13 @@ public class ToolBarListener extends WizardFrameListener implements ActionListen
 		}
 		
 		else if(command.equals("validateXSD")) {
-			Document doc = WizardBusiness.writePdsc(session.getWizardFrame().getFormPanel().getTagArr());
+			Document doc = FileBusiness.genratePDSCDocument(session.getSelectedForm().getRoot());
 			String message = FileBusiness.validateXMLSchema(doc);
-			session.getWizardFrame().setValidatorText(message);;
+			session.getWizardFrame().setValidatorText(message);
 		}
 		
 		else if (command.equals("createPack")) {
-			ArrayList<XmlTag> tagArr = session.getWizardFrame().getFormPanelContainer().getFormPanel().getTagArr();
-			XmlTag root = tagArr.get(0);
+			XmlTag root = session.getSelectedForm().getRoot();
 			File path = DialogUtils.showChooseDirectoryFrame();
 			if (path != null) {
 				try {

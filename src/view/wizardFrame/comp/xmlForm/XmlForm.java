@@ -11,6 +11,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import business.OSValidator;
+import business.XmlTagBusiness;
 import listeners.wizardFrameListeners.comp.xmlForm.XmlFormListener;
 import model.XmlTag;
 import net.miginfocom.swing.MigLayout;
@@ -18,6 +19,7 @@ import view.comp.CustomColor;
 import view.wizardFrame.comp.xmlForm.comp.TagRow;
 
 public class XmlForm extends JPanel{
+
 
 	private HashMap<XmlTag,TagRow> tagOpenRowHashMap;
 	private HashMap<XmlTag,TagRow> tagCloseRowHashMap;
@@ -30,19 +32,41 @@ public class XmlForm extends JPanel{
 	
 	private static int INNER_ROW_PADDIND;
 
-	public XmlForm( XmlTag root ) {
+	public XmlForm() {
 		
-		this.root = root;
 		if(OSValidator.isWindows()) INNER_ROW_PADDIND = -8;
 		else INNER_ROW_PADDIND = -13;
-	
+		
+		root = XmlTagBusiness.getRoot();
+		root.addSelectedChild(XmlTagBusiness.getCompleteTagFromNameAndParent("vendor", root));
+		root.addSelectedChild(XmlTagBusiness.getCompleteTagFromNameAndParent("name", root));
+		root.addSelectedChild(XmlTagBusiness.getCompleteTagFromNameAndParent("description", root));
+		root.addSelectedChild(XmlTagBusiness.getCompleteTagFromNameAndParent("license", root));
+		root.addSelectedChild(XmlTagBusiness.getCompleteTagFromNameAndParent("url", root));
 		this.OpenCloseTagsLinesHashMap = new HashMap<XmlTag,Line2D>();
 		this.tagOpenRowHashMap = new HashMap<XmlTag, TagRow>();
 		this.tagCloseRowHashMap = new HashMap<XmlTag, TagRow>();
+		root.setSelectedAttrArr(root.getAttrArr());
 
 		listener = new XmlFormListener(this);
-
-		placeComponents() ;
+		
+		placeComponents();
+	}
+	
+	
+	
+	
+	public XmlForm(XmlTag root) {
+		
+		if(OSValidator.isWindows()) INNER_ROW_PADDIND = -8;
+		else INNER_ROW_PADDIND = -13;
+		this.root = root;
+		this.OpenCloseTagsLinesHashMap = new HashMap<XmlTag,Line2D>();
+		this.tagOpenRowHashMap = new HashMap<XmlTag, TagRow>();
+		this.tagCloseRowHashMap = new HashMap<XmlTag, TagRow>();
+		listener = new XmlFormListener(this);
+		
+		placeComponents();
 
 	}
 
@@ -56,10 +80,11 @@ public class XmlForm extends JPanel{
 		rowCounter = 0;
 		tagOpenRowHashMap.clear();
 		tagCloseRowHashMap.clear();
-		paintTag(root,0);
+		if(this.root != null) paintTag(root,0);
 		this.repaint();
 		this.revalidate();
 	}
+	
 
 
 	/**
@@ -90,9 +115,7 @@ public class XmlForm extends JPanel{
 		/** saving left border that represent indentation inside row */
 		openRow.setLeftBorder(leftBorder);
 
-
 		this.add(openRow.open());
-		
 
 		int parentLevel = level;
 
@@ -138,7 +161,7 @@ public class XmlForm extends JPanel{
 	 * adding tag inside XmlForm
 	 * @param tag
 	 */
-	public void addTag(XmlTag tag) {
+	public void addRootChild(XmlTag tag) {
 		if (tag.getParent() == null) {
 			this.root.addSelectedChild(tag);
 			tag.setParent(root);
@@ -196,7 +219,7 @@ public class XmlForm extends JPanel{
 
 
 	public TagRow getTagOpenRow(XmlTag tag) {
-		return getTagOpenRowHashMap().get(tag);
+		return this.tagOpenRowHashMap.get(tag);
 	}
 
 
@@ -212,31 +235,12 @@ public class XmlForm extends JPanel{
 	}
 
 
-
-	/**
-	 * @return the tagOpenRowHashMap
-	 */
-	public HashMap<XmlTag, TagRow> getTagOpenRowHashMap() {
-		return tagOpenRowHashMap;
-	}
-
-
-
-	/**
-	 * @return the tagCloseRowHashMap
-	 */
-	public HashMap<XmlTag, TagRow> getTagCloseRowHashMap() {
-		return tagCloseRowHashMap;
-	}
-
-
 	/**
 	 * @return the root
 	 */
 	public XmlTag getRoot() {
 		return root;
 	}
-	
 	
 	public int getRowCounter() {
 		return this.rowCounter;

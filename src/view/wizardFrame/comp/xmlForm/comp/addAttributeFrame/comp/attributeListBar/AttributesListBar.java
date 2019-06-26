@@ -65,7 +65,7 @@ public class AttributesListBar extends JPanel{
   		    	
   		    	panel1.add(checkBox);
   		        
-  		        AttributeButton showDescriptionButton = (AttributeButton) new AttributeButton(attr).toIconButton(IconUtils.FAgetInfoCircleIcon(20));
+  		        AttributeButton showDescriptionButton = (AttributeButton) new AttributeButton(attr).toIconButton(IconUtils.FAgetInfoCircleIcon(20,null));;
   		        showDescriptionButton.addActionListener(listener);
   		        showDescriptionButton.setActionCommand("showDescription");
   		        

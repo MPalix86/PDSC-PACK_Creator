@@ -16,6 +16,7 @@ import view.comp.TagButton;
 import view.comp.TagMenuItem;
 import view.tagCustomizationFrame.TagCustomizationFrame;
 import view.wizardFrame.WizardFrame;
+import view.wizardFrame.comp.xmlForm.XmlForm;
 
 /**
  * TagCustomizationFrame Listener
@@ -225,8 +226,16 @@ public class TagCustomizationFrameListener implements ItemListener, ActionListen
 		
 		}
 		
-		
+		/**
+		 * Add in wizard frame ( in selectedForm ) just modified tag
+		 * 
+		 * IMPORTANT:
+		 * if selectedForm is set to null tag will be added to a new Form
+		 * 
+		 */
 		else if(command == "addInWizard") {
+			
+			boolean confirm = true;
 			
 			/** recovering TagButton instance */
 			TagButton tagBtn = (TagButton) e.getSource();
@@ -242,40 +251,45 @@ public class TagCustomizationFrameListener implements ItemListener, ActionListen
 																				+ " Missing dependency : " + missingDependency.getName() + 
 																				" </p><br><p> Do you want to continue </span></p></html>"
 																			); 
-				/** if user want to continue */
-				if(response) {
-					
-					/** add tag in wizard frame */
-					XmlTag tag = tagBtn.getTag();
-					
-					XmlTag newTag;
-					if(tag.getParent() != null) newTag = new XmlTag(tag,tag.getParent());
-					else newTag = new XmlTag(tag);
-				
-					
-					wizardFrame.getFormPanelContainer().getFormPanel().addTag(newTag);
-					DialogUtils.okMessage("Tag added correctly", "done");
-					
-					/** updating preview pane in wizard frame */
-					session.getWizardFrame().updatePreview();
+				/** if user dont't want to continue anyway*/
+				if(!response) {
+					confirm = false;
 				}
 			}
 			
 			/** if there aren't missing dependency */
-			else {
+			if(confirm) {
+				/** add tag in wizard frame */
 				XmlTag tag = tagBtn.getTag();
 				
 				XmlTag newTag;
+				
 				if(tag.getParent() != null) newTag = new XmlTag(tag,tag.getParent());
 				else newTag = new XmlTag(tag);
+			
+				/** if selected form == null user want to create new PDSC (new xmlForm) */
+				if (session.getSelectedForm() == null) {
+					
+					XmlForm form = new XmlForm(newTag);
+		
+					session.getWizardFrame().addXmlFormTab(form);
+					
+					session.addXmlFormInFormArr(form);
+					
+					session.setSelectedForm(form);
+				}
 				
-				wizardFrame.getFormPanelContainer().getFormPanel().addTag(newTag);
+				/** if selected form != null user is updating form on which is working */
+				else {
+					session.getSelectedForm().addRootChild(newTag);
+				}
+				
 				DialogUtils.okMessage("Tag added correctly", "done");
+				
+				tagCustomizationFrame.dispose();
 				
 			}
 			
-			/** updating preview pane in wizard frame */
-			session.getWizardFrame().updatePreview();
 		}
 		
 		else if (command.equals("addRequiredTags")) {
