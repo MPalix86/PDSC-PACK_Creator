@@ -59,6 +59,26 @@ public class IconUtils {
 		return IconFontSwing.buildIcon(FontAwesome.FLOPPY_O, size, c);
 	}
 	
+	public static Icon FAgetTimesIcon(int size , Color c) {
+		if (c == null) c = ICON_COLOR;
+		IconFontSwing.register(FontAwesome.getIconFont());
+		return IconFontSwing.buildIcon(FontAwesome.TIMES, size, c);
+	}
+	
+	
+	public static Icon FAgetPlusIcon(int size , Color c) {
+		if (c == null) c = ICON_COLOR;
+		IconFontSwing.register(FontAwesome.getIconFont());
+		return IconFontSwing.buildIcon(FontAwesome.PLUS, size, c);
+	}
+	
+	
+	public static Icon FAgetFolderOpenIcon(int size , Color c) {
+		if (c == null) c = ICON_COLOR;
+		IconFontSwing.register(FontAwesome.getIconFont());
+		return IconFontSwing.buildIcon(FontAwesome.FOLDER_OPEN, size, c);
+	}
+	
 	
 	
 	
@@ -66,43 +86,123 @@ public class IconUtils {
 	/** OTHERS */
 	
 	public static ImageIcon getPackIcon(int size) {
-		return new ImageIcon(new ImageIcon(IconUtils.class.getResource(iconPath() + "pack20.png")).getImage().getScaledInstance(size, size, Image.SCALE_DEFAULT));
+		ImageIcon icon = null;
+		try {
+			icon = new ImageIcon(new ImageIcon(IconUtils.class.getResource(iconPath() + "pack20.png")).getImage().getScaledInstance(size, size, Image.SCALE_DEFAULT));
+		}catch(Exception e) {
+			icon = new ImageIcon();
+		}
+		return icon;
+	}
+	
+	public static ImageIcon getOkIcon(int size) {
+		ImageIcon icon = null;
+		try {
+			icon = new ImageIcon(new ImageIcon(IconUtils.class.getResource(iconPath() + "ok40.png")).getImage().getScaledInstance(size, size, Image.SCALE_DEFAULT));
+		}catch(Exception e) {
+			icon = new ImageIcon();
+		}
+		return icon;
+	}
+	
+	public static ImageIcon getWarningIcon(int size) {
+		ImageIcon icon = null;
+		try {
+			icon = new ImageIcon(new ImageIcon(IconUtils.class.getResource(iconPath() + "warning48.png")).getImage().getScaledInstance(size, size, Image.SCALE_DEFAULT));
+		}catch(Exception e) {
+			icon = new ImageIcon();
+		}
+		return icon;	 
 	}
 	
 	public static ImageIcon getPlayIcon(int size) {
-		return new ImageIcon(new ImageIcon(IconUtils.class.getResource(iconPath() + "play20.png")).getImage().getScaledInstance(size, size, Image.SCALE_DEFAULT));
+		ImageIcon icon = null;
+		try {
+			icon = new ImageIcon(new ImageIcon(IconUtils.class.getResource(iconPath() + "play20.png")).getImage().getScaledInstance(size, size, Image.SCALE_DEFAULT));
+		}catch(Exception e) {
+			icon = new ImageIcon();
+		}
+		return icon;
 	}
 	
 	public static ImageIcon getHideChildrenListIcon(int size) {
-		return  new ImageIcon(new ImageIcon(IconUtils.class.getResource(iconPath() + "hideList20.png")).getImage().getScaledInstance(size, size, Image.SCALE_DEFAULT));
+		ImageIcon icon = null;
+		try {
+			icon = new ImageIcon(new ImageIcon(IconUtils.class.getResource(iconPath() + "hideList20.png")).getImage().getScaledInstance(size, size, Image.SCALE_DEFAULT));
+		}catch(Exception e) {
+			icon = new ImageIcon();
+		}
+		return icon;
 	}
 	
 	public static ImageIcon getShowChildrenListIcon(int size) {
-		return  new ImageIcon(new ImageIcon(IconUtils.class.getResource(iconPath() + "showList20.png")).getImage().getScaledInstance(size, size, Image.SCALE_DEFAULT));
+		ImageIcon icon = null;
+		try {
+			icon = new ImageIcon(new ImageIcon(IconUtils.class.getResource(iconPath() + "showList20.png")).getImage().getScaledInstance(size, size, Image.SCALE_DEFAULT));
+		}catch(Exception e) {
+			icon = new ImageIcon();
+		}
+		return icon;
 	}
 	
 	public static ImageIcon getChildrenListIcon(int size) {
-		return  new ImageIcon(new ImageIcon(IconUtils.class.getResource(iconPath() + "tagList20.png")).getImage().getScaledInstance(size, size, Image.SCALE_DEFAULT));
+		ImageIcon icon = null;
+		try {
+			icon = new ImageIcon(new ImageIcon(IconUtils.class.getResource(iconPath() + "tagList20.png")).getImage().getScaledInstance(size, size, Image.SCALE_DEFAULT));
+		}catch(Exception e) {
+			icon = new ImageIcon();
+		}
+		return icon;
 	}
 	
 	public static ImageIcon getChildrenListIArrowIcon(int size) {
-		return  new ImageIcon(new ImageIcon(IconUtils.class.getResource(iconPath() + "tagListArrow.png")).getImage().getScaledInstance(33, size, Image.SCALE_DEFAULT));
+		ImageIcon icon = null;
+		try {
+			icon = new ImageIcon(new ImageIcon(IconUtils.class.getResource(iconPath() + "tagListArrow.png")).getImage().getScaledInstance(33, size, Image.SCALE_DEFAULT));
+		}catch(Exception e) {
+			icon = new ImageIcon();
+		}
+		return icon;
 	}
 	
 	public static ImageIcon getSaveIcon(int size) {
-		return  new ImageIcon(new ImageIcon(IconUtils.class.getResource( iconPath() + "save.png")).getImage().getScaledInstance(size, size, Image.SCALE_DEFAULT));
+		ImageIcon icon = null;
+		try {
+			icon = new ImageIcon(new ImageIcon(IconUtils.class.getResource(iconPath() + "save.png")).getImage().getScaledInstance(size, size, Image.SCALE_DEFAULT));
+		}catch(Exception e) {
+			icon = new ImageIcon();
+		}
+		return icon;
 	}
 	
 	public static ImageIcon getSaveAsIcon(int size) {
-		return  new ImageIcon(new ImageIcon(IconUtils.class.getResource( iconPath() + "saveAs.png")).getImage().getScaledInstance(size, size, Image.SCALE_DEFAULT));
+		ImageIcon icon = null;
+		try {
+			icon = new ImageIcon(new ImageIcon(IconUtils.class.getResource(iconPath() + "saveAs.png")).getImage().getScaledInstance(size, size, Image.SCALE_DEFAULT));
+		}catch(Exception e) {
+			icon = new ImageIcon();
+		}
+		return icon;
 	}
 	
 	public static ImageIcon getScreeIcon(int size) {
-		return  new ImageIcon(new ImageIcon(IconUtils.class.getResource( iconPath() + "screen.png")).getImage().getScaledInstance(size, size, Image.SCALE_DEFAULT));
+		ImageIcon icon = null;
+		try {
+			icon = new ImageIcon(new ImageIcon(IconUtils.class.getResource(iconPath() + "screen.png")).getImage().getScaledInstance(size, size, Image.SCALE_DEFAULT));
+		}catch(Exception e) {
+			icon = new ImageIcon();
+		}
+		return icon;
 	}
 	
 	public static ImageIcon getPcIcon(int size) {
-		return  new ImageIcon(new ImageIcon(IconUtils.class.getResource( iconPath() + "pc.png")).getImage().getScaledInstance(size, size, Image.SCALE_DEFAULT));
+		ImageIcon icon = null;
+		try {
+			icon = new ImageIcon(new ImageIcon(IconUtils.class.getResource(iconPath() + "pc.png")).getImage().getScaledInstance(size, size, Image.SCALE_DEFAULT));
+		}catch(Exception e) {
+			icon = new ImageIcon();
+		}
+		return icon;
 	}
 	
 	private static String iconPath() {

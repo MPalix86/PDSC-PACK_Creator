@@ -40,7 +40,8 @@ public class SquareButton extends JButton{
     public SquareButton(String text, Color background, Color foreground) {
     	super(text);
     	setup();
-        
+    	this.setBackground(background);
+        this.setForeground(foreground);
     }
     
     
@@ -49,6 +50,8 @@ public class SquareButton extends JButton{
     public SquareButton(String text, Color background, Color foreground, Color pressedBackgroundColor) {
     	super(text);
     	setup();
+      	this.setBackground(background);
+        this.setForeground(foreground);
     }
     
     

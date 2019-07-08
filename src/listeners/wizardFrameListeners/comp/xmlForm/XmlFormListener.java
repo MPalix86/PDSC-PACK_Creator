@@ -58,15 +58,7 @@ public class XmlFormListener implements FocusListener, MouseListener{
 		
 		if(tag != null) {
 			TagRow openRow = xmlForm.getTagOpenRow(tag);
-			TagRow closeRow = xmlForm.getTagCloseRow(tag);
-			
-			/** changing row has focus value to track which row has focus */
-			openRow.hasFocus = true;
-			
-			/** setting tag label brighter */
-			openRow.setTagLabelBrighter();
-
-			if(closeRow != null) closeRow.setTagLabelBrighter();
+			openRow.highlightBckGround(CustomColor.LIGHT_GRAY);
 		}
 		
 	}
@@ -105,14 +97,7 @@ public class XmlFormListener implements FocusListener, MouseListener{
 		
 		if(tag != null) {
 			TagRow openRow = xmlForm.getTagOpenRow(tag);
-			TagRow closeRow = xmlForm.getTagCloseRow(tag);
-			
-			/** changing row has focus value to track which row has focus */
-			openRow.hasFocus = false;
-			
-			/** removing tag label brighter */
-			openRow.unsetTagLabelBrighter();
-			if(closeRow != null) closeRow.unsetTagLabelBrighter();
+			openRow.unsetHighlightBackGround();
 		}
 		
 	}
@@ -193,14 +178,8 @@ public class XmlFormListener implements FocusListener, MouseListener{
 			
 			TagRow openRow  = xmlForm.getTagOpenRow(tag);
 			TagRow closeRow  = xmlForm.getTagCloseRow(tag);
-			
-			if(!openRow.hasFocus) {
-				openRow.unsetTagLabelBrighter();
-				
-				if(closeRow != null) closeRow.unsetTagLabelBrighter();
-			}
-			
-			
+			openRow.unsetTagLabelBrighter();
+			if(closeRow != null) closeRow.unsetTagLabelBrighter();
 			xmlForm.removeLine(tag);
 		}
 		else if(e.getSource().getClass().equals(AttributeLabel.class)) {

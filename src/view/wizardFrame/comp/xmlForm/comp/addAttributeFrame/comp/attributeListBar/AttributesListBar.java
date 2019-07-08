@@ -60,8 +60,13 @@ public class AttributesListBar extends JPanel{
   		  		XmlAttribute attr = attrArr.get(i);
   		    	
   		    	AttributeCheckBox checkBox = new AttributeCheckBox(attr);
-  		    	checkBox.setForeground(CustomColor.ATTR_COLOR);
   		    	checkBox.addItemListener(listener);
+  		    	checkBox.setForeground(CustomColor.ATTR_COLOR);
+  		    	if(attr.isRequired()) {
+  		    		checkBox.setText(attr.getName() + " *");
+  		    		checkBox.setSelected(true);
+  		    	}
+  		    	 
   		    	
   		    	panel1.add(checkBox);
   		        
@@ -81,6 +86,7 @@ public class AttributesListBar extends JPanel{
     	panel.add(panel1,BorderLayout.CENTER);
     	
     	this.add(panel,BorderLayout.CENTER);
+  
 	}
 		
 

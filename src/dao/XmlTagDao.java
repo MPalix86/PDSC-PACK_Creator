@@ -81,6 +81,23 @@ public class XmlTagDao {
 	
 	
 	
+	public Integer getTagIdFromTagName(String name) {
+		String query = "SELECT id FROM tags As t WHERE t.name = '" + name + "' ";
+		
+		ArrayList<TableRecord> result = conn.query(query);
+		Iterator<TableRecord> i = result.iterator();
+
+		 while(i.hasNext()){
+			TableRecord record = i.next();
+			System.out.println(record.get("id"));
+			return Integer.parseInt(record.get("id"));
+		 }
+		return null;
+	}
+	
+	
+	
+	
 	public XmlTag getTagFromNameAndParent(String name , XmlTag parent) {
 		XmlTag tag = null;
 		
@@ -318,6 +335,29 @@ public class XmlTagDao {
 			childrenArr.add(tag);
 		}
 		return childrenArr;
+	}
+	
+	
+	
+	
+	public XmlTag getTagFromTagId(int tagId) {
+		String query = "SELECT * FROM tags WHERE id = '" + tagId + "'";
+		
+		ArrayList<TableRecord> result = conn.query(query);
+		Iterator<TableRecord> i = result.iterator();
+		
+		XmlTag tag  = null;
+		
+		while(i.hasNext()){
+			TableRecord record = i.next();
+			
+			tag = new XmlTag (
+					record.get("name"),
+					null /** possible values */,
+					record.get("default_content")
+	        );
+		}	
+		return tag;
 	}
 	
 }

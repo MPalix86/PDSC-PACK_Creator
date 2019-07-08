@@ -120,8 +120,11 @@ public class TagFormTextArea extends JTextArea implements DocumentListener, Focu
 		
 		String lines[] = CustomUtils.separateText(this.getText(), "\n");
 		
-		String maxLine;
-		maxLine = lines[0];
+		String maxLine = "";
+		if(lines.length >= 1) {
+			maxLine = lines[0];
+		}
+		
 		
 		for (String line : lines){
 			if (line.length() > maxLine.length()) maxLine = line;

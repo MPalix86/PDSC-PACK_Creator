@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import dao.XmlAttributeDao;
 import dao.XmlTagDao;
+import model.Response;
 import model.XmlAttribute;
 import model.XmlTag;
 
@@ -19,48 +20,89 @@ public class XmlTagBusiness {
 			instance = new XmlTagBusiness();
 		return instance;
 	}
-
 	
-	public static XmlTag findSelectedChildFromTagName(XmlTag root, String childName) {
-		ArrayList <XmlTag> children = new ArrayList();
-		children.add(root);
-		while(!children.isEmpty()) {
-			XmlTag element = children.get(0);
-			children.remove(element);
-			if(element.getName().equals(childName)) {	
-				return element;
+	
+	
+	
+	
+	
+	/**
+	 * starting from tagName verify if tag is PDSC standard tag for this parent
+	 * or f tag is PDSC standard tag in general or if tag is new tag not present in PDSC standard
+	 * 
+	 * @param childName
+	 * @param parent
+	 * @return
+	 */
+	
+	public static Response verifyTagFromName(String childName , XmlTag parent) {
+		
+		if(childName != null) {
+			XmlTag child;
+			if(parent != null) {
+				/** check if tag is PDSC standard tag for this parent */
+				XmlTag modelChild = XmlTagBusiness.findModelChildFromSelectedChildName(parent, childName);
+				
+				if(modelChild != null) {
+					child = new XmlTag(modelChild , parent);
+					XmlTagBusiness.addRequiredAttr(child);
+					if(modelChild.getMax() <= 0) {
+						System.out.println("raggiunto il massimo numero");
+						return new Response.ResponseBuilder()
+								.flag(true)
+								.status(XmlTag.MAX_REACHED)
+								.message(" tag is standard attribute for this parent " )
+								.object(child)
+								.build();
+					}
+					
+					else {
+						return new Response.ResponseBuilder()
+								.flag(true)
+								.status(XmlTag.IS_STANDARD_FOR_TAG)
+								.message(" tag is standard attribute for this parent " )
+								.object(child)
+								.build();
+					}
+				}
+				
 			}
-			if( element.getSelectedChildrenArr() != null ) {
-				element.getSelectedChildrenArr().forEach((c)-> children.add(c));
+			
+					
+			/** check if tag is PDSC standard tag in general */
+			Integer childId = XmlTagBusiness.getTagIdFromTagName(childName);
+			
+			if(childId != null) {
+				child = XmlTagBusiness.getCompleteTagFromTagId(childId);
+				if(child != null) {
+					child.setParent(parent);
+					XmlTagBusiness.addRequiredAttr(child);
+					return new Response.ResponseBuilder()
+							.flag(true)
+							.status(XmlTag.IS_GENERAL_PDSC)
+							.object(child)
+							.build();
+				}
 			}
 		}
-		return null;
+		
+		return 	new Response.ResponseBuilder()
+				.flag(true)
+				.status(XmlAttribute.IS_NEW)
+				.message(" Attribute " + childName + "is not PDSC standard tag" )
+				.object(new XmlTag(childName , false , parent , XmlTag.MAX_OCCURENCE_NUMBER))
+				.build();
 	}
 	
 	
 	
-//	public XmlTag addChildInSelectecChild(XmlTag parent , XmlTag child) {
-//		
-//		XmlTag ModelChild = 
-//		
-//		/** if max child number is > 0, add child */
-//		if(child.getMax() > 0 ) {
-//			
-//			/** creating new child instance of selected child with parent , passed parent */
-//			XmlTag newChild = new XmlTag(child, parent);
-//			
-//			/** adding new child in selectedChildArr of new parent */
-//			parent.addSelectedChild(newChild);
-//			
-//			/** maximum number of possible child in the model instance is reduced by one */
-//			child.setMax(child.getMax() -1);
-//			
-//		}
-//		
-//		return parent;
-//	}
 	
-	
+	/**
+	 * debug function that print on standard output tag's tree starting from model tag
+	 * 
+	 * @param tag	tag to print
+	 * @param level starting indentation level (usually 0)
+	 */
 	
 	public static void printModelTag(XmlTag tag,int level) {
 		
@@ -91,6 +133,12 @@ public class XmlTagBusiness {
 	
 	
 	
+	/**
+	 * debug function that print on standard output tag's tree starting from local tag
+	 * 
+	 * @param tag	tag to print
+	 * @param level starting indentation level (usually 0)
+	 */
 	
 	public static void printLocalTag(XmlTag tag,int level) {
 		
@@ -119,6 +167,16 @@ public class XmlTagBusiness {
 	}
 	
 	
+	
+	
+	/**
+	 * return model child that contains all original constraints. 
+	 * 
+	 * @param parent
+	 * @param childName
+	 * @return model child found or null
+	 */
+	
 	public static XmlTag findModelChildFromSelectedChildName(XmlTag parent, String childName) {
 		ArrayList <XmlTag> children = new ArrayList();
 		children.add(parent);
@@ -135,6 +193,45 @@ public class XmlTagBusiness {
 		return null;
 	}
 	
+	
+	
+	
+	
+
+	/**
+	 * find in selected child array , all children that have passed name
+	 * 
+	 * @param root			tag on which to search
+	 * @param childName		child name
+	 * @return	arrayLyst with all found children
+	 */
+	
+	public static XmlTag findSelectedChildFromTagName(XmlTag root, String childName) {
+		ArrayList <XmlTag> children = new ArrayList();
+		children.add(root);
+		while(!children.isEmpty()) {
+			XmlTag element = children.get(0);
+			children.remove(element);
+			if(element.getName().equals(childName)) {	
+				return element;
+			}
+			if( element.getSelectedChildrenArr() != null ) {
+				element.getSelectedChildrenArr().forEach((c)-> children.add(c));
+			}
+		}
+		return null;
+	}
+	
+	
+	
+	
+	/**
+	 * Find the number of times the child (cildName) appears in  tag
+	 * 
+	 * @param parent 	parent tag on which search
+	 * @param childName	name of child tag to find
+	 * @return number of times that child appears in parent
+	 */
 	
 	public static int findChildOccurrenceNumber(XmlTag parent, String childName) {
 		int childOccurrence = 0;
@@ -156,6 +253,16 @@ public class XmlTagBusiness {
 	
 	
 	
+	
+	/**
+	 * find  if attrName is already present in selectedAttrArr and if true return
+	 * found attr
+	 * 
+	 * @param parent	parent tag on which search attribute
+	 * @param attrName	the attribute to find
+	 * @return the attribute found or null
+	 */
+	
 	public static XmlAttribute findChildSelectedAttrFromName(XmlTag parent, String attrName) {
 		ArrayList<XmlAttribute> selectedAttrArr = parent.getSelectedAttrArr();
 		if (selectedAttrArr != null) {
@@ -171,6 +278,14 @@ public class XmlTagBusiness {
 	
 	
 	
+	
+	
+	/**
+	 * return root tag, the only one that hava parent == null
+	 * 
+	 * @return root tag
+	 */
+	
 	public static XmlTag getRoot() {
 		XmlTag root = XmlTagDao.getInstance().getRootTag();
 		root.setAttrArr(XmlAttributeDao.getInstance().getTagAttributes(root));
@@ -178,21 +293,51 @@ public class XmlTagBusiness {
 		
 	}
 	
+	
+	
+	
+	/** 
+	 * return tag's not required children;
+	 * 
+	 * @param parent parent tag
+	 * @return tag's not required children or null
+	 */
+	
 	public static  ArrayList<XmlTag> getNotRequiredChildren(XmlTag parent) {
-
 		return XmlTagDao.getInstance().getNotRequiredChildrenFromTag(parent);
 	}
 	
 	
-
+	
+	
+	/**
+	 * this function assume that tag have name , required and other filed already set.
+	 * this function simply add attrArr , possibleVlaues
+	 * 
+	 * @param name		tag's name
+	 * @param parent	parent tag 
+	 * @return	tag found or null
+	 */
+	
 	public static XmlTag getCompleteTagFromNameAndParent(String name , XmlTag parent) {
 		XmlTag tag = XmlTagDao.getInstance().getTagFromNameAndParent(name, parent);
-		if(tag != null) return getCompleteTag(tag);
+		if(tag != null) return getCompleteTagFromTagInstance(tag);
 		return null;
 	}
 	
 	
-	public static XmlTag getCompleteTag(XmlTag tag) {
+	
+	
+	
+	/**
+	 * this function assume that tag have name , required and other filed already set.
+	 * this function simply add attrArr , possibleVlaues
+	 * 
+	 * @param tag
+	 * @return passed tag with attrArr and possibleValues set
+	 */
+	
+	public static XmlTag getCompleteTagFromTagInstance(XmlTag tag) {
 		
 		tag.setAttrArr(XmlAttributeDao.getInstance().getTagAttributes(tag));
 		tag.setPossibleValues(XmlTagDao.getInstance().getTagPossibleValues(tag));
@@ -205,13 +350,82 @@ public class XmlTagBusiness {
 			for(int i = 0; i < childrenArr.size(); i++) {		
 				XmlTag child = childrenArr.get(i);	
 				/** recursion */
-				getCompleteTag(child);
+				getCompleteTagFromTagInstance(child);
 			}
 		}
 		
 		return tag;
 	}
 	
+	
+	
+	
+	/**
+	 * this function assume that tag have name , required and other filed already set.
+	 * this function simply add attrArr and possibleVlaues
+	 * 
+	 * @param tag
+	 * @return passed tag with attrArr and possibleValues set
+	 */
+	
+	public static XmlTag getCompleteTagFromTagId(Integer id) {
+		
+		XmlTag tag = XmlTagDao.getInstance().getTagFromTagId(id);
+		
+		tag.setTagId(id);
+
+		tag.setAttrArr(XmlAttributeDao.getInstance().getTagAttributes(tag));
+		tag.setPossibleValues(XmlTagDao.getInstance().getTagPossibleValues(tag));
+		
+		ArrayList<XmlTag> childrenArr = XmlTagDao.getInstance().getChildrenArrFromTag(tag);
+		tag.setChildrenArr(childrenArr);
+		
+		if(childrenArr != null) {
+			/** iterating trough selected children */
+			for(int i = 0; i < childrenArr.size(); i++) {		
+				XmlTag child = childrenArr.get(i);	
+				/** recursion */
+				getCompleteTagFromTagId(child.getTagId());
+			}
+		}
+		return tag;
+	}
+	
+	
+	
+	
+	/**
+	 * return tag id of tagName passed
+	 * 
+	 * @param name tag's name
+	 * @return tag id of tagName passed
+	 */
+	
+	public static Integer getTagIdFromTagName(String name) {
+		return XmlTagDao.getInstance().getTagIdFromTagName(name);
+	}
+	
+	
+	
+	
+	/**
+	 * add required attributes inside passed tag
+	 * 
+	 * @param tag 
+	 */
+	
+	public static void addRequiredAttr(XmlTag tag) {
+		if(tag.getAttrArr() != null) {
+			for ( int i = 0; i < tag.getAttrArr().size(); i++) {
+				XmlAttribute attr = tag.getAttrArr().get(i);
+				if(attr.isRequired()) tag.addSelectedAttr(attr);
+			}
+		}
+	}
+	
+	
+	
+
 	
 	
 }

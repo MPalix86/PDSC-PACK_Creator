@@ -6,18 +6,12 @@ import java.awt.Color;
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
-import javax.swing.border.EmptyBorder;
 
 import model.XmlTag;
 
 public class XmlFormContainer extends JPanel{
 	private XmlForm formPanel;
 	private JScrollPane scrollPane;
-	
-	public XmlFormContainer() {
-		this.formPanel = new XmlForm();
-		placeComponents();
-	}
 	
 	
 	public XmlFormContainer(XmlTag root) {
@@ -39,13 +33,11 @@ public class XmlFormContainer extends JPanel{
 		
 		JScrollBar verticalScrollBar = new JScrollBar(JScrollBar.VERTICAL);
 		verticalScrollBar.setUnitIncrement(40);
+		
 
 		this.scrollPane = new JScrollPane(formPanel);
-		
 		scrollPane.setHorizontalScrollBar(horizontalScrollBar);
 		scrollPane.setVerticalScrollBar(verticalScrollBar);
-		scrollPane.setBorder(new EmptyBorder(0,0,0,0));
-		
 		this.add(scrollPane,BorderLayout.CENTER);
 		
 	}

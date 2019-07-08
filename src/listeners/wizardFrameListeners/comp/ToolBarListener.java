@@ -11,10 +11,13 @@ import business.FileBusiness;
 import business.Session;
 import business.XmlTagBusiness;
 import listeners.wizardFrameListeners.WizardFrameListener;
+import model.Pack;
+import model.Response;
 import model.XmlTag;
-import model.pdsc.Pack;
+import view.comp.CustomColor;
 import view.comp.DialogUtils;
 import view.comp.TagMenuItem;
+import view.comp.TextButton;
 import view.tagCustomizationFrame.TagCustomizationFrame;
 import view.wizardFrame.comp.toolBar.ToolBar;
 
@@ -37,8 +40,8 @@ public class ToolBarListener extends WizardFrameListener implements ActionListen
 		if(command == "addRootChild") {
 			TagMenuItem item = (TagMenuItem) e.getSource();
 			XmlTag tag = item.getTag();
-			tag = XmlTagBusiness.getCompleteTag(tag);
-			TagCustomizationFrame f = new TagCustomizationFrame(new XmlTag(tag));
+			tag = XmlTagBusiness.getCompleteTagFromTagInstance(tag);
+			new TagCustomizationFrame(new XmlTag(tag));
 		}
 		
 		
@@ -47,9 +50,37 @@ public class ToolBarListener extends WizardFrameListener implements ActionListen
 		}
 		
 		else if(command.equals("validateXSD")) {
-			Document doc = FileBusiness.genratePDSCDocument(session.getSelectedForm().getRoot());
-			String message = FileBusiness.validateXMLSchema(doc);
-			session.getWizardFrame().setValidatorText(message);
+			if(session.getSelectedPDSCDoc() != null) {
+				Document doc = FileBusiness.genratePDSCDocument(session.getSelectedForm().getRoot());
+				Response response = FileBusiness.validateXMLSchema(doc);
+				
+				
+				/** response.getObject() contains line number erro */
+				if(response.getObject() != null) {
+					
+					/** recovering line number */
+					int lineNumber = (int) response.getObject();
+					
+					/** button creation for error showing */
+					TextButton lineButton  = new TextButton("Show error line", CustomColor.SYSTEM_RED_COLOR_DARK , CustomColor.SYSTEM_RED_COLOR_LIGHT.brighter());
+					
+					/** button listener */
+					lineButton.addActionListener(new ActionListener() { 
+						  public void actionPerformed(ActionEvent e) {
+							  
+							/** making row blink */
+							System.out.println(lineNumber);
+						    session.getSelectedForm().lineFocusBlink(lineNumber, CustomColor.LIGHT_GRAY, 5);
+						  } 
+						} );
+					
+					/** insert text and button in validator */
+					session.getWizardFrame().setValidatorText(response.getMessage());
+					session.getWizardFrame().insertValidatorComnponent(lineButton);
+				}
+				else session.getWizardFrame().setValidatorText(response.getMessage());
+			}
+			else DialogUtils.warningMessage("No document selected");
 		}
 		
 		else if (command.equals("createPack")) {
@@ -57,7 +88,7 @@ public class ToolBarListener extends WizardFrameListener implements ActionListen
 			File path = DialogUtils.showChooseDirectoryFrame();
 			if (path != null) {
 				try {
-					int status = session.getWizardFrame().getPack().createPack(root , path);
+					int status = session.getSelectedPDSCDoc().getPack().createPack(root , path);
 					if(status == Pack.PACK_CREATED_CORRECTLY) {
 						
 					}

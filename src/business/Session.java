@@ -4,6 +4,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import model.PDSCDocument;
 import view.wizardFrame.WizardFrame;
 import view.wizardFrame.comp.xmlForm.XmlForm;;
 
@@ -18,12 +19,11 @@ public class Session {
 	/** wizardFrame instance */
 	private static WizardFrame wizardFrame;
 	
-	/** Array that contains all current form on which user is working */
-	private static ArrayList<XmlForm> formArray;
 	
 	/**
-	 * contains always current selected form on wich user is working.
-	 * On This variable are base many function like "save file" in Menu ,
+	 * contains always current selected form with and all necessary information 
+	 * on wich user is working.
+	 * On This variable are based many function like "save file" in Menu ,
 	 * "add root children in XmlForm class", ecc ecc.
 	 * 
 	 * IMPORTANT :
@@ -33,9 +33,12 @@ public class Session {
 	 * 
 	 * selectedForm change based on current selected tab in wizardFrame
 	 */
-	private static XmlForm selectedForm;
+	private static PDSCDocument selectedPdscDoc;
 	
-	
+	/**
+	 * represent open all open document on which user is working
+	 */
+	private static ArrayList<PDSCDocument> currentWorkinPdscDoc ;
 	
 	
 	
@@ -84,19 +87,70 @@ public class Session {
 		this.wizardFrame = wizardFrame;
 	}
 	
-	public void addXmlFormInFormArr(XmlForm form) {
-		if(formArray == null) formArray = new ArrayList<XmlForm>();
-		formArray.add(form);
+	public PDSCDocument getSelectedPDSCDoc() {
+		return this.selectedPdscDoc;
+	}
+	
+	
+	public void setSelectedPDSCDoc(PDSCDocument doc) {
+		this.selectedPdscDoc = doc;
+	}
+	
+	public void setSelectedPDSCDoc(XmlForm form) {
+		for (int i = 0; i < currentWorkinPdscDoc.size(); i++) {
+			PDSCDocument doc = currentWorkinPdscDoc.get(i);
+			if(doc.getForm().equals(form)) {
+				setSelectedPDSCDoc(doc);
+			}
+		}
 	}
 	
 	
 	public XmlForm getSelectedForm() {
-		return this.selectedForm;
+		if (selectedPdscDoc == null) return null;
+		return selectedPdscDoc.getForm();
 	}
 	
 	
-	public void setSelectedForm(XmlForm form) {
-		this.selectedForm = form;
+	public void addInCurrentWorkingPdscDoc(PDSCDocument doc) {
+		if(currentWorkinPdscDoc == null) currentWorkinPdscDoc = new ArrayList<PDSCDocument>();
+		currentWorkinPdscDoc.add(doc);
+	}
+	
+	
+	public PDSCDocument getPdscDocFromXmlForm(XmlForm form) {
+		if(currentWorkinPdscDoc != null) {
+			for (int i = 0; i < currentWorkinPdscDoc.size(); i++) {
+				PDSCDocument doc = currentWorkinPdscDoc.get(i);
+				if(doc.getForm().equals(form)) {
+					return doc;
+				}
+			}
+		}
+		return null;
+	}
+	
+	public PDSCDocument getPdscDocFromFilePath(File file) {
+		if(currentWorkinPdscDoc != null) {
+			for (int i = 0; i < currentWorkinPdscDoc.size(); i++) {
+				PDSCDocument doc = currentWorkinPdscDoc.get(i);
+				if(doc.getSourcePath() != null) {
+					if(doc.getSourcePath().equals(file)) {
+						return doc;
+					}
+				}
+				
+			}
+		}
+
+		return null;
+	}
+	
+	
+	public void removeFromCurrentWorkingPdscDoc(PDSCDocument doc) {
+		if(this.currentWorkinPdscDoc.contains(doc)) {
+			currentWorkinPdscDoc.remove(doc);
+		}
 	}
 																												/* OTHERS */
 	

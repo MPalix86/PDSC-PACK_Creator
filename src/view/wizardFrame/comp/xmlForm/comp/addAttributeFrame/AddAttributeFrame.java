@@ -93,11 +93,10 @@ public class AddAttributeFrame extends JFrame{
 				JPanel panel2 = new JPanel(new BorderLayout());
 				panel2.setBackground(Color.WHITE);
 				panel2.setBorder(new MatteBorder(0,0,1,0, CustomColor.LIGHT_GRAY));
-					selectedAttrlabel = new JLabel("ClicK info button for attribute description ");
-					selectedAttrlabel.setForeground(CustomColor.GRAY);
-					Font selectedAttrlabelFont = selectedAttrlabel.getFont();
-					selectedAttrlabel.setFont(new Font(selectedAttrlabelFont.getName(),Font.PLAIN,10));
-					selectedAttrlabel.setBorder(new EmptyBorder(10,10,10,10));
+					selectedAttrlabel = new JLabel("<html> <font size = 3> Add desired attrbutes for tag " + tag.getName() + 
+													". Click info button for attribute description </font> <br></html>"
+													);
+					selectedAttrlabel.setBorder(new EmptyBorder(5,10,10,10));
 				panel2.add(selectedAttrlabel, BorderLayout.CENTER);
 			
 			contentPane2.add(panel2,BorderLayout.NORTH);
@@ -137,7 +136,7 @@ public class AddAttributeFrame extends JFrame{
 	
 	public void updateDescription(String atrtName , String text){
 		this.selectedAttrlabel.setText(atrtName);
-		this.descriptionTextArea.setText(text);
+		this.descriptionTextArea.setText("Description : \n\n" + text);
 		Font selectedAttrlabelFont = selectedAttrlabel.getFont();
 		selectedAttrlabel.setFont(new Font(selectedAttrlabelFont.getName(),Font.PLAIN,14));
 		selectedAttrlabel.setForeground(CustomColor.ATTR_COLOR);

@@ -10,12 +10,17 @@ import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
-
-import javax.swing.JSplitPane;
+import java.util.ArrayList;
 
 
 public class ClosableTabbedPane extends DnDTabbedPane{
 	private TabCloseUI closeUI = new TabCloseUI(this);
+	private ArrayList<TabCloseListener> listeners;
+	
+	public void addTabCloseListener (TabCloseListener listener) {
+		if (listeners == null) listeners = new ArrayList<TabCloseListener>();
+	    listeners.add(listener);
+	}
 	
 	public void paint(Graphics g){
 		super.paint(g);
@@ -43,6 +48,7 @@ public class ClosableTabbedPane extends DnDTabbedPane{
 			tabbedPane = pane;
 			tabbedPane.addMouseMotionListener(this);
 			tabbedPane.addMouseListener(this);
+			
 		}
 		public void mouseEntered(MouseEvent me) {}
 		public void mouseExited(MouseEvent me) {}
@@ -51,23 +57,22 @@ public class ClosableTabbedPane extends DnDTabbedPane{
 		public void mouseDragged(MouseEvent me) {}
 		
 		
-
+		/**
+		 * handle tab closing
+		 */
 		public void mouseReleased(MouseEvent me) {
 			if(closeUnderMouse(me.getX(), me.getY())){
 				boolean isToCloseTab = tabAboutToClose(selectedTab);
-				if (isToCloseTab && selectedTab > -1){			
-					tabbedPane.removeTabAt(selectedTab);
+				if (isToCloseTab && selectedTab > -1){	
 					
-					if(tabbedPane.getParent().getClass() == JSplitPane.class && tabbedPane.getTabCount() <= 0){
-						System.out.println(tabbedPane.getTabCount()+ "WTF");
-						JSplitPane splitPane = (JSplitPane) tabbedPane.getParent();
-						splitPane.remove(tabbedPane);
-						splitPane.repaint();
-						splitPane.revalidate();
-					}
+				
+					/** calling custom event for all registered TabCloselisteners */
+					if (listeners != null) listeners.forEach((l)-> l.onTabClose (tabbedPane));
+					tabbedPane.removeTabAt(selectedTab);
 					
 				}
 				selectedTab = tabbedPane.getSelectedIndex();
+				
 			}
 		}
 
@@ -156,6 +161,11 @@ public class ClosableTabbedPane extends DnDTabbedPane{
 
 	public boolean tabAboutToClose(int tabIndex) {
 		return true;
+	}
+	
+	
+	public interface TabCloseListener {
+		 void onTabClose(ClosableTabbedPane tabbedPane);
 	}
 
 	

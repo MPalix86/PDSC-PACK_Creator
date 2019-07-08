@@ -55,7 +55,7 @@ public class CustomColor extends Color{
 	public final static Color SYSTEM_YELLOW_COLOR_LIGHT = new Color(255,214,10);
 	
 	public final static Color SYSTEM_YELLOW_COLOR_DARK = new Color(255,204,0);
-	
+
 	
 	
 	

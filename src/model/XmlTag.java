@@ -111,6 +111,11 @@ public class XmlTag{
 	public final static int MAX_OCCURENCE_NUMBER = 1000;
 	
 	
+	public final static int  IS_STANDARD_FOR_TAG = 0;
+	public final static int  IS_GENERAL_PDSC = 1;
+	public final static int  IS_NEW = 2;
+	public final static int  MAX_REACHED = 3;
+	
 	
 	
 	public XmlTag(Integer tagId,Integer relId, String name, boolean required, XmlTag parent, int max, Object possibleValues, String defaultContent,XmlNameSpace nameSpace) {
@@ -134,8 +139,15 @@ public class XmlTag{
 		this.parent = parent;
 		this.max = max;
 	}
-
-
+	
+	
+	
+	
+	public XmlTag(String name, Object possibleValues, String defaultContent) {
+		this.name = name;
+		this.possibleValues = possibleValues;	
+		this.defaultContent = defaultContent;
+	}
 
 
 

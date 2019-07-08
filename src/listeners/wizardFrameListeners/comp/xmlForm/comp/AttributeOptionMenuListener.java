@@ -3,7 +3,6 @@ package listeners.wizardFrameListeners.comp.xmlForm.comp;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.util.HashMap;
 
 import business.Session;
 import model.XmlAttribute;
@@ -37,10 +36,9 @@ public class AttributeOptionMenuListener implements ActionListener{
 		else if (command.equals("addPath")) {
 			File file = DialogUtils.showChooseFileFrame();
 			if(file != null) {
-				attr.setValue(attr.getValue() + file.getName()) ;
-				HashMap<XmlAttribute,String> pathFileHashMap = session.getWizardFrame().getPack().getPathFilesHashMap();
-				if(pathFileHashMap.containsKey(attr)) pathFileHashMap.replace(attr, file.getAbsolutePath());
-				else pathFileHashMap.put(attr, file.getAbsolutePath());
+				if(attr.getValue()!= null) attr.setValue(attr.getValue() + file.getName()) ;
+				else attr.setValue(file.getName()) ;
+				session.getSelectedPDSCDoc().getPack().addPath(attr, file.getAbsolutePath());
 			}
 				
 		}

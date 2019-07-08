@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Insets;
 
 import javax.swing.UIManager;
+import javax.swing.border.LineBorder;
 import javax.swing.border.MatteBorder;
 
 import view.comp.CustomColor;
@@ -15,7 +16,7 @@ public class SetUiManager {
 	
 	public SetUiManager() {
 
-		UIManager.put("TabbedPane.contentBorderInsets", new Insets(0,0,0,0));
+		UIManager.put("TabbedPane.contentBorderInsets", new Insets(5,0,0,0));
 		UIManager.put("TabbedPane.background", new Color(235,235,235));
 		UIManager.put("TabbedPane.foreground", Color.DARK_GRAY);
 		UIManager.put("TabbedPane.selected", CustomColor.WHITE);
@@ -32,7 +33,7 @@ public class SetUiManager {
 		UIManager.put("MenuItem.foreground", CustomColor.DARK_GRAY);
 		UIManager.put("MenuItem.background", Color.WHITE);
 		
-		UIManager.put("PopupMenu.border", new MatteBorder(1,1,1,1,CustomColor.SYSTEM_GRAY_COLOR_DARK));
+		UIManager.put("PopupMenu.border", new LineBorder(CustomColor.DARK_GRAY , 2 , true));
 		UIManager.put("PopupMenu.background", Color.WHITE);
 		
 		

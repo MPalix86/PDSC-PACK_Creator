@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 import business.Session;
 import business.XmlTagBusiness;
 import model.XmlTag;
+import view.comp.DialogUtils;
 import view.tagCustomizationFrame.TagCustomizationFrame;
 import view.wizardFrame.comp.tagsListBar.TagsListBar;
 import view.wizardFrame.comp.tagsListBar.comp.TagListBarButton;
@@ -28,8 +29,12 @@ public class TagListBarListener implements ActionListener{
 		String command = e.getActionCommand();
 		if (command.equals("addRootChild")) {
 			XmlTag tag = btn.getTag();
-			tag = XmlTagBusiness.getCompleteTag(tag);
-			new TagCustomizationFrame(new XmlTag(tag));
+			tag = XmlTagBusiness.getCompleteTagFromTagInstance(tag);
+			if(session.getSelectedForm() != null) {
+				new TagCustomizationFrame(new XmlTag(tag));
+			}
+			else DialogUtils.warningMessage("Select document before adding tag");
+			
 		}
 	}
 

@@ -16,7 +16,6 @@ import view.comp.TagButton;
 import view.comp.TagMenuItem;
 import view.tagCustomizationFrame.TagCustomizationFrame;
 import view.wizardFrame.WizardFrame;
-import view.wizardFrame.comp.xmlForm.XmlForm;
 
 /**
  * TagCustomizationFrame Listener
@@ -267,19 +266,12 @@ public class TagCustomizationFrameListener implements ItemListener, ActionListen
 				if(tag.getParent() != null) newTag = new XmlTag(tag,tag.getParent());
 				else newTag = new XmlTag(tag);
 			
-				/** if selected form == null user want to create new PDSC (new xmlForm) */
-				if (session.getSelectedForm() == null) {
-					
-					XmlForm form = new XmlForm(newTag);
-		
-					session.getWizardFrame().addXmlFormTab(form);
-					
-					session.addXmlFormInFormArr(form);
-					
-					session.setSelectedForm(form);
+				/** if selected PDSCDoc == null  */
+				if (session.getSelectedPDSCDoc() == null) {
+					DialogUtils.warningMessage("No document selected");
 				}
 				
-				/** if selected form != null user is updating form on which is working */
+				/** if PDSCDoc != null user is updating PDSCDoc on which is working */
 				else {
 					session.getSelectedForm().addRootChild(newTag);
 				}
@@ -298,10 +290,6 @@ public class TagCustomizationFrameListener implements ItemListener, ActionListen
 			TagCustomizationBusiness.addRequiredTags(tag);
 			tagCustomizationFrame.getTagContainer().updateView();
 
-			
-		
-			
-			
 		}
 
 		  

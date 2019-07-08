@@ -3,7 +3,6 @@ package view.wizardFrame.comp.xmlForm.comp.addAttributeFrame.comp.attributeListB
 
 import java.awt.BorderLayout;
 
-import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
@@ -53,13 +52,8 @@ public class AttributesListBarContainer extends JPanel{
 		scrollPane.setBorder(new MatteBorder(0,0,0,1, CustomColor.LIGHT_GRAY));
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
+	
 		
-		JLabel title = new JLabel("Attributes");
-		title.setForeground(CustomColor.DARK_GRAY);
-		title.setHorizontalAlignment(JLabel.CENTER);
-		title.setVerticalAlignment(JLabel.CENTER);
-		
-		this.add(title,BorderLayout.NORTH);
 		this.add(scrollPane,BorderLayout.CENTER);
 	}
 

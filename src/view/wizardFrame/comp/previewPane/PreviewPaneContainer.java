@@ -2,14 +2,16 @@ package view.wizardFrame.comp.previewPane;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
 
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
 
 import listeners.wizardFrameListeners.comp.previewPaneListeners.PreviewPaneContainerListener;
 
-public class PreviewPaneContainer extends JPanel{
+public class PreviewPaneContainer extends JFrame{
 	
 	private PreviewPane previewPane;
 	
@@ -27,14 +29,18 @@ public class PreviewPaneContainer extends JPanel{
 	
 	
 	private void placeComponents() {
-		
+		JPanel contentPane = new JPanel(new BorderLayout());
 		this.setLayout(new BorderLayout());
+		this.add(contentPane , BorderLayout.CENTER);
 		
 		JScrollPane ScrollPane = new JScrollPane(previewPane);
 		ScrollPane.setBackground(Color.WHITE);
 		ScrollPane.setBorder(new EmptyBorder(10,0,0,0));
 		ScrollPane.setRowHeaderView(previewPane.getTextLineNumber());
-		this.add(ScrollPane, BorderLayout.CENTER);
+		contentPane.add(ScrollPane, BorderLayout.CENTER);
+		
+		this.setVisible(true);
+		this.setMinimumSize(new Dimension(500,600));
 	}
 
 

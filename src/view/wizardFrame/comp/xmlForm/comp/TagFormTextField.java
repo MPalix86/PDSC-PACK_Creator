@@ -82,7 +82,6 @@ public class TagFormTextField extends TagTextField implements DocumentListener, 
 
 	@Override
 	public void focusLost(FocusEvent e) {
-		row.scrollRectToVisible(this.getBounds());
 	}
 	
 

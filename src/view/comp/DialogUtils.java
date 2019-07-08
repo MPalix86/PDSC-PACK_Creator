@@ -1,13 +1,18 @@
 package view.comp;
 
+import java.awt.Component;
+import java.awt.event.ActionEvent;
 import java.io.File;
 
+import javax.swing.AbstractAction;
 import javax.swing.ImageIcon;
+import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.JSpinner;
 import javax.swing.LookAndFeel;
 import javax.swing.SpinnerNumberModel;
+import javax.swing.Timer;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
@@ -238,5 +243,44 @@ public class DialogUtils {
 				 icon, options, options[0]); 
 	
 	}
+	
+	
+	
+	/**
+	 * Show JDialog without buttons only that go off after "millis" seconds
+	 * 
+	 * @param message	message to show in dialog
+	 * @param icon		icon to set in dialog	
+	 * @param millis	number of seconds before dialog dispose
+	 */
+	
+	public static void  noButtonsTemporaryMessage(String message, ImageIcon icon , int millis , Component parentFrame ) {
+		final JOptionPane optionPane = new JOptionPane(message, JOptionPane.INFORMATION_MESSAGE, JOptionPane.DEFAULT_OPTION, icon, new Object[]{}, null);
+		final JDialog dialog = new JDialog();
+		if(parentFrame != null) dialog.setLocationRelativeTo(parentFrame);
+		dialog.setTitle("Message");
+		dialog.setModal(true);
+
+		dialog.setContentPane(optionPane);
+
+		dialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+		dialog.pack();
+
+		//create timer to dispose of dialog after "millis" seconds
+		Timer timer = new Timer(millis, new AbstractAction() {
+		    @Override
+		    public void actionPerformed(ActionEvent ae) {
+		        dialog.dispose();
+		    }
+		});
+		
+		timer.setRepeats(false);//the timer should only go off once
+
+		//start timer to close JDialog as dialog modal we must start the timer before its visible
+		timer.start();
+
+		dialog.setVisible(true);
+	}
+
 
 }

@@ -8,6 +8,7 @@ import javax.swing.JToolBar;
 
 import business.Session;
 import business.XmlTagBusiness;
+import listeners.IndependentFrameListener.FileOptionListener;
 import listeners.wizardFrameListeners.comp.ToolBarListener;
 import model.XmlTag;
 import view.comp.DropDownButton;
@@ -36,14 +37,17 @@ public class ToolBar extends JToolBar{
 	
 	private Session session;
 	
+	private FileOptionListener fileOptionListener;
+	
 	
 	
 	
 	
 	public ToolBar() {
+		fileOptionListener = new FileOptionListener();
 		this.listener = new ToolBarListener(this) ;
 		session = Session.getInstance();
-		
+		this.setFloatable(false);
 		placeComponents();
 	}
 	
@@ -76,6 +80,16 @@ public class ToolBar extends JToolBar{
 		validateXsd.addActionListener(listener);
 		validateXsd.setActionCommand("validateXSD");
 		
+		SquareButton saveButton = new SquareButton().toIconButton(IconUtils.getSaveIcon(20));
+		saveButton.setToolTipText("Save current PDSC");
+		saveButton.addActionListener(fileOptionListener);
+		saveButton.setActionCommand("savePDSC");
+		
+		SquareButton saveAsButton = new SquareButton().toIconButton(IconUtils.getSaveAsIcon(20));
+		saveAsButton.setToolTipText("Save PDSC as");
+		saveAsButton.addActionListener(fileOptionListener);
+		saveAsButton.setActionCommand("savePDSCAs");
+		
 		
 		generateTagsMenu();
 
@@ -83,11 +97,13 @@ public class ToolBar extends JToolBar{
 		this.add(dropDownTagsButton);
 		this.add(showHideTagsListButton);
 		
-		this.addSeparator();
+		
+		this.add(saveButton);
+		this.add(saveAsButton);
+		
 		
 		this.add(validateXsd);
 		this.add(createPackButton);
-
 
 		this.setRollover(true);
 	

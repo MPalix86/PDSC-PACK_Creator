@@ -34,7 +34,7 @@ public class TagRow extends JPanel{
 	private XmlForm form;
 	private int option;
 	private int rowNumber;
-	public boolean hasFocus = false;
+	
 	ArrayList<AttributeLabel> attrLabelArr ;
 	
 	private final static int OPEN_ROW = 0;
@@ -155,7 +155,7 @@ public class TagRow extends JPanel{
 		
 		
 		/** if tag have no children */
-		if(tag.getSelectedChildrenArr() == null) {
+		if(tag.getSelectedChildrenArr() == null || tag.getSelectedChildrenArr().size() <= 0) {
 
 			/** if tag haven't possible values */
 			if(tag.getPossibleValues() == null) {
@@ -261,7 +261,6 @@ public class TagRow extends JPanel{
 		if (tagLabel2 != null) tagLabel2.setForeground(CustomColor.TAG_COLOR);
 	}
 	
-	
 	/** 
 	 * used when switching from TagTextField and tagTextArea and vice versa
 	 * to avoid the focus lost
@@ -305,11 +304,13 @@ public class TagRow extends JPanel{
 	}
 	
 	
-	public void highlightBckGround() {
-		this.setBackground(new Color(178,215,255));
+	public void highlightBckGround(Color bg) {
+		this.setBackground(bg);
 		for (Component comp : this.getComponents()) {
-			comp.setBackground(new Color(178,215,255));
+			comp.setBackground(bg);
 		}
+		/** tagtextArea is not recognized like Component*/
+		if(tagTextArea != null) tagTextArea.setBackground(bg);
 	}
 	
 	
@@ -319,6 +320,8 @@ public class TagRow extends JPanel{
 		for (Component comp : this.getComponents()) {
 			comp.setBackground(CustomColor.WHITE);
 		}
+		/** tagtextArea is not recognized like Component*/
+		if(tagTextArea != null) tagTextArea.setBackground(Color.WHITE);
 	}
 	
 	
@@ -343,42 +346,51 @@ public class TagRow extends JPanel{
 	
 	
 	
-	
-	/**
-	 * @return the tagLabel0
-	 */
-	public TagLabel getTagLabel0() {
-		return tagLabel0;
+	public void setForeground(Color c) {
+		for (Component comp : this.getComponents()) {
+			comp.setForeground(c);
+		}
+		repaint();
+		revalidate();
 	}
 	
 	
 	
+	public void setDefaultForeground() {
+		for (Component comp : this.getComponents()) {
+			if(comp.getClass().equals(AttributeFormTextField.class)) 		comp.setForeground(CustomColor.ATTR_VALUE_COLOR);
+			else if(comp.getClass().equals(AttributeFormComboBox.class)) 	comp.setForeground(CustomColor.ATTR_VALUE_COLOR);
+			else if(comp.getClass().equals(TagFormTextField.class)) 		comp.setForeground(Color.DARK_GRAY);
+			else if(comp.getClass().equals(TagFormTextArea.class)) 			comp.setForeground(Color.DARK_GRAY);
+			else if(comp.getClass().equals(TagFormComboBox.class)) 			comp.setForeground(Color.DARK_GRAY);
+			else if(comp.getClass().equals(AttributeLabel.class)) 			comp.setForeground(CustomColor.ATTR_COLOR);
+			else if(comp.getClass().equals(TagLabel.class))					comp.setForeground(CustomColor.TAG_COLOR);
+			else if(comp.getClass().equals(NameSpaceLabel.class))			comp.setForeground(CustomColor.ATTR_COLOR);
+			else if(comp.getClass().equals(NameSpaceFormTextField.class))	comp.setForeground(CustomColor.ATTR_VALUE_COLOR);
+		}
+		repaint();
+		revalidate();
+	}
 	
-	/**
-	 * @return the tagTextArea
-	 */
-	public TagFormTextArea getTagTextArea() {
-		return tagTextArea;
+	public void requestFocus() {
+		boolean focusSetted = false;
+		for (Component comp : this.getComponents()) {
+			if(comp.getClass().equals(AttributeFormTextField.class)) 		{comp.requestFocusInWindow(); focusSetted = true; break; }
+			else if(comp.getClass().equals(AttributeFormComboBox.class)) 	{comp.requestFocusInWindow(); focusSetted = true; break; }
+			else if(comp.getClass().equals(TagFormTextField.class)) 		{comp.requestFocusInWindow(); focusSetted = true; break; }
+			else if(comp.getClass().equals(TagFormComboBox.class)) 			{comp.requestFocusInWindow(); focusSetted = true; break; }
+			else if(comp.getClass().equals(AttributeLabel.class)) 			{comp.requestFocusInWindow(); focusSetted = true; break; }
+			else if(comp.getClass().equals(TagLabel.class))					{comp.requestFocusInWindow(); focusSetted = true; break; }
+			else if(comp.getClass().equals(NameSpaceLabel.class))			{comp.requestFocusInWindow(); focusSetted = true; break; }
+			else if(comp.getClass().equals(NameSpaceFormTextField.class))	{comp.requestFocusInWindow(); focusSetted = true; break; }
+		}
+		if(!focusSetted) {
+			if(tagTextArea != null) tagTextArea.requestFocusInWindow();
+		}
+		repaint();
+		revalidate();
 	}
 
-
-
-
-	/**
-	 * @return the tagLabel1
-	 */
-	public TagLabel getTagLabel1() {
-		return tagLabel1;
-	}
-
-
-
-	/**
-	 * @return the tagLabel2
-	 */
-	public TagLabel getTagLabel2() {
-		return tagLabel2;
-	}
 	
 	
 	/**
@@ -386,6 +398,14 @@ public class TagRow extends JPanel{
 	 */
 	public int getLeftBorder() {
 		return leftBorder;
+	}
+	
+	
+	/**
+	 * @return the leftBorder
+	 */
+	public TagFormTextArea getTagTextArea() {
+		return this.tagTextArea;
 	}
 
 
@@ -406,11 +426,6 @@ public class TagRow extends JPanel{
 	
 	public int getRowNumber() {
 		return this.rowNumber;
-	}
-	
-	public boolean hasFocus() {
-		if(hasFocus) return true;
-		return false;
 	}
 	
 

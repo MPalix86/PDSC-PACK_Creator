@@ -1,0 +1,161 @@
+package listeners.IndependentFrameListener;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+
+import org.apache.commons.io.FilenameUtils;
+import org.jdom2.Document;
+
+import business.FileBusiness;
+import business.Session;
+import business.XmlTagBusiness;
+import model.PDSCDocument;
+import model.Response;
+import model.XmlTag;
+import view.comp.DialogUtils;
+import view.comp.IconUtils;
+import view.wizardFrame.comp.xmlForm.XmlForm;
+import view.wizardFrame.comp.xmlForm.comp.addAttributeFrame.AddAttributeFrame;
+
+public class FileOptionListener implements ActionListener{
+	private Session session;
+	
+	public  FileOptionListener() {
+		session = Session.getInstance();
+	}
+
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		String command = e.getActionCommand();
+		
+		if(command.equals("openPDSCFile")) {
+			File pdscFile = DialogUtils.showChooseFileFrame();
+			if (pdscFile != null) {
+				
+				/** if file is pdsc file */
+				if( FilenameUtils.getExtension(pdscFile.getName()).equals("PDSC") || FilenameUtils.getExtension(pdscFile.getName()).equals("pdsc")) {
+					
+					/** if file is already open */
+					if(session.getPdscDocFromFilePath(pdscFile) != null) {
+						DialogUtils.warningMessage("File already open");
+					}
+					else {
+						
+						/** reading file */
+						XmlTag root = FileBusiness.ReadPDSCFile(null,null,pdscFile);
+						
+						/** creating new XmlForm and PDSCDocuemnt */
+						XmlForm form = new XmlForm(root);
+						PDSCDocument doc = new PDSCDocument(form , pdscFile);
+						
+						/* adding document in  addInCurrentWorkingPdscDoc */
+						session.addInCurrentWorkingPdscDoc(doc);
+						
+						/** adding tab in wizardFrame */
+						session.getWizardFrame().addXmlFormTab(doc);
+						
+						session.setSelectedPDSCDoc(doc);
+
+					}
+					
+					
+				}
+				else DialogUtils.warningMessage(" Select PDSC File ");
+			}
+		}
+		
+		else if(command.equals("savePDSCAs")) {
+			
+			if(session.getSelectedPDSCDoc() != null) {
+				/** asking user to select destination folder */
+				File folder = DialogUtils.showSaveFileFrame();
+				/** verify if document is selected */
+				if(folder != null) {
+					
+					/** generate pdsc document */
+					Document doc = FileBusiness.genratePDSCDocument(session.getSelectedPDSCDoc().getForm().getRoot());
+					Response response = FileBusiness.createFile(folder.toString(), "PDSC", doc, false , false);
+					
+					/** handling response */
+					if (response != null) {
+						if (response.getStatus() == FileBusiness.FILE_ALREADY_EXIST) {
+							DialogUtils.warningMessage(" File Already Exists ");
+						}
+						else if(response.getStatus() == FileBusiness.FILE_CREATED_CORRECTLY) {
+							PDSCDocument pdscDoc = session.getSelectedPDSCDoc();
+							pdscDoc.setSourcePath(folder.getAbsoluteFile());
+							session.getWizardFrame().updateTabTitle(pdscDoc);
+							DialogUtils.okMessage("File Created"," ");
+						}
+					}
+				}
+			}
+			else DialogUtils.warningMessage("No document selected");
+			
+		}
+		
+		
+		else if(command.equals("savePDSC")) {
+			if(Session.getInstance().getSelectedPDSCDoc() != null && Session.getInstance().getSelectedPDSCDoc().getSourcePath() != null) {
+				File file = new File(session.getSelectedPDSCDoc().getSourcePath().toString());
+				file.delete();
+				Document doc = FileBusiness.genratePDSCDocument(session.getSelectedPDSCDoc().getForm().getRoot());
+				Response response = FileBusiness.createFile(file.toString(), "", doc, false ,  true);
+				
+				/** handling response */
+				if (response != null) {
+					if(response.getStatus() == FileBusiness.FILE_CREATED_CORRECTLY) {
+						DialogUtils.noButtonsTemporaryMessage(" File Saved" , IconUtils.getOkIcon(40), 700 , session.getWizardFrame());
+					}
+					else {
+						DialogUtils.warningMessage("Some error occurred\n Error Code : " + response.getStatus() );
+					}
+				}
+			}
+			
+			else DialogUtils.noButtonsTemporaryMessage("No document selected" , IconUtils.getWarningIcon(48), 1300, session.getWizardFrame());
+		}
+		
+		
+		
+		else if(command.equals("showPDSCPreview")) {
+			if(session.getSelectedPDSCDoc() != null) {
+				Document doc = FileBusiness.genratePDSCDocument(session.getSelectedPDSCDoc().getForm().getRoot());
+				String text = FileBusiness.getDocumentPreview(doc);
+				session.getWizardFrame().showPreview(text);
+			}
+			
+		}
+		
+		
+		else if(command.equals("createNewPDSC")) {
+			XmlTag root = XmlTagBusiness.getRoot();
+			XmlTagBusiness.addRequiredAttr(root);
+			
+			root.addSelectedChild(XmlTagBusiness.getCompleteTagFromNameAndParent("vendor", root));
+			root.addSelectedChild(XmlTagBusiness.getCompleteTagFromNameAndParent("name", root));
+			root.addSelectedChild(XmlTagBusiness.getCompleteTagFromNameAndParent("description", root));
+			root.addSelectedChild(XmlTagBusiness.getCompleteTagFromNameAndParent("license", root));
+			root.addSelectedChild(XmlTagBusiness.getCompleteTagFromNameAndParent("url", root));
+			
+			XmlForm form = new XmlForm(root);
+			
+			PDSCDocument doc = new PDSCDocument(form , (File) null);
+			
+			session.addInCurrentWorkingPdscDoc(doc);
+			
+			session.getWizardFrame().addXmlFormTab(doc);
+			
+			session.setSelectedPDSCDoc(doc);
+			
+			new AddAttributeFrame(root);
+			
+
+			
+			
+		}
+		
+	}
+
+}

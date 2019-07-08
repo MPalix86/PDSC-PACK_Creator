@@ -37,7 +37,7 @@ public class TagOptionMenuListener implements ActionListener{
 				}
 				if(response) {
 					XmlTag modelTag = XmlTagBusiness.findModelChildFromSelectedChildName(parent, tag.getName());
-					modelTag.setMax(modelTag.getMax() + 1);
+					if(modelTag != null) modelTag.setMax(modelTag.getMax() + 1);
 					parent.removeSelectedChild(tag);
 				}
 			}
@@ -49,6 +49,8 @@ public class TagOptionMenuListener implements ActionListener{
 		
 		
 		else if(command.equals("addAttribute")) {
+			
+			/** adding attributes */
 			new AddAttributeFrame(tag);
 		}
 
@@ -80,6 +82,7 @@ public class TagOptionMenuListener implements ActionListener{
 						tag.addSelectedAttrAtIndex(attr, 0);
 						TagRow row = session.getSelectedForm().getTagOpenRow(tag);
 						row.update();
+						row.requestFocus();
 					}
 				}
 				if(!errorMessage.contentEquals("")) DialogUtils.warningMessage(errorMessage);
@@ -87,6 +90,76 @@ public class TagOptionMenuListener implements ActionListener{
 			}
 		}
 		
-	}
+		
+		
+		else if(command.equals("addTag")) {
+			
+			/** recovering TagButton instance */
+			TagMenuItem tagMenuItem = (TagMenuItem) e.getSource();
+			
+			/** recovering model instance for selected child */
+			XmlTag child = tagMenuItem.getTag();
+			
+			boolean response = true;
+			
+			/** if maximum number of children reached for parent tag ask confirmation */
+			if(child.getMax() <= 0) {
+				response = DialogUtils.yesNoWarningMessage("Following PDSC standard : \n maximum number of children reached for tag < " + child.getName() + " > Do you want to continue ?");
+			}
+			if(response) {
+				
+				/** recovering parent instance for selected child */
+				XmlTag parent = child.getParent();
 
+				/** creating new child instance of selected child with parent , passed parent */
+				XmlTag newChild = new XmlTag(child, parent);
+				
+				/** adding new child in selectedChildArr of new parent */
+				parent.addSelectedChildAtIndex(newChild, 0);
+				
+				/** maximum number of possible child in the model instance is reduced by one */
+				child.setMax(child.getMax() -1);
+				
+				if(newChild.getAttrArr() != null) new AddAttributeFrame(newChild);
+				
+				session.getSelectedForm().UpdateView();
+				
+			}
+		}
+		
+		else if(command.equals("addCustomTag")) {
+			
+			/** verify if tag haven't content setted*/
+			if(tag.getContent() != null && tag.getContent().trim().length() > 0) {
+				DialogUtils.warningMessage("Following PDSC standard : \n tags with textual content cannot have children");
+			}
+			
+			else{
+				String tagNames = DialogUtils.showInputDialog("Add Custom Tag", "Add one or more tags separated by space \n tag1 tag2 ...");
+				
+				if (tagNames != null){
+					/** separating string by comma */
+					String[] names = CustomUtils.separateText(tagNames, " ");
+					
+					/** reverse array */
+					names = (String[]) CustomUtils.reverseArray(names);
+					
+					for (String name : names){
+						
+						Response response = XmlTagBusiness.verifyTagFromName(name, tag);
+						
+						boolean confirmation = true ;
+						if (response.getStatus() == XmlTag.MAX_REACHED) {
+							confirmation = DialogUtils.yesNoWarningMessage("Following PDSC standard : \n maximum number of children reached for tag < " + name + " > Do you want to continue ?");
+						}
+						if(confirmation) {
+							XmlTag child = (XmlTag) response.getObject();
+							tag.addSelectedChildAtIndex(child, 0);
+							session.getSelectedForm().UpdateView();
+						}
+					}	 
+				}
+			}
+		}
+	}
 }

@@ -13,6 +13,7 @@ import model.XmlAttribute;
 import model.XmlTag;
 import view.comp.AttributeButton;
 import view.comp.AttributeCheckBox;
+import view.wizardFrame.comp.xmlForm.comp.TagRow;
 import view.wizardFrame.comp.xmlForm.comp.addAttributeFrame.AddAttributeFrame;
 
 public class AddAttributeFrameListener implements ActionListener , ItemListener{
@@ -33,8 +34,10 @@ public class AddAttributeFrameListener implements ActionListener , ItemListener{
 			XmlTag tag = frame.geTtag();
 			if(newSelectedAttr != null) newSelectedAttr.forEach(a -> tag.addSelectedAttrAtIndex(a, 0));
 			frame.dispose();
-			session.getSelectedForm().getTagOpenRow(tag).update();
-
+			
+			TagRow row = session.getSelectedForm().getTagOpenRow(tag);
+			row.update();
+			row.requestFocus();
 		}
 		
 		else if(command.equals("showDescription")) {

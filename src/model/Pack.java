@@ -1,4 +1,4 @@
-package model.pdsc;
+package model;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -9,16 +9,26 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import javax.swing.SwingWorker;
+
+import org.jdom2.Document;
+
+import business.CustomUtils;
 import business.FileBusiness;
+import business.Session;
 import business.XmlTagBusiness;
-import model.XmlAttribute;
-import model.XmlTag;
+import view.wizardFrame.comp.PackStatusUpdateFrame.PackStatusUpdateFrame;
 
-public class Pack {
+public class Pack extends SwingWorker<Integer,String>{
 	private String name;
 	private String vendor;
+	private String highestReleaseVersion;
 	private HashMap <XmlAttribute,String> pathFilesHashMap;
+	private PackStatusUpdateFrame frame;
 	
 	public static final int PACK_CREATED_CORRECTLY = 0;
 	public static final int REQUIRED_FIELDS_MISSING	 = 1;
@@ -48,8 +58,9 @@ public class Pack {
 		String mainPathString = mainPathFile.getAbsolutePath() + "/";
 		
 		/** completePathFile = mainPathFile/vendor/name/ */
-		File completePathFile = new File(mainPathString + this.vendor + "/" + this.name);
+		File completePathFile = new File(mainPathString + this.vendor + "." + this.name + "." + highestReleaseVersion);
 		String completePathString = completePathFile.getAbsolutePath() + "/";
+		completePathFile.mkdir();
 		
 		/** log file in mainPathFile */
 		File logFile = new File(mainPathString + "log.txt");
@@ -65,7 +76,7 @@ public class Pack {
 		
 		/** log file beginning string */
 		log = "pack " + completePathString + "...\n creation time : " +  dateFormat.format(date) + "\n\n";
-		System.out.println("loggodata");
+		
 		writer.write(log.getBytes());
 		
 		/** breadth first search */
@@ -74,7 +85,7 @@ public class Pack {
 			children.remove(0);
 			
 			/** if find tag file , and parent tag == files */
-			if(child.getName().equals("file") && child.getParent().getName().equals("files")) {
+			if(child.getName().equals("file")) {
 				
 				/** keep attributes */
 				for(int i = 0; i < child.getSelectedAttrArr().size(); i++) {
@@ -101,12 +112,55 @@ public class Pack {
 							/** copy file in destination directory */
 							if(destinationFile.exists()) {
 								log = " FILE ALREADY INSERTED 	" + srcFile.getPath() + " ----> " + destinationFile.getPath() + "\n";
+								publish(log);
 							}
 							else {
 								Files.copy(srcFile.toPath(), destinationFile.toPath());
 								log = " FILE ADDED CORRECTLY 	" + srcFile.getPath() + " ----> " + destinationFile.getPath() + "\n";
+								publish(log);
 							}
 						}
+						
+						/** verify if file is present in opened pack */
+						else if (Session.getInstance().getSelectedPDSCDoc().getSourcePath() != null) {
+							
+							/** recovering opened pdsc file path */
+							File PDSClocation =  Session.getInstance().getSelectedPDSCDoc().getSourcePath();
+							
+							/** removing pdsc document name from path */
+							String oldPackPathWithouthName =  PDSClocation.toString().replace(PDSClocation.getName(), "");	
+							
+							/** 
+							 * recovering file from opened older pack version 
+							 * note that oldPackFile represent the same as srcFile in if statement above
+							 */
+							File oldPackFile = new File(oldPackPathWithouthName + "/" + attr.getValue().trim());
+							
+							
+							/** 
+							 * FROM HERE IS THE SAME CODE AS IF ABOVE 
+							 * change only srcFile -> oldPackFile
+							 * making destination directories 
+							 */
+							
+							/** making destination directories */
+							destinationPath.mkdirs();
+							
+							/** copy file in destination directory */
+							if(destinationFile.exists()) {
+								log = " FILE ALREADY INSERTED 	" + oldPackFile.getPath() + " ----> " + destinationFile.getPath() + "\n";
+								publish(log);
+							}
+							else {
+								Files.copy(oldPackFile.toPath(), destinationFile.toPath());
+								log = " FILE ADDED CORRECTLY 	" + oldPackFile.getPath() + " ----> " + destinationFile.getPath() + "\n";
+								publish(log);
+							}
+							
+							/** END OF SAME CODE */
+						}
+						
+						
 						/** if destination file has't associated source file */
 						else {
 							destinationPath.mkdirs();
@@ -123,12 +177,25 @@ public class Pack {
 			}
 		}
 		
+		/** generate PDSC Document */
+		Document doc = FileBusiness.genratePDSCDocument(Session.getInstance().getSelectedPDSCDoc().getForm().getRoot());
+		String fileName = name + "." + vendor ;
+		Response response = FileBusiness.createFile(completePathString + fileName, "pdsc", doc, false, true);
+		
+		log = response.getMessage();
+		writer.write(log.getBytes());
+		
 		writer.close();
 		return PACK_CREATED_CORRECTLY;
 	}
 
 	
-	
+	/**
+	 *  create verify if name is already taken and in this case generate new name 
+	 *  while name not exists
+	 *  
+	 *  @param file 
+	 */
 	private File generateMainPath(File file) {
 		
 		int i = 1;
@@ -143,19 +210,112 @@ public class Pack {
 	}
 	
 	
-	
+	/**
+	 * verify presence of required fields;
+	 * 
+	 * @param root
+	 * @return
+	 */
 	private int checkRequiredFields(XmlTag root) {
-		
 		XmlTag vendor = XmlTagBusiness.findSelectedChildFromTagName(root, "vendor");
 		XmlTag name = XmlTagBusiness.findSelectedChildFromTagName(root, "name");
 		
+		if(getVerifyHighestReleaseVersion(root));
+		else return REQUIRED_FIELDS_MISSING;
 		if (name.getContent() != null) this.name = name.getContent();
 		else return REQUIRED_FIELDS_MISSING;
 		if (vendor.getContent() != null) this.vendor = vendor.getContent();
+		else return REQUIRED_FIELDS_MISSING;
 		
 		return 0;
+	}
+	
+	
+	
+	
+	/**
+	 * getVerifyHighestReleaseVersion
+	 * 
+	 * @param root
+	 * @return the highest release version String and verify pattern
+	 */
+	private boolean getVerifyHighestReleaseVersion(XmlTag root) {
+		
+		int[] highestVersion = {0,0,0} ;
+		
+		XmlTag releases = XmlTagBusiness.findSelectedChildFromTagName(root,"releases");
+		if(releases != null) {
+			
+			ArrayList<XmlTag> children = releases.getSelectedChildrenArr();
+			
+			if(children != null) {
+				for(int i = 0; i < children.size(); i++) {
+					XmlTag release = children.get(i);
+					XmlAttribute attr = XmlTagBusiness.findChildSelectedAttrFromName(release, "version");
+					if(attr != null && attr.getValue() != null) {
+						Pattern pattern = Pattern.compile("^(\\d+\\.)?(\\d+\\.)?(\\*|\\d+)$");
+						Matcher matcher = pattern.matcher(attr.getValue());
+						if(matcher.matches()) {
+							String result[] = CustomUtils.separateText(attr.getValue(), "\\.");
+							for (int j = 0; j < result.length; j++) {
+								System.out.println(result[j]);
+								int n = Integer.parseInt(result[j]);
+								if( n > highestVersion[j]) highestVersion[j] = n;
+							}
+						}
+					}
+				}
+			}
+			highestReleaseVersion = highestVersion[0] + "." + highestVersion[1] + "." + highestVersion[2]; 
+			return true;
+		}
+		return false;
+	}
+	
+	
+	public void addPath(XmlAttribute attr, String sourcePath) {
+		if(pathFilesHashMap.containsKey(attr)) pathFilesHashMap.replace(attr, sourcePath);
+		else {
+			this.pathFilesHashMap.put(attr , sourcePath);
+			System.out.println("aggiunto");
+		}
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	@Override
+	protected Integer doInBackground() throws Exception {
+		return null;
+	}
+	
+	@Override
+	protected void process(List<String> infoList) {
 		
 	}
+	
+	@Override
+	protected void done() { 
+		
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	
