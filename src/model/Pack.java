@@ -9,11 +9,9 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import javax.swing.SwingWorker;
+import java.util.zip.ZipOutputStream;
 
 import org.jdom2.Document;
 
@@ -21,178 +19,206 @@ import business.CustomUtils;
 import business.FileBusiness;
 import business.Session;
 import business.XmlTagBusiness;
-import view.wizardFrame.comp.PackStatusUpdateFrame.PackStatusUpdateFrame;
 
-public class Pack extends SwingWorker<Integer,String>{
+public class Pack {
 	private String name;
 	private String vendor;
 	private String highestReleaseVersion;
 	private HashMap <XmlAttribute,String> pathFilesHashMap;
-	private PackStatusUpdateFrame frame;
+	private File choosenPath;
+	private XmlTag root;
+	private PDSCDocument PDSCDoc;
+	private ArrayList <Log> lastPackCreatedLogs;
+	
 	
 	public static final int PACK_CREATED_CORRECTLY = 0;
 	public static final int REQUIRED_FIELDS_MISSING	 = 1;
+	public static final int NO_CHOOSEN_PATH	 = 2;
 	
 	
-	private static final String MAIN_DIR_NAME = "PDSC";
 	
-	public Pack() {
-		if(pathFilesHashMap == null) pathFilesHashMap = new HashMap<XmlAttribute, String> ();
+	private static final String MAIN_DIR_NAME = "PACK";
+	
+	public Pack(PDSCDocument PDSCDoc  , File choosenPath ) {
+		this.choosenPath = choosenPath;
+		lastPackCreatedLogs = new ArrayList<Log>();
+		
+		/** recovering fields from PDSCDoc */
+		this.PDSCDoc = PDSCDoc;
+		this.pathFilesHashMap = PDSCDoc.getPathFilesHashMap();
+		this.root = PDSCDoc.getRoot();
 	}
 	
-
 	
 	
-	public int createPack(XmlTag root, File choosenPath) throws IOException {
+	public Response createpack() throws IOException {
 		
-		/** preparing breadth first search */
-		ArrayList <XmlTag> children = new ArrayList<XmlTag>();
-		children.add(root);
-		
-		String log = "";
-		
-		if (checkRequiredFields(root) != 0) return REQUIRED_FIELDS_MISSING;
-		
-		/** mainPathFile = userChoosenPath/PDSC/ */
-		File mainPathFile = generateMainPath(choosenPath);
-		String mainPathString = mainPathFile.getAbsolutePath() + "/";
-		
-		/** completePathFile = mainPathFile/vendor/name/ */
-		File completePathFile = new File(mainPathString + this.vendor + "." + this.name + "." + highestReleaseVersion);
-		String completePathString = completePathFile.getAbsolutePath() + "/";
-		completePathFile.mkdir();
-		
-		/** log file in mainPathFile */
-		File logFile = new File(mainPathString + "log.txt");
-		if(logFile.exists()) logFile.delete();
-		logFile.createNewFile();
-		
-		/** fileWriter to write log file */
-		FileOutputStream writer = new FileOutputStream(logFile , true);
-		
-		/** date */
-		DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-		Date date = new Date(); 
-		
-		/** log file beginning string */
-		log = "pack " + completePathString + "...\n creation time : " +  dateFormat.format(date) + "\n\n";
-		
-		writer.write(log.getBytes());
-		
-		/** breadth first search */
-		while(!children.isEmpty()) {
-			XmlTag child = children.get(0);
-			children.remove(0);
+		if(choosenPath != null) {
 			
-			/** if find tag file , and parent tag == files */
-			if(child.getName().equals("file")) {
+			/** Clear log arr */
+			lastPackCreatedLogs.clear();
+			
+			/** preparing breadth first search */
+			ArrayList <XmlTag> children = new ArrayList<XmlTag>();
+			
+			/** preparing BFS */
+			children.add(root);
+			
+			if (checkRequiredFields(root) != 0) return new Response.ResponseBuilder().status(REQUIRED_FIELDS_MISSING).build();
+			
+			/** mainPathFile = userChoosenPath/PDSC/ */
+			File mainPathFile = generateMainPath(choosenPath);
+			String mainPathString = mainPathFile.getAbsolutePath() + "/";
+			
+			/** completePathFile = mainPathFile/vendor/name/ */
+			File completePathFile = new File(mainPathString + this.vendor + "." + this.name + "." + highestReleaseVersion);
+			String completePathString = completePathFile.getAbsolutePath() + "/";
+			completePathFile.mkdir();
+			
+			/** log file in mainPathFile */
+			File logFile = new File(mainPathString + "log.txt");
+			if(logFile.exists()) logFile.delete();
+			logFile.createNewFile();
+			
+			/** fileWriter to write log file */
+			FileOutputStream writer = new FileOutputStream(logFile , true);
+			
+			/** date */
+			DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+			Date date = new Date(); 
+			
+			/** log file beginning string */
+			String logIniti = "pack " + completePathString + "...\n creation time : " +  dateFormat.format(date) + "\n\n";
+			
+			/** write log */
+			writer.write(logIniti.getBytes());
+			
+			/** crating new log object */
+			Log log = new Log("" , Log.MESSAGE);
+			
+			/** breadth first search */
+			while(!children.isEmpty()) {
 				
-				/** keep attributes */
-				for(int i = 0; i < child.getSelectedAttrArr().size(); i++) {
-					XmlAttribute attr = child.getSelectedAttrArr().get(i);
+				/** recovering source file */
+				XmlTag child = children.get(0);
+				children.remove(0);
+				
+				/** if find tag file , and parent tag == files */
+				if(child.getName().equals("file")) {
 					
-					/** find attribute name */
-					if(attr.getName().equals("name")) {
-						
-						/** recovering path only without file */
-						File destinationPath = new File(completePathString + FileBusiness.pathComponent(attr.getValue()));
-						
-						/** recovering path with file */
-						File destinationFile = new File(completePathString + attr.getValue());
-						
-						/** if destination file has associated source file */
-						if (pathFilesHashMap.containsKey(attr)) {
+					/** keep attributes */
+					for(int i = 0; i < child.getSelectedAttrArr().size(); i++) {
+						XmlAttribute attr = child.getSelectedAttrArr().get(i);
+						 
+						/** find attribute name */
+						if(attr.getName().equals("name")) {
 							
-							/** recovering source file */
-							File srcFile = new File( (String) pathFilesHashMap.get(attr) ) ;	
+							/** recovering path only without file */
+							File destinationPath = new File(completePathString + FileBusiness.pathComponent(attr.getValue()));
 							
-							/** making destination directories */
-							destinationPath.mkdirs();
+							/** recovering path with file */
+							File destinationFile = new File(completePathString + attr.getValue());
 							
-							/** copy file in destination directory */
-							if(destinationFile.exists()) {
-								log = " FILE ALREADY INSERTED 	" + srcFile.getPath() + " ----> " + destinationFile.getPath() + "\n";
-								publish(log);
+							File srcFile = null;
+							
+							/** if destination file has associated source file */
+							if (pathFilesHashMap.containsKey(attr)) {
+		
+								srcFile = new File( (String) pathFilesHashMap.get(attr) ) ;	
 							}
-							else {
-								Files.copy(srcFile.toPath(), destinationFile.toPath());
-								log = " FILE ADDED CORRECTLY 	" + srcFile.getPath() + " ----> " + destinationFile.getPath() + "\n";
-								publish(log);
+							
+							/** verify if file is present in opened pack */
+							else if (this.PDSCDoc.getSourcePath() != null) {
+								
+								
+								/** recovering opened pdsc file path */
+								File PDSClocation =  this.PDSCDoc.getSourcePath();
+								
+								/** removing pdsc document name from path */
+								String oldPackPathWithouthName =  PDSClocation.toString().replace(PDSClocation.getName(), "");	
+								
+								/** 
+								 * recovering file from opened older pack version 
+								 * note that oldPackFile represent the same as srcFile in if statement above
+								 */
+								srcFile = new File(oldPackPathWithouthName + "/" + attr.getValue().trim());
 							}
+							
+							/** if destination directory not exists, create it */
+							if(!destinationPath.exists()) {
+								
+								/** if can't create destination dir */
+								if(!destinationPath.mkdirs()) {
+									log.setText("DIRECTORY NOT CREATED ----> " + destinationPath.getPath());
+									log.setType(Log.ERROR);
+								}
+								else {
+									log.setText("No source file : PATH CREATED WITHOUTH FILE ----> " + destinationPath.getPath() + "\n");
+									log.setType(Log.WARNING);
+								}
+							}
+							
+
+							
+							
+							if(srcFile.exists()) {
+								/** copy file in destination directory */
+								if(destinationFile.exists()) {
+									log.setText(" FILE ALREADY INSERTED 	" + srcFile.getPath() + " ----> " + destinationFile.getPath() + "\n");
+									log.setType(Log.WARNING);
+								}
+								else {
+									Files.copy(srcFile.toPath(), destinationFile.toPath());
+									log.setText(" FILE ADDED CORRECTLY 	" + srcFile.getPath() + " ----> " + destinationFile.getPath() + "\n");
+									log.setType(Log.MESSAGE);
+								}
+							}
+		
+							
+							/** writing log in log file */
+							lastPackCreatedLogs.add(new Log(log));
+							writer.write(log.getText().getBytes());
 						}
-						
-						/** verify if file is present in opened pack */
-						else if (Session.getInstance().getSelectedPDSCDoc().getSourcePath() != null) {
-							
-							/** recovering opened pdsc file path */
-							File PDSClocation =  Session.getInstance().getSelectedPDSCDoc().getSourcePath();
-							
-							/** removing pdsc document name from path */
-							String oldPackPathWithouthName =  PDSClocation.toString().replace(PDSClocation.getName(), "");	
-							
-							/** 
-							 * recovering file from opened older pack version 
-							 * note that oldPackFile represent the same as srcFile in if statement above
-							 */
-							File oldPackFile = new File(oldPackPathWithouthName + "/" + attr.getValue().trim());
-							
-							
-							/** 
-							 * FROM HERE IS THE SAME CODE AS IF ABOVE 
-							 * change only srcFile -> oldPackFile
-							 * making destination directories 
-							 */
-							
-							/** making destination directories */
-							destinationPath.mkdirs();
-							
-							/** copy file in destination directory */
-							if(destinationFile.exists()) {
-								log = " FILE ALREADY INSERTED 	" + oldPackFile.getPath() + " ----> " + destinationFile.getPath() + "\n";
-								publish(log);
-							}
-							else {
-								Files.copy(oldPackFile.toPath(), destinationFile.toPath());
-								log = " FILE ADDED CORRECTLY 	" + oldPackFile.getPath() + " ----> " + destinationFile.getPath() + "\n";
-								publish(log);
-							}
-							
-							/** END OF SAME CODE */
-						}
-						
-						
-						/** if destination file has't associated source file */
-						else {
-							destinationPath.mkdirs();
-							log = "NO SOURCE FILE 	PATH CREATED WITHOUTH FILE ----> " + destinationPath.getPath() + "\n";
-						}
-						writer.write(log.getBytes());
 					}
+					
 				}
 				
+				if( child.getSelectedChildrenArr() != null ) {
+					child.getSelectedChildrenArr().forEach((c)-> children.add(c));
+				}
 			}
 			
-			if( child.getSelectedChildrenArr() != null ) {
-				child.getSelectedChildrenArr().forEach((c)-> children.add(c));
-			}
+			/** generate PDSC Document */
+			Document doc = FileBusiness.genratePDSCDocument(Session.getInstance().getSelectedPDSCDoc().getForm().getRoot());
+			String fileName = name + "." + vendor ;
+			Response response = FileBusiness.createFile(completePathString + fileName, "pdsc", doc, false, true);
+			
+			/** writing log about PDSC file creation */
+			log = new Log ("PDSC file creation status :" + response.getMessage() + "\n\n\n\n\n",Log.MESSAGE);
+			writer.write(log.getText().getBytes());
+			
+			/** creating zip archive */
+	        FileOutputStream fos = new FileOutputStream(completePathFile + ".pack");
+	        ZipOutputStream zipOut = new ZipOutputStream(fos);
+	        FileBusiness.zipFile(completePathFile, completePathFile.getName(), zipOut);
+			
+	        /** closing streams */
+	        zipOut.close();
+	        fos.close();
+			writer.close();
+			
+			return new Response.ResponseBuilder().status(PACK_CREATED_CORRECTLY).object(lastPackCreatedLogs).build();
+			
 		}
-		
-		/** generate PDSC Document */
-		Document doc = FileBusiness.genratePDSCDocument(Session.getInstance().getSelectedPDSCDoc().getForm().getRoot());
-		String fileName = name + "." + vendor ;
-		Response response = FileBusiness.createFile(completePathString + fileName, "pdsc", doc, false, true);
-		
-		log = response.getMessage();
-		writer.write(log.getBytes());
-		
-		writer.close();
-		return PACK_CREATED_CORRECTLY;
+
+		return new Response.ResponseBuilder().status(NO_CHOOSEN_PATH).object(lastPackCreatedLogs).build();
+
 	}
 
 	
 	/**
-	 *  create verify if name is already taken and in this case generate new name 
-	 *  while name not exists
+	 *  verify if name is already taken and in this case generate new name 
+	 *  while name is not a new name
 	 *  
 	 *  @param file 
 	 */
@@ -258,7 +284,6 @@ public class Pack extends SwingWorker<Integer,String>{
 						if(matcher.matches()) {
 							String result[] = CustomUtils.separateText(attr.getValue(), "\\.");
 							for (int j = 0; j < result.length; j++) {
-								System.out.println(result[j]);
 								int n = Integer.parseInt(result[j]);
 								if( n > highestVersion[j]) highestVersion[j] = n;
 							}
@@ -273,75 +298,35 @@ public class Pack extends SwingWorker<Integer,String>{
 	}
 	
 	
-	public void addPath(XmlAttribute attr, String sourcePath) {
-		if(pathFilesHashMap.containsKey(attr)) pathFilesHashMap.replace(attr, sourcePath);
-		else {
-			this.pathFilesHashMap.put(attr , sourcePath);
-			System.out.println("aggiunto");
-		}
+	
+	
+	
+	
+	
+	public void setChoosenPath(File path) {
+		this.choosenPath = path;
 	}
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	@Override
-	protected Integer doInBackground() throws Exception {
-		return null;
-	}
-	
-	@Override
-	protected void process(List<String> infoList) {
-		
-	}
-	
-	@Override
-	protected void done() { 
-		
-	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	/**
-	 * @return the destinationSourcepathFilesHashMap
-	 */
+
 	public HashMap<XmlAttribute, String> getPathFilesHashMap() {
 		return this.pathFilesHashMap;
 	}
 	
-	/**
-	 * @param destinationSourcepathFilesHashMap the destinationSourcepathFilesHashMap to set
-	 */
+
 	public void setPathFilesHashMap(HashMap<XmlAttribute, String> pathFilesHashMap) {
 		this.pathFilesHashMap = pathFilesHashMap;
 	}
-	/**
-	 * @return the name
-	 */
+	
+
 	public String getName() {
 		return name;
 	}
-	/**
-	 * @return the vendor
-	 */
+
 	public String getVendor() {
 		return vendor;
+	}
+	
+	public ArrayList<Log> getLastPackCreatedLogs() {
+		return this.lastPackCreatedLogs;
 	}
 }

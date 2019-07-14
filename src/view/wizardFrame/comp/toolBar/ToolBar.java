@@ -8,13 +8,14 @@ import javax.swing.JToolBar;
 
 import business.Session;
 import business.XmlTagBusiness;
-import listeners.IndependentFrameListener.FileOptionListener;
+import listeners.FileOptionListener;
+import listeners.PDSCOptionListener;
 import listeners.wizardFrameListeners.comp.ToolBarListener;
 import model.XmlTag;
 import view.comp.DropDownButton;
-import view.comp.IconUtils;
 import view.comp.SquareButton;
 import view.comp.TagMenuItem;
+import view.comp.utils.IconUtils;
 
 /**
  *  Menu bar creation
@@ -39,12 +40,19 @@ public class ToolBar extends JToolBar{
 	
 	private FileOptionListener fileOptionListener;
 	
+	private PDSCOptionListener PdscOptionListener;
+	
+	private SquareButton undo;
+	
+	private SquareButton redo;
+	
 	
 	
 	
 	
 	public ToolBar() {
 		fileOptionListener = new FileOptionListener();
+		PdscOptionListener = new PDSCOptionListener();
 		this.listener = new ToolBarListener(this) ;
 		session = Session.getInstance();
 		this.setFloatable(false);
@@ -62,7 +70,7 @@ public class ToolBar extends JToolBar{
 	private void placeComponents() {
 
 		createPackButton = new SquareButton().toIconButton(IconUtils.getPackIcon(20));
-		createPackButton.addActionListener(listener);
+		createPackButton.addActionListener(PdscOptionListener);
 		createPackButton.setActionCommand("createPack");
 		createPackButton.setToolTipText("createPack");
 	
@@ -77,7 +85,7 @@ public class ToolBar extends JToolBar{
 
 		SquareButton validateXsd = new SquareButton().toIconButton(IconUtils.getPlayIcon(20));
 		validateXsd.setToolTipText("Validate with XSD");
-		validateXsd.addActionListener(listener);
+		validateXsd.addActionListener(PdscOptionListener);
 		validateXsd.setActionCommand("validateXSD");
 		
 		SquareButton saveButton = new SquareButton().toIconButton(IconUtils.getSaveIcon(20));
@@ -89,6 +97,16 @@ public class ToolBar extends JToolBar{
 		saveAsButton.setToolTipText("Save PDSC as");
 		saveAsButton.addActionListener(fileOptionListener);
 		saveAsButton.setActionCommand("savePDSCAs");
+		
+		redo = new SquareButton().toIconButton(IconUtils.getRedoIcon(20));
+		redo.setToolTipText("Redo");
+		redo.addActionListener(PdscOptionListener);
+		redo.setActionCommand("redo");
+		
+		undo = new SquareButton().toIconButton(IconUtils.getUndoIcon(20));
+		undo.setToolTipText("Undo");
+		undo.addActionListener(PdscOptionListener);
+		undo.setActionCommand("undo");
 		
 		
 		generateTagsMenu();
@@ -104,14 +122,14 @@ public class ToolBar extends JToolBar{
 		
 		this.add(validateXsd);
 		this.add(createPackButton);
+		
+		this.add(undo);
+		this.add(redo);
 
 		this.setRollover(true);
 	
 	}
 	
-	
-	
-
 	private void generateTagsMenu() {
 		
 		ImageIcon showTagsIcon = IconUtils.getChildrenListIArrowIcon(20);
@@ -175,6 +193,26 @@ public class ToolBar extends JToolBar{
 	 */
 	public Session getSession() {
 		return session;
+	}
+	
+	
+	
+
+	/**
+	 * @return the undo
+	 */
+	public SquareButton getUndo() {
+		return undo;
+	}
+
+
+
+
+	/**
+	 * @return the redo
+	 */
+	public SquareButton getRedo() {
+		return redo;
 	}
 	
 	

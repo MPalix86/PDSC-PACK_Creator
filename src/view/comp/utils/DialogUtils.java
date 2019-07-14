@@ -1,4 +1,4 @@
-package view.comp;
+package view.comp.utils;
 
 import java.awt.Component;
 import java.awt.event.ActionEvent;

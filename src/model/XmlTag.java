@@ -294,6 +294,75 @@ public class XmlTag{
 	
 	
 	
+	/**
+	 * this function is the exact copy of constructor above, but rather than 
+	 * return a new instance of passed tag, copy passed tag in THIS instance 
+	 * IRREVERSIBILY CHANGING IT
+	 * 
+	 * @param tag with which replace this instance
+	 */
+	
+	public void replaceWith(XmlTag tag) {
+		
+		if(tag.getAttrArr() != null) {
+			
+			this.attrArr = new ArrayList<XmlAttribute>(); 
+			
+			/** for each attribute add new instance inside attrArr */
+			tag.getAttrArr().forEach((a)->this.attrArr.add(new XmlAttribute(a,this)));
+		}
+
+		if(tag.getSelectedAttrArr() != null) {
+			
+			this.selectedAttrArr = new ArrayList<XmlAttribute>(); 
+			
+			/** for each selected attribute add new instance inside attrArr */
+			tag.getSelectedAttrArr().forEach((a)-> this.selectedAttrArr.add(new XmlAttribute(a,this)));
+		}
+		
+		
+		if(tag.getChildrenArr() != null) {
+			
+			this.childrenArr = new ArrayList<XmlTag>(); 
+			
+			/** for each children add new instance inside childrenArr */
+			tag.getChildrenArr().forEach((c)->this.childrenArr.add(new XmlTag(c, this)));
+		}
+		
+		if(tag.getSelectedChildrenArr() != null) {
+			
+			this.selectedChildrenArr = new ArrayList<XmlTag>(); 
+			
+			/** for each selected children add new instance inside selectedchildrendArr */
+			tag.getSelectedChildrenArr().forEach((c)-> this.selectedChildrenArr.add(new XmlTag(c, this)));
+		}
+	
+		if(tag.getParent() != null) this.parent = null ;
+		
+		if(tag.getDefaultContent() != null) this.defaultContent = new String(tag.getDefaultContent());
+		
+		if(tag.getContent() != null) this.content = new String(tag.getContent());
+		
+		if(tag.getDescription() != null) this.description = new String (tag.getDescription());
+		
+		if(tag.getNameSpace() != null) this.nameSpace = new XmlNameSpace(tag.getNameSpace());
+		
+		if(tag.getName() != null) this.name = new String(tag.getName());
+		
+		if(tag.getMax() != null) this.max = tag.getMax();
+		
+		if(tag.getPossibleValues() != null) this.possibleValues = tag.getPossibleValues();
+		
+		if(tag.getRelId() != null) this.relId = tag.getRelId();
+		
+		if(tag.getTagId() != null) this.tagId = tag.getTagId();
+		
+		this.required = tag.isRequired();
+		
+	}
+	
+	
+	
 	
 	
 	/**

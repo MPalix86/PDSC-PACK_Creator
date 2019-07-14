@@ -1,4 +1,4 @@
-package view.wizardFrame.comp.validatorPane;
+package view.wizardFrame.comp.console;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -8,13 +8,13 @@ import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
 
-public class ValidatorContainer extends JPanel{
+public class ConsoleContainer extends JPanel{
 	
 	private JScrollPane scrollPane;
-	private Validator validator;
+	private Console console;
 
-	public ValidatorContainer() {
-		validator = new Validator();
+	public ConsoleContainer() {
+		console = new Console();
 		this.setBackground(Color.WHITE);
 		this.setLayout(new BorderLayout());
 		
@@ -24,7 +24,7 @@ public class ValidatorContainer extends JPanel{
 		JScrollBar verticalScrollBar = new JScrollBar(JScrollBar.VERTICAL);
 		verticalScrollBar.setUnitIncrement(40);
 
-		this.scrollPane = new JScrollPane(validator);
+		this.scrollPane = new JScrollPane(console);
 		
 		scrollPane.setHorizontalScrollBar(horizontalScrollBar);
 		scrollPane.setVerticalScrollBar(verticalScrollBar);
@@ -34,8 +34,8 @@ public class ValidatorContainer extends JPanel{
 	}
 	
 	
-	public Validator getValidator() {
-		return this.validator;
+	public Console getConsole() {
+		return this.console;
 	}
 
 }

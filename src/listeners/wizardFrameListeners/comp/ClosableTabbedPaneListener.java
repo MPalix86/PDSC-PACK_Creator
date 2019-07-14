@@ -68,7 +68,7 @@ public class ClosableTabbedPaneListener implements TabCloseListener, ChangeListe
         if(sourceTabbedPane.getSelectedComponent() != null && sourceTabbedPane.getSelectedComponent().getClass() == XmlFormContainer.class) {
         	XmlFormContainer formContainer = (XmlFormContainer) sourceTabbedPane.getSelectedComponent();
         	XmlForm form = formContainer.getFormPanel();
-        	session.getWizardFrame().setValidatorText(" ");
+        	session.getWizardFrame().setConsoleText(" ", false);
         	session.getWizardFrame().setDescriptionText(" ");
         	session.setSelectedPDSCDoc(form);
         }

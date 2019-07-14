@@ -428,5 +428,9 @@ public class TagRow extends JPanel{
 		return this.rowNumber;
 	}
 	
+	public XmlTag getTag() {
+		return this.tag;
+	}
+	
 
 }

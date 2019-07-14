@@ -47,7 +47,6 @@ public class XmlTagBusiness {
 					child = new XmlTag(modelChild , parent);
 					XmlTagBusiness.addRequiredAttr(child);
 					if(modelChild.getMax() <= 0) {
-						System.out.println("raggiunto il massimo numero");
 						return new Response.ResponseBuilder()
 								.flag(true)
 								.status(XmlTag.MAX_REACHED)

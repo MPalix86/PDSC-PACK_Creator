@@ -1,4 +1,4 @@
-package view.comp;
+package view.comp.utils;
 
 import java.awt.Color;
 import java.awt.Image;
@@ -28,6 +28,13 @@ public class IconUtils {
 		IconFontSwing.register(FontAwesome.getIconFont());
 		return IconFontSwing.buildIcon(FontAwesome.DESKTOP, size, c );
 	}
+	
+	public static Icon FAgetExclamationTriangleIcon(int size , Color c) {
+		if (c == null) c = ICON_COLOR;
+		IconFontSwing.register(FontAwesome.getIconFont());
+		return IconFontSwing.buildIcon(FontAwesome.EXCLAMATION_TRIANGLE, size, c );
+	}
+	
 	
 	public static Icon FAgetAlignLeftIcon(int size , Color c) {
 		if (c == null) c = ICON_COLOR;
@@ -89,6 +96,26 @@ public class IconUtils {
 		ImageIcon icon = null;
 		try {
 			icon = new ImageIcon(new ImageIcon(IconUtils.class.getResource(iconPath() + "pack20.png")).getImage().getScaledInstance(size, size, Image.SCALE_DEFAULT));
+		}catch(Exception e) {
+			icon = new ImageIcon();
+		}
+		return icon;
+	}
+	
+	public static ImageIcon getUndoIcon(int size) {
+		ImageIcon icon = null;
+		try {
+			icon = new ImageIcon(new ImageIcon(IconUtils.class.getResource(iconPath() + "undo.png")).getImage().getScaledInstance(size, size, Image.SCALE_DEFAULT));
+		}catch(Exception e) {
+			icon = new ImageIcon();
+		}
+		return icon;
+	}
+	
+	public static ImageIcon getRedoIcon(int size) {
+		ImageIcon icon = null;
+		try {
+			icon = new ImageIcon(new ImageIcon(IconUtils.class.getResource(iconPath() + "redo.png")).getImage().getScaledInstance(size, size, Image.SCALE_DEFAULT));
 		}catch(Exception e) {
 			icon = new ImageIcon();
 		}
@@ -199,6 +226,16 @@ public class IconUtils {
 		ImageIcon icon = null;
 		try {
 			icon = new ImageIcon(new ImageIcon(IconUtils.class.getResource(iconPath() + "pc.png")).getImage().getScaledInstance(size, size, Image.SCALE_DEFAULT));
+		}catch(Exception e) {
+			icon = new ImageIcon();
+		}
+		return icon;
+	}
+	
+	public static ImageIcon getFolderIcon(int size) {
+		ImageIcon icon = null;
+		try {
+			icon = new ImageIcon(new ImageIcon(IconUtils.class.getResource(iconPath() + "folder.png")).getImage().getScaledInstance(size, size, Image.SCALE_DEFAULT));
 		}catch(Exception e) {
 			icon = new ImageIcon();
 		}

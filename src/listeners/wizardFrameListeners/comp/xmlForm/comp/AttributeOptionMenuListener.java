@@ -9,8 +9,7 @@ import model.XmlAttribute;
 import model.XmlEnum;
 import model.XmlTag;
 import view.comp.AttributeMenuItem;
-import view.comp.DialogUtils;
-import view.wizardFrame.comp.xmlForm.comp.AttributeOptionMenu;
+import view.comp.utils.DialogUtils;
 import view.wizardFrame.comp.xmlForm.comp.TagRow;
 
 public class AttributeOptionMenuListener implements ActionListener{
@@ -21,16 +20,21 @@ public class AttributeOptionMenuListener implements ActionListener{
 	public void actionPerformed(ActionEvent e) {
 		String command = e.getActionCommand();
 		AttributeMenuItem item = (AttributeMenuItem) e.getSource();
-		AttributeOptionMenu menu = (AttributeOptionMenu) item.getParent();
 		XmlAttribute attr = item.getAttr();
 		XmlTag tag = attr.getTag();
+		
+		
 		if(command.equals("deleteAttribute")) {
 			boolean response = true;
 			if(attr.isRequired()) response = DialogUtils.yesNoWarningMessage("Following PDSC Standard ' " + attr.getName() + " ' is required for tag <" + tag.getName() + "> \n do you want to delete it ?");
 			if(response) {
 				tag.removeSelectedAttr(attr);
 			}
-			
+
+			/**
+			 * IMPORTANT : saving state of root tag for undo redo action
+			 */
+			Session.getInstance().getSelectedPDSCDoc().getUndoManager().addState();
 		}
 		
 		else if (command.equals("addPath")) {
@@ -38,7 +42,7 @@ public class AttributeOptionMenuListener implements ActionListener{
 			if(file != null) {
 				if(attr.getValue()!= null) attr.setValue(attr.getValue() + file.getName()) ;
 				else attr.setValue(file.getName()) ;
-				session.getSelectedPDSCDoc().getPack().addPath(attr, file.getAbsolutePath());
+				session.getSelectedPDSCDoc().addPath(attr, file.getAbsolutePath());
 			}
 				
 		}
@@ -56,6 +60,12 @@ public class AttributeOptionMenuListener implements ActionListener{
 		
 			}
 		}
+		
+		/**
+		 * IMPORTANT : saving state of root tag for undo redo action
+		 */
+		Session.getInstance().getSelectedPDSCDoc().getUndoManager().addState();
+		
 		TagRow row = session.getSelectedForm().getTagOpenRow(tag);
 		row.update();
 	}

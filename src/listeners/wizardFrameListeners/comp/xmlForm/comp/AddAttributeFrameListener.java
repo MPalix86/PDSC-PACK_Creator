@@ -38,6 +38,11 @@ public class AddAttributeFrameListener implements ActionListener , ItemListener{
 			TagRow row = session.getSelectedForm().getTagOpenRow(tag);
 			row.update();
 			row.requestFocus();
+			
+			/**
+			 * IMPORTANT : saving state of root tag for undo redo action
+			 */
+			Session.getInstance().getSelectedPDSCDoc().getUndoManager().addState();
 		}
 		
 		else if(command.equals("showDescription")) {

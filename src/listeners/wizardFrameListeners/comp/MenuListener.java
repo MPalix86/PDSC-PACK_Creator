@@ -22,7 +22,7 @@ public class MenuListener implements ActionListener {
 		}
 		
 		else if(command.equals("showValidator")) {
-			session.getWizardFrame().addValidatorPane();
+			session.getWizardFrame().addConsolePane();
 		}
 		
 		else if(command.equals("showDescriptionPane")) {

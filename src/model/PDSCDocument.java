@@ -1,6 +1,7 @@
 package model;
 
 import java.io.File;
+import java.util.HashMap;
 
 import view.wizardFrame.comp.xmlForm.XmlForm;
 
@@ -10,22 +11,60 @@ public class PDSCDocument {
 	
 	private File sourcePath;
 	
-	private Pack pack;
+	private HashMap <XmlAttribute,String> pathFilesHashMap;
 	
-	public PDSCDocument(XmlForm form, File sourcePath) {
+	private XmlTag root;
+	
+	private UndoManager undoManager;
+	
+	
+	public PDSCDocument(XmlForm form, File sourcePath, XmlTag root) {
+		
+		this.pathFilesHashMap = new HashMap <XmlAttribute,String>();
+		
 		this.form = form;
 		this.sourcePath = sourcePath;
-		this.pack = new Pack();
+		this.root = root;
 	}
 	
 	
-	public PDSCDocument(XmlForm form, String sourcePath) {
+	public PDSCDocument(XmlForm form, String sourcePath, XmlTag root) {
+		this.pathFilesHashMap = new HashMap <XmlAttribute,String>();
+		
 		this.form = form;
 		this.sourcePath = new File(sourcePath);
-		this.pack = new Pack();
+		this.root = root;
 	}
 	
-
+	public PDSCDocument(XmlForm form, File sourcePath, XmlTag root, UndoManager m) {
+		
+		this.pathFilesHashMap = new HashMap <XmlAttribute,String>();
+		
+		this.undoManager = m;
+		this.form = form;
+		this.sourcePath = sourcePath;
+		this.root = root;
+	}
+	
+	
+	public PDSCDocument(XmlForm form, String sourcePath, XmlTag root, UndoManager m) {
+		this.pathFilesHashMap = new HashMap <XmlAttribute,String>();
+		
+		this.undoManager = m;
+		this.form = form;
+		this.sourcePath = new File(sourcePath);
+		this.root = root;
+	}
+	
+	
+	
+	public void addPath(XmlAttribute attr, String sourcePath) {
+		if(pathFilesHashMap.containsKey(attr)) pathFilesHashMap.replace(attr, sourcePath);
+		else {
+			this.pathFilesHashMap.put(attr , sourcePath);
+		}
+	}
+	
 
 	/**
 	 * @return the form
@@ -54,21 +93,23 @@ public class PDSCDocument {
 	public void setSourcePath(File sourcePath) {
 		this.sourcePath = sourcePath;
 	}
-
-	/**
-	 * @return the pack
-	 */
-	public Pack getPack() {
-		return pack;
-	}
-
-	/**
-	 * @param pack the pack to set
-	 */
-	public void setPack(Pack pack) {
-		this.pack = pack;
+	
+	public XmlTag getRoot() {
+		return this.getRoot();
 	}
 	
+	public HashMap <XmlAttribute,String> getPathFilesHashMap(){
+		return this.pathFilesHashMap;
+	}
+	
+	public void setUndoManager(UndoManager m) {
+		this.undoManager = m;
+	}
+	
+	public UndoManager getUndoManager() {
+		return this.undoManager;
+	}
+
 	
 
 }

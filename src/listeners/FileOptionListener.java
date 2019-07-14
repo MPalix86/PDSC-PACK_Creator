@@ -1,4 +1,4 @@
-package listeners.IndependentFrameListener;
+package listeners;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -12,9 +12,10 @@ import business.Session;
 import business.XmlTagBusiness;
 import model.PDSCDocument;
 import model.Response;
+import model.UndoManager;
 import model.XmlTag;
-import view.comp.DialogUtils;
-import view.comp.IconUtils;
+import view.comp.utils.DialogUtils;
+import view.comp.utils.IconUtils;
 import view.wizardFrame.comp.xmlForm.XmlForm;
 import view.wizardFrame.comp.xmlForm.comp.addAttributeFrame.AddAttributeFrame;
 
@@ -45,9 +46,16 @@ public class FileOptionListener implements ActionListener{
 						/** reading file */
 						XmlTag root = FileBusiness.ReadPDSCFile(null,null,pdscFile);
 						
-						/** creating new XmlForm and PDSCDocuemnt */
+						/** creating new XmlForm */
 						XmlForm form = new XmlForm(root);
-						PDSCDocument doc = new PDSCDocument(form , pdscFile);
+						
+						/** creating unndoManager to manage operation of undo/redo on PDSCDocument*/
+						UndoManager manager = new UndoManager(root);
+						
+						manager.addUndoAbleEditListener(new UndoManagerListener());
+						
+						/** creating new PDSCDocument instance */
+						PDSCDocument doc = new PDSCDocument(form , pdscFile, root, manager);
 						
 						/* adding document in  addInCurrentWorkingPdscDoc */
 						session.addInCurrentWorkingPdscDoc(doc);
@@ -139,21 +147,27 @@ public class FileOptionListener implements ActionListener{
 			root.addSelectedChild(XmlTagBusiness.getCompleteTagFromNameAndParent("license", root));
 			root.addSelectedChild(XmlTagBusiness.getCompleteTagFromNameAndParent("url", root));
 			
+			/** creating new XmlForm */
 			XmlForm form = new XmlForm(root);
 			
-			PDSCDocument doc = new PDSCDocument(form , (File) null);
+			/** creating unndoManager to manage operation of undo/redo on PDSCDocument*/
+			UndoManager manager = new UndoManager(root);
 			
+			manager.addUndoAbleEditListener(new UndoManagerListener());
+			
+			/** creating new PDSCDocument instance */
+			PDSCDocument doc = new PDSCDocument(form , (File) null, root, manager);
+			
+			/* adding document in  addInCurrentWorkingPdscDoc */
 			session.addInCurrentWorkingPdscDoc(doc);
 			
+			/** adding tab in wizardFrame */
 			session.getWizardFrame().addXmlFormTab(doc);
 			
 			session.setSelectedPDSCDoc(doc);
 			
 			new AddAttributeFrame(root);
-			
 
-			
-			
 		}
 		
 	}

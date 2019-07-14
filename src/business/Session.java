@@ -146,6 +146,7 @@ public class Session {
 		return null;
 	}
 	
+
 	
 	public void removeFromCurrentWorkingPdscDoc(PDSCDocument doc) {
 		if(this.currentWorkinPdscDoc.contains(doc)) {

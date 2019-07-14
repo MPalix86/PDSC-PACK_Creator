@@ -62,6 +62,7 @@ public class XmlForm extends JPanel{
 		rowCounter = 1;
 		tagOpenRowHashMap.clear();
 		tagCloseRowHashMap.clear();
+		tagRowArr.clear();
 		if(this.root != null) paintTag(root,0);
 		this.repaint();
 		this.revalidate();
@@ -217,6 +218,7 @@ public class XmlForm extends JPanel{
 		
 		TagRow row = getTagRowByLineNumber(lineNumber);
 		if(row != null) {
+			System.out.println(row.getTag().getName());
 			scrollRectToVisible(row.getBounds());
 			
 			Timer timer1 = new Timer(200, new ActionListener() {
@@ -245,6 +247,7 @@ public class XmlForm extends JPanel{
 			
 			timer.start();
 		}
+		else System.out.println("row = null");
 	}
 	
 	

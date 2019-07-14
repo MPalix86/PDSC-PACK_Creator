@@ -6,7 +6,7 @@ import java.awt.event.ActionListener;
 import business.Session;
 import business.XmlTagBusiness;
 import model.XmlTag;
-import view.comp.DialogUtils;
+import view.comp.utils.DialogUtils;
 import view.tagCustomizationFrame.TagCustomizationFrame;
 import view.wizardFrame.comp.tagsListBar.TagsListBar;
 import view.wizardFrame.comp.tagsListBar.comp.TagListBarButton;

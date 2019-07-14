@@ -7,10 +7,10 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.MatteBorder;
 
-import listeners.IndependentFrameListener.FileOptionListener;
+import listeners.FileOptionListener;
 import net.miginfocom.swing.MigLayout;
-import view.comp.IconUtils;
 import view.comp.TextButton;
+import view.comp.utils.IconUtils;
 
 public class OverviewPane extends JPanel{
 	

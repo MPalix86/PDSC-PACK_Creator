@@ -89,7 +89,6 @@ public class XmlTagDao {
 
 		 while(i.hasNext()){
 			TableRecord record = i.next();
-			System.out.println(record.get("id"));
 			return Integer.parseInt(record.get("id"));
 		 }
 		return null;

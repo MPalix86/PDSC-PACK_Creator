@@ -10,8 +10,8 @@ import business.XmlTagBusiness;
 import model.Response;
 import model.XmlAttribute;
 import model.XmlTag;
-import view.comp.DialogUtils;
 import view.comp.TagMenuItem;
+import view.comp.utils.DialogUtils;
 import view.wizardFrame.comp.xmlForm.comp.TagRow;
 import view.wizardFrame.comp.xmlForm.comp.addAttributeFrame.AddAttributeFrame;
 
@@ -44,7 +44,13 @@ public class TagOptionMenuListener implements ActionListener{
 			else {
 				session.getSelectedForm().getRoot().removeSelectedChild(tag);
 			}
+			/**
+			 * IMPORTANT : saving state of root tag for undo redo action
+			 */
+			Session.getInstance().getSelectedPDSCDoc().getUndoManager().addState();
+			
 			session.getSelectedForm().UpdateView();
+			
 		}
 		
 		
@@ -83,6 +89,11 @@ public class TagOptionMenuListener implements ActionListener{
 						TagRow row = session.getSelectedForm().getTagOpenRow(tag);
 						row.update();
 						row.requestFocus();
+						
+						/**
+						 * IMPORTANT : saving state of root tag for undo redo action
+						 */
+						Session.getInstance().getSelectedPDSCDoc().getUndoManager().addState();
 					}
 				}
 				if(!errorMessage.contentEquals("")) DialogUtils.warningMessage(errorMessage);
@@ -124,6 +135,11 @@ public class TagOptionMenuListener implements ActionListener{
 				
 				session.getSelectedForm().UpdateView();
 				
+				/**
+				 * IMPORTANT : saving state of root tag for undo redo action
+				 */
+				Session.getInstance().getSelectedPDSCDoc().getUndoManager().addState();
+				
 			}
 		}
 		
@@ -156,6 +172,10 @@ public class TagOptionMenuListener implements ActionListener{
 							XmlTag child = (XmlTag) response.getObject();
 							tag.addSelectedChildAtIndex(child, 0);
 							session.getSelectedForm().UpdateView();
+							/**
+							 * IMPORTANT : saving state of root tag for undo redo action
+							 */
+							Session.getInstance().getSelectedPDSCDoc().getUndoManager().addState();
 						}
 					}	 
 				}

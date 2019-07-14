@@ -16,7 +16,7 @@ import net.miginfocom.swing.MigLayout;
 import view.comp.AttributeButton;
 import view.comp.AttributeCheckBox;
 import view.comp.CustomColor;
-import view.comp.IconUtils;
+import view.comp.utils.IconUtils;
 
 
 public class AttributesListBar extends JPanel{

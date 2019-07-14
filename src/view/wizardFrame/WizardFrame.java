@@ -18,15 +18,16 @@ import business.Session;
 import listeners.wizardFrameListeners.WizardFrameListener;
 import listeners.wizardFrameListeners.comp.ClosableTabbedPaneListener;
 import model.PDSCDocument;
-import view.comp.IconUtils;
 import view.comp.customTabbedPane.ClosableTabbedPane;
+import view.comp.utils.IconUtils;
+import view.wizardFrame.comp.console.Console;
+import view.wizardFrame.comp.console.ConsoleContainer;
 import view.wizardFrame.comp.descriptionPane.DescriptionPaneContainer;
 import view.wizardFrame.comp.menuBar.Menu;
 import view.wizardFrame.comp.overviewPane.OverviewPane;
 import view.wizardFrame.comp.previewPane.PreviewPaneContainer;
 import view.wizardFrame.comp.tagsListBar.TagsListBarContainer;
 import view.wizardFrame.comp.toolBar.ToolBarContainer;
-import view.wizardFrame.comp.validatorPane.ValidatorContainer;
 import view.wizardFrame.comp.xmlForm.XmlFormContainer;
 
 /**
@@ -53,11 +54,13 @@ public class WizardFrame extends JFrame {
 	
 	private ClosableTabbedPane closableTabbedPaneSouth;
 	
-	private ValidatorContainer validatorContainer;
+	private ConsoleContainer consoleContainer;
 	
 	private JSplitPane splitPane;
 	
 	private DescriptionPaneContainer descriptionPaneContainer;
+	
+	private Console console;
 	
 	private ClosableTabbedPaneListener closableTabbedPaneListener;
 	
@@ -87,7 +90,8 @@ public class WizardFrame extends JFrame {
 		tagsListbarContainer = new TagsListBarContainer();
 		closableTabbedPaneCenter = new ClosableTabbedPane();
 		closableTabbedPaneSouth = new ClosableTabbedPane();
-		validatorContainer = new ValidatorContainer();
+		consoleContainer = new ConsoleContainer();
+		console = consoleContainer.getConsole();
 		descriptionPaneContainer =  new DescriptionPaneContainer();
 		closableTabbedPaneListener = new ClosableTabbedPaneListener();
 		
@@ -140,7 +144,7 @@ public class WizardFrame extends JFrame {
 
 		
 		
-		closableTabbedPaneSouth.addTab(" XSD Validator   ", IconUtils.getScreeIcon(20), this.validatorContainer);
+		closableTabbedPaneSouth.addTab(" Console   ", IconUtils.getScreeIcon(20), consoleContainer);
 		closableTabbedPaneSouth.addTab(" Description   ", IconUtils.FAgetInfoCircleIcon(20,null), this.descriptionPaneContainer);
 		
 		splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT,closableTabbedPaneCenter, closableTabbedPaneSouth);	
@@ -206,12 +210,12 @@ public class WizardFrame extends JFrame {
 	/**
 	 * add validator frame in southTabContainer
 	 */
-	public void addValidatorPane() {
+	public void addConsolePane() {
 		boolean validatorFound = false;
 		boolean tabContainerFound = false;
 		
 		if(closableTabbedPaneSouth == null) closableTabbedPaneSouth = new ClosableTabbedPane();
-		if(validatorContainer == null) 	validatorContainer = new ValidatorContainer();
+		if(consoleContainer == null) 	consoleContainer = new ConsoleContainer();
 		
 		/** recovering all component from splitpane */
 		Component[] compList = splitPane.getComponents();
@@ -227,7 +231,7 @@ public class WizardFrame extends JFrame {
 					if(c != null) {
 						
 						/** if tab == validatorContainer */
-						if(c.equals(validatorContainer)) {
+						if(c.equals(consoleContainer)) {
 							
 							validatorFound =true;
 							break;
@@ -241,14 +245,14 @@ public class WizardFrame extends JFrame {
 		
 		
 		if(!validatorFound && !tabContainerFound) {
-			closableTabbedPaneSouth.addTab(" XSD Validator   ", IconUtils.getScreeIcon(20), this.validatorContainer);
+			closableTabbedPaneSouth.addTab(" XSD Console   ", IconUtils.getScreeIcon(20), consoleContainer);
 			splitPane.add(closableTabbedPaneSouth);
 			splitPane.repaint();
 		}
 		
 		
 		if(!validatorFound && tabContainerFound) {
-			closableTabbedPaneSouth.addTab(" XSD Validator   ", IconUtils.getScreeIcon(20), this.validatorContainer);
+			closableTabbedPaneSouth.addTab(" XSD Console   ", IconUtils.getScreeIcon(20), consoleContainer);
 			splitPane.repaint();
 		}
 		
@@ -373,20 +377,21 @@ public class WizardFrame extends JFrame {
 
 	
 	
-	public void setValidatorText(String text) {
-		if(validatorContainer != null) {
-			validatorContainer.getValidator().setText(text);
-			validatorContainer.getValidator().repaint();
-			validatorContainer.getValidator().revalidate();
+	public void setConsoleText(String text , boolean append) {
+		if(consoleContainer != null) {
+			if(append) console.append(text);
+			else console.setText(text);
+			console.repaint();
+			console.revalidate();
 		}
 	}
 	
 	
 	
-	public void insertValidatorComnponent(JComponent comp) {
-		validatorContainer.getValidator().insertComp(comp);
-		validatorContainer.getValidator().repaint();
-		validatorContainer.getValidator().revalidate();
+	public void insertConsoleComnponent(JComponent comp) {
+		console.insertComp(comp);
+		console.repaint();
+		console.revalidate();
 	}
 	
 	

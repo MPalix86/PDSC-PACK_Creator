@@ -5,6 +5,7 @@ import java.awt.event.FocusListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
+import business.Session;
 import model.XmlAttribute;
 import model.XmlTag;
 import view.comp.CustomColor;
@@ -93,6 +94,11 @@ public class XmlFormListener implements FocusListener, MouseListener{
 			comboBox.setTagContent();
 			tag = comboBox.getTag();
 		}
+		
+		/**
+		 * IMPORTANT : saving state of root tag for undo redo action
+		 */
+		Session.getInstance().getSelectedPDSCDoc().getUndoManager().addState();
 		
 		
 		if(tag != null) {

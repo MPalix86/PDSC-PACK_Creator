@@ -11,9 +11,9 @@ import business.XmlTagBusiness;
 import model.XmlAttribute;
 import model.XmlTag;
 import view.comp.AttributeCheckBox;
-import view.comp.DialogUtils;
 import view.comp.TagButton;
 import view.comp.TagMenuItem;
+import view.comp.utils.DialogUtils;
 import view.tagCustomizationFrame.TagCustomizationFrame;
 import view.wizardFrame.WizardFrame;
 
