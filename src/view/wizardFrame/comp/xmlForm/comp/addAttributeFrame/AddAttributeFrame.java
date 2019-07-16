@@ -19,8 +19,8 @@ import javax.swing.border.MatteBorder;
 import listeners.wizardFrameListeners.comp.xmlForm.comp.AddAttributeFrameListener;
 import model.XmlAttribute;
 import model.XmlTag;
-import view.comp.CustomColor;
 import view.comp.SquareButton;
+import view.comp.utils.ColorUtils;
 import view.wizardFrame.comp.xmlForm.comp.addAttributeFrame.comp.attributeListBar.AttributesListBarContainer;
 
 public class AddAttributeFrame extends JFrame{
@@ -62,6 +62,7 @@ public class AddAttributeFrame extends JFrame{
 		
 	
 		descriptionTextArea = new JTextArea();
+		descriptionTextArea.setLineWrap(true);
 		descriptionTextArea.setBackground(Color.WHITE );
 		descriptionTextArea.setEditable(false);
 		
@@ -81,18 +82,18 @@ public class AddAttributeFrame extends JFrame{
 				Font labelFont = tagLabel.getFont();
 				tagLabel.setFont(new Font(labelFont.getName(),Font.PLAIN,16));
 				tagLabel.setBorder(new EmptyBorder(0,10,0,0));
-				tagLabel.setForeground(CustomColor.TAG_COLOR);
+				tagLabel.setForeground(ColorUtils.TAG_COLOR);
 
 				
 			panel1.add(tagLabel,BorderLayout.WEST);
-			panel1.setBorder(new MatteBorder(0,0,0,0, CustomColor.LIGHT_GRAY));
+			panel1.setBorder(new MatteBorder(0,0,0,0, ColorUtils.LIGHT_GRAY));
 			
 			JPanel contentPane2 = new JPanel(new BorderLayout());
 			contentPane2.setBackground(Color.WHITE);
 			
 				JPanel panel2 = new JPanel(new BorderLayout());
 				panel2.setBackground(Color.WHITE);
-				panel2.setBorder(new MatteBorder(0,0,1,0, CustomColor.LIGHT_GRAY));
+				panel2.setBorder(new MatteBorder(0,0,1,0, ColorUtils.LIGHT_GRAY));
 					selectedAttrlabel = new JLabel("<html> <font size = 3> Add desired attrbutes for tag " + tag.getName() + 
 													". Click info button for attribute description </font> <br></html>"
 													);
@@ -104,7 +105,7 @@ public class AddAttributeFrame extends JFrame{
 			
 			buttonsPanel.setBackground(Color.WHITE);
 			buttonsPanel.setLayout(new GridLayout(1,2));
-			buttonsPanel.setBorder(new MatteBorder(1,0,0,0, CustomColor.LIGHT_GRAY));
+			buttonsPanel.setBorder(new MatteBorder(1,0,0,0, ColorUtils.LIGHT_GRAY));
 
 			
 			SquareButton addBtn = new SquareButton("Add");
@@ -139,7 +140,7 @@ public class AddAttributeFrame extends JFrame{
 		this.descriptionTextArea.setText("Description : \n\n" + text);
 		Font selectedAttrlabelFont = selectedAttrlabel.getFont();
 		selectedAttrlabel.setFont(new Font(selectedAttrlabelFont.getName(),Font.PLAIN,14));
-		selectedAttrlabel.setForeground(CustomColor.ATTR_COLOR);
+		selectedAttrlabel.setForeground(ColorUtils.ATTR_COLOR);
 	}
 	
 	public static void centreWindow(Window frame) {

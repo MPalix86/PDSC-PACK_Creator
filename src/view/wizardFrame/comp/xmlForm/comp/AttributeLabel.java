@@ -3,7 +3,7 @@ package view.wizardFrame.comp.xmlForm.comp;
 import javax.swing.JLabel;
 
 import model.XmlAttribute;
-import view.comp.CustomColor;
+import view.comp.utils.ColorUtils;
 
 public class AttributeLabel extends JLabel{
 	
@@ -17,7 +17,7 @@ public class AttributeLabel extends JLabel{
 	
 	
 	private void customize() {
-		this.setForeground(CustomColor.ATTR_COLOR);
+		this.setForeground(ColorUtils.ATTR_COLOR);
 	}
 
 

@@ -13,7 +13,7 @@ import javax.swing.event.DocumentListener;
 
 import business.CustomUtils;
 import model.XmlTag;
-import view.comp.CustomColor;
+import view.comp.utils.ColorUtils;
  
 public class TagFormTextArea extends JTextArea implements DocumentListener, FocusListener{
 	private XmlTag tag;
@@ -37,7 +37,7 @@ public class TagFormTextArea extends JTextArea implements DocumentListener, Focu
 	
 	private void setup() {
 		this.setForeground(Color.DARK_GRAY);
-		this.setBorder(new MatteBorder (0,0,0,0,CustomColor.LIGHT_GRAY));
+		this.setBorder(new MatteBorder (0,0,0,0,ColorUtils.LIGHT_GRAY));
 		
 
 		if(this.getText().length() == 0) {

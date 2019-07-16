@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 import business.Session;
 import business.TagCustomizationBusiness;
+import business.XmlAttributeBusiness;
 import business.XmlTagBusiness;
 import model.XmlAttribute;
 import model.XmlTag;
@@ -48,7 +49,9 @@ public class AddAttributeFrameListener implements ActionListener , ItemListener{
 		else if(command.equals("showDescription")) {
 			AttributeButton b = (AttributeButton) e.getSource();
 			XmlAttribute attr = b.getAttribute();
-			frame.updateDescription(attr.getName() , "EHHHHHHHHHHHH");
+			String description = XmlAttributeBusiness.getAttrDescription(attr);
+			if(description != null) frame.updateDescription(attr.getName() , description);
+			else frame.updateDescription(attr.getName() , "NO DESCRIPTION AVAILABLE FOR THIS ATTRIBUTE");
 		}
 		
 		else if(command.equals("cancel")) {

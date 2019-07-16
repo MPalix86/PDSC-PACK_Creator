@@ -2,10 +2,6 @@
 <classpath>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="lib" path="/Users/mircopalese/eclipse-workspace/PDSC/libraries/jsyntaxpane-1.0.0.jar"/>
-	<classpathentry kind="lib" path="/Users/mircopalese/eclipse-workspace/PDSC/libraries/h2-1.4.197.jar"/>
-	<classpathentry kind="lib" path="/Users/mircopalese/eclipse-workspace/PDSC/libraries/jgoodies-common-1.8.0.jar"/>
-	<classpathentry kind="lib" path="/Users/mircopalese/eclipse-workspace/PDSC/libraries/jgoodies-forms-1.8.0.jar"/>
 	<classpathentry kind="lib" path="/Users/mircopalese/eclipse-workspace/PDSC/libraries/miglayout-core-5.2.jar"/>
 	<classpathentry kind="lib" path="/Users/mircopalese/eclipse-workspace/PDSC/libraries/miglayout-swing-5.2.jar"/>
 	<classpathentry kind="lib" path="/Users/mircopalese/eclipse-workspace/PDSC/libraries/jdom-2.0.6.jar"/>

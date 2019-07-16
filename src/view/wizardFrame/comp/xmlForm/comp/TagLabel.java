@@ -3,7 +3,7 @@ package view.wizardFrame.comp.xmlForm.comp;
 import javax.swing.JLabel;
 
 import model.XmlTag;
-import view.comp.CustomColor;
+import view.comp.utils.ColorUtils;
 
 public class TagLabel extends JLabel{
 	
@@ -17,7 +17,7 @@ public class TagLabel extends JLabel{
 	
 	
 	private void customize() {
-		this.setForeground(CustomColor.TAG_COLOR);
+		this.setForeground(ColorUtils.TAG_COLOR);
 	}
 
 

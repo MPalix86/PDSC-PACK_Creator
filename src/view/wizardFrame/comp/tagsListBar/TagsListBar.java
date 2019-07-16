@@ -12,7 +12,7 @@ import javax.swing.border.EmptyBorder;
 import business.XmlTagBusiness;
 import listeners.wizardFrameListeners.comp.TagListBarListener;
 import model.XmlTag;
-import view.comp.CustomColor;
+import view.comp.utils.ColorUtils;
 import view.wizardFrame.comp.tagsListBar.comp.TagListBarButton;
 
 /**
@@ -50,7 +50,7 @@ public class TagsListBar extends JPanel{
 	    	panel.setMaximumSize(new Dimension(300,30));
 	    	
 	    	TagListBarButton btn = new TagListBarButton( "< " + tag.getName() + " >"  ,  tag);
-	        btn.setForeground(CustomColor.TAG_COLOR);
+	        btn.setForeground(ColorUtils.TAG_COLOR);
 	      
 	        
 	        btn.addActionListener(listener);

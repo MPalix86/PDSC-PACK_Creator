@@ -8,7 +8,7 @@ import java.awt.event.MouseListener;
 import business.Session;
 import model.XmlAttribute;
 import model.XmlTag;
-import view.comp.CustomColor;
+import view.comp.utils.ColorUtils;
 import view.wizardFrame.comp.xmlForm.XmlForm;
 import view.wizardFrame.comp.xmlForm.comp.AttributeFormComboBox;
 import view.wizardFrame.comp.xmlForm.comp.AttributeFormTextField;
@@ -59,7 +59,7 @@ public class XmlFormListener implements FocusListener, MouseListener{
 		
 		if(tag != null) {
 			TagRow openRow = xmlForm.getTagOpenRow(tag);
-			openRow.highlightBckGround(CustomColor.LIGHT_GRAY);
+			openRow.highlightBckGround(ColorUtils.LIGHT_GRAY);
 		}
 		
 	}
@@ -190,7 +190,7 @@ public class XmlFormListener implements FocusListener, MouseListener{
 		}
 		else if(e.getSource().getClass().equals(AttributeLabel.class)) {
 			AttributeLabel label = (AttributeLabel) e.getSource();
-			label.setForeground(CustomColor.ATTR_COLOR);
+			label.setForeground(ColorUtils.ATTR_COLOR);
 		}
 		
 	}

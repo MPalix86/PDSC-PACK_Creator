@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.AbstractButton;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JPopupMenu;
 import javax.swing.JToggleButton;
@@ -16,21 +17,39 @@ public class DropDownButton extends AbstractButton
    JPopupMenu popupMenu;
   
    public DropDownButton(JPopupMenu _popupMenu, ImageIcon icon) {
-	   
-      this.popupMenu = _popupMenu;
-  
-      menuButton = new JToggleButton(icon);
-      add(menuButton);
-      menuButton.setContentAreaFilled(false);
-      menuButton.setBorder(new EmptyBorder(9,9,9,9));
-      
-  
-      menuButton.addActionListener(new ActionListener() {
-    	  
-    	 @Override
-         public void actionPerformed(ActionEvent ae) {
-            popupMenu.show(menuButton, 0, menuButton.getSize().height);
-         }
-      });
+	      this.popupMenu = _popupMenu;
+		  
+	      menuButton = new JToggleButton(icon);
+	      add(menuButton);
+	      menuButton.setContentAreaFilled(false);
+	      menuButton.setBorder(new EmptyBorder(9,9,9,9));
+	      
+	  
+	      menuButton.addActionListener(new ActionListener() {
+	    	  
+	    	 @Override
+	         public void actionPerformed(ActionEvent ae) {
+	            popupMenu.show(menuButton, 0, menuButton.getSize().height);
+	         }
+	      });
    } 
+   
+   public DropDownButton(JPopupMenu _popupMenu, Icon icon) {
+	      this.popupMenu = _popupMenu;
+		  
+	      menuButton = new JToggleButton(icon);
+	      add(menuButton);
+	      menuButton.setContentAreaFilled(false);
+	      menuButton.setBorder(new EmptyBorder(9,9,9,9));
+	      
+	  
+	      menuButton.addActionListener(new ActionListener() {
+	    	  
+	    	 @Override
+	         public void actionPerformed(ActionEvent ae) {
+	            popupMenu.show(menuButton, 0, menuButton.getSize().height);
+	         }
+	      });
+   }
+  
 }

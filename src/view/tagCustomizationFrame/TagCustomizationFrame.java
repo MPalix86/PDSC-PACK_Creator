@@ -15,9 +15,9 @@ import javax.swing.border.MatteBorder;
 
 import listeners.tagCustomizationFrameListeners.TagCustomizationFrameListener;
 import model.XmlTag;
-import view.comp.CustomColor;
 import view.comp.SquareButton;
 import view.comp.TagButton;
+import view.comp.utils.ColorUtils;
 import view.tagCustomizationFrame.comp.TagContainer;
 import view.wizardFrame.comp.xmlForm.XmlForm;
 
@@ -199,7 +199,7 @@ public class TagCustomizationFrame extends JFrame {
 		addButton.setActionCommand("addInWizard");
 		
 		JPanel addButtonPanel = new JPanel(new BorderLayout());
-		addButtonPanel.setBorder(new MatteBorder(1,1,1,1,CustomColor.LIGHT_GRAY));
+		addButtonPanel.setBorder(new MatteBorder(1,1,1,1,ColorUtils.LIGHT_GRAY));
 		addButtonPanel.add(addButton, BorderLayout.CENTER);
 		
 		
@@ -207,7 +207,7 @@ public class TagCustomizationFrame extends JFrame {
 		cancelButton.addActionListener(listener);
 		cancelButton.setActionCommand("cancel");
 		JPanel cancelButtonPanel = new JPanel(new BorderLayout());
-		cancelButtonPanel.setBorder(new MatteBorder(1,1,1,1,CustomColor.LIGHT_GRAY));
+		cancelButtonPanel.setBorder(new MatteBorder(1,1,1,1,ColorUtils.LIGHT_GRAY));
 		cancelButtonPanel.add(cancelButton, BorderLayout.CENTER);
 
 

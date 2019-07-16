@@ -13,8 +13,8 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import model.XmlTag;
-import view.comp.CustomColor;
 import view.comp.TagTextField;
+import view.comp.utils.ColorUtils;
 
 public class TagFormTextField extends TagTextField implements DocumentListener, FocusListener, ActionListener{
 	
@@ -38,7 +38,7 @@ public class TagFormTextField extends TagTextField implements DocumentListener, 
 	
 	private void setup() {
 		this.setForeground(Color.DARK_GRAY);
-		this.setBorder(new MatteBorder (0,0,1,0,CustomColor.LIGHT_GRAY));
+		this.setBorder(new MatteBorder (0,0,1,0,ColorUtils.LIGHT_GRAY));
 		
 
 		if(this.getText().length() == 0) {

@@ -95,7 +95,7 @@ public class PDSCDocument {
 	}
 	
 	public XmlTag getRoot() {
-		return this.getRoot();
+		return this.root;
 	}
 	
 	public HashMap <XmlAttribute,String> getPathFilesHashMap(){

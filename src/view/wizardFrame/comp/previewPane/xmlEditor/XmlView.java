@@ -33,7 +33,7 @@ import javax.swing.text.PlainView;
 import javax.swing.text.Segment;
 import javax.swing.text.Utilities;
 
-import view.comp.CustomColor;
+import view.comp.utils.ColorUtils;
 
 /**
  * Thanks: http://groups.google.com/group/de.comp.lang.java/msg/2bbeb016abad270
@@ -60,11 +60,11 @@ public class XmlView extends PlainView {
     static {
         // NOTE: the order is important!
         patternColors = new LinkedHashMap<Pattern, Color>();
-        patternColors.put(Pattern.compile(TAG_PATTERN), CustomColor.TAG_COLOR);
-        patternColors.put(Pattern.compile(TAG_CDATA),CustomColor.TAG_COLOR);
-        patternColors.put(Pattern.compile(TAG_ATTRIBUTE_PATTERN),CustomColor.ATTR_COLOR);
-        patternColors.put(Pattern.compile(TAG_END_PATTERN),CustomColor.TAG_COLOR);
-        patternColors.put(Pattern.compile(TAG_ATTRIBUTE_VALUE), CustomColor.ATTR_VALUE_COLOR);
+        patternColors.put(Pattern.compile(TAG_PATTERN), ColorUtils.TAG_COLOR);
+        patternColors.put(Pattern.compile(TAG_CDATA),ColorUtils.TAG_COLOR);
+        patternColors.put(Pattern.compile(TAG_ATTRIBUTE_PATTERN),ColorUtils.ATTR_COLOR);
+        patternColors.put(Pattern.compile(TAG_END_PATTERN),ColorUtils.TAG_COLOR);
+        patternColors.put(Pattern.compile(TAG_ATTRIBUTE_VALUE), ColorUtils.ATTR_VALUE_COLOR);
         patternColors.put(Pattern.compile(TAG_COMMENT), new Color(150,122, 176));
     }
 

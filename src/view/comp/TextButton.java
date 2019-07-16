@@ -7,7 +7,11 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
 
+import javax.swing.ImageIcon;
 import javax.swing.JLabel;
+import javax.swing.border.EmptyBorder;
+
+import view.comp.utils.ColorUtils;
 
  
 
@@ -26,7 +30,7 @@ public final class TextButton extends JLabel implements MouseListener{
 		listeners = new ArrayList<ActionListener>();
 		addMouseListener(this);
 		foreground = Color.DARK_GRAY;
-		mouseEnteredReleasedForeground = CustomColor.SYSTEM_BLUE_COLOR_DARK;
+		mouseEnteredReleasedForeground = ColorUtils.SYSTEM_BLUE_COLOR_DARK;
 		this.setForeground(foreground);
 	}
 	
@@ -38,6 +42,15 @@ public final class TextButton extends JLabel implements MouseListener{
 		addMouseListener(this);
 		this.foreground = foreground;
 		this.mouseEnteredReleasedForeground = mouseEnteredReleasedForeground;
+		this.setForeground(foreground);
+	}
+	
+	public TextButton(ImageIcon icon) {
+		super(icon);
+		setCursor(new Cursor(Cursor.HAND_CURSOR));
+		listeners = new ArrayList<ActionListener>();
+		addMouseListener(this);
+		this.setBorder(new EmptyBorder(0,0,0,0));
 		this.setForeground(foreground);
 	}
 	

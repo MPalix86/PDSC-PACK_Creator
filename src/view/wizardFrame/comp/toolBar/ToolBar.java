@@ -72,7 +72,7 @@ public class ToolBar extends JToolBar{
 		createPackButton = new SquareButton().toIconButton(IconUtils.getPackIcon(20));
 		createPackButton.addActionListener(PdscOptionListener);
 		createPackButton.setActionCommand("createPack");
-		createPackButton.setToolTipText("createPack");
+		createPackButton.setToolTipText("Export Pack");
 	
 
 	
@@ -88,12 +88,12 @@ public class ToolBar extends JToolBar{
 		validateXsd.addActionListener(PdscOptionListener);
 		validateXsd.setActionCommand("validateXSD");
 		
-		SquareButton saveButton = new SquareButton().toIconButton(IconUtils.getSaveIcon(20));
+		SquareButton saveButton = new SquareButton().toIconButton(IconUtils.getSaveIcon(24));
 		saveButton.setToolTipText("Save current PDSC");
 		saveButton.addActionListener(fileOptionListener);
 		saveButton.setActionCommand("savePDSC");
 		
-		SquareButton saveAsButton = new SquareButton().toIconButton(IconUtils.getSaveAsIcon(20));
+		SquareButton saveAsButton = new SquareButton().toIconButton(IconUtils.getSaveAsIcon(24));
 		saveAsButton.setToolTipText("Save PDSC as");
 		saveAsButton.addActionListener(fileOptionListener);
 		saveAsButton.setActionCommand("savePDSCAs");
@@ -132,7 +132,7 @@ public class ToolBar extends JToolBar{
 	
 	private void generateTagsMenu() {
 		
-		ImageIcon showTagsIcon = IconUtils.getChildrenListIArrowIcon(20);
+		ImageIcon showTagsIcon = IconUtils.getChildrenListIArrowIcon(35);
 		
 		XmlTag root = XmlTagBusiness.getRoot();
 		ArrayList<XmlTag> rootChildren = XmlTagBusiness.getNotRequiredChildren(root);

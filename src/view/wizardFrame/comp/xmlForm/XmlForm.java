@@ -17,7 +17,7 @@ import business.OSValidator;
 import listeners.wizardFrameListeners.comp.xmlForm.XmlFormListener;
 import model.XmlTag;
 import net.miginfocom.swing.MigLayout;
-import view.comp.CustomColor;
+import view.comp.utils.ColorUtils;
 import view.wizardFrame.comp.xmlForm.comp.TagRow;
 
 public class XmlForm extends JPanel{
@@ -177,7 +177,7 @@ public class XmlForm extends JPanel{
 		if (closeRow != null) {
 			Graphics g = this.getGraphics();
 			Graphics2D g2 = (Graphics2D) g;
-			g.setColor(CustomColor.TAG_COLOR_BRIGHTER);
+			g.setColor(ColorUtils.TAG_COLOR_BRIGHTER);
 			TagRow openRow = getTagOpenRow(tag);
 			Line2D line = new Line2D.Double(
 					openRow.getX() + openRow.getLeftBorder() + 18, 

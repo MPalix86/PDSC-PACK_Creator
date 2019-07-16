@@ -15,7 +15,7 @@ import model.XmlTag;
 import net.miginfocom.swing.MigLayout;
 import view.comp.AttributeButton;
 import view.comp.AttributeCheckBox;
-import view.comp.CustomColor;
+import view.comp.utils.ColorUtils;
 import view.comp.utils.IconUtils;
 
 
@@ -23,7 +23,6 @@ public class AttributesListBar extends JPanel{
 	
 	
 	private XmlTag tag;
-	private int option;
 	private AddAttributeFrameListener listener;
 	
 
@@ -61,7 +60,7 @@ public class AttributesListBar extends JPanel{
   		    	
   		    	AttributeCheckBox checkBox = new AttributeCheckBox(attr);
   		    	checkBox.addItemListener(listener);
-  		    	checkBox.setForeground(CustomColor.ATTR_COLOR);
+  		    	checkBox.setForeground(ColorUtils.ATTR_COLOR);
   		    	if(attr.isRequired()) {
   		    		checkBox.setText(attr.getName() + " *");
   		    		checkBox.setSelected(true);
@@ -70,7 +69,7 @@ public class AttributesListBar extends JPanel{
   		    	
   		    	panel1.add(checkBox);
   		        
-  		        AttributeButton showDescriptionButton = (AttributeButton) new AttributeButton(attr).toIconButton(IconUtils.FAgetInfoCircleIcon(20,null));;
+  		        AttributeButton showDescriptionButton = (AttributeButton) new AttributeButton(attr).toIconButton(IconUtils.FAgetInfoCircleIcon(20,null));
   		        showDescriptionButton.addActionListener(listener);
   		        showDescriptionButton.setActionCommand("showDescription");
   		        

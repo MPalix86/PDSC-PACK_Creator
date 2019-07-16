@@ -11,7 +11,7 @@ import javax.swing.event.DocumentListener;
 import business.Session;
 import model.XmlAttribute;
 import view.comp.AttributeTextField;
-import view.comp.CustomColor;
+import view.comp.utils.ColorUtils;
 
 public class AttributeFormTextField extends AttributeTextField implements DocumentListener, FocusListener{
 	
@@ -38,8 +38,8 @@ public class AttributeFormTextField extends AttributeTextField implements Docume
 	
 	private void setup() {
 		
-		this.setForeground(CustomColor.ATTR_VALUE_COLOR);
-		this.setBorder(new MatteBorder (0,0,1,0,CustomColor.LIGHT_GRAY));
+		this.setForeground(ColorUtils.ATTR_VALUE_COLOR);
+		this.setBorder(new MatteBorder (0,0,1,0,ColorUtils.LIGHT_GRAY));
 		
 
 		if(this.getText().length() == 0) {

@@ -13,6 +13,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.zip.ZipOutputStream;
 
+import org.apache.commons.io.FilenameUtils;
 import org.jdom2.Document;
 
 import business.CustomUtils;
@@ -114,7 +115,7 @@ public class Pack {
 						if(attr.getName().equals("name")) {
 							
 							/** recovering path only without file */
-							File destinationPath = new File(completePathString + FileBusiness.pathComponent(attr.getValue()));
+							File destinationPath = new File(completePathString + attr.getValue().replace(FilenameUtils.getName(attr.getValue()), ""));
 							
 							/** recovering path with file */
 							File destinationFile = new File(completePathString + attr.getValue());

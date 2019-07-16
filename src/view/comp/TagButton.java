@@ -3,6 +3,7 @@ package view.comp;
 import javax.swing.ImageIcon;
 
 import model.XmlTag;
+import view.comp.utils.ColorUtils;
 
 /**
  * This button contains an XmlTag instance
@@ -23,7 +24,7 @@ public class TagButton extends SquareButton{
 	
 	public TagButton(XmlTag tag ) {
 		super("< " + tag.getName() + " >");
-		super.setForeground(CustomColor.TAG_COLOR);
+		super.setForeground(ColorUtils.TAG_COLOR);
 		this.tag = tag;
 		
 	}

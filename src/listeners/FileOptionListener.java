@@ -92,7 +92,7 @@ public class FileOptionListener implements ActionListener{
 						}
 						else if(response.getStatus() == FileBusiness.FILE_CREATED_CORRECTLY) {
 							PDSCDocument pdscDoc = session.getSelectedPDSCDoc();
-							pdscDoc.setSourcePath(folder.getAbsoluteFile());
+							pdscDoc.setSourcePath((File)response.getObject());
 							session.getWizardFrame().updateTabTitle(pdscDoc);
 							DialogUtils.okMessage("File Created"," ");
 						}

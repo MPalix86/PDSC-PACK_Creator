@@ -13,8 +13,8 @@ import business.Session;
 import model.Log;
 import model.Pack;
 import model.Response;
-import view.comp.CustomColor;
 import view.comp.TextButton;
+import view.comp.utils.ColorUtils;
 import view.comp.utils.DialogUtils;
 
 public class PDSCOptionListener implements ActionListener{
@@ -45,7 +45,7 @@ public class PDSCOptionListener implements ActionListener{
 					int lineNumber = (int) response.getObject();
 					
 					/** button creation for error showing */
-					TextButton lineButton  = new TextButton("Show error line", CustomColor.SYSTEM_RED_COLOR_DARK , CustomColor.SYSTEM_RED_COLOR_LIGHT.brighter());
+					TextButton lineButton  = new TextButton("Show error line", ColorUtils.SYSTEM_RED_COLOR_DARK , ColorUtils.SYSTEM_RED_COLOR_LIGHT.brighter());
 					
 					/** button listener */
 					lineButton.addActionListener(new ActionListener() { 
@@ -53,7 +53,7 @@ public class PDSCOptionListener implements ActionListener{
 							  
 							/** making row blink */
 							System.out.println(lineNumber);
-						    session.getSelectedForm().lineFocusBlink(lineNumber, CustomColor.LIGHT_GRAY, 5);
+						    session.getSelectedForm().lineFocusBlink(lineNumber, ColorUtils.LIGHT_GRAY, 5);
 						  } 
 						} );
 					
@@ -79,6 +79,7 @@ public class PDSCOptionListener implements ActionListener{
 						int status = r.getStatus();
 						if(status == Pack.PACK_CREATED_CORRECTLY) { 
 							ArrayList<Log> logArr = ( ArrayList<Log>) r.getObject();
+							session.getWizardFrame().addConsolePane();
 							session.getWizardFrame().setConsoleText("", false);
 							for(int i = 0; i < logArr.size(); i++) {
 								Log l = logArr.get(i);

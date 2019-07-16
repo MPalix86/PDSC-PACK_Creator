@@ -3,7 +3,7 @@ package view.wizardFrame.comp.xmlForm.comp;
 import javax.swing.JLabel;
 
 import model.XmlNameSpace;
-import view.comp.CustomColor;
+import view.comp.utils.ColorUtils;
 
 public class NameSpaceLabel extends JLabel{
 	
@@ -12,7 +12,7 @@ public class NameSpaceLabel extends JLabel{
 	public NameSpaceLabel(XmlNameSpace nameSpace, String text) {
 		super(text);
 		this.nameSpace = nameSpace;
-		this.setForeground(CustomColor.ATTR_COLOR);
+		this.setForeground(ColorUtils.ATTR_COLOR);
 		
 	}
 	

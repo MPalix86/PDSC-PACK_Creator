@@ -29,7 +29,7 @@ import javax.swing.text.JTextComponent;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.Utilities;
 
-import view.comp.CustomColor;
+import view.comp.utils.ColorUtils;
 
 /**
  *  This class will display line numbers for a related text component. The text
@@ -47,7 +47,7 @@ public class TextLineNumber extends JPanel
 	public final static float CENTER = 0.5f;
 	public final static float RIGHT = 1.0f;
 
-	private final static Border OUTER = new MatteBorder(0, 0, 0, 1, CustomColor.LIGHT_GRAY);
+	private final static Border OUTER = new MatteBorder(0, 0, 0, 1, ColorUtils.LIGHT_GRAY);
 
 	private final static int HEIGHT = Integer.MAX_VALUE - 1000000;
 

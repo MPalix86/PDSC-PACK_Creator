@@ -11,7 +11,7 @@ import javax.swing.border.MatteBorder;
 
 import listeners.wizardFrameListeners.comp.xmlForm.comp.AddAttributeFrameListener;
 import model.XmlTag;
-import view.comp.CustomColor;
+import view.comp.utils.ColorUtils;
 
 
 public class AttributesListBarContainer extends JPanel{
@@ -49,7 +49,7 @@ public class AttributesListBarContainer extends JPanel{
         
         
 		scrollPane.setVerticalScrollBar(scrollBar);
-		scrollPane.setBorder(new MatteBorder(0,0,0,1, CustomColor.LIGHT_GRAY));
+		scrollPane.setBorder(new MatteBorder(0,0,0,1, ColorUtils.LIGHT_GRAY));
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
 	

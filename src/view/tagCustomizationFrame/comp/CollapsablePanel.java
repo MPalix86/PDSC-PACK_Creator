@@ -17,7 +17,6 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
-import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JPanel;
@@ -28,6 +27,8 @@ import listeners.tagCustomizationFrameListeners.TagCustomizationFrameListener;
 import model.XmlTag;
 import view.comp.DropDownButton;
 import view.comp.TagMenuItem;
+import view.comp.utils.ColorUtils;
+import view.comp.utils.IconUtils;
 
 
 public class CollapsablePanel extends JPanel {
@@ -70,7 +71,7 @@ public class CollapsablePanel extends JPanel {
             
             editMenu = new JPopupMenu();
     		copyItem = new TagMenuItem("Copy Tag",this.tag);
-    		addRequiredTagsItem = new TagMenuItem("Add Requirede Tags",this.tag);
+    		addRequiredTagsItem = new TagMenuItem("Add Required Tags",this.tag);
     		deleteItem = new TagMenuItem("Delete",this.tag);
     		
     		/** if tag has children add showChildrenButton */
@@ -96,8 +97,7 @@ public class CollapsablePanel extends JPanel {
     		}
     		
    
-        	ImageIcon eidtIcon = new ImageIcon (getClass().getClassLoader().getResource("icons/edit20.png"));
-            dropDownButton = new DropDownButton(editMenu,eidtIcon);
+            dropDownButton = new DropDownButton(editMenu,IconUtils.FAgetPencilSquareOIcon(18, ColorUtils.DARK_GRAY));
             dropDownButton.setBounds(5, 0, 20, 20);
         	
             this.add(this.dropDownButton);

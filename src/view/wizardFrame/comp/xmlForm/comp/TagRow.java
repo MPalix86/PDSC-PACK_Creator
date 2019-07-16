@@ -16,7 +16,7 @@ import model.XmlAttribute;
 import model.XmlNameSpace;
 import model.XmlTag;
 import net.miginfocom.swing.MigLayout;
-import view.comp.CustomColor;
+import view.comp.utils.ColorUtils;
 import view.wizardFrame.comp.xmlForm.XmlForm;
 
 public class TagRow extends JPanel{
@@ -248,17 +248,17 @@ public class TagRow extends JPanel{
 	}
 
 	public void setTagLabelBrighter() {
-		if (tagLabel0 != null) tagLabel0.setForeground(CustomColor.TAG_COLOR_BRIGHTER);
-		if (tagLabel1 != null) tagLabel1.setForeground(CustomColor.TAG_COLOR_BRIGHTER);
-		if (tagLabel2 != null) tagLabel2.setForeground(CustomColor.TAG_COLOR_BRIGHTER);
+		if (tagLabel0 != null) tagLabel0.setForeground(ColorUtils.TAG_COLOR_BRIGHTER);
+		if (tagLabel1 != null) tagLabel1.setForeground(ColorUtils.TAG_COLOR_BRIGHTER);
+		if (tagLabel2 != null) tagLabel2.setForeground(ColorUtils.TAG_COLOR_BRIGHTER);
 	}
 	
 	
 
 	public void unsetTagLabelBrighter() {
-		if (tagLabel0 != null) tagLabel0.setForeground(CustomColor.TAG_COLOR);
-		if (tagLabel1 != null) tagLabel1.setForeground(CustomColor.TAG_COLOR);
-		if (tagLabel2 != null) tagLabel2.setForeground(CustomColor.TAG_COLOR);
+		if (tagLabel0 != null) tagLabel0.setForeground(ColorUtils.TAG_COLOR);
+		if (tagLabel1 != null) tagLabel1.setForeground(ColorUtils.TAG_COLOR);
+		if (tagLabel2 != null) tagLabel2.setForeground(ColorUtils.TAG_COLOR);
 	}
 	
 	/** 
@@ -316,9 +316,9 @@ public class TagRow extends JPanel{
 	
 	
 	public void unsetHighlightBackGround() {
-		this.setBackground(CustomColor.WHITE);
+		this.setBackground(ColorUtils.WHITE);
 		for (Component comp : this.getComponents()) {
-			comp.setBackground(CustomColor.WHITE);
+			comp.setBackground(ColorUtils.WHITE);
 		}
 		/** tagtextArea is not recognized like Component*/
 		if(tagTextArea != null) tagTextArea.setBackground(Color.WHITE);
@@ -358,15 +358,15 @@ public class TagRow extends JPanel{
 	
 	public void setDefaultForeground() {
 		for (Component comp : this.getComponents()) {
-			if(comp.getClass().equals(AttributeFormTextField.class)) 		comp.setForeground(CustomColor.ATTR_VALUE_COLOR);
-			else if(comp.getClass().equals(AttributeFormComboBox.class)) 	comp.setForeground(CustomColor.ATTR_VALUE_COLOR);
+			if(comp.getClass().equals(AttributeFormTextField.class)) 		comp.setForeground(ColorUtils.ATTR_VALUE_COLOR);
+			else if(comp.getClass().equals(AttributeFormComboBox.class)) 	comp.setForeground(ColorUtils.ATTR_VALUE_COLOR);
 			else if(comp.getClass().equals(TagFormTextField.class)) 		comp.setForeground(Color.DARK_GRAY);
 			else if(comp.getClass().equals(TagFormTextArea.class)) 			comp.setForeground(Color.DARK_GRAY);
 			else if(comp.getClass().equals(TagFormComboBox.class)) 			comp.setForeground(Color.DARK_GRAY);
-			else if(comp.getClass().equals(AttributeLabel.class)) 			comp.setForeground(CustomColor.ATTR_COLOR);
-			else if(comp.getClass().equals(TagLabel.class))					comp.setForeground(CustomColor.TAG_COLOR);
-			else if(comp.getClass().equals(NameSpaceLabel.class))			comp.setForeground(CustomColor.ATTR_COLOR);
-			else if(comp.getClass().equals(NameSpaceFormTextField.class))	comp.setForeground(CustomColor.ATTR_VALUE_COLOR);
+			else if(comp.getClass().equals(AttributeLabel.class)) 			comp.setForeground(ColorUtils.ATTR_COLOR);
+			else if(comp.getClass().equals(TagLabel.class))					comp.setForeground(ColorUtils.TAG_COLOR);
+			else if(comp.getClass().equals(NameSpaceLabel.class))			comp.setForeground(ColorUtils.ATTR_COLOR);
+			else if(comp.getClass().equals(NameSpaceFormTextField.class))	comp.setForeground(ColorUtils.ATTR_VALUE_COLOR);
 		}
 		repaint();
 		revalidate();

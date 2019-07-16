@@ -11,7 +11,7 @@ import javax.swing.event.DocumentListener;
 
 import business.Session;
 import model.XmlNameSpace;
-import view.comp.CustomColor;
+import view.comp.utils.ColorUtils;
 
 public class NameSpaceFormTextField extends JTextField implements DocumentListener, FocusListener{
 
@@ -30,8 +30,8 @@ public class NameSpaceFormTextField extends JTextField implements DocumentListen
 			this.setText(nameSpace.getUrl());
 		}
 		
-		this.setForeground(CustomColor.ATTR_VALUE_COLOR);
-		this.setBorder(new MatteBorder (0,0,1,0,CustomColor.LIGHT_GRAY));
+		this.setForeground(ColorUtils.ATTR_VALUE_COLOR);
+		this.setBorder(new MatteBorder (0,0,1,0,ColorUtils.LIGHT_GRAY));
 		
 		this.row = row;
 
@@ -48,8 +48,8 @@ public class NameSpaceFormTextField extends JTextField implements DocumentListen
 	public NameSpaceFormTextField(XmlNameSpace nameSpace,String text,TagRow row) {
 		super(text);
 		this.nameSpace = nameSpace;
-		this.setForeground(CustomColor.ATTR_VALUE_COLOR);
-		this.setBorder(new MatteBorder (0,0,1,0,CustomColor.LIGHT_GRAY));
+		this.setForeground(ColorUtils.ATTR_VALUE_COLOR);
+		this.setBorder(new MatteBorder (0,0,1,0,ColorUtils.LIGHT_GRAY));
 		
 		this.row = row;
 

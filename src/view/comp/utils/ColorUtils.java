@@ -1,8 +1,8 @@
-package view.comp;
+package view.comp.utils;
 
 import java.awt.Color;
 
-public class CustomColor extends Color{
+public class ColorUtils extends Color{
 
 	public static final Color ST_BLUE = new Color (0,153,214);
 	
@@ -20,6 +20,8 @@ public class CustomColor extends Color{
 	
 	public final static Color ICON_BLUE = new Color(30,127,226);
 	
+	public final static Color FOLDER_BROWN = new Color(245,206,133);
+	
 	public final static Color SYSTEM_BLUE_COLOR_LIGHT = new Color(10,132,255);
 	
 	public final static Color SYSTEM_BLUE_COLOR_DARK = new Color(0,122,255);
@@ -34,7 +36,7 @@ public class CustomColor extends Color{
 	
 	public final static Color SYSTEM_GREEN_COLOR_LIGHT = new Color(50,215,75);
 	
-	public final static Color SYSTEM_GREEN_COLOR_DARK = new Color(40,205,65);
+	public final static Color SYSTEM_GREEN_COLOR_DARK = new Color(50,190,166);
 	
 	public final static Color SYSTEM_ORANGE_COLOR_LIGHT = new Color(255,159,10);
 	
@@ -59,7 +61,7 @@ public class CustomColor extends Color{
 	
 	
 	
-	public CustomColor(float r, float g, float b) {
+	public ColorUtils(float r, float g, float b) {
 		super(r, g, b);
 		// TODO Auto-generated constructor stub
 	}

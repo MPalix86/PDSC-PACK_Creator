@@ -149,5 +149,10 @@ public class XmlAttributeBusiness {
 		if (name.equals(null) || name.equals("")) return false;
 		return true;
 	}
+	
+	public static String getAttributeDescription(XmlAttribute attr) {
+		String description = XmlAttributeDao.getInstance().getAttrDescriptionFromAttrName(attr);
+		return description;
+	}
 
 }

@@ -211,7 +211,7 @@ public class WizardFrame extends JFrame {
 	 * add validator frame in southTabContainer
 	 */
 	public void addConsolePane() {
-		boolean validatorFound = false;
+		boolean found = false;
 		boolean tabContainerFound = false;
 		
 		if(closableTabbedPaneSouth == null) closableTabbedPaneSouth = new ClosableTabbedPane();
@@ -230,32 +230,39 @@ public class WizardFrame extends JFrame {
 					Component c = closableTabbedPaneSouth.getTabComponentAt(i);
 					if(c != null) {
 						
-						/** if tab == validatorContainer */
+						/** if tab == consoleContainer */
 						if(c.equals(consoleContainer)) {
-							
-							validatorFound =true;
+							found = true;
 							break;
 						}
 					}
-					
 				}
 				break;
 			}
 		}
 		
 		
-		if(!validatorFound && !tabContainerFound) {
-			closableTabbedPaneSouth.addTab(" XSD Console   ", IconUtils.getScreeIcon(20), consoleContainer);
+		if(!found && !tabContainerFound) {
+			closableTabbedPaneSouth.addTab(" Console   ", IconUtils.getScreeIcon(20), consoleContainer);
+			closableTabbedPaneSouth.setSelectedComponent(consoleContainer);
 			splitPane.add(closableTabbedPaneSouth);
 			splitPane.repaint();
 		}
 		
 		
-		if(!validatorFound && tabContainerFound) {
-			closableTabbedPaneSouth.addTab(" XSD Console   ", IconUtils.getScreeIcon(20), consoleContainer);
+		if(!found && tabContainerFound) {
+			closableTabbedPaneSouth.addTab(" Console   ", IconUtils.getScreeIcon(20), consoleContainer);
+			closableTabbedPaneSouth.setSelectedComponent(consoleContainer);
 			splitPane.repaint();
 		}
 		
+	}
+	
+	
+	
+	
+	public void addOverviewPane() {
+		closableTabbedPaneCenter.addTab(" Overview   ",IconUtils.FAgetPlusCircleIcon(20,null),new OverviewPane());
 	}
 	
 	
@@ -300,12 +307,14 @@ public class WizardFrame extends JFrame {
 		if(!descriptionPaneFound && !tabContainerFound) {
 			closableTabbedPaneSouth.addTab(" Description   ", IconUtils.FAgetInfoCircleIcon(20,null), this.descriptionPaneContainer);
 			splitPane.add(closableTabbedPaneSouth);
+			closableTabbedPaneSouth.setSelectedComponent(descriptionPaneContainer);
 			splitPane.repaint();
 		}
 		
 		
 		if(!descriptionPaneFound && tabContainerFound) {
 			closableTabbedPaneSouth.addTab(" Description   ", IconUtils.FAgetInfoCircleIcon(20,null), this.descriptionPaneContainer);
+			closableTabbedPaneSouth.setSelectedComponent(descriptionPaneContainer);
 			splitPane.repaint();
 		}
 		
@@ -318,6 +327,7 @@ public class WizardFrame extends JFrame {
 	public void addXmlFormTab(PDSCDocument doc) {
 		
 		XmlFormContainer formContainer = new XmlFormContainer(doc.getForm());
+		if(closableTabbedPaneCenter == null ) closableTabbedPaneCenter = new ClosableTabbedPane();
 		
 		/** if is new file */
 		if(doc.getSourcePath() == null) {

@@ -258,6 +258,7 @@ public class TagCustomizationFrameListener implements ItemListener, ActionListen
 			
 			/** if there aren't missing dependency */
 			if(confirm) {
+				
 				/** add tag in wizard frame */
 				XmlTag tag = tagBtn.getTag();
 				

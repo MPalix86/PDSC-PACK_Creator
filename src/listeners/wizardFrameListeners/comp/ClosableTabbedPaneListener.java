@@ -48,10 +48,7 @@ public class ClosableTabbedPaneListener implements TabCloseListener, ChangeListe
 		 */
 		
 		if(tabbedPane.getParent().getClass() == JSplitPane.class && tabbedPane.getTabCount() <= 1){
-			JSplitPane splitPane = (JSplitPane) tabbedPane.getParent();
-			splitPane.remove(tabbedPane);
-			splitPane.repaint();
-			splitPane.revalidate();
+			session.getWizardFrame().addOverviewPane();
 		}
 		
 		

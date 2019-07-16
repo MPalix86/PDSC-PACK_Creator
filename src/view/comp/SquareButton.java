@@ -8,9 +8,11 @@ import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.border.EmptyBorder;
 
+import view.comp.utils.ColorUtils;
+
 public class SquareButton extends JButton{
     
-    private Color pressedBackGroundColor = CustomColor.LIGHT_GRAY;
+    private Color pressedBackGroundColor = ColorUtils.LIGHT_GRAY;
     
     private Color hoverBackGroundColor = Color.GRAY;
     
@@ -20,7 +22,7 @@ public class SquareButton extends JButton{
     
     public final static Color PRESSED_BACKGROUND_COLOR = Color.GRAY;
     
-    public final static Color HOVER_BACKGROUND_COLOR = CustomColor.LIGHT_GRAY;
+    public final static Color HOVER_BACKGROUND_COLOR = ColorUtils.LIGHT_GRAY;
 
     public SquareButton() {
         setup();

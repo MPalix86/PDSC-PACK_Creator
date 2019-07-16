@@ -10,7 +10,7 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.MatteBorder;
 
-import view.comp.CustomColor;
+import view.comp.utils.ColorUtils;
 
 public class TagsListBarContainer extends JPanel{
 	
@@ -52,7 +52,7 @@ public class TagsListBarContainer extends JPanel{
         
         
 		scrollPane.setVerticalScrollBar(scrollBar);
-		scrollPane.setBorder(new MatteBorder(0,0,0,1, CustomColor.LIGHT_GRAY));
+		scrollPane.setBorder(new MatteBorder(0,0,0,1, ColorUtils.LIGHT_GRAY));
 		scrollPane.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 		scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
 		

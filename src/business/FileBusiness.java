@@ -5,6 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -44,10 +45,14 @@ public class FileBusiness {
 	
 	
 	
-	//--------------------------------------------------------------------------createFile()
+	
 	public static Response createFile(String path , String extension , Document doc, boolean createOnTempFile, boolean overrideIfExists) {
+		
+		File file;
+		file = new File (path + "." + extension);
+
 		try {	
-			File file;
+			
 			if(createOnTempFile) {
 				file = File.createTempFile(path, extension);
 				if(file.exists()) {
@@ -57,20 +62,7 @@ public class FileBusiness {
 				
 			}
 			
-			else {
-				if(extension != null && !extension.equals("")) {
-					file = new File (path + "." + extension);
-				}
-				else file = new File (path);
-			}
-			
-		 
-			
-			if(file.exists() && overrideIfExists) {
-				file.delete();
-			}
-			
-			if ( (!file.exists() && createOnTempFile == false) || (file.exists() && createOnTempFile == true) ) {
+			if ( (createOnTempFile) || (file.exists() && overrideIfExists) || (!file.exists())) {
 				if (doc == null) doc = new Document();
 				Format format = Format.getPrettyFormat();
 				format.setTextMode(Format.TextMode.NORMALIZE);
@@ -171,7 +163,8 @@ public class FileBusiness {
 	public static Response validateXMLSchema(Document doc){
 		
 		/** loading xsd path */
-		String xsdPath = "/Users/mircopalese/Desktop/pdscdescriptor1.xsd";
+		String xsdPath = "../resources/PACK.xsd";
+		URL url = FileBusiness.class.getResource(xsdPath);
 		
 		String returnMessage = "";
 		
@@ -179,7 +172,7 @@ public class FileBusiness {
 	       SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
 	       
 	       /** loading xsd file */
-	       File xsdFile = new File(xsdPath);
+	       File xsdFile = new File(url.getPath());
 	       
 	       Schema schema = factory.newSchema(xsdFile);
 	       
