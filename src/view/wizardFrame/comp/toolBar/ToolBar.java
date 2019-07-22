@@ -132,8 +132,6 @@ public class ToolBar extends JToolBar{
 	
 	private void generateTagsMenu() {
 		
-		ImageIcon showTagsIcon = IconUtils.getChildrenListIArrowIcon(35);
-		
 		XmlTag root = XmlTagBusiness.getRoot();
 		ArrayList<XmlTag> rootChildren = XmlTagBusiness.getNotRequiredChildren(root);
 		
@@ -148,7 +146,7 @@ public class ToolBar extends JToolBar{
 	        tagsMenu.add(menuItem);
 	    }
 	    
-		dropDownTagsButton = new DropDownButton(tagsMenu,showTagsIcon );
+		dropDownTagsButton = new DropDownButton(tagsMenu,IconUtils.getChildrenListIArrowIcon(35));
 
 	}
 	

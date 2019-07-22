@@ -2,7 +2,6 @@ package business;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import model.PDSCDocument;
 import view.wizardFrame.WizardFrame;
@@ -18,6 +17,7 @@ public class Session {
 	
 	/** wizardFrame instance */
 	private static WizardFrame wizardFrame;
+
 	
 	
 	/**
@@ -39,14 +39,6 @@ public class Session {
 	 * represent open all open document on which user is working
 	 */
 	private static ArrayList<PDSCDocument> currentWorkinPdscDoc ;
-	
-	
-	
-	/**
-	 * contains association between xmlForm and file on which save work;
-	 * The association is created when user save for the first time his work;
-	 */
-	private static HashMap<XmlForm, File> formFileHashMap;
 	
 	
 	
@@ -153,16 +145,14 @@ public class Session {
 			currentWorkinPdscDoc.remove(doc);
 		}
 	}
-																												/* OTHERS */
+																										
 	
  
 	public static synchronized Session getInstance(){
 		if(instance==null)
-			if(formFileHashMap == null) {
-				formFileHashMap = new HashMap<XmlForm,File>();
-			}
 			instance = new Session();
 		return instance;
 	}
+	
 	
 }

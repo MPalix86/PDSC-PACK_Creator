@@ -5,7 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
-import java.net.URL;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
@@ -19,6 +19,7 @@ import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 import javax.xml.validation.Validator;
 
+import org.apache.commons.io.FileUtils;
 import org.jdom2.Attribute;
 import org.jdom2.Document;
 import org.jdom2.Element;
@@ -163,33 +164,35 @@ public class FileBusiness {
 	public static Response validateXMLSchema(Document doc){
 		
 		/** loading xsd path */
-		String xsdPath = "../resources/PACK.xsd";
-		URL url = FileBusiness.class.getResource(xsdPath);
-		
+		String xsdPath = "/resources/PACK.XSD";
+
 		String returnMessage = "";
 		
 		try {
-	       SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+			InputStream in = FileBusiness.class.getResourceAsStream(xsdPath); 
+			
+		    File xsdFile = File.createTempFile("PACK", "XSD");
+			
+		    FileUtils.copyInputStreamToFile(in, xsdFile);
+			 
+	        SchemaFactory factory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+
+	        Schema schema = factory.newSchema(xsdFile);
 	       
-	       /** loading xsd file */
-	       File xsdFile = new File(url.getPath());
-	       
-	       Schema schema = factory.newSchema(xsdFile);
-	       
-	       /** creating temp pdsc file */ 
-	       Response response = FileBusiness.createFile("pdsc_temp", "PDSC", doc,true , false);
-		   File tempPDSC = null;
+	        /** creating temp pdsc file */ 
+	        Response response = FileBusiness.createFile("pdsc_temp", "PDSC", doc,true , false);
+		    File tempPDSC = null;
 		   
-		   /** recovering temp pdsc file */
-		   if(response.getStatus() == FileBusiness.FILE_CREATED_CORRECTLY) tempPDSC = (File) response.getObject();
+		    /** recovering temp pdsc file */
+		    if(response.getStatus() == FileBusiness.FILE_CREATED_CORRECTLY) tempPDSC = (File) response.getObject();
 		   
-		   /** validation */
-		   Validator validator = schema.newValidator();
-		   validator.validate(new StreamSource(tempPDSC));
-		   returnMessage = "validation seccessfull";
+		    /** validation */
+		    Validator validator = schema.newValidator();
+		    validator.validate(new StreamSource(tempPDSC));
+		    returnMessage = "validation seccessfull";
 	   }
 	   catch (IOException e) {
-		   returnMessage = "IOException during creation of temp fail for XSD validation";
+		   returnMessage = "IOException";
 	   }
 	   catch (SAXParseException e) {
 	       int line = (e.getLineNumber() - 1);

@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import business.XmlAttributeBusiness;
 import listeners.wizardFrameListeners.comp.xmlForm.comp.AddAttributeFrameListener;
 import model.XmlAttribute;
 import model.XmlTag;
@@ -41,7 +40,7 @@ public class AttributesListBar extends JPanel{
 		this.setLayout(new BorderLayout());
 		
 		ArrayList<XmlAttribute> attrArr = null;
-		if (tag.getAttrArr() != null) attrArr = XmlAttributeBusiness.getNotSelectedAttributes(tag);
+		if (tag.getAttrArr() != null) attrArr = tag.getAttrArr();
 		
 		
 		JPanel panel = new JPanel(new BorderLayout());

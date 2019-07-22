@@ -1,4 +1,4 @@
-package view.wizardFrame.comp.xmlForm.comp;
+package view.wizardFrame.comp.xmlForm.comp.tagComp;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -15,6 +15,7 @@ import javax.swing.event.DocumentListener;
 import model.XmlTag;
 import view.comp.TagTextField;
 import view.comp.utils.ColorUtils;
+import view.wizardFrame.comp.xmlForm.comp.TagRow;
 
 public class TagFormTextField extends TagTextField implements DocumentListener, FocusListener, ActionListener{
 	
@@ -74,7 +75,10 @@ public class TagFormTextField extends TagTextField implements DocumentListener, 
 		/**
 		 * follow user selected element on screen
 		 */
-		row.scrollRectToVisible(this.getBounds());	
+		if(!row.isVisible()) {
+			row.scrollRectToVisible(this.getBounds());	
+		}
+		
 	}
 
 

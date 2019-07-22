@@ -25,7 +25,8 @@ public class Pack {
 	private String name;
 	private String vendor;
 	private String highestReleaseVersion;
-	private HashMap <XmlAttribute,String> pathFilesHashMap;
+	private HashMap <XmlAttribute,String> attrPathFilesHashMap;
+	private HashMap <XmlTag,String> tagPathFilesHashMap;
 	private File choosenPath;
 	private XmlTag root;
 	private PDSCDocument PDSCDoc;
@@ -46,7 +47,8 @@ public class Pack {
 		
 		/** recovering fields from PDSCDoc */
 		this.PDSCDoc = PDSCDoc;
-		this.pathFilesHashMap = PDSCDoc.getPathFilesHashMap();
+		this.attrPathFilesHashMap = PDSCDoc.getAttrPathFilesHashMap();
+		this.tagPathFilesHashMap = PDSCDoc.getTagPathFilesHashMap();
 		this.root = PDSCDoc.getRoot();
 	}
 	
@@ -104,8 +106,90 @@ public class Pack {
 				XmlTag child = children.get(0);
 				children.remove(0);
 				
+				/** contains ONLY destination path without file name */
+				String destinationPathString = completePathString;
+				
+				/** contains destination path with file name */
+				String destinationFileString = completePathString;
+				
+				
+				/** ======================================================================================================== */
+				if(child.getName().equals("license") || child.getName().equals("doc")) {
+					if(child.getContent() != null) {
+						destinationPathString += child.getContent().replace(FilenameUtils.getName(child.getContent()), "");
+						destinationFileString += child.getContent();
+					}
+					
+					/** recovering path only without file */
+					File destinationPath = new File(destinationPathString);
+					
+					/** recovering path with file */
+					File destinationFile = new File(destinationFileString);
+					
+					File srcFile = null;
+					
+					/** if destination file has associated source file */
+					if (tagPathFilesHashMap.containsKey(child)) {
+
+						srcFile = new File( (String) tagPathFilesHashMap.get(child) ) ;	
+					}
+					
+					/** verify if file is present in opened pack */
+					else if (this.PDSCDoc.getSourcePath() != null) {
+						
+						/** recovering opened pdsc file path */
+						File PDSClocation =  this.PDSCDoc.getSourcePath();
+						
+						/** removing pdsc document name from path */
+						String oldPackPathWithouthName =  PDSClocation.toString().replace(PDSClocation.getName(), "");	
+						
+						/** 
+						 * recovering file from opened older pack version 
+						 * note that oldPackFile represent the same as srcFile in if statement above
+						 */
+						if (child.getContent() != null) srcFile = new File(oldPackPathWithouthName + "/" + child.getContent().trim());
+						else srcFile = new File(oldPackPathWithouthName);
+						
+					}
+					
+					/** if destination directory not exists, create it */
+					if(!destinationPath.exists()) {
+						
+						/** if can't create destination dir */
+						if(!destinationPath.mkdirs()) {
+							log.setText("DIRECTORY NOT CREATED ----> " + destinationPath.getPath());
+							log.setType(Log.ERROR);
+						}
+						else {
+							log.setText("No source file : PATH CREATED WITHOUTH FILE ----> " + destinationPath.getPath() + "\n");
+							log.setType(Log.WARNING);
+						}
+					}
+					
+					
+					if(srcFile != null && srcFile.exists()) {
+						/** copy file in destination directory */
+						if(destinationFile.exists()) {
+							log.setText(" FILE ALREADY INSERTED 	" + srcFile.getPath() + " ----> " + destinationFile.getPath() + "\n");
+							log.setType(Log.WARNING);
+						}
+						else {
+							Files.copy(srcFile.toPath(), destinationFile.toPath());
+							log.setText(" FILE ADDED CORRECTLY 	" + srcFile.getPath() + " ----> " + destinationFile.getPath() + "\n");
+							log.setType(Log.MESSAGE);
+						}
+					}
+
+					
+					/** writing log in log file */
+					lastPackCreatedLogs.add(new Log(log));
+					writer.write(log.getText().getBytes());
+				}
+				
+				
+				/** ======================================================================================================== */
 				/** if find tag file , and parent tag == files */
-				if(child.getName().equals("file")) {
+				if(child.getName().equals("file")) {					
 					
 					/** keep attributes */
 					for(int i = 0; i < child.getSelectedAttrArr().size(); i++) {
@@ -114,18 +198,24 @@ public class Pack {
 						/** find attribute name */
 						if(attr.getName().equals("name")) {
 							
+							if(attr.getValue() != null) {
+								destinationPathString += attr.getValue().replace(FilenameUtils.getName(attr.getValue()), "");
+								destinationFileString += attr.getValue();
+							}
+							
 							/** recovering path only without file */
-							File destinationPath = new File(completePathString + attr.getValue().replace(FilenameUtils.getName(attr.getValue()), ""));
+							File destinationPath = new File(destinationPathString);
 							
 							/** recovering path with file */
-							File destinationFile = new File(completePathString + attr.getValue());
+							File destinationFile = new File(destinationFileString);
+							
 							
 							File srcFile = null;
 							
 							/** if destination file has associated source file */
-							if (pathFilesHashMap.containsKey(attr)) {
+							if (attrPathFilesHashMap.containsKey(attr)) {
 		
-								srcFile = new File( (String) pathFilesHashMap.get(attr) ) ;	
+								srcFile = new File( (String) attrPathFilesHashMap.get(attr) ) ;	
 							}
 							
 							/** verify if file is present in opened pack */
@@ -142,7 +232,9 @@ public class Pack {
 								 * recovering file from opened older pack version 
 								 * note that oldPackFile represent the same as srcFile in if statement above
 								 */
-								srcFile = new File(oldPackPathWithouthName + "/" + attr.getValue().trim());
+								if (attr.getValue() != null) srcFile = new File(oldPackPathWithouthName + "/" + attr.getValue().trim());
+								else srcFile = new File(oldPackPathWithouthName);
+								
 							}
 							
 							/** if destination directory not exists, create it */
@@ -159,10 +251,8 @@ public class Pack {
 								}
 							}
 							
-
 							
-							
-							if(srcFile.exists()) {
+							if(srcFile != null && srcFile.exists()) {
 								/** copy file in destination directory */
 								if(destinationFile.exists()) {
 									log.setText(" FILE ALREADY INSERTED 	" + srcFile.getPath() + " ----> " + destinationFile.getPath() + "\n");
@@ -191,7 +281,7 @@ public class Pack {
 			
 			/** generate PDSC Document */
 			Document doc = FileBusiness.genratePDSCDocument(Session.getInstance().getSelectedPDSCDoc().getForm().getRoot());
-			String fileName = name + "." + vendor ;
+			String fileName = vendor + "." + name ;
 			Response response = FileBusiness.createFile(completePathString + fileName, "pdsc", doc, false, true);
 			
 			/** writing log about PDSC file creation */
@@ -215,7 +305,10 @@ public class Pack {
 		return new Response.ResponseBuilder().status(NO_CHOOSEN_PATH).object(lastPackCreatedLogs).build();
 
 	}
-
+	
+	
+	
+	
 	
 	/**
 	 *  verify if name is already taken and in this case generate new name 
@@ -309,13 +402,13 @@ public class Pack {
 	}
 	
 
-	public HashMap<XmlAttribute, String> getPathFilesHashMap() {
-		return this.pathFilesHashMap;
+	public HashMap<XmlAttribute, String> getAttrPathFilesHashMap() {
+		return this.attrPathFilesHashMap;
 	}
 	
 
-	public void setPathFilesHashMap(HashMap<XmlAttribute, String> pathFilesHashMap) {
-		this.pathFilesHashMap = pathFilesHashMap;
+	public void setAttrPathFilesHashMap(HashMap<XmlAttribute, String> attrPathFilesHashMap) {
+		this.attrPathFilesHashMap = attrPathFilesHashMap;
 	}
 	
 
@@ -330,4 +423,5 @@ public class Pack {
 	public ArrayList<Log> getLastPackCreatedLogs() {
 		return this.lastPackCreatedLogs;
 	}
+
 }

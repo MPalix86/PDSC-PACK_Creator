@@ -6,6 +6,7 @@ package view.wizardFrame;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Dimension;
 
 import javax.swing.JButton;
 import javax.swing.JComponent;
@@ -108,6 +109,7 @@ public class WizardFrame extends JFrame {
 		session.setWizardFrame(this);
 		
 		this.setVisible(true);
+		this.setMinimumSize(new Dimension (this.getPreferredSize()));
 	}
 	
 	

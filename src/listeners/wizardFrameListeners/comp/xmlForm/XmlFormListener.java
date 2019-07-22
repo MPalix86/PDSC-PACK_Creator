@@ -6,20 +6,22 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
 import business.Session;
+import business.XmlAttributeBusiness;
+import business.XmlTagBusiness;
 import model.XmlAttribute;
 import model.XmlTag;
 import view.comp.utils.ColorUtils;
 import view.wizardFrame.comp.xmlForm.XmlForm;
-import view.wizardFrame.comp.xmlForm.comp.AttributeFormComboBox;
-import view.wizardFrame.comp.xmlForm.comp.AttributeFormTextField;
-import view.wizardFrame.comp.xmlForm.comp.AttributeLabel;
-import view.wizardFrame.comp.xmlForm.comp.AttributeOptionMenu;
-import view.wizardFrame.comp.xmlForm.comp.TagFormComboBox;
-import view.wizardFrame.comp.xmlForm.comp.TagFormTextArea;
-import view.wizardFrame.comp.xmlForm.comp.TagFormTextField;
-import view.wizardFrame.comp.xmlForm.comp.TagLabel;
-import view.wizardFrame.comp.xmlForm.comp.TagOptionMenu;
 import view.wizardFrame.comp.xmlForm.comp.TagRow;
+import view.wizardFrame.comp.xmlForm.comp.attributeComp.AttributeFormComboBox;
+import view.wizardFrame.comp.xmlForm.comp.attributeComp.AttributeFormTextField;
+import view.wizardFrame.comp.xmlForm.comp.attributeComp.AttributeLabel;
+import view.wizardFrame.comp.xmlForm.comp.attributeComp.AttributeOptionMenu;
+import view.wizardFrame.comp.xmlForm.comp.tagComp.TagFormComboBox;
+import view.wizardFrame.comp.xmlForm.comp.tagComp.TagFormTextArea;
+import view.wizardFrame.comp.xmlForm.comp.tagComp.TagFormTextField;
+import view.wizardFrame.comp.xmlForm.comp.tagComp.TagLabel;
+import view.wizardFrame.comp.xmlForm.comp.tagComp.TagOptionMenu;
 
 public class XmlFormListener implements FocusListener, MouseListener{
 	
@@ -35,14 +37,17 @@ public class XmlFormListener implements FocusListener, MouseListener{
 	public void focusGained(FocusEvent e) {
 	
 		XmlTag tag = null;
+		XmlAttribute attr = null;
 		
 		if(e.getSource().getClass().equals(AttributeFormTextField.class)) {
 			AttributeFormTextField textField = (AttributeFormTextField) e.getSource();
-			tag = textField.getAttribute().getTag();
+			attr = textField.getAttribute();
+			tag = attr.getTag();
 		}
 		else if(e.getSource().getClass().equals(AttributeFormComboBox.class)) {
 			AttributeFormComboBox comboBox = (AttributeFormComboBox) e.getSource();
-			tag = comboBox.getAttr().getTag();
+			attr = comboBox.getAttr();
+			tag = attr.getTag();
 		}
 		else if(e.getSource().getClass().equals(TagFormTextField.class)) {
 			TagFormTextField textField = (TagFormTextField) e.getSource();
@@ -57,10 +62,26 @@ public class XmlFormListener implements FocusListener, MouseListener{
 			tag = comboBox.getTag();
 		}
 		
+
+		
 		if(tag != null) {
 			TagRow openRow = xmlForm.getTagOpenRow(tag);
-			openRow.highlightBckGround(ColorUtils.LIGHT_GRAY);
+			openRow.highlightBckGround(null);
+			
+			String tagDescription = "TAG : " + tag.getName() + "\n";
+			if(XmlTagBusiness.getTagDescription(tag) == null) tagDescription += "No description found for tag " + tag.getName() + "\n\n";
+			else tagDescription += tagDescription + XmlTagBusiness.getTagDescription(tag);
+			
+			if(attr != null) {
+				String attrDescription = "ATTRIBUTE : " + attr.getName() + "\n" ;
+				if( XmlAttributeBusiness.getAttributeDescription(attr) == null) attrDescription += "No description found for attribute " + attr.getName();
+				else attrDescription += XmlAttributeBusiness.getAttributeDescription(attr);
+				Session.getInstance().getWizardFrame().setDescriptionText(tagDescription + attrDescription);
+			}
+			else Session.getInstance().getWizardFrame().setDescriptionText(tagDescription);
 		}
+		
+		
 		
 	}
 

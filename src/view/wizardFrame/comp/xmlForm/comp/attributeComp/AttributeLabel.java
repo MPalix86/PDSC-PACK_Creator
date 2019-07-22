@@ -1,4 +1,4 @@
-package view.wizardFrame.comp.xmlForm.comp;
+package view.wizardFrame.comp.xmlForm.comp.attributeComp;
 
 import javax.swing.JLabel;
 

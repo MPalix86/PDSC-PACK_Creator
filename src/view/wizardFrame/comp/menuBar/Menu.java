@@ -41,7 +41,7 @@ public class Menu extends JMenuBar {
 		JMenuItem tagsList = new JMenuItem("Show Tags List");
 		tagsList.addActionListener(menuListener);
 		tagsList.setActionCommand("showTagListBar");
-		tagsList.setIcon(IconUtils.getChildrenListIcon(16));
+		tagsList.setIcon(IconUtils.getShowChildrenListIcon(16));
 		
 		JMenuItem DescriptionPane = new JMenuItem("Show Description Panel");
 		DescriptionPane.addActionListener(menuListener);

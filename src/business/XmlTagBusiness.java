@@ -4,12 +4,18 @@ import java.util.ArrayList;
 
 import dao.XmlAttributeDao;
 import dao.XmlTagDao;
+import model.PDSCTagAttributeException;
 import model.Response;
 import model.XmlAttribute;
 import model.XmlTag;
 
 public class XmlTagBusiness {
 	private static XmlTagBusiness instance;
+	
+	public final static int  IS_STANDARD_FOR_TAG = 0;
+	public final static int  IS_GENERAL_PDSC = 1;
+	public final static int  IS_NEW = 2;
+	public final static int  MAX_REACHED = 3;
 	
 	
 	/*
@@ -49,7 +55,7 @@ public class XmlTagBusiness {
 					if(modelChild.getMax() <= 0) {
 						return new Response.ResponseBuilder()
 								.flag(true)
-								.status(XmlTag.MAX_REACHED)
+								.status(XmlTagBusiness.MAX_REACHED)
 								.message(" tag is standard attribute for this parent " )
 								.object(child)
 								.build();
@@ -58,7 +64,7 @@ public class XmlTagBusiness {
 					else {
 						return new Response.ResponseBuilder()
 								.flag(true)
-								.status(XmlTag.IS_STANDARD_FOR_TAG)
+								.status(XmlTagBusiness.IS_STANDARD_FOR_TAG)
 								.message(" tag is standard attribute for this parent " )
 								.object(child)
 								.build();
@@ -78,7 +84,7 @@ public class XmlTagBusiness {
 					XmlTagBusiness.addRequiredAttr(child);
 					return new Response.ResponseBuilder()
 							.flag(true)
-							.status(XmlTag.IS_GENERAL_PDSC)
+							.status(XmlTagBusiness.IS_GENERAL_PDSC)
 							.object(child)
 							.build();
 				}
@@ -277,6 +283,29 @@ public class XmlTagBusiness {
 	
 	
 	
+	/**
+	 * find  attr by name in passed array of attributes.
+	 * found attr
+	 * 
+	 * @param parent	parent tag on which search attribute
+	 * @param attrName	the attribute to find
+	 * @return the attribute found or null
+	 */
+	
+	public static XmlAttribute findAttributeFromArrayOfAttributes(ArrayList<XmlAttribute> attrArr, String attrName) {
+		if (attrArr != null) {
+			for(int i = 0; i < attrArr.size(); i++ ) {
+				XmlAttribute attr = attrArr.get(i);
+				if(attr.getName().equals(attrName) ){
+					return attr;
+				}
+			}
+		}
+		return null;
+	}
+	
+	
+	
 	
 	
 	/**
@@ -327,19 +356,124 @@ public class XmlTagBusiness {
 	
 	
 	
+	/**
+	 * Verify tagAttribute exception, adding or removing attribute based on exception
+	 * 
+	 * example : Tag  " component " have attribute " Cvendor ", but 
+	 * 			 must not be specified for a component within a bundle.
+	 * 
+	 * for more info uncomment all System.out.println();
+	 */
+	public static void verifyTagAttributeException(XmlTag tag) {
+		
+		System.out.println(" veifying exceptions for tag " + tag.getName());
+		
+		/** verify consistency */
+		if(tag.getTagAttributeExceptionArr() == null || tag.getTagAttributeExceptionArr().size() <= 0) return ;
+		if(tag.getParent() == null) return ;
+		if(tag.getAttrArr() == null || tag.getAttrArr().size() <= 0) return ;
+		
+		/** for each exception */
+		for (int j = 0; j < tag.getTagAttributeExceptionArr().size(); j++) {
+			
+			/** flag to know if attribute is present in tag */
+			boolean foundException = false;
+			
+			/** recovering exception */
+			PDSCTagAttributeException exception = tag.getTagAttributeExceptionArr().get(j);
+			
+			/** if tags aren't the same return */
+			if(!tag.getName().equals(exception.getTag().getName())) return;
+				
+			/** if parents aren't the same return */
+			if(!tag.getParent().getName().equals(exception.getParent().getName())) return ;
+			
+			System.out.println("name and parent control passed: verifying if exception for attr : " + exception.getAttribute().getName() + " is present in attrArr ");
+			
+			/** for each attr */
+			for (int i = 0; i < tag.getAttrArr().size(); i ++) {
+
+				/** recovering attribute */
+				XmlAttribute attr = tag.getAttrArr().get(i);
+				
+				/** if attributes coincides */
+				if(attr.getName().equals(exception.getAttribute().getName())) {
+					
+					System.out.println("ok exception is present in attrArr");
+					
+					/** if this tag contains attribute change flag to true */
+					foundException = true;
+					
+					/**
+					 *  verify exception.
+					 * 
+					 *  0 = tag must not contains attribute
+					 *  1 = tag must contains attribute
+					 */
+					if(exception.getException() == 0) {
+						
+						System.out.println("removing attr");
+						
+						tag.getAttrArr().remove(attr);
+						
+						/** removing attribute from selectedAttrArr */
+						if(tag.getSelectedAttrArr() != null && tag.getSelectedAttrArr().size() > 0) {
+							
+							/** for each attr in selectedAttrArr */
+							for (int h = 0; h < tag.getSelectedAttrArr().size(); h ++) {
+								
+								/** recovering selectedAttr */
+								XmlAttribute selectedAttr = tag.getSelectedAttrArr().get(h);
+								
+								/** if selectedAttr coincides with exceptioAttr, remove it*/
+								if(selectedAttr.getName().equals(exception.getAttribute().getName())) {
+									
+									tag.getSelectedAttrArr().remove(selectedAttr);
+								}
+							}
+						}
+					}
+				}
+			}
+			
+			/** if attrException is not present in tag */
+			if(!foundException) {
+				/**
+				 *  verify exception.
+				 * 
+				 *  0 = tag must not contains attribute
+				 *  1 = tag must contains attribute
+				 */
+				if(exception.getException() == 1) {
+					
+					/** adding attrbute */
+					tag.getAttrArr().add(new XmlAttribute(exception.getAttribute() , tag));
+				}
+			}
+			
+		}
+	}
+
+	
+	
+	
 	
 	/**
 	 * this function assume that tag have name , required and other filed already set.
 	 * this function simply add attrArr , possibleVlaues
 	 * 
 	 * @param tag
-	 * @return passed tag with attrArr and possibleValues set
+	 * @return passed tag with attrArr, possibleValues and TagAttributeExceptionArr set
 	 */
 	
 	public static XmlTag getCompleteTagFromTagInstance(XmlTag tag) {
 		
 		tag.setAttrArr(XmlAttributeDao.getInstance().getTagAttributes(tag));
 		tag.setPossibleValues(XmlTagDao.getInstance().getTagPossibleValues(tag));
+		
+		/** verifying tag attribute exception */
+		tag.setTagAttributeExceptionArr(XmlTagDao.getInstance().getTagAttributeExceptionArr(tag));
+		if(tag.getTagAttributeExceptionArr() != null ) verifyTagAttributeException(tag);
 		
 		ArrayList<XmlTag> childrenArr = XmlTagDao.getInstance().getChildrenArrFromTag(tag);
 		tag.setChildrenArr(childrenArr);
@@ -375,6 +509,9 @@ public class XmlTagBusiness {
 
 		tag.setAttrArr(XmlAttributeDao.getInstance().getTagAttributes(tag));
 		tag.setPossibleValues(XmlTagDao.getInstance().getTagPossibleValues(tag));
+		
+		tag.setTagAttributeExceptionArr(XmlTagDao.getInstance().getTagAttributeExceptionArr(tag));
+		if(tag.getTagAttributeExceptionArr() != null ) verifyTagAttributeException(tag);
 		
 		ArrayList<XmlTag> childrenArr = XmlTagDao.getInstance().getChildrenArrFromTag(tag);
 		tag.setChildrenArr(childrenArr);
@@ -420,6 +557,16 @@ public class XmlTagBusiness {
 				if(attr.isRequired()) tag.addSelectedAttr(attr);
 			}
 		}
+	}
+	
+	
+	
+	
+	/**
+	 * return tag description
+	 */
+	public static String getTagDescription(XmlTag tag) {
+		return XmlTagDao.getInstance().getTagDescriptionFromTagName(tag);
 	}
 	
 	

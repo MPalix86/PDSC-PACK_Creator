@@ -62,11 +62,6 @@ public class XmlTag{
 	 * tag's default content, set to void string ("") if tag can have content, 
 	 * set do desire content if tag has predefined content, set to null if tag
 	 * can't have any content (tag can only contains other tags).
-	 * <p>
-	 * NOTE : if tag can't have content you can use directly constructor 
-	 *        without defaultContent value. see XmlStandardTag  
-	 * 
-	 * <a href="file:XmlStandardTag.java">XmlTagABstract</a>
 	 */
 	
 	private String defaultContent; 
@@ -107,16 +102,13 @@ public class XmlTag{
 	private  ArrayList<XmlTag> childrenArr;	
 	
 	
+	/** contains attribute that in certain condition can have exception in this tag */
+	private ArrayList <PDSCTagAttributeException> tagAttributeExceptionArr;
+	
+	
 	/** general max occurrence number */
 	public final static int MAX_OCCURENCE_NUMBER = 1000;
-	
-	
-	public final static int  IS_STANDARD_FOR_TAG = 0;
-	public final static int  IS_GENERAL_PDSC = 1;
-	public final static int  IS_NEW = 2;
-	public final static int  MAX_REACHED = 3;
-	
-	
+		
 	
 	public XmlTag(Integer tagId,Integer relId, String name, boolean required, XmlTag parent, int max, Object possibleValues, String defaultContent,XmlNameSpace nameSpace) {
 		this.name = name;
@@ -154,10 +146,7 @@ public class XmlTag{
 
 	/**
 	 * This constructor return the exact PARENTLESS copy of tag passed by parameter in a new instance
-	 * <p>
-	 * other constructor to avoid inconsistency in certain implementation, was defined in XmlStandardTag
 	 * 
-	 * <a href="file:XmlStandardTag.java">XmlTagABstract</a>
 	 * @param tag the tag to be copied into new instance
 	 */
 	
@@ -226,10 +215,7 @@ public class XmlTag{
 	/**
 	 * This constructor return the exact copy of tag passed by parameter in a new instance.
 	 * Parent is set to the parent passed by parameter
-	 * <p>
-	 * other constructor to avoid inconsistency, was defined in XmlStandardTag
 	 * 
-	 * <a href="file:XmlStandardTag.java">XmlTagABstract</a>
 	 * @param tag the tag to be copied into new instance
 	 */
 	
@@ -765,6 +751,7 @@ public class XmlTag{
 		this.childrenArr = null;
 		this.parent = null;
 		this.max = null;
+		this.tagAttributeExceptionArr = null;
 	}
 	
 	
@@ -788,6 +775,7 @@ public class XmlTag{
 		this.defaultContent = null;
 		this.possibleValues = null;	
 	}
+	
 	
 	
 	
@@ -818,6 +806,7 @@ public class XmlTag{
 		if (attrArr == null) attrArr = new ArrayList<XmlAttribute>();
 		this.attrArr.add(attr);
 	}
+	
 	
 	
 	
@@ -880,6 +869,20 @@ public class XmlTag{
 	
 	
 	
+	
+	/**
+	 * Add PDSCTagAttributeException inside tagAttributeExceptionArr
+	 * 
+	 * @param e Exception to insert
+	 */
+	
+	public void addTagAttributeExceptionArr(PDSCTagAttributeException e) {
+		if(tagAttributeExceptionArr == null) tagAttributeExceptionArr = new ArrayList<PDSCTagAttributeException>();
+		this.tagAttributeExceptionArr.add(e);
+	}
+	
+	
+	
 	/**
 	 * Add attribute inside selectedAttrArr
 	 * 
@@ -903,6 +906,46 @@ public class XmlTag{
 	
 	public void removeSelectedAttr(XmlAttribute attr) {
 		this.selectedAttrArr.remove(attr);
+	}
+	
+	
+	
+	
+	
+	/**
+	 * Remove PDSCTagAttributeException from tagAttributeExceptionArr
+	 * 
+	 * @param e
+	 */
+	
+	public void removeTagAttributeExceptionArr(PDSCTagAttributeException e) {
+		this.tagAttributeExceptionArr.remove(e);
+	}
+	
+	
+	
+	
+	
+	/**
+	 * set tagAttributeExceptionArr
+	 * 
+	 * @param tagAttributeExceptionArr to set
+	 */
+	public void setTagAttributeExceptionArr(ArrayList<PDSCTagAttributeException> tagAttributeExceptionArr) {
+		this.tagAttributeExceptionArr = tagAttributeExceptionArr;
+	}
+	
+	
+	
+	
+	
+	/** 
+	 *  Retrurn tagAttributeExceptionArr
+	 * 
+	 * @return tagAttributeExceptionArr
+	 */
+	public ArrayList<PDSCTagAttributeException> getTagAttributeExceptionArr(){
+		return this.tagAttributeExceptionArr;
 	}
 	
 	

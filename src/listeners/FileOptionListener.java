@@ -73,7 +73,34 @@ public class FileOptionListener implements ActionListener{
 			}
 		}
 		
-		else if(command.equals("savePDSCAs")) {
+		else if(command.equals("savePDSC")) {
+			if(Session.getInstance().getSelectedPDSCDoc() != null && Session.getInstance().getSelectedPDSCDoc().getSourcePath() != null) {
+				File file = new File(session.getSelectedPDSCDoc().getSourcePath().toString());
+				file.delete();
+				Document doc = FileBusiness.genratePDSCDocument(session.getSelectedPDSCDoc().getForm().getRoot());
+				Response response = FileBusiness.createFile(file.toString(), "", doc, false ,  true);
+				
+				/** handling response */
+				if (response != null) {
+					if(response.getStatus() == FileBusiness.FILE_CREATED_CORRECTLY) {
+						DialogUtils.noButtonsTemporaryMessage(" File Saved" , IconUtils.getOkIcon(40), 700 , session.getWizardFrame());
+					}
+					else {
+						DialogUtils.warningMessage("Some error occurred\n Error Code : " + response.getStatus() );
+					}
+				}
+			}
+			
+			else {
+				if(Session.getInstance().getSelectedPDSCDoc() != null) command = "savePDSCAs";
+				else DialogUtils.noButtonsTemporaryMessage("No document selected" , IconUtils.getWarningIcon(48), 1300, session.getWizardFrame());
+			}
+		}
+		
+		/**
+		 * TEMPORARY CORRECTION DO NOT PUT ELSE IF SEE savePDSC above
+		 */
+		if(command.equals("savePDSCAs")) {
 			
 			if(session.getSelectedPDSCDoc() != null) {
 				/** asking user to select destination folder */
@@ -104,27 +131,6 @@ public class FileOptionListener implements ActionListener{
 		}
 		
 		
-		else if(command.equals("savePDSC")) {
-			if(Session.getInstance().getSelectedPDSCDoc() != null && Session.getInstance().getSelectedPDSCDoc().getSourcePath() != null) {
-				File file = new File(session.getSelectedPDSCDoc().getSourcePath().toString());
-				file.delete();
-				Document doc = FileBusiness.genratePDSCDocument(session.getSelectedPDSCDoc().getForm().getRoot());
-				Response response = FileBusiness.createFile(file.toString(), "", doc, false ,  true);
-				
-				/** handling response */
-				if (response != null) {
-					if(response.getStatus() == FileBusiness.FILE_CREATED_CORRECTLY) {
-						DialogUtils.noButtonsTemporaryMessage(" File Saved" , IconUtils.getOkIcon(40), 700 , session.getWizardFrame());
-					}
-					else {
-						DialogUtils.warningMessage("Some error occurred\n Error Code : " + response.getStatus() );
-					}
-				}
-			}
-			
-			else DialogUtils.noButtonsTemporaryMessage("No document selected" , IconUtils.getWarningIcon(48), 1300, session.getWizardFrame());
-		}
-		
 		
 		
 		else if(command.equals("showPDSCPreview")) {
@@ -133,19 +139,19 @@ public class FileOptionListener implements ActionListener{
 				String text = FileBusiness.getDocumentPreview(doc);
 				session.getWizardFrame().showPreview(text);
 			}
-			
+			else DialogUtils.noButtonsTemporaryMessage("No document selected", IconUtils.getWarningIcon(48), 15000, session.getWizardFrame());
 		}
 		
 		
 		else if(command.equals("createNewPDSC")) {
 			XmlTag root = XmlTagBusiness.getRoot();
-			XmlTagBusiness.addRequiredAttr(root);
 			
 			root.addSelectedChild(XmlTagBusiness.getCompleteTagFromNameAndParent("vendor", root));
 			root.addSelectedChild(XmlTagBusiness.getCompleteTagFromNameAndParent("name", root));
 			root.addSelectedChild(XmlTagBusiness.getCompleteTagFromNameAndParent("description", root));
 			root.addSelectedChild(XmlTagBusiness.getCompleteTagFromNameAndParent("license", root));
 			root.addSelectedChild(XmlTagBusiness.getCompleteTagFromNameAndParent("url", root));
+			root.addSelectedChild(XmlTagBusiness.getCompleteTagFromNameAndParent("releases", root));
 			
 			/** creating new XmlForm */
 			XmlForm form = new XmlForm(root);

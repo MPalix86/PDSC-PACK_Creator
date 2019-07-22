@@ -41,6 +41,7 @@ public class PreviewPaneContainer extends JFrame{
 		
 		this.setVisible(true);
 		this.setMinimumSize(new Dimension(500,600));
+		this.setPreferredSize(new Dimension(600,800));
 	}
 
 

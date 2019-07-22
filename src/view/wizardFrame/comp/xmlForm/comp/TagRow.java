@@ -18,6 +18,15 @@ import model.XmlTag;
 import net.miginfocom.swing.MigLayout;
 import view.comp.utils.ColorUtils;
 import view.wizardFrame.comp.xmlForm.XmlForm;
+import view.wizardFrame.comp.xmlForm.comp.attributeComp.AttributeFormComboBox;
+import view.wizardFrame.comp.xmlForm.comp.attributeComp.AttributeFormTextField;
+import view.wizardFrame.comp.xmlForm.comp.attributeComp.AttributeLabel;
+import view.wizardFrame.comp.xmlForm.comp.namespaceComp.NameSpaceFormTextField;
+import view.wizardFrame.comp.xmlForm.comp.namespaceComp.NameSpaceLabel;
+import view.wizardFrame.comp.xmlForm.comp.tagComp.TagFormComboBox;
+import view.wizardFrame.comp.xmlForm.comp.tagComp.TagFormTextArea;
+import view.wizardFrame.comp.xmlForm.comp.tagComp.TagFormTextField;
+import view.wizardFrame.comp.xmlForm.comp.tagComp.TagLabel;
 
 public class TagRow extends JPanel{
 	
@@ -305,6 +314,7 @@ public class TagRow extends JPanel{
 	
 	
 	public void highlightBckGround(Color bg) {
+		if (bg == null) bg = new Color(200,221,242);
 		this.setBackground(bg);
 		for (Component comp : this.getComponents()) {
 			comp.setBackground(bg);

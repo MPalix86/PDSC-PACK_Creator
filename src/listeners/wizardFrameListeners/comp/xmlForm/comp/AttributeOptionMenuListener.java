@@ -4,6 +4,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 
+import org.apache.commons.io.FilenameUtils;
+
 import business.Session;
 import model.XmlAttribute;
 import model.XmlEnum;
@@ -40,9 +42,9 @@ public class AttributeOptionMenuListener implements ActionListener{
 		else if (command.equals("addPath")) {
 			File file = DialogUtils.showChooseFileFrame();
 			if(file != null) {
-				if(attr.getValue()!= null) attr.setValue(attr.getValue() + file.getName()) ;
+				if(attr.getValue()!= null) attr.setValue(attr.getValue().replace(FilenameUtils.getName(attr.getValue()), "") + file.getName()) ;
 				else attr.setValue(file.getName()) ;
-				session.getSelectedPDSCDoc().addPath(attr, file.getAbsolutePath());
+				session.getSelectedPDSCDoc().addAttrPath(attr, file.getAbsolutePath());
 			}
 				
 		}

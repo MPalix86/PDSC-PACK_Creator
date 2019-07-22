@@ -6,6 +6,7 @@ import java.util.Iterator;
 
 import dBConnection.DBConnection;
 import dBConnection.TableRecord;
+import model.PDSCTagAttributeException;
 import model.XmlEnum;
 import model.XmlNameSpace;
 import model.XmlTag;
@@ -246,7 +247,7 @@ public class XmlTagDao {
 						"       tags AS t ON t.id = ttr.tag_id\n" + 
 						"       LEFT JOIN\n" + 
 						"       name_space AS ns ON ns.id = ttr.name_space_id\n" + 
-						" WHERE ttr.parent_id =" + parent.getTagId() + "";
+						" WHERE ttr.parent_id =" + parent.getTagId()  + "";
 		
 		ArrayList<TableRecord> result = conn.query(query);
 		Iterator<TableRecord> i = result.iterator();
@@ -273,8 +274,11 @@ public class XmlTagDao {
 		    		record.get("default_content"),
 		    		nameSpace
 		    );
+			 
+			if(tag.getName().equals("description")) childrenArr.add(0, tag);
+			if(tag.getName().equals("doc")) childrenArr.add(1, tag);
+			else  childrenArr.add(tag);
 			
-			childrenArr.add(tag);
 		}
 		return childrenArr;
 	}
@@ -357,6 +361,72 @@ public class XmlTagDao {
 	        );
 		}	
 		return tag;
+	}
+	
+	
+	
+	
+	
+	
+	
+	public String getTagDescription(XmlTag tag) {
+		String description = null;
+		String query =  "Select * From tags AS t WHere t.name ='" + tag.getTagId() + "'";
+		
+		ArrayList<TableRecord> result = conn.query(query);
+		Iterator<TableRecord> i = result.iterator();
+		
+		while (i.hasNext()) {
+			TableRecord record = i.next();
+			description = record.get("description");
+	    }
+		return description;
+	}
+	
+	
+	
+	
+	public String getTagDescriptionFromTagName(XmlTag tag) {
+		String description = null;
+		String query =  "Select * From tags AS t WHere t.name ='" + tag.getName() + "'";
+		
+		ArrayList<TableRecord> result = conn.query(query);
+		Iterator<TableRecord> i = result.iterator();
+		
+		while (i.hasNext()) {
+			TableRecord record = i.next();
+			description = record.get("description");
+	    }
+		return description;
+	}
+	
+	
+	public ArrayList<PDSCTagAttributeException> getTagAttributeExceptionArr(XmlTag tag){
+		String query = 	"SELECT tag_attributes_exception.* , tags.name as t_name , attributes.name as a_name\n" + 
+						"FROM tag_attributes_exception\n" + 
+						"    LEFT JOIN tags ON tags.id = tag_attributes_exception.tag_id \n" + 
+						"    LEFT JOIN attributes ON attributes.id = tag_attributes_exception.attribute_id\n" + 
+						"WHERE tag_attributes_exception.tag_id =" + tag.getTagId() + "";
+		
+		ArrayList<PDSCTagAttributeException> exceptions = null;
+		
+		ArrayList<TableRecord> result = conn.query(query);
+		Iterator<TableRecord> i = result.iterator();
+		
+		if(i.hasNext()) exceptions = new ArrayList<PDSCTagAttributeException>();
+		
+		while (i.hasNext()) {
+			TableRecord record = i.next();
+			PDSCTagAttributeException exception = new PDSCTagAttributeException(
+					tag,
+					this.getTagFromTagId(Integer.parseInt(record.get("parent_id"))),
+					XmlAttributeDao.getInstance().getAttributeFromName(record.get("a_name")),
+					Integer.parseInt(record.get("exception"))
+			);
+			exceptions.add(exception);
+	    }
+		
+		return exceptions;
 	}
 	
 }

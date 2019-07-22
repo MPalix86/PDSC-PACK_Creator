@@ -97,7 +97,8 @@ public class CollapsablePanelTagContent extends JPanel{
 				XmlAttribute a = tag.getAttrArr().get(i);
 				
 				/** add attribute inside checkBox */
-				AttributeCheckBox c = new AttributeCheckBox(a);   
+				AttributeCheckBox c = new AttributeCheckBox(a); 
+				if (a.isRequired())c.setText(a.getName() + " *");
 				c.setForeground(new Color(255, 99, 71));   
 				
 				
@@ -116,11 +117,8 @@ public class CollapsablePanelTagContent extends JPanel{
 				
 				c.addItemListener(listener);
 				
-				/** if attribute is required, check checkBox and make it non editable */
-				if(a.isRequired()) {
-					c.setSelected(true);
-					c.setEnabled(false);
-				}
+				/** if attribute is required, check checkBox */
+				if(a.isRequired()) c.setSelected(true);
 				
 				attributesPanel.add(c,BorderLayout.CENTER); 
 			}

@@ -141,7 +141,7 @@ public class IconUtils {
 		ImageIcon icon = null;
 		try {
 			BufferedImage buffIm = ImageIO.read(IconUtils.class.getResource(iconPath() + "twitter.png"));
-			BufferedImage scaledImg = Scalr.resize(buffIm, Method.ULTRA_QUALITY, size);
+			BufferedImage scaledImg = Scalr.resize(buffIm, Method.AUTOMATIC, size);
 			icon = new ImageIcon(scaledImg);
 		}catch(Exception e) {
 			icon = new ImageIcon();
@@ -153,7 +153,7 @@ public class IconUtils {
 		ImageIcon icon = null;
 		try {
 			BufferedImage buffIm = ImageIO.read(IconUtils.class.getResource(iconPath() + "facebook.png"));
-			BufferedImage scaledImg = Scalr.resize(buffIm, Method.ULTRA_QUALITY, size);
+			BufferedImage scaledImg = Scalr.resize(buffIm, Method.AUTOMATIC, size);
 			icon = new ImageIcon(scaledImg);
 		}catch(Exception e) {
 			icon = new ImageIcon();
@@ -261,7 +261,7 @@ public class IconUtils {
 	public static ImageIcon getChildrenListIArrowIcon(int size) {
 		ImageIcon icon = null;
 		try {
-			BufferedImage buffIm = ImageIO.read(IconUtils.class.getResource(iconPath() + "taglistArrow.png"));
+			BufferedImage buffIm = ImageIO.read(IconUtils.class.getResource(iconPath() + "tagListArrow.png"));
 			BufferedImage scaledImg = Scalr.resize(buffIm, Method.ULTRA_QUALITY, size);
 			icon = new ImageIcon(scaledImg);
 		}catch(Exception e) {

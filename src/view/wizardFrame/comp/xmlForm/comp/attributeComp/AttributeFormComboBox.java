@@ -1,4 +1,4 @@
-package view.wizardFrame.comp.xmlForm.comp;
+package view.wizardFrame.comp.xmlForm.comp.attributeComp;
 
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
@@ -7,6 +7,7 @@ import business.Session;
 import model.XmlAttribute;
 import view.comp.AttributeComboBox;
 import view.comp.utils.ColorUtils;
+import view.wizardFrame.comp.xmlForm.comp.TagRow;
 
 public class AttributeFormComboBox  extends AttributeComboBox implements FocusListener{
 
@@ -25,7 +26,9 @@ public class AttributeFormComboBox  extends AttributeComboBox implements FocusLi
 		/**
 		 * follow user selected element on screen
 		 */
-		row.scrollRectToVisible(this.getBounds());
+		if(!row.isVisible()) {
+			row.scrollRectToVisible(this.getBounds());	
+		}
 
 	}
 

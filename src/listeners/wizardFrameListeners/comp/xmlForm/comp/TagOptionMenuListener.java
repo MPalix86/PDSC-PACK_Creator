@@ -1,7 +1,11 @@
 package listeners.wizardFrameListeners.comp.xmlForm.comp;
 
+import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+
+import org.apache.commons.io.FilenameUtils;
 
 import business.CustomUtils;
 import business.Session;
@@ -55,9 +59,26 @@ public class TagOptionMenuListener implements ActionListener{
 		
 		
 		else if(command.equals("addAttribute")) {
-			
 			/** adding attributes */
 			new AddAttributeFrame(tag);
+		}
+		
+		
+		else if (command.equals("addPath")) {
+			File file = DialogUtils.showChooseFileFrame();
+			if(file != null) {
+				
+				/** setting tag content */
+				if(tag.getContent()!= null) tag.setContent(tag.getContent().replace(FilenameUtils.getName(tag.getContent()), "") + file.getName()) ;
+				else tag.setContent(file.getName()) ;
+				
+				/** adding source path in pdscDoc*/
+				session.getSelectedPDSCDoc().addTagPath(tag, file.getAbsolutePath());
+				
+				/** updating row */
+				session.getSelectedForm().getTagOpenRow(tag).update();
+				
+			}		
 		}
 
 		
@@ -131,9 +152,18 @@ public class TagOptionMenuListener implements ActionListener{
 				/** maximum number of possible child in the model instance is reduced by one */
 				child.setMax(child.getMax() -1);
 				
-				if(newChild.getAttrArr() != null) new AddAttributeFrame(newChild);
-				
+				/** updating view */
 				session.getSelectedForm().UpdateView();
+				
+				/** to avoid focus lost on AddAttributeFrame caused by UpdaView above, it is added at the end of awt event queue */
+				EventQueue.invokeLater(new Runnable() {
+					@Override
+					public void run() {
+						if(newChild.getAttrArr() != null) {
+							new AddAttributeFrame(newChild).toFront();
+						}
+					}
+				});
 				
 				/**
 				 * IMPORTANT : saving state of root tag for undo redo action
@@ -165,7 +195,7 @@ public class TagOptionMenuListener implements ActionListener{
 						Response response = XmlTagBusiness.verifyTagFromName(name, tag);
 						
 						boolean confirmation = true ;
-						if (response.getStatus() == XmlTag.MAX_REACHED) {
+						if (response.getStatus() == XmlTagBusiness.MAX_REACHED) {
 							confirmation = DialogUtils.yesNoWarningMessage("Following PDSC standard : \n maximum number of children reached for tag < " + name + " > Do you want to continue ?");
 						}
 						if(confirmation) {

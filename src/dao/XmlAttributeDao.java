@@ -154,7 +154,7 @@ public class XmlAttributeDao {
 	
 	public String getAttrDescriptionFromAttrName(XmlAttribute attr) {
 		String description = null;
-		String query =  "Select a.description From attributes AS a WHere a.name =" + attr.getName() + "";
+		String query =  "Select a.description From attributes AS a WHere a.name ='" + attr.getName() + "'";
 		
 		ArrayList<TableRecord> result = conn.query(query);
 		Iterator<TableRecord> i = result.iterator();
@@ -192,6 +192,8 @@ public class XmlAttributeDao {
 		attr = new XmlAttribute(attrId,name,required,possibleValues,defaultValue,null);
 		return attr;
 	}
+	
+
 	
 
 }

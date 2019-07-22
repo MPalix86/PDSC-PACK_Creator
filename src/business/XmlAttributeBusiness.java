@@ -127,7 +127,14 @@ public class XmlAttributeBusiness {
 	}
 	
 	
-	
+	public  static XmlAttribute getModelAttrFromAttrName(XmlTag tag, String attrName) {
+		if(tag.getAttrArr() == null) return null;
+		for (int i = 0; i < tag.getAttrArr().size(); i ++) {
+			XmlAttribute attr = tag.getAttrArr().get(i);
+			if(attr.getName().equals(attrName)) return attr;
+		}
+		return null;
+	}
 	
 	
 	public static XmlAttribute getAttributeWithPossibleValuesFromName(String name) {

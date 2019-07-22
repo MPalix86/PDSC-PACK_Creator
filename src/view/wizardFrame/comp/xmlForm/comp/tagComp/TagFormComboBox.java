@@ -1,10 +1,11 @@
-package view.wizardFrame.comp.xmlForm.comp;
+package view.wizardFrame.comp.xmlForm.comp.tagComp;
 
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 
 import model.XmlTag;
 import view.comp.TagComboBox;
+import view.wizardFrame.comp.xmlForm.comp.TagRow;
 
 public class TagFormComboBox extends TagComboBox implements FocusListener{
 	
@@ -20,7 +21,9 @@ public class TagFormComboBox extends TagComboBox implements FocusListener{
 		/**
 		 * follow user selected element on screen
 		 */
-		row.scrollRectToVisible(this.getBounds());
+		if(!row.isVisible()) {
+			row.scrollRectToVisible(this.getBounds());	
+		}
 		
 	}
 

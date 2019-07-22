@@ -34,6 +34,7 @@ public class AddAttributeFrame extends JFrame{
 	private XmlTag tag;
 	private JLabel selectedAttrlabel;
 	private ArrayList<XmlAttribute> addedAttr;
+	private XmlTag originalTagCopy;
 	
 	
 	/**
@@ -44,6 +45,8 @@ public class AddAttributeFrame extends JFrame{
 	}
 
 	public AddAttributeFrame(XmlTag tag) {
+		this.originalTagCopy = new XmlTag(tag);
+		if(tag.getParent() != null ) originalTagCopy.setParent(tag.getParent());
 		this.tag = tag;
 		addedAttr = new ArrayList<XmlAttribute>();
 		
@@ -108,7 +111,7 @@ public class AddAttributeFrame extends JFrame{
 			buttonsPanel.setBorder(new MatteBorder(1,0,0,0, ColorUtils.LIGHT_GRAY));
 
 			
-			SquareButton addBtn = new SquareButton("Add");
+			SquareButton addBtn = new SquareButton("Confirm");
 			addBtn.addActionListener(listener);
 			addBtn.setActionCommand("addAttributes");
 			SquareButton cancelBtn = new SquareButton("Cancel");
@@ -156,6 +159,10 @@ public class AddAttributeFrame extends JFrame{
 	
 	public ArrayList<XmlAttribute> getAddeAttrArr(){
 		return this.addedAttr;
+	}
+	
+	public XmlTag getOriginalTagCopy() {
+		return this.originalTagCopy;
 	}
 }
 

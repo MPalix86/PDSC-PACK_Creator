@@ -1,7 +1,8 @@
-package view.wizardFrame.comp.xmlForm.comp;
+package view.wizardFrame.comp.xmlForm.comp.attributeComp;
 
 import javax.swing.JLabel;
 import javax.swing.JPopupMenu;
+import javax.swing.JSeparator;
 
 import business.Session;
 import listeners.wizardFrameListeners.comp.xmlForm.comp.AttributeOptionMenuListener;
@@ -19,27 +20,31 @@ public class AttributeOptionMenu extends JPopupMenu{
 		this.sourceLabel = sourceLabel;
 		this.listener = new AttributeOptionMenuListener();
 		
+		
+		
 		AttributeMenuItem deleteAttrItem = new AttributeMenuItem("Delete",attr);
-		AttributeMenuItem addPathItem = new AttributeMenuItem("Select File",attr);
-		AttributeMenuItem CustomValueItem = new AttributeMenuItem("Insert Custom Value",attr);
-		
-		
 		deleteAttrItem.addActionListener(listener);
 		deleteAttrItem.setActionCommand("deleteAttribute");
-		add(deleteAttrItem);
+		
 		
 		if (attr.getTag().getName().equals("file") && attr.getName().equals("name")) {
+			AttributeMenuItem addPathItem = new AttributeMenuItem("Select File",attr);
 			addPathItem.addActionListener(listener);
 			addPathItem.setActionCommand("addPath");
 			add(addPathItem);
+			add(new JSeparator());
 		}
 		
 		if(attr.getPossibleValues() != null) {
+			AttributeMenuItem CustomValueItem = new AttributeMenuItem("Insert Custom Value",attr);
 			System.out.println(attr.getPossibleValues().getClass());
 			CustomValueItem.addActionListener(listener);
 			CustomValueItem.setActionCommand("addCustomValue");
 			add(CustomValueItem);
 		}
+		
+		
+		add(deleteAttrItem);
 
 		
 		/**

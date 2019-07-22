@@ -44,23 +44,27 @@ public class PDSCOptionListener implements ActionListener{
 					/** recovering line number */
 					int lineNumber = (int) response.getObject();
 					
-					/** button creation for error showing */
-					TextButton lineButton  = new TextButton("Show error line", ColorUtils.SYSTEM_RED_COLOR_DARK , ColorUtils.SYSTEM_RED_COLOR_LIGHT.brighter());
-					
-					/** button listener */
-					lineButton.addActionListener(new ActionListener() { 
-						  public void actionPerformed(ActionEvent e) {
-							  
-							/** making row blink */
-							System.out.println(lineNumber);
-						    session.getSelectedForm().lineFocusBlink(lineNumber, ColorUtils.LIGHT_GRAY, 5);
-						  } 
-						} );
-					
-					/** insert text and button in validator */
+					if(lineNumber > 0) {
+						
+						/** button creation for error showing */
+						TextButton lineButton  = new TextButton("Show error line", ColorUtils.SYSTEM_RED_COLOR_DARK , ColorUtils.SYSTEM_RED_COLOR_LIGHT.brighter());
+						
+						/** button listener */
+						lineButton.addActionListener(new ActionListener() { 
+							  public void actionPerformed(ActionEvent e) {
+								  
+								/** making row blink */
+								System.out.println(lineNumber);
+							    session.getSelectedForm().lineFocusBlink(lineNumber, ColorUtils.LIGHT_GRAY, 5);
+							  } 
+							} );
+						
+						/** insert text and button in validator */
+						session.getWizardFrame().insertConsoleComnponent(lineButton);
+					}
 					session.getWizardFrame().setConsoleText(response.getMessage() , false);
-					session.getWizardFrame().insertConsoleComnponent(lineButton);
 				}
+
 				else session.getWizardFrame().setConsoleText(response.getMessage(), false);
 			}
 			else DialogUtils.warningMessage("No document selected");
@@ -86,11 +90,13 @@ public class PDSCOptionListener implements ActionListener{
 								if(l.getType() == Log.WARNING) session.getWizardFrame().setConsoleText("Warning " + l.getText(), true);
 								else if (l.getType() == Log.ERROR)session.getWizardFrame().setConsoleText("Error " + l.getText(), true);
 							}
+							session.getWizardFrame().setConsoleText("PACK CREATED CORRECTLY IN : " + path.getAbsolutePath(), true);
 							DialogUtils.okMessage("Pack created correctly", "Pack Created");
 						}
 						else if(status == Pack.REQUIRED_FIELDS_MISSING) {
 							DialogUtils.warningMessage("Required Fields missing");
 						}
+						else DialogUtils.warningMessage("Some Error Occurred");
 					} 
 					catch (IOException e1) {
 						e1.printStackTrace();

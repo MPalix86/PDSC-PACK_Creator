@@ -1,11 +1,10 @@
-package view.wizardFrame.comp.xmlForm.comp;
+package view.wizardFrame.comp.xmlForm.comp.tagComp;
 
 import javax.swing.JMenu;
 import javax.swing.JPopupMenu;
 import javax.swing.JSeparator;
 
 import business.Session;
-import business.XmlAttributeBusiness;
 import listeners.wizardFrameListeners.comp.xmlForm.comp.TagOptionMenuListener;
 import model.XmlTag;
 import view.comp.TagMenuItem;
@@ -25,10 +24,10 @@ public class TagOptionMenu extends JPopupMenu {
 		deleteTagItem.addActionListener(listener);
 		deleteTagItem.setActionCommand("deleteTag");
 		
-		TagMenuItem addAttributeItem = new TagMenuItem("Add Attributes",tag);
+		TagMenuItem addAttributeItem = new TagMenuItem("Add/Remove Attributes",tag);
 		addAttributeItem.addActionListener(listener);
 		addAttributeItem.setActionCommand("addAttribute");
-		if(XmlAttributeBusiness.getNotSelectedAttributes(tag) == null) addAttributeItem.setEnabled(false);
+		if(tag.getAttrArr() == null || tag.getAttrArr().size() == 0) addAttributeItem.setEnabled(false);
 			
 		TagMenuItem addCustomAttributeItem = new TagMenuItem("Add Custom Attribute",tag);
 		addCustomAttributeItem.addActionListener(listener);
@@ -61,6 +60,15 @@ public class TagOptionMenu extends JPopupMenu {
 		addCustomTagItem.addActionListener(listener);
 		addCustomTagItem.setActionCommand("addCustomTag");
 		if(tag.getContent() != null && tag.getContent().trim().length() > 0) addCustomTagItem.setEnabled(false);
+		
+		
+		if(tag.getName().equals("license") || tag.getName().equals("doc")) {
+			TagMenuItem addPathItem = new TagMenuItem("Select File",tag);
+			addPathItem.addActionListener(listener);
+			addPathItem.setActionCommand("addPath");
+			add(addPathItem);
+			add(new JSeparator());
+		}
 		
 		
 			

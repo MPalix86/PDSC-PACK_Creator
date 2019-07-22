@@ -24,7 +24,7 @@ public class DBConnection {
 	   { 
 		   try {
 		         Class.forName("org.sqlite.JDBC");
-		         conn = DriverManager.getConnection("jdbc:sqlite:src/dBConnection/packCreator.db");
+		         conn = DriverManager.getConnection("jdbc:sqlite::resource:dBConnection/packCreator.db");
 			} catch (SQLException | ClassNotFoundException e) {
 				 System.err.println( e.getClass().getName() + ": " + e.getMessage() );
 		         System.exit(0);

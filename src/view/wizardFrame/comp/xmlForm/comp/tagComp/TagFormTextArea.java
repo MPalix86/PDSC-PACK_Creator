@@ -1,4 +1,4 @@
-package view.wizardFrame.comp.xmlForm.comp;
+package view.wizardFrame.comp.xmlForm.comp.tagComp;
 
 import java.awt.Color;
 import java.awt.Dimension;
@@ -14,6 +14,7 @@ import javax.swing.event.DocumentListener;
 import business.CustomUtils;
 import model.XmlTag;
 import view.comp.utils.ColorUtils;
+import view.wizardFrame.comp.xmlForm.comp.TagRow;
  
 public class TagFormTextArea extends JTextArea implements DocumentListener, FocusListener{
 	private XmlTag tag;
@@ -92,7 +93,9 @@ public class TagFormTextArea extends JTextArea implements DocumentListener, Focu
 		/**
 		 * follow user selected element on screen
 		 */
-		row.scrollRectToVisible(this.getBounds());
+		if(!row.isVisible()) {
+			row.scrollRectToVisible(this.getBounds());	
+		}
 		
 	}
 

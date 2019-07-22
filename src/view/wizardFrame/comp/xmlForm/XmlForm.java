@@ -43,7 +43,7 @@ public class XmlForm extends JPanel{
 		this.setBorder(new EmptyBorder(0,0,0,0));
 		this.setBackground(Color.WHITE);
 		this.setLayout(new MigLayout("wrap 1" , "" , "[] 0 []"));
-		if(OSValidator.isWindows()) INNER_ROW_PADDIND = -8;
+		if(OSValidator.isWindows()) INNER_ROW_PADDIND = -6;
 		else INNER_ROW_PADDIND = -13;
 		this.root = root;
 		this.OpenCloseTagsLinesHashMap = new HashMap<XmlTag,Line2D>();
