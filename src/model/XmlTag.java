@@ -32,8 +32,13 @@ public class XmlTag{
 	
 	/** tag's content */
 	protected String content; 
-
 	
+	/** tag's content type in integer form*/
+	private Integer contentTypeInt;
+	
+	/** tag's content type in string form*/
+	private String contentTypeString;
+
 	/** true if tag is mandatory, false otherwise */
 	protected boolean required;
 	
@@ -110,7 +115,7 @@ public class XmlTag{
 	public final static int MAX_OCCURENCE_NUMBER = 1000;
 		
 	
-	public XmlTag(Integer tagId,Integer relId, String name, boolean required, XmlTag parent, int max, Object possibleValues, String defaultContent,XmlNameSpace nameSpace) {
+	public XmlTag(Integer tagId,Integer relId, String name, boolean required, XmlTag parent, int max, Object possibleValues, String defaultContent,XmlNameSpace nameSpace , String contentType) {
 		this.name = name;
 		this.required = required;
 		this.parent = parent;
@@ -120,25 +125,28 @@ public class XmlTag{
 		this.nameSpace = nameSpace;
 		this.tagId = tagId;
 		this.relId = relId;
+		this.contentTypeString = contentType;
 	}
 	
 	
 	
 	
-	public XmlTag(String name, boolean required, XmlTag parent, int max) {
+	public XmlTag(String name, boolean required, XmlTag parent, int max, String contentType) {
 		this.name = name;
 		this.required = required;
 		this.parent = parent;
 		this.max = max;
+		this.contentTypeString = contentType;
 	}
 	
 	
 	
 	
-	public XmlTag(String name, Object possibleValues, String defaultContent) {
+	public XmlTag(String name, Object possibleValues, String defaultContent, String contentType) {
 		this.name = name;
 		this.possibleValues = possibleValues;	
 		this.defaultContent = defaultContent;
+		this.contentTypeString = contentType;
 	}
 
 
@@ -204,6 +212,10 @@ public class XmlTag{
 		if(tag.getRelId() != null) this.relId = tag.getRelId();
 		
 		if(tag.getTagId() != null) this.tagId = tag.getTagId();
+		
+		if(tag.getContentTypeInt() != null) this.contentTypeInt = tag.getContentTypeInt();
+		
+		if(tag.getContentTypeString() != null) this.contentTypeString = tag.getContentTypeString();
 		
 		this.required = tag.isRequired();
 		
@@ -274,6 +286,10 @@ public class XmlTag{
 		
 		if(tag.getTagId() != null) this.tagId = tag.getTagId();
 		
+		if(tag.getContentTypeInt() != null) this.contentTypeInt = tag.getContentTypeInt();
+		
+		if(tag.getContentTypeString() != null) this.contentTypeString = tag.getContentTypeString();
+		
 		this.required = tag.isRequired();
 		
 	}
@@ -288,7 +304,7 @@ public class XmlTag{
 	 * @param tag with which replace this instance
 	 */
 	
-	public void replaceWith(XmlTag tag) {
+	public void replaceWith(XmlTag tag , XmlTag parent) {
 		
 		if(tag.getAttrArr() != null) {
 			
@@ -323,7 +339,7 @@ public class XmlTag{
 			tag.getSelectedChildrenArr().forEach((c)-> this.selectedChildrenArr.add(new XmlTag(c, this)));
 		}
 	
-		if(tag.getParent() != null) this.parent = null ;
+		if(tag.getParent() != null) this.parent = parent ;
 		
 		if(tag.getDefaultContent() != null) this.defaultContent = new String(tag.getDefaultContent());
 		
@@ -343,8 +359,20 @@ public class XmlTag{
 		
 		if(tag.getTagId() != null) this.tagId = tag.getTagId();
 		
+		if(tag.getContentTypeInt() != null) this.contentTypeInt = tag.getContentTypeInt();
+		
+		if(tag.getContentTypeString() != null) this.contentTypeString = tag.getContentTypeString();
+		
 		this.required = tag.isRequired();
 		
+	}
+	
+	
+	
+	
+	@Override
+	public String toString() {
+		return "paste element after " + this.name;
 	}
 	
 	
@@ -999,6 +1027,20 @@ public class XmlTag{
 	 */
 	public void setTagId(Integer tagId) {
 		this.tagId = tagId;
+	}
+	
+	
+	
+	
+	
+	public String getContentTypeString() {
+		return this.contentTypeString;
+	}
+	
+	
+	
+	public Integer getContentTypeInt() {
+		return this.contentTypeInt;
 	}
 
 

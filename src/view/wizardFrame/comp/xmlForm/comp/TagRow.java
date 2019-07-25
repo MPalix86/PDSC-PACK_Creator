@@ -156,18 +156,17 @@ public class TagRow extends JPanel{
 		}
 		
 		/** close tag */
-		tagLabel1 = new TagLabel("> ",tag);
+		if(tag.getContentTypeString().equals("void")) tagLabel1 = new TagLabel("/> ",tag);
+		else tagLabel1 = new TagLabel("> ",tag);
 		tagLabel1.addMouseListener(listener);
 		if(tag.getContent() != null && CustomUtils.thereAreMoreLinesInString(tag.getContent())) this.add(tagLabel1, "wrap");
 		else  this.add(tagLabel1);
-		
-		
 		
 		/** if tag have no children */
 		if(tag.getSelectedChildrenArr() == null || tag.getSelectedChildrenArr().size() <= 0) {
 
 			/** if tag haven't possible values */
-			if(tag.getPossibleValues() == null) {
+			if(tag.getPossibleValues() == null && !tag.getContentTypeString().equals("void")) {
 
 				/** if tag have content set */
 				
@@ -222,7 +221,7 @@ public class TagRow extends JPanel{
 			}
 			
 			/** if tag have possible value  */
-			else {
+			else if(tag.getPossibleValues() != null && !tag.getContentTypeString().equals("void")){
 				TagFormComboBox contentComboBox = new TagFormComboBox(tag,this);
 
 				if (tag.getDefaultContent() != null && tag.getContent() == null ) {
@@ -238,10 +237,13 @@ public class TagRow extends JPanel{
 
 				this.add(contentComboBox);
 			}
-
-			tagLabel2 = new TagLabel("</  " + tag.getName() + "  > ",tag);
-			tagLabel2.addMouseListener(listener);
-			this.add(tagLabel2);
+			
+			if(!tag.getContentTypeString().equals("void")) {
+				tagLabel2 = new TagLabel("</  " + tag.getName() + "  > ",tag);
+				tagLabel2.addMouseListener(listener);
+				this.add(tagLabel2);
+			}
+			
 		}
 		return this;
 	}

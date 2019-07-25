@@ -66,8 +66,6 @@ public class FileOptionListener implements ActionListener{
 						session.setSelectedPDSCDoc(doc);
 
 					}
-					
-					
 				}
 				else DialogUtils.warningMessage(" Select PDSC File ");
 			}
@@ -146,12 +144,16 @@ public class FileOptionListener implements ActionListener{
 		else if(command.equals("createNewPDSC")) {
 			XmlTag root = XmlTagBusiness.getRoot();
 			
-			root.addSelectedChild(XmlTagBusiness.getCompleteTagFromNameAndParent("vendor", root));
+			root.addSelectedChild(XmlTagBusiness.getCompleteTagFromNameAndParent("vendor", root));	
 			root.addSelectedChild(XmlTagBusiness.getCompleteTagFromNameAndParent("name", root));
 			root.addSelectedChild(XmlTagBusiness.getCompleteTagFromNameAndParent("description", root));
 			root.addSelectedChild(XmlTagBusiness.getCompleteTagFromNameAndParent("license", root));
 			root.addSelectedChild(XmlTagBusiness.getCompleteTagFromNameAndParent("url", root));
-			root.addSelectedChild(XmlTagBusiness.getCompleteTagFromNameAndParent("releases", root));
+			XmlTag releases  = XmlTagBusiness.getCompleteTagFromNameAndParent("releases", root);
+			XmlTag release = XmlTagBusiness.getCompleteTagFromNameAndParent("release", releases);
+			XmlTagBusiness.addRequiredAttr(release);
+			releases.addSelectedChild(release);
+			root.addSelectedChild(releases);
 			
 			/** creating new XmlForm */
 			XmlForm form = new XmlForm(root);

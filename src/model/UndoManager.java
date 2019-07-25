@@ -105,7 +105,7 @@ public class UndoManager {
 		if( i > 0) {
 			i--;
 			Memento m = mementoArr.get(i);
-			root.replaceWith(m.getStatus());
+			root.replaceWith(m.getStatus() , m.getStatus().getParent());
 			
 			for (int h = 0; h < mementoArr.size(); h++) {
 				System.out.println(mementoArr.get(h).getStatus().getName());
@@ -127,7 +127,7 @@ public class UndoManager {
 		if(i < mementoArr.size() - 1) {
 			i++;
 			Memento m = mementoArr.get(i);
-			root.replaceWith(m.getStatus());
+			root.replaceWith(m.getStatus() , m.getStatus().getParent());
 			
 			System.out.println("redo");
 			System.out.println("memntoArr size : " + mementoArr.size());

@@ -68,9 +68,6 @@ public class TagCustomizationFrame extends JFrame {
 		/** recovenring parent tag */
 		this.parent = parent;
 		
-		/** recovenring parent tag */
-		this.parent = parent;
-		
 		/** setting up listener */
 		listener = new TagCustomizationFrameListener(this);
 		

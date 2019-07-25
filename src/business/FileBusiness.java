@@ -200,7 +200,7 @@ public class FileBusiness {
 	       String el = e.getPublicId();
 	       String message = e.getMessage();
 	       String selected_document;
-	       if(Session.getInstance().getSelectedPDSCDoc().getSourcePath() == null) selected_document = "untiteled";
+	       if(Session.getInstance().getSelectedPDSCDoc().getSourcePath() == null) selected_document = "untitled";
 	       else selected_document = Session.getInstance().getSelectedPDSCDoc().getSourcePath().toString();
 	       
 	       returnMessage = 	"Selected Document : " + selected_document + "\n" +
@@ -248,7 +248,7 @@ public class FileBusiness {
 				
 				Document document = (Document) builder.build(pdscFile);
 				parentEl = document.getRootElement();
-				xmlParent = new XmlTag(parentEl.getName() , true , null , 1);	
+				xmlParent = new XmlTag(parentEl.getName() , true , null , 1 , "all");	
 				
 				for(int i = 0; i < parentEl.getNamespacesIntroduced().size(); i++) {
 					Namespace namespace = parentEl.getNamespacesIntroduced().get(i);
@@ -299,7 +299,7 @@ public class FileBusiness {
 				
 				else {
 					
-	    			xmlChild = new XmlTag(parentEl.getName() , false , xmlParent , XmlTag.MAX_OCCURENCE_NUMBER);
+	    			xmlChild = new XmlTag(parentEl.getName() , false , xmlParent , XmlTag.MAX_OCCURENCE_NUMBER, "all");
 					
 					/** recovering parent id that is mandatory for others query */
 	    			Integer childId = XmlTagBusiness.getTagIdFromTagName(parentEl.getName());
@@ -313,7 +313,7 @@ public class FileBusiness {
 					xmlParent.addSelectedChild(xmlChild);
 					}
 				
-				XmlTag modelChild = XmlTagBusiness.findModelChildFromSelectedChildName(xmlParent, xmlChild.getName());
+				XmlTag modelChild = XmlTagUtils.findModelChildFromSelectedChildName(xmlParent, xmlChild.getName());
 				
 				if(modelChild != null) {
 
@@ -387,10 +387,10 @@ public class FileBusiness {
         if (fileToZip.isDirectory()) {
  
             if (fileName.endsWith("/")) {
-                zipOut.putNextEntry(new ZipEntry(fileName));
+                zipOut.putNextEntry(new ZipEntry(fileToZip.toString()));
                 zipOut.closeEntry();
             } else {
-                zipOut.putNextEntry(new ZipEntry(fileName + "/"));
+                zipOut.putNextEntry(new ZipEntry(fileToZip.toString() + "/"));
                 zipOut.closeEntry();
             }
             File[] children = fileToZip.listFiles();

@@ -32,11 +32,6 @@ public class AttributeOptionMenuListener implements ActionListener{
 			if(response) {
 				tag.removeSelectedAttr(attr);
 			}
-
-			/**
-			 * IMPORTANT : saving state of root tag for undo redo action
-			 */
-			Session.getInstance().getSelectedPDSCDoc().getUndoManager().addState();
 		}
 		
 		else if (command.equals("addPath")) {
@@ -69,7 +64,7 @@ public class AttributeOptionMenuListener implements ActionListener{
 		Session.getInstance().getSelectedPDSCDoc().getUndoManager().addState();
 		
 		TagRow row = session.getSelectedForm().getTagOpenRow(tag);
-		row.update();
+		if(row != null) row.update();
 	}
 }
 

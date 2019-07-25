@@ -45,8 +45,7 @@ public class AddAttributeFrame extends JFrame{
 	}
 
 	public AddAttributeFrame(XmlTag tag) {
-		this.originalTagCopy = new XmlTag(tag);
-		if(tag.getParent() != null ) originalTagCopy.setParent(tag.getParent());
+		this.originalTagCopy = new XmlTag(tag , tag.getParent());
 		this.tag = tag;
 		addedAttr = new ArrayList<XmlAttribute>();
 		

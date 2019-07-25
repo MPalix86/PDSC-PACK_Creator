@@ -6,9 +6,8 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
 import business.Session;
-import business.TagCustomizationBusiness;
 import business.XmlAttributeBusiness;
-import business.XmlTagBusiness;
+import business.XmlTagUtils;
 import model.XmlAttribute;
 import model.XmlTag;
 import view.comp.AttributeButton;
@@ -43,7 +42,7 @@ public class AddAttributeFrameListener implements ActionListener , ItemListener{
 		
 		if(command.equals("addAttributes")) {
 			
-			tag.replaceWith(tagCopy);
+			tag.setSelectedAttrArr(tagCopy.getSelectedAttrArr());
 			
 			frame.dispose();
 		
@@ -76,23 +75,13 @@ public class AddAttributeFrameListener implements ActionListener , ItemListener{
 	public void itemStateChanged(ItemEvent e) {
 		AttributeCheckBox c = (AttributeCheckBox) e.getItem();
 		XmlAttribute attr =  c.getAttr();
-		
-		
 		/** if attribute was selected */
-		if(c.isSelected()) {
+		if(c.isSelected()) 
+			if(XmlTagUtils.findChildSelectedAttrFromName(tagCopy, attr.getName()) == null) tagCopy.addSelectedAttr(new XmlAttribute(attr,tagCopy));
 			
-			/** if the attribute has not already been added */
-			if(!TagCustomizationBusiness.tagHasAttribute(tag,attr)) {
-				tagCopy.addSelectedAttrAtIndex(new XmlAttribute(attr, tagCopy), 0);
-			}
-			
-		}
-		
-		/** if attribute was unset */
 		else {
-			XmlAttribute selectedAttr = XmlTagBusiness.findAttributeFromArrayOfAttributes(tagCopy.getSelectedAttrArr(), attr.getName());
-			if(tagCopy.getSelectedAttrArr().remove(selectedAttr)) {
-			}
+			XmlAttribute selectedAttr = XmlTagUtils.findAttributeFromArrayOfAttributes(tagCopy.getSelectedAttrArr(), attr.getName());
+			tagCopy.removeSelectedAttr(selectedAttr);
 		}	
 	}
 }

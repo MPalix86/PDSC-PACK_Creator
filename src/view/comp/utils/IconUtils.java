@@ -38,6 +38,12 @@ public class IconUtils {
 		return IconFontSwing.buildIcon(FontAwesome.PENCIL_SQUARE_O, size, c );
 	}
 	
+	public static Icon FAgetTrashIcon(int size , Color c) {
+		if (c == null) c = ICON_COLOR;
+		IconFontSwing.register(FontAwesome.getIconFont());
+		return IconFontSwing.buildIcon(FontAwesome.TRASH, size, c );
+	}
+	
 	public static Icon FAgetExclamationTriangleIcon(int size , Color c) {
 		if (c == null) c = ICON_COLOR;
 		IconFontSwing.register(FontAwesome.getIconFont());
@@ -88,11 +94,23 @@ public class IconUtils {
 		return IconFontSwing.buildIcon(FontAwesome.PLUS, size, c);
 	}
 	
+	public static Icon FAgetPencilIcon(int size , Color c) {
+		if (c == null) c = ICON_COLOR;
+		IconFontSwing.register(FontAwesome.getIconFont());
+		return IconFontSwing.buildIcon(FontAwesome.PENCIL, size, c);
+	}
+	
 	
 	public static Icon FAgetFolderOpenIcon(int size , Color c) {
 		if (c == null) c = ICON_COLOR;
 		IconFontSwing.register(FontAwesome.getIconFont());
 		return IconFontSwing.buildIcon(FontAwesome.FOLDER_OPEN, size, c);
+	}
+	
+	public static Icon FAgetClipboardIcon(int size , Color c) {
+		if (c == null) c = ICON_COLOR;
+		IconFontSwing.register(FontAwesome.getIconFont());
+		return IconFontSwing.buildIcon(FontAwesome.CLIPBOARD, size, c);
 	}
 	
 	
@@ -105,7 +123,7 @@ public class IconUtils {
 		ImageIcon icon = null;
 		try {
 			BufferedImage buffIm = ImageIO.read(IconUtils.class.getResource(iconPath() + "pack.png"));
-			BufferedImage scaledImg = Scalr.resize(buffIm, size);
+			BufferedImage scaledImg = Scalr.resize(buffIm, Method.AUTOMATIC, size);
 			icon = new ImageIcon(scaledImg);
 		}catch(Exception e) {
 			icon = new ImageIcon();
@@ -117,7 +135,7 @@ public class IconUtils {
 		ImageIcon icon = null;
 		try {
 			BufferedImage buffIm = ImageIO.read(IconUtils.class.getResource(iconPath() + "STLogoOnly.png"));
-			BufferedImage scaledImg = Scalr.resize(buffIm, Method.ULTRA_QUALITY, size);
+			BufferedImage scaledImg = Scalr.resize(buffIm, Method.AUTOMATIC, size);
 			icon = new ImageIcon(scaledImg);
 		}catch(Exception e) {
 			icon = new ImageIcon();
@@ -129,13 +147,14 @@ public class IconUtils {
 		ImageIcon icon = null;
 		try {
 			BufferedImage buffIm = ImageIO.read(IconUtils.class.getResource(iconPath() + "youtube.png"));
-			BufferedImage scaledImg = Scalr.resize(buffIm, Method.ULTRA_QUALITY, size);
+			BufferedImage scaledImg = Scalr.resize(buffIm, Method.AUTOMATIC, size);
 			icon = new ImageIcon(scaledImg);
 		}catch(Exception e) {
 			icon = new ImageIcon();
 		}
 		return icon;
 	}
+
 	
 	public static ImageIcon getTwitterIcon(int size) {
 		ImageIcon icon = null;
@@ -165,7 +184,7 @@ public class IconUtils {
 		ImageIcon icon = null;
 		try {
 			BufferedImage buffIm = ImageIO.read(IconUtils.class.getResource(iconPath() + "undo.png"));
-			BufferedImage scaledImg = Scalr.resize(buffIm, size);
+			BufferedImage scaledImg = Scalr.resize(buffIm, Method.AUTOMATIC, size);
 			icon = new ImageIcon(scaledImg);
 		}catch(Exception e) {
 			icon = new ImageIcon();
@@ -178,7 +197,7 @@ public class IconUtils {
 		ImageIcon icon = null;
 		try {
 			BufferedImage buffIm = ImageIO.read(IconUtils.class.getResource(iconPath() + "redo.png"));
-			BufferedImage scaledImg = Scalr.resize(buffIm,  size);
+			BufferedImage scaledImg = Scalr.resize(buffIm,Method.AUTOMATIC,  size);
 			icon = new ImageIcon(scaledImg);
 		}catch(Exception e) {
 			icon = new ImageIcon();
@@ -190,7 +209,7 @@ public class IconUtils {
 		ImageIcon icon = null;
 		try {
 			BufferedImage buffIm = ImageIO.read(IconUtils.class.getResource(iconPath() + "ok40.png"));
-			BufferedImage scaledImg = Scalr.resize(buffIm, Method.ULTRA_QUALITY, size);
+			BufferedImage scaledImg = Scalr.resize(buffIm, Method.AUTOMATIC, size);
 			icon = new ImageIcon(scaledImg);
 		}catch(Exception e) {
 			icon = new ImageIcon();
@@ -202,7 +221,7 @@ public class IconUtils {
 		ImageIcon icon = null;
 		try {
 			BufferedImage buffIm = ImageIO.read(IconUtils.class.getResource(iconPath() + "warning48.png"));
-			BufferedImage scaledImg = Scalr.resize(buffIm, Method.ULTRA_QUALITY, size);
+			BufferedImage scaledImg = Scalr.resize(buffIm, Method.AUTOMATIC, size);
 			icon = new ImageIcon(scaledImg);
 		}catch(Exception e) {
 			icon = new ImageIcon();
@@ -214,7 +233,7 @@ public class IconUtils {
 		ImageIcon icon = null;
 		try {
 			BufferedImage buffIm = ImageIO.read(IconUtils.class.getResource(iconPath() + "play.png"));
-			BufferedImage scaledImg = Scalr.resize(buffIm, size);
+			BufferedImage scaledImg = Scalr.resize(buffIm, Method.AUTOMATIC, size);
 			icon = new ImageIcon(scaledImg);
 		}catch(Exception e) {
 			icon = new ImageIcon();
@@ -226,7 +245,7 @@ public class IconUtils {
 		ImageIcon icon = null;
 		try {
 			BufferedImage buffIm = ImageIO.read(IconUtils.class.getResource(iconPath() + "hideList20.png"));
-			BufferedImage scaledImg = Scalr.resize(buffIm, Method.ULTRA_QUALITY, size);
+			BufferedImage scaledImg = Scalr.resize(buffIm, Method.AUTOMATIC, size);
 			icon = new ImageIcon(scaledImg);
 		}catch(Exception e) {
 			icon = new ImageIcon();
@@ -238,7 +257,7 @@ public class IconUtils {
 		ImageIcon icon = null;
 		try {
 			BufferedImage buffIm = ImageIO.read(IconUtils.class.getResource(iconPath() + "showList20.png"));
-			BufferedImage scaledImg = Scalr.resize(buffIm, Method.ULTRA_QUALITY, size);
+			BufferedImage scaledImg = Scalr.resize(buffIm, Method.AUTOMATIC, size);
 			icon = new ImageIcon(scaledImg);
 		}catch(Exception e) {
 			icon = new ImageIcon();
@@ -250,7 +269,7 @@ public class IconUtils {
 		ImageIcon icon = null;
 		try {
 			BufferedImage buffIm = ImageIO.read(IconUtils.class.getResource(iconPath() + "taglist20.png"));
-			BufferedImage scaledImg = Scalr.resize(buffIm, Method.ULTRA_QUALITY, size);
+			BufferedImage scaledImg = Scalr.resize(buffIm, Method.AUTOMATIC, size);
 			icon = new ImageIcon(scaledImg);
 		}catch(Exception e) {
 			icon = new ImageIcon();
@@ -262,7 +281,7 @@ public class IconUtils {
 		ImageIcon icon = null;
 		try {
 			BufferedImage buffIm = ImageIO.read(IconUtils.class.getResource(iconPath() + "tagListArrow.png"));
-			BufferedImage scaledImg = Scalr.resize(buffIm, Method.ULTRA_QUALITY, size);
+			BufferedImage scaledImg = Scalr.resize(buffIm, Method.AUTOMATIC, size);
 			icon = new ImageIcon(scaledImg);
 		}catch(Exception e) {
 			icon = new ImageIcon();
@@ -274,7 +293,7 @@ public class IconUtils {
 		ImageIcon icon = null;
 		try {
 			BufferedImage buffIm = ImageIO.read(IconUtils.class.getResource(iconPath() + "save.png"));
-			BufferedImage scaledImg = Scalr.resize(buffIm, size);
+			BufferedImage scaledImg = Scalr.resize(buffIm, Method.AUTOMATIC, size);
 			icon = new ImageIcon(scaledImg);
 		}catch(Exception e) {
 			icon = new ImageIcon();
@@ -286,7 +305,7 @@ public class IconUtils {
 		ImageIcon icon = null;
 		try {
 			BufferedImage buffIm = ImageIO.read(IconUtils.class.getResource(iconPath() + "saveAs.png"));
-			BufferedImage scaledImg = Scalr.resize(buffIm, size);
+			BufferedImage scaledImg = Scalr.resize(buffIm, Method.AUTOMATIC, size);
 			icon = new ImageIcon(scaledImg);
 		}catch(Exception e) {
 			icon = new ImageIcon();
@@ -298,7 +317,116 @@ public class IconUtils {
 		ImageIcon icon = null;
 		try {
 			BufferedImage buffIm = ImageIO.read(IconUtils.class.getResource(iconPath() + "screen.png"));
-			BufferedImage scaledImg = Scalr.resize(buffIm, Method.ULTRA_QUALITY, size);
+			BufferedImage scaledImg = Scalr.resize(buffIm, Method.AUTOMATIC, size);
+			icon = new ImageIcon(scaledImg);
+		}catch(Exception e) {
+			icon = new ImageIcon();
+		}
+		return icon;
+	}
+	
+	public static ImageIcon getCopyIcon(int size) {
+		ImageIcon icon = null;
+		try {
+			BufferedImage buffIm = ImageIO.read(IconUtils.class.getResource(iconPath() + "copy.png"));
+			BufferedImage scaledImg = Scalr.resize(buffIm, Method.AUTOMATIC, size);
+			icon = new ImageIcon(scaledImg);
+		}catch(Exception e) {
+			icon = new ImageIcon();
+		}
+		return icon;
+	}
+	
+	public static ImageIcon getCutIcon(int size) {
+		ImageIcon icon = null;
+		try {
+			BufferedImage buffIm = ImageIO.read(IconUtils.class.getResource(iconPath() + "cut.png"));
+			BufferedImage scaledImg = Scalr.resize(buffIm, Method.AUTOMATIC, size);
+			icon = new ImageIcon(scaledImg);
+		}catch(Exception e) {
+			icon = new ImageIcon();
+		}
+		return icon;
+	}
+	
+	public static ImageIcon getNewDocumentIcon(int size) {
+		ImageIcon icon = null;
+		try {
+			BufferedImage buffIm = ImageIO.read(IconUtils.class.getResource(iconPath() + "newDocument.png"));
+			BufferedImage scaledImg = Scalr.resize(buffIm, Method.AUTOMATIC, size);
+			icon = new ImageIcon(scaledImg);
+		}catch(Exception e) {
+			icon = new ImageIcon();
+		}
+		return icon;
+	}
+	
+	
+	public static ImageIcon getCloneIcon(int size) {
+		ImageIcon icon = null;
+		try {
+			BufferedImage buffIm = ImageIO.read(IconUtils.class.getResource(iconPath() + "clone.png"));
+			BufferedImage scaledImg = Scalr.resize(buffIm, Method.AUTOMATIC, size);
+			icon = new ImageIcon(scaledImg);
+		}catch(Exception e) {
+			icon = new ImageIcon();
+		}
+		return icon;
+	}
+	
+	public static ImageIcon getTreeStructureIcon(int size) {
+		ImageIcon icon = null;
+		try {
+			BufferedImage buffIm = ImageIO.read(IconUtils.class.getResource(iconPath() + "treeStructure.png"));
+			BufferedImage scaledImg = Scalr.resize(buffIm, Method.AUTOMATIC, size);
+			icon = new ImageIcon(scaledImg);
+		}catch(Exception e) {
+			icon = new ImageIcon();
+		}
+		return icon;
+	}
+	
+	public static ImageIcon getTrashIcon(int size) {
+		ImageIcon icon = null;
+		try {
+			BufferedImage buffIm = ImageIO.read(IconUtils.class.getResource(iconPath() + "trash.png"));
+			BufferedImage scaledImg = Scalr.resize(buffIm, Method.AUTOMATIC, size);
+			icon = new ImageIcon(scaledImg);
+		}catch(Exception e) {
+			icon = new ImageIcon();
+		}
+		return icon;
+	}
+	
+	public static ImageIcon getHierarchyIcon(int size) {
+		ImageIcon icon = null;
+		try {
+			BufferedImage buffIm = ImageIO.read(IconUtils.class.getResource(iconPath() + "hierarchy.png"));
+			BufferedImage scaledImg = Scalr.resize(buffIm, Method.AUTOMATIC, size);
+			icon = new ImageIcon(scaledImg);
+		}catch(Exception e) {
+			icon = new ImageIcon();
+		}
+		return icon;
+	}
+	
+	public static ImageIcon getDiagramIcon(int size) {
+		ImageIcon icon = null;
+		try {
+			BufferedImage buffIm = ImageIO.read(IconUtils.class.getResource(iconPath() + "diagram.png"));
+			BufferedImage scaledImg = Scalr.resize(buffIm, Method.AUTOMATIC, size);
+			icon = new ImageIcon(scaledImg);
+		}catch(Exception e) {
+			icon = new ImageIcon();
+		}
+		return icon;
+	}
+	
+	public static ImageIcon getStructureIcon(int size) {
+		ImageIcon icon = null;
+		try {
+			BufferedImage buffIm = ImageIO.read(IconUtils.class.getResource(iconPath() + "structure.png"));
+			BufferedImage scaledImg = Scalr.resize(buffIm, Method.AUTOMATIC, size);
 			icon = new ImageIcon(scaledImg);
 		}catch(Exception e) {
 			icon = new ImageIcon();

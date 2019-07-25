@@ -109,7 +109,7 @@ public class WizardFrame extends JFrame {
 		session.setWizardFrame(this);
 		
 		this.setVisible(true);
-		this.setMinimumSize(new Dimension (this.getPreferredSize()));
+		this.setMinimumSize(new Dimension(600,400));
 	}
 	
 	
@@ -333,7 +333,7 @@ public class WizardFrame extends JFrame {
 		
 		/** if is new file */
 		if(doc.getSourcePath() == null) {
-			closableTabbedPaneCenter.addTab(" Untiteled   ", IconUtils.FAgetAlignLeftIcon(20,null) , formContainer , "No path" );
+			closableTabbedPaneCenter.addTab(" Untitled   ", IconUtils.FAgetAlignLeftIcon(20,null) , formContainer , "No path" );
 		}
 		else {
 			
@@ -396,6 +396,7 @@ public class WizardFrame extends JFrame {
 			console.repaint();
 			console.revalidate();
 		}
+		
 	}
 	
 	

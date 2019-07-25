@@ -1,5 +1,6 @@
 package business;
 
+import java.awt.datatransfer.Clipboard;
 import java.io.File;
 import java.util.ArrayList;
 
@@ -39,6 +40,13 @@ public class Session {
 	 * represent open all open document on which user is working
 	 */
 	private static ArrayList<PDSCDocument> currentWorkinPdscDoc ;
+	
+	private Clipboard clipboard;
+	
+	
+	private Session() {
+		 clipboard = new Clipboard("PDSCCReator ClipBoard");
+	}
 	
 	
 	
@@ -152,6 +160,11 @@ public class Session {
 		if(instance==null)
 			instance = new Session();
 		return instance;
+		
+	}
+	
+	public Clipboard getClipboard() {
+		return this.clipboard;
 	}
 	
 	

@@ -7,7 +7,6 @@ import business.Session;
 import business.XmlTagBusiness;
 import model.XmlTag;
 import view.comp.utils.DialogUtils;
-import view.tagCustomizationFrame.TagCustomizationFrame;
 import view.wizardFrame.comp.tagsListBar.TagsListBar;
 import view.wizardFrame.comp.tagsListBar.comp.TagListBarButton;
 
@@ -31,7 +30,8 @@ public class TagListBarListener implements ActionListener{
 			XmlTag tag = btn.getTag();
 			tag = XmlTagBusiness.getCompleteTagFromTagInstance(tag);
 			if(session.getSelectedForm() != null) {
-				new TagCustomizationFrame(new XmlTag(tag));
+				XmlTagBusiness.addTagInParent(tag, session.getSelectedPDSCDoc().getRoot(), true, false);
+				session.getSelectedForm().UpdateView();
 			}
 			else DialogUtils.warningMessage("Select document before adding tag");
 			

@@ -54,7 +54,7 @@ public class XmlAttributeDao {
 						"       attributes_tags_relations AS atr ON a.id = atr.attribute_id\n" + 
 						"       LEFT JOIN\n" + 
 						"       name_space AS ns ON atr.name_space_id = ns.id\n" + 
-						" WHERE atr.tag_id = " + parent.getTagId() + "";
+						" WHERE atr.tag_id = " + parent.getTagId() + " ORDER BY name";
 		
 		ArrayList<TableRecord> result = conn.query(query);
 		Iterator<TableRecord> i = result.iterator();

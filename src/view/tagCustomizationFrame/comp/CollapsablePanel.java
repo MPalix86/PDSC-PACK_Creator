@@ -70,7 +70,7 @@ public class CollapsablePanel extends JPanel {
             int h = getHeight();
             
             editMenu = new JPopupMenu();
-    		copyItem = new TagMenuItem("Copy Tag",this.tag);
+    		copyItem = new TagMenuItem("Clone",this.tag);
     		addRequiredTagsItem = new TagMenuItem("Add Required Tags",this.tag);
     		deleteItem = new TagMenuItem("Delete",this.tag);
     		

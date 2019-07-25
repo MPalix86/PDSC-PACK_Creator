@@ -8,6 +8,9 @@ import business.Session;
 import listeners.wizardFrameListeners.comp.xmlForm.comp.AttributeOptionMenuListener;
 import model.XmlAttribute;
 import view.comp.AttributeMenuItem;
+import view.comp.utils.ColorUtils;
+import view.comp.utils.IconUtils;
+import view.wizardFrame.comp.xmlForm.comp.TagRow;
 
 public class AttributeOptionMenu extends JPopupMenu{
 	
@@ -25,12 +28,14 @@ public class AttributeOptionMenu extends JPopupMenu{
 		AttributeMenuItem deleteAttrItem = new AttributeMenuItem("Delete",attr);
 		deleteAttrItem.addActionListener(listener);
 		deleteAttrItem.setActionCommand("deleteAttribute");
+		deleteAttrItem.setIcon(IconUtils.getTrashIcon(16));
 		
 		
 		if (attr.getTag().getName().equals("file") && attr.getName().equals("name")) {
 			AttributeMenuItem addPathItem = new AttributeMenuItem("Select File",attr);
 			addPathItem.addActionListener(listener);
 			addPathItem.setActionCommand("addPath");
+			addPathItem.setIcon(IconUtils.FAgetFolderOpenIcon(16, ColorUtils.FOLDER_BROWN));
 			add(addPathItem);
 			add(new JSeparator());
 		}
@@ -55,7 +60,8 @@ public class AttributeOptionMenu extends JPopupMenu{
 		 * 
 		 * must to remove focus when jpopupmenu is called;
 		 */
-		Session.getInstance().getSelectedForm().getTagOpenRow(attr.getTag()).grabFocus();
+		TagRow row = Session.getInstance().getSelectedForm().getTagOpenRow(attr.getTag());
+		if(row != null) row.grabFocus();
 	
 	
 	}

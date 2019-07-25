@@ -43,7 +43,7 @@ public class Menu extends JMenuBar {
 		tagsList.setActionCommand("showTagListBar");
 		tagsList.setIcon(IconUtils.getShowChildrenListIcon(16));
 		
-		JMenuItem DescriptionPane = new JMenuItem("Show Description Panel");
+		JMenuItem DescriptionPane = new JMenuItem("Show Description");
 		DescriptionPane.addActionListener(menuListener);
 		DescriptionPane.setActionCommand("showDescriptionPane");
 		DescriptionPane.setIcon(IconUtils.FAgetInfoCircleIcon(16,null));
@@ -58,7 +58,7 @@ public class Menu extends JMenuBar {
 		JMenuItem newPDSC = new JMenuItem(" New PDSC File");
 		newPDSC.addActionListener(fileListener);
 		newPDSC.setActionCommand("createNewPDSC");
-		newPDSC.setIcon(IconUtils.FAgetPlusIcon(20, ColorUtils.SYSTEM_GREEN_COLOR_DARK));
+		newPDSC.setIcon(IconUtils.getNewDocumentIcon(20));
 		
 		
 		JMenuItem save = new JMenuItem(" Save");

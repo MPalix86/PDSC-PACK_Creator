@@ -6,6 +6,7 @@ import java.io.File;
 
 import javax.swing.AbstractAction;
 import javax.swing.ImageIcon;
+import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
@@ -17,6 +18,8 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 import business.Session;
+import model.XmlTag;
+import view.comp.SquareButton;
 
 public class DialogUtils {
 	private Session session;
@@ -137,7 +140,7 @@ public class DialogUtils {
 	    } catch (IllegalAccessException | UnsupportedLookAndFeelException | InstantiationException | ClassNotFoundException e) {}
 	   
 	    
-		fileChooser.setFileSelectionMode(JFileChooser.SAVE_DIALOG);
+		fileChooser.setFileSelectionMode(JFileChooser.OPEN_DIALOG);
 		
 		
 		/** handling user's choice */
@@ -281,6 +284,34 @@ public class DialogUtils {
 
 		dialog.setVisible(true);
 	}
+	
+	
+	
+	
+	public static int intEnumJoptionPane(XmlTag parent) {
+		JComboBox <XmlTag> jcb = new JComboBox(parent.getSelectedChildrenArr().toArray());
+		SquareButton addBtn = new SquareButton("Add");
+		Object[] options = { "Paste", "Cncel" };
+		int choice = JOptionPane.showOptionDialog(null, jcb, "Paste tag after element : ", 0,JOptionPane.INFORMATION_MESSAGE, IconUtils.FAgetClipboardIcon(48, ColorUtils.FOLDER_BROWN), options, options[0]); 
+		System.out.println("choice " + choice);
+		if(choice == 0) {
+			int index =  jcb.getSelectedIndex();
+			return index + 1;
+		
+		}
+		else return -1;
+	}
+	
+	
+	public static boolean CustomButtonTrueFalsePane(String message, String trueButtonMessage, String falseButtonMessage, ImageIcon icon) {
+		Object[] options = { trueButtonMessage, falseButtonMessage };
+		int value = JOptionPane.showOptionDialog (null, message, "Warning", JOptionPane.YES_NO_OPTION,JOptionPane.INFORMATION_MESSAGE, icon, options, options[0]); 
+		if(value == 0) return true;
+		else return false;
+	
+	}
+	
+	
 
 
 }

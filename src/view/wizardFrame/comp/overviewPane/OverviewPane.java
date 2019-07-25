@@ -36,7 +36,7 @@ public class OverviewPane extends JPanel{
 		openFileButton.setIcon(IconUtils.FAgetFolderOpenIcon(20, ColorUtils.FOLDER_BROWN));
 		
 		TextButton newFileButton = new TextButton ("Create new PDSC file");
-		newFileButton.setIcon(IconUtils.FAgetPlusIcon(20, ColorUtils.SYSTEM_GREEN_COLOR_DARK));
+		newFileButton.setIcon(IconUtils.getNewDocumentIcon(20));
 		newFileButton.addActionListener(filelistener);
 		newFileButton.setActionCommand("createNewPDSC");
 		

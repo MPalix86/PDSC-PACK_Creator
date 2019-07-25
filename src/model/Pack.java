@@ -11,15 +11,15 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.zip.ZipOutputStream;
 
 import org.apache.commons.io.FilenameUtils;
 import org.jdom2.Document;
+import org.zeroturnaround.zip.ZipUtil;
 
 import business.CustomUtils;
 import business.FileBusiness;
 import business.Session;
-import business.XmlTagBusiness;
+import business.XmlTagUtils;
 
 public class Pack {
 	private String name;
@@ -31,6 +31,7 @@ public class Pack {
 	private XmlTag root;
 	private PDSCDocument PDSCDoc;
 	private ArrayList <Log> lastPackCreatedLogs;
+	private File mainPathFile;
 	
 	
 	public static final int PACK_CREATED_CORRECTLY = 0;
@@ -70,7 +71,7 @@ public class Pack {
 			if (checkRequiredFields(root) != 0) return new Response.ResponseBuilder().status(REQUIRED_FIELDS_MISSING).build();
 			
 			/** mainPathFile = userChoosenPath/PDSC/ */
-			File mainPathFile = generateMainPath(choosenPath);
+			mainPathFile = generateMainPath(choosenPath);
 			String mainPathString = mainPathFile.getAbsolutePath() + "/";
 			
 			/** completePathFile = mainPathFile/vendor/name/ */
@@ -289,13 +290,9 @@ public class Pack {
 			writer.write(log.getText().getBytes());
 			
 			/** creating zip archive */
-	        FileOutputStream fos = new FileOutputStream(completePathFile + ".pack");
-	        ZipOutputStream zipOut = new ZipOutputStream(fos);
-	        FileBusiness.zipFile(completePathFile, completePathFile.getName(), zipOut);
-			
-	        /** closing streams */
-	        zipOut.close();
-	        fos.close();
+			File zipFile = new File(completePathFile.toString() + ".zip");
+			ZipUtil.pack(completePathFile,zipFile);
+
 			writer.close();
 			
 			return new Response.ResponseBuilder().status(PACK_CREATED_CORRECTLY).object(lastPackCreatedLogs).build();
@@ -337,8 +334,8 @@ public class Pack {
 	 * @return
 	 */
 	private int checkRequiredFields(XmlTag root) {
-		XmlTag vendor = XmlTagBusiness.findSelectedChildFromTagName(root, "vendor");
-		XmlTag name = XmlTagBusiness.findSelectedChildFromTagName(root, "name");
+		XmlTag vendor = XmlTagUtils.findSelectedChildFromTagName(root, "vendor");
+		XmlTag name = XmlTagUtils.findSelectedChildFromTagName(root, "name");
 		
 		if(getVerifyHighestReleaseVersion(root));
 		else return REQUIRED_FIELDS_MISSING;
@@ -363,7 +360,7 @@ public class Pack {
 		
 		int[] highestVersion = {0,0,0} ;
 		
-		XmlTag releases = XmlTagBusiness.findSelectedChildFromTagName(root,"releases");
+		XmlTag releases = XmlTagUtils.findSelectedChildFromTagName(root,"releases");
 		if(releases != null) {
 			
 			ArrayList<XmlTag> children = releases.getSelectedChildrenArr();
@@ -371,7 +368,7 @@ public class Pack {
 			if(children != null) {
 				for(int i = 0; i < children.size(); i++) {
 					XmlTag release = children.get(i);
-					XmlAttribute attr = XmlTagBusiness.findChildSelectedAttrFromName(release, "version");
+					XmlAttribute attr = XmlTagUtils.findChildSelectedAttrFromName(release, "version");
 					if(attr != null && attr.getValue() != null) {
 						Pattern pattern = Pattern.compile("^(\\d+\\.)?(\\d+\\.)?(\\*|\\d+)$");
 						Matcher matcher = pattern.matcher(attr.getValue());
@@ -422,6 +419,10 @@ public class Pack {
 	
 	public ArrayList<Log> getLastPackCreatedLogs() {
 		return this.lastPackCreatedLogs;
+	}
+	
+	public File getMainPathFile() {
+		return this.mainPathFile;
 	}
 
 }

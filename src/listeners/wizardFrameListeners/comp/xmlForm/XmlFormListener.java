@@ -66,7 +66,8 @@ public class XmlFormListener implements FocusListener, MouseListener{
 		
 		if(tag != null) {
 			TagRow openRow = xmlForm.getTagOpenRow(tag);
-			openRow.highlightBckGround(null);
+			if( openRow != null) openRow.highlightBckGround(null);
+			
 			
 			String tagDescription = "TAG : " + tag.getName() + "\n";
 			if(XmlTagBusiness.getTagDescription(tag) == null) tagDescription += "No description found for tag " + tag.getName() + "\n\n";
@@ -124,7 +125,8 @@ public class XmlFormListener implements FocusListener, MouseListener{
 		
 		if(tag != null) {
 			TagRow openRow = xmlForm.getTagOpenRow(tag);
-			openRow.unsetHighlightBackGround();
+			if(openRow != null) openRow.unsetHighlightBackGround();
+			
 		}
 		
 	}

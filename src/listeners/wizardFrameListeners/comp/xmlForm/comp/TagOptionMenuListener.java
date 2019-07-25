@@ -14,14 +14,21 @@ import business.XmlTagBusiness;
 import model.Response;
 import model.XmlAttribute;
 import model.XmlTag;
+import model.XmlTagConstants;
 import view.comp.TagMenuItem;
 import view.comp.utils.DialogUtils;
 import view.wizardFrame.comp.xmlForm.comp.TagRow;
 import view.wizardFrame.comp.xmlForm.comp.addAttributeFrame.AddAttributeFrame;
+import view.wizardFrame.comp.xmlForm.comp.tagComp.TagOptionMenu;
 
 public class TagOptionMenuListener implements ActionListener{
 	
 	private Session session = Session.getInstance();
+	private TagOptionMenu menu;
+	
+	public TagOptionMenuListener(TagOptionMenu menu) {
+		this.menu = menu;
+	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -31,35 +38,21 @@ public class TagOptionMenuListener implements ActionListener{
 		XmlTag tag = item.getTag();
 		
 		if(command.equals("deleteTag")) {
-			
-			if(tag.getParent() != null) {
-				XmlTag parent = tag.getParent();
-				int tagOccurrenceInParent = XmlTagBusiness.findChildOccurrenceNumber(parent,tag.getName());
-				boolean response = true;
-				if(tag.isRequired() && tagOccurrenceInParent <= 1) {
-					response = DialogUtils.yesNoWarningMessage("Following PDSC standard : \n < " + parent.getName() + "> must contain at least one tag < " + tag.getName() + " > \n Do you want to continue ?");
-				}
-				if(response) {
-					XmlTag modelTag = XmlTagBusiness.findModelChildFromSelectedChildName(parent, tag.getName());
-					if(modelTag != null) modelTag.setMax(modelTag.getMax() + 1);
-					parent.removeSelectedChild(tag);
-				}
-			}
-			else {
-				session.getSelectedForm().getRoot().removeSelectedChild(tag);
-			}
-			/**
-			 * IMPORTANT : saving state of root tag for undo redo action
-			 */
-			Session.getInstance().getSelectedPDSCDoc().getUndoManager().addState();
-			
+			XmlTagBusiness.removeSelectedChildFromParent(tag, tag.getParent(), true, true);
 			session.getSelectedForm().UpdateView();
-			
+		}
+		
+		
+		
+		else if(command.equals("cloneTag")) {
+			int copiesNumber = DialogUtils.cloneDialog();
+			XmlTagBusiness.cloneTag(tag, copiesNumber, true, true);
+			session.getSelectedForm().UpdateView();
+
 		}
 		
 		
 		else if(command.equals("addAttribute")) {
-			/** adding attributes */
 			new AddAttributeFrame(tag);
 		}
 		
@@ -79,6 +72,11 @@ public class TagOptionMenuListener implements ActionListener{
 				session.getSelectedForm().getTagOpenRow(tag).update();
 				
 			}		
+		}
+		
+		else if(command.equals("addRequiredChildren")) {
+			XmlTagBusiness.addRequiredChildren(tag.getParent(), true);
+			session.getSelectedForm().UpdateView();
 		}
 
 		
@@ -132,6 +130,7 @@ public class TagOptionMenuListener implements ActionListener{
 			/** recovering model instance for selected child */
 			XmlTag child = tagMenuItem.getTag();
 			
+			
 			boolean response = true;
 			
 			/** if maximum number of children reached for parent tag ask confirmation */
@@ -148,6 +147,8 @@ public class TagOptionMenuListener implements ActionListener{
 				
 				/** adding new child in selectedChildArr of new parent */
 				parent.addSelectedChildAtIndex(newChild, 0);
+				
+				
 				
 				/** maximum number of possible child in the model instance is reduced by one */
 				child.setMax(child.getMax() -1);
@@ -181,7 +182,7 @@ public class TagOptionMenuListener implements ActionListener{
 			}
 			
 			else{
-				String tagNames = DialogUtils.showInputDialog("Add Custom Tag", "Add one or more tags separated by space \n tag1 tag2 ...");
+				String tagNames = DialogUtils.showInputDialog("Add Custom Element", "Add one or more custom elements separated by space \n el1 el2 ...");
 				
 				if (tagNames != null){
 					/** separating string by comma */
@@ -195,7 +196,7 @@ public class TagOptionMenuListener implements ActionListener{
 						Response response = XmlTagBusiness.verifyTagFromName(name, tag);
 						
 						boolean confirmation = true ;
-						if (response.getStatus() == XmlTagBusiness.MAX_REACHED) {
+						if (response.getStatus() == XmlTagConstants.MAX_REACHED) {
 							confirmation = DialogUtils.yesNoWarningMessage("Following PDSC standard : \n maximum number of children reached for tag < " + name + " > Do you want to continue ?");
 						}
 						if(confirmation) {

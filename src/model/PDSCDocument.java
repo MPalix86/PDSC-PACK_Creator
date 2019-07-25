@@ -1,10 +1,8 @@
 package model;
 
-import java.awt.datatransfer.Clipboard;
 import java.io.File;
 import java.util.HashMap;
 
-import listeners.ClipboardListener;
 import view.wizardFrame.comp.xmlForm.XmlForm;
 
 public class PDSCDocument {
@@ -20,15 +18,12 @@ public class PDSCDocument {
 	private XmlTag root;
 	
 	private UndoManager undoManager;
-		
-	private Clipboard clipboard = new Clipboard("PDSCCReator ClipBoard");
 	
 	
 	public PDSCDocument(XmlForm form, File sourcePath, XmlTag root) {
 		
 		this.attrPathFilesHashMap = new HashMap <XmlAttribute,String>();
 		this.tagPathFilesHashMap = new HashMap <XmlTag,String>();
-		clipboard.addFlavorListener(new ClipboardListener());
 		this.form = form;
 		this.sourcePath = sourcePath;
 		this.root = root;
@@ -131,10 +126,6 @@ public class PDSCDocument {
 	
 	public UndoManager getUndoManager() {
 		return this.undoManager;
-	}
-	
-	public Clipboard getClipboard() {
-		return this.clipboard;
 	}
 
 	

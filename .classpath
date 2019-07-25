@@ -10,5 +10,10 @@
 	<classpathentry kind="lib" path="/Users/mircopalese/eclipse-workspace/PDSC/libraries/jiconfont-swing-1.0.1.jar"/>
 	<classpathentry kind="lib" path="/Users/mircopalese/eclipse-workspace/PDSC/libraries/jiconfont-1.0.0.jar"/>
 	<classpathentry kind="lib" path="/Users/mircopalese/eclipse-workspace/PDSC/libraries/commons-io-2.6.jar"/>
+	<classpathentry kind="lib" path="/Users/mircopalese/eclipse-workspace/PDSC/libraries/jackson-core-2.9.9.jar"/>
+	<classpathentry kind="lib" path="/Users/mircopalese/eclipse-workspace/PDSC/libraries/jackson-databind-2.9.9.1.jar"/>
+	<classpathentry kind="lib" path="/Users/mircopalese/eclipse-workspace/PDSC/libraries/jackson-databind-2.9.9.jar"/>
+	<classpathentry kind="lib" path="/Users/mircopalese/eclipse-workspace/PDSC/libraries/slf4j-api-1.6.6.jar"/>
+	<classpathentry kind="lib" path="/Users/mircopalese/eclipse-workspace/PDSC/libraries/zt-zip-1.13.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

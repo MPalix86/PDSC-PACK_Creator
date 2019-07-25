@@ -1,5 +1,6 @@
 package listeners;
 
+import java.awt.Desktop;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
@@ -16,6 +17,7 @@ import model.Response;
 import view.comp.TextButton;
 import view.comp.utils.ColorUtils;
 import view.comp.utils.DialogUtils;
+import view.comp.utils.IconUtils;
 
 public class PDSCOptionListener implements ActionListener{
 	
@@ -61,6 +63,7 @@ public class PDSCOptionListener implements ActionListener{
 						
 						/** insert text and button in validator */
 						session.getWizardFrame().insertConsoleComnponent(lineButton);
+						
 					}
 					session.getWizardFrame().setConsoleText(response.getMessage() , false);
 				}
@@ -91,7 +94,8 @@ public class PDSCOptionListener implements ActionListener{
 								else if (l.getType() == Log.ERROR)session.getWizardFrame().setConsoleText("Error " + l.getText(), true);
 							}
 							session.getWizardFrame().setConsoleText("PACK CREATED CORRECTLY IN : " + path.getAbsolutePath(), true);
-							DialogUtils.okMessage("Pack created correctly", "Pack Created");
+							boolean choice = DialogUtils.CustomButtonTrueFalsePane("Pack Created Correctly", "Open folder", "Continute", IconUtils.getOkIcon(48));
+							if(choice) Desktop.getDesktop().open(pack.getMainPathFile());
 						}
 						else if(status == Pack.REQUIRED_FIELDS_MISSING) {
 							DialogUtils.warningMessage("Required Fields missing");
