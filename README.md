@@ -8,12 +8,12 @@ Silvio Lucio Oliva
 
 PDSC-PACK Creator is a Java program for PDSC file and CMSIS pack creation following CMSIS-Pack Standard (by ARM)
 
-Main features include:
+### Main features include:
   - Easy to use PDSC document creator and reader
   - CMSIS-Pack creation starting from PDSC document
   - Highly scalable CMSIS-Pack standard definition
 
-Others features:
+### Others features:
   - Easy management of the standard elements and attributes
   - PDSC file creation with required elements and attributes already set
   - Easy insertion of optional elements and attributes
@@ -27,5 +27,5 @@ Others features:
   - Update an existing CMSIS pack editing the PDSC file
   - Update the CMSIS-Pack Standard database through the application User Interface  <!-- not available yet -->
   
- Releases history:
+ ### Releases history:
   - 25/07/2019  PDSC PACK Creator 0.0.1   ( first alpha "stable" version )
