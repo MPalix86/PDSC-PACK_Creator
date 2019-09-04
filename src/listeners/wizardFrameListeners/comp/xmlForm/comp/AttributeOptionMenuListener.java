@@ -7,6 +7,8 @@ import java.io.File;
 import org.apache.commons.io.FilenameUtils;
 
 import business.Session;
+import business.XmlAttributeBusiness;
+import business.XmlTagBusiness;
 import model.XmlAttribute;
 import model.XmlEnum;
 import model.XmlTag;
@@ -27,21 +29,28 @@ public class AttributeOptionMenuListener implements ActionListener{
 		
 		
 		if(command.equals("deleteAttribute")) {
-			boolean response = true;
-			if(attr.isRequired()) response = DialogUtils.yesNoWarningMessage("Following PDSC Standard ' " + attr.getName() + " ' is required for tag <" + tag.getName() + "> \n do you want to delete it ?");
-			if(response) {
-				tag.removeSelectedAttr(attr);
-			}
+			XmlTagBusiness.removeSelectedAttributeFromParent(attr, tag, true, true);
+			
 		}
 		
 		else if (command.equals("addPath")) {
 			File file = DialogUtils.showChooseFileFrame();
 			if(file != null) {
-				if(attr.getValue()!= null) attr.setValue(attr.getValue().replace(FilenameUtils.getName(attr.getValue()), "") + file.getName()) ;
-				else attr.setValue(file.getName()) ;
-				session.getSelectedPDSCDoc().addAttrPath(attr, file.getAbsolutePath());
+				if(attr.getValue()!= null) {
+					String value = attr.getValue().replace(FilenameUtils.getName(attr.getValue()), "") + file.getName() ;
+					XmlAttributeBusiness.setAttributeValue(attr, value, true);
+				}
+				else XmlAttributeBusiness.setAttributeValue(attr, file.getName(), true);
+				attr.setFile(file);
 			}
 				
+		}
+		
+		
+		else if (command.equals("removePath")) {
+			attr.setValue(attr.getValue().replace(attr.getFile().getName(), ""));
+			attr.setFile(null);
+			session.getSelectedForm().getTagOpenRow(attr.getTag()).update();
 		}
 		
 		
@@ -57,11 +66,6 @@ public class AttributeOptionMenuListener implements ActionListener{
 		
 			}
 		}
-		
-		/**
-		 * IMPORTANT : saving state of root tag for undo redo action
-		 */
-		Session.getInstance().getSelectedPDSCDoc().getUndoManager().addState();
 		
 		TagRow row = session.getSelectedForm().getTagOpenRow(tag);
 		if(row != null) row.update();

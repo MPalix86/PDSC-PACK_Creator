@@ -40,21 +40,26 @@ public class XmlAttributeDao {
 		boolean required = false;
 		XmlNameSpace nameSpace = null;
 		ArrayList<XmlAttribute> attrArr = null;
+		String possibleValuesType = null;
 		
-		String query =  "  SELECT atr.id as rel_id,\n" + 
+		String query =  "SELECT atr.id AS rel_id,\n" + 
 						"       atr.attribute_id,\n" + 
 						"       a.name,\n" + 
 						"       a.default_value,\n" + 
 						"       a.possible_values_type_id,\n" + 
 						"       atr.required,\n" + 
 						"       ns.prefix,\n" + 
-						"       ns.url\n" + 
+						"       ns.url,\n" + 
+						"       apvt.name AS possible_values_type\n" + 
 						"  FROM attributes AS a\n" + 
 						"       LEFT JOIN\n" + 
 						"       attributes_tags_relations AS atr ON a.id = atr.attribute_id\n" + 
 						"       LEFT JOIN\n" + 
 						"       name_space AS ns ON atr.name_space_id = ns.id\n" + 
-						" WHERE atr.tag_id = " + parent.getTagId() + " ORDER BY name";
+						"       LEFT JOIN\n" + 
+						"       attributes_possible_values_types AS apvt ON apvt.id = a.possible_values_type_id\n" + 
+						" WHERE atr.tag_id =" + parent.getTagId() + "\n" + 
+						" ORDER BY a.name;";
 		
 		ArrayList<TableRecord> result = conn.query(query);
 		Iterator<TableRecord> i = result.iterator();
@@ -67,6 +72,7 @@ public class XmlAttributeDao {
 			name 				= record.get("name");
 			defaultValue 		= record.get("default_value");
 			required 			= Boolean.parseBoolean(record.get("required"));
+			possibleValuesType	= record.get("possible_values_type");
 			
 			
 			if(record.get("prefix") != null && record.get("url") != null) nameSpace = new XmlNameSpace(record.get("prefix"), record.get("url"));
@@ -76,7 +82,7 @@ public class XmlAttributeDao {
 			}
 			else possibleValues = null;
 			
-			XmlAttribute attr = new XmlAttribute(attrId,relId,name,required,possibleValues,defaultValue,nameSpace,parent);
+			XmlAttribute attr = new XmlAttribute(attrId,relId,name,required,possibleValues,defaultValue,nameSpace,parent,possibleValuesType);
 			attrArr.add(attr);
 	    }
 		return attrArr;
@@ -94,13 +100,13 @@ public class XmlAttributeDao {
 		
 		ArrayList<TableRecord> result = conn.query(query);
 		Iterator<TableRecord> i = result.iterator();
-		if(i.hasNext()) {
+		if(i.hasNext() && result.get(0).get("value")!= null) {
 			possibleValues = new XmlEnum();
 			possibleValues.add("");
 		}
 		while (i.hasNext()) {
 			TableRecord record = i.next();
-			possibleValues.add(record.get("value"));
+			if(possibleValues != null) possibleValues.add(record.get("value"));
 	    }
 		return possibleValues;
 	}
@@ -120,7 +126,7 @@ public class XmlAttributeDao {
 		ArrayList<TableRecord> result = conn.query(query);
 		Iterator<TableRecord> i = result.iterator();
 		if(i.hasNext()) {
-			if(result.get(0).get("value") != "null" && result.get(0).get("value")!= null) {
+			if( result.get(0).get("value")!= null) {
 				possibleValues = new XmlEnum();
 				possibleValues.add("");
 			}
@@ -130,6 +136,7 @@ public class XmlAttributeDao {
 			TableRecord record = i.next();
 			if(possibleValues != null)
 				possibleValues.add(record.get("value"));
+			 
 	    }
 		return possibleValues;
 	}
@@ -170,13 +177,15 @@ public class XmlAttributeDao {
 	public XmlAttribute getAttributeFromName(String name) {
 		Integer attrId = null;
 		String defaultValue = null;
-		Object possibleValues = null;
+		XmlEnum possibleValues = null;
 		boolean required = false;
 		XmlAttribute attr = null;
+		String possibleValuesType = null;
 		
-		String query = "SELECT a.*\n" + 
-					"  FROM attributes AS a\n" + 
-					" WHERE name = '" + name  + "';";
+		String query = 	"SELECT a.* , apvt.name AS valueType\n" + 
+						"  FROM attributes AS a\n" + 
+						"  LEFT JOIN attributes_possible_values_types AS apvt ON apvt.id = a.possible_values_type_id\n" + 
+						"WHERE a.name = '"+ name +"'";
 			
 
 		ArrayList<TableRecord> result = conn.query(query);
@@ -187,9 +196,11 @@ public class XmlAttributeDao {
 			attrId 				= Integer.parseInt(record.get("id"));
 			defaultValue		= record.get("default_value");
 			name 				= record.get("name");
+			possibleValuesType  = record.get("possible_values_type");
 	    }
 		
-		attr = new XmlAttribute(attrId,name,required,possibleValues,defaultValue,null);
+		if(!result.isEmpty())  attr = new XmlAttribute(attrId,name,required,possibleValues,defaultValue,null, possibleValuesType);
+			
 		return attr;
 	}
 	

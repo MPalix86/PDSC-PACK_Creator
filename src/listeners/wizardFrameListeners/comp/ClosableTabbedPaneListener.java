@@ -39,6 +39,8 @@ public class ClosableTabbedPaneListener implements TabCloseListener, ChangeListe
 			/** unsetting slectedPDSCDocument */
 			if(session.getSelectedPDSCDoc().equals(doc)) session.setSelectedPDSCDoc((PDSCDocument) null);
 			
+			
+			
 		}
 		
 		
@@ -68,6 +70,15 @@ public class ClosableTabbedPaneListener implements TabCloseListener, ChangeListe
         	session.getWizardFrame().setConsoleText(" ", false);
         	session.getWizardFrame().setDescriptionText(" ");
         	session.setSelectedPDSCDoc(form);
+        	
+        	/** enabling / disabling undo redo when document change*/
+        	if(session.getSelectedPDSCDoc().getUndoManager().canRedo()) {
+        		session.getWizardFrame().getToolBarContainer().getToolBar().enableRedo();
+        	}else session.getWizardFrame().getToolBarContainer().getToolBar().disableRedo();
+        	if(session.getSelectedPDSCDoc().getUndoManager().canRedo()) {
+        		session.getWizardFrame().getToolBarContainer().getToolBar().enableUndo();
+        	}else session.getWizardFrame().getToolBarContainer().getToolBar().disableUndo();
+        	
         }
 	
 	}

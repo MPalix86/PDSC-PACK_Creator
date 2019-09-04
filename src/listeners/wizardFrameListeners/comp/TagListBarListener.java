@@ -30,7 +30,7 @@ public class TagListBarListener implements ActionListener{
 			XmlTag tag = btn.getTag();
 			tag = XmlTagBusiness.getCompleteTagFromTagInstance(tag);
 			if(session.getSelectedForm() != null) {
-				XmlTagBusiness.addTagInParent(tag, session.getSelectedPDSCDoc().getRoot(), true, false);
+				XmlTagBusiness.addTagInParent(new XmlTag(tag) , tag, session.getSelectedPDSCDoc().getRoot(), true, false,null);
 				session.getSelectedForm().UpdateView();
 			}
 			else DialogUtils.warningMessage("Select document before adding tag");

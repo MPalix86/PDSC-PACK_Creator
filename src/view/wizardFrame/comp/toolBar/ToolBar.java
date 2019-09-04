@@ -102,11 +102,13 @@ public class ToolBar extends JToolBar{
 		redo.setToolTipText("Redo");
 		redo.addActionListener(PdscOptionListener);
 		redo.setActionCommand("redo");
+		redo.setEnabled(false);
 		
 		undo = new SquareButton().toIconButton(IconUtils.getUndoIcon(20));
 		undo.setToolTipText("Undo");
 		undo.addActionListener(PdscOptionListener);
 		undo.setActionCommand("undo");
+		undo.setEnabled(false);
 		
 		
 		generateTagsMenu();
@@ -211,6 +213,22 @@ public class ToolBar extends JToolBar{
 	 */
 	public SquareButton getRedo() {
 		return redo;
+	}
+	
+	public void disableRedo() {
+		this.redo.setEnabled(false);
+	}
+	
+	public void disableUndo() {
+		this.undo.setEnabled(false);
+	}
+	
+	public void enableRedo() {
+		this.redo.setEnabled(true);
+	}
+	
+	public void enableUndo() {
+		this.undo.setEnabled(true);
 	}
 	
 	

@@ -1,5 +1,6 @@
 package model;
 
+import java.io.File;
 import java.util.ArrayList;
 
 /**
@@ -33,11 +34,8 @@ public class XmlTag{
 	/** tag's content */
 	protected String content; 
 	
-	/** tag's content type in integer form*/
-	private Integer contentTypeInt;
-	
 	/** tag's content type in string form*/
-	private String contentTypeString;
+	private String valueType;
 
 	/** true if tag is mandatory, false otherwise */
 	protected boolean required;
@@ -72,8 +70,16 @@ public class XmlTag{
 	private String defaultContent; 
 	
 	
-	
+	/** tag's possible values */
 	private Object possibleValues;
+	
+	/** 
+	 * Some tag can have associated source file for pack creation;
+	 * this file represent source file path on filesystem
+	 * 
+	 * NOTE: before setting control that valueType is equals to File
+	 */
+	private File file;
 
 	
 	
@@ -115,7 +121,7 @@ public class XmlTag{
 	public final static int MAX_OCCURENCE_NUMBER = 1000;
 		
 	
-	public XmlTag(Integer tagId,Integer relId, String name, boolean required, XmlTag parent, int max, Object possibleValues, String defaultContent,XmlNameSpace nameSpace , String contentType) {
+	public XmlTag(Integer tagId,Integer relId, String name, boolean required, XmlTag parent, int max, Object possibleValues, String defaultContent,XmlNameSpace nameSpace , String valueType) {
 		this.name = name;
 		this.required = required;
 		this.parent = parent;
@@ -125,28 +131,28 @@ public class XmlTag{
 		this.nameSpace = nameSpace;
 		this.tagId = tagId;
 		this.relId = relId;
-		this.contentTypeString = contentType;
+		this.valueType = valueType;
 	}
 	
 	
 	
 	
-	public XmlTag(String name, boolean required, XmlTag parent, int max, String contentType) {
+	public XmlTag(String name, boolean required, XmlTag parent, int max, String valueType) {
 		this.name = name;
 		this.required = required;
 		this.parent = parent;
 		this.max = max;
-		this.contentTypeString = contentType;
+		this.valueType = valueType;
 	}
 	
 	
 	
 	
-	public XmlTag(String name, Object possibleValues, String defaultContent, String contentType) {
+	public XmlTag(String name, Object possibleValues, String defaultContent, String valueType) {
 		this.name = name;
 		this.possibleValues = possibleValues;	
 		this.defaultContent = defaultContent;
-		this.contentTypeString = contentType;
+		this.valueType = valueType;
 	}
 
 
@@ -157,7 +163,6 @@ public class XmlTag{
 	 * 
 	 * @param tag the tag to be copied into new instance
 	 */
-	
 	public XmlTag(XmlTag tag) {
 		
 		if(tag.getAttrArr() != null) {
@@ -213,9 +218,9 @@ public class XmlTag{
 		
 		if(tag.getTagId() != null) this.tagId = tag.getTagId();
 		
-		if(tag.getContentTypeInt() != null) this.contentTypeInt = tag.getContentTypeInt();
+		if(tag.getValueType() != null) this.valueType = tag.getValueType();
 		
-		if(tag.getContentTypeString() != null) this.contentTypeString = tag.getContentTypeString();
+		if(tag.getFile() != null) this.file = tag.getFile();
 		
 		this.required = tag.isRequired();
 		
@@ -230,7 +235,6 @@ public class XmlTag{
 	 * 
 	 * @param tag the tag to be copied into new instance
 	 */
-	
 	public XmlTag(XmlTag tag, XmlTag parent) {
 		
 		if(tag.getAttrArr() != null) {
@@ -286,9 +290,9 @@ public class XmlTag{
 		
 		if(tag.getTagId() != null) this.tagId = tag.getTagId();
 		
-		if(tag.getContentTypeInt() != null) this.contentTypeInt = tag.getContentTypeInt();
+		if(tag.getValueType() != null) this.valueType = tag.getValueType();
 		
-		if(tag.getContentTypeString() != null) this.contentTypeString = tag.getContentTypeString();
+		if(tag.getFile() != null) this.file = tag.getFile();
 		
 		this.required = tag.isRequired();
 		
@@ -303,7 +307,6 @@ public class XmlTag{
 	 * 
 	 * @param tag with which replace this instance
 	 */
-	
 	public void replaceWith(XmlTag tag , XmlTag parent) {
 		
 		if(tag.getAttrArr() != null) {
@@ -359,22 +362,13 @@ public class XmlTag{
 		
 		if(tag.getTagId() != null) this.tagId = tag.getTagId();
 		
-		if(tag.getContentTypeInt() != null) this.contentTypeInt = tag.getContentTypeInt();
+		if(tag.getValueType() != null) this.valueType = tag.getValueType();
 		
-		if(tag.getContentTypeString() != null) this.contentTypeString = tag.getContentTypeString();
+		if(tag.getFile() != null) this.file = tag.getFile();
 		
 		this.required = tag.isRequired();
 		
 	}
-	
-	
-	
-	
-	@Override
-	public String toString() {
-		return "paste element after " + this.name;
-	}
-	
 	
 	
 	
@@ -384,7 +378,6 @@ public class XmlTag{
 	 * 
 	 * @return new void instance
 	 */
-	
 	public XmlTag() {}
 	
 
@@ -396,7 +389,6 @@ public class XmlTag{
 	 * 
 	 * @return the name
 	 */
-	
 	public String getName() {
 		return name;
 	}
@@ -411,7 +403,6 @@ public class XmlTag{
 	 * 
 	 * @param name the name to set
 	 */
-	
 	public void setName(String name) {
 		this.name = name;
 	}
@@ -425,7 +416,6 @@ public class XmlTag{
 	 * 
 	 * @return tag's content
 	 */
-	
 	public String getContent() {
 		return content;
 	}
@@ -439,7 +429,6 @@ public class XmlTag{
 	 * 
 	 * @param content the content to set
 	 */
-	
 	public void setContent(String content) {
 		this.content = content;
 	}
@@ -453,7 +442,6 @@ public class XmlTag{
 	 * 
 	 * @return true if tag is required false otherwise
 	 */
-	
 	public boolean isRequired() {
 		return required;
 	}
@@ -467,7 +455,6 @@ public class XmlTag{
 	 * 
 	 * @param required true if tag is required false otherwise
 	 */
-	
 	public void setRequired(boolean required) {
 		this.required = required;
 	}
@@ -481,7 +468,6 @@ public class XmlTag{
 	 * 
 	 * @return the selectedchildrendArr
 	 */
-	
 	public ArrayList<XmlTag> getSelectedChildrenArr() {
 		return selectedChildrenArr;
 	}
@@ -495,7 +481,6 @@ public class XmlTag{
 	 * 
 	 * @param selectedchildrendArr the selectedchildrendArr array to set
 	 */
-	
 	public void setSelectedChildrenArr(ArrayList<XmlTag> selectedChildrenArr) {
 		this.selectedChildrenArr = selectedChildrenArr;
 	}
@@ -509,7 +494,6 @@ public class XmlTag{
 	 * 
 	 * @return tag's parent
 	 */
-	
 	public XmlTag getParent() {
 		return parent;
 	}
@@ -523,7 +507,6 @@ public class XmlTag{
 	 * 
 	 * @param parent the parent to set
 	 */
-	
 	public void setParent(XmlTag parent) {
 		this.parent = parent;
 	}
@@ -537,7 +520,6 @@ public class XmlTag{
 	 * 
 	 * @return the max occurrence 
 	 */
-	
 	public Integer getMax() {
 		return this.max;
 	}
@@ -551,7 +533,6 @@ public class XmlTag{
 	 * 
 	 * @param max the max to set
 	 */
-	
 	public void setMax(Integer max) {
 		this.max = max;
 	}
@@ -565,7 +546,6 @@ public class XmlTag{
 	 * 
 	 * @return the defaultContent
 	 */
-	
 	public String getDefaultContent() {
 		return defaultContent;
 	}
@@ -579,7 +559,6 @@ public class XmlTag{
 	 * 
 	 * @param defaultContent the defaultContent to set
 	 */
-	
 	public void setDefaultContent(String defaultContent) {
 		this.defaultContent = defaultContent;
 	}
@@ -593,7 +572,6 @@ public class XmlTag{
 	 * 
 	 * @return the nameSpace
 	 */
-	
 	public XmlNameSpace getNameSpace() {
 		return nameSpace;
 	}
@@ -607,7 +585,6 @@ public class XmlTag{
 	 * 
 	 * @param nameSpace the nameSpace to set
 	 */
-	
 	public void setNameSpace(XmlNameSpace nameSpace) {
 		this.nameSpace = nameSpace;
 	}
@@ -620,7 +597,6 @@ public class XmlTag{
 	 * 
 	 * @param possibleValues the possibleValues to set
 	 */
-	
 	public void setPossibleValues(Object o) {
 		this.possibleValues = o;
 	}
@@ -633,7 +609,6 @@ public class XmlTag{
 	 * 
 	 * @return the possibleValues 
 	 */
-	
 	public Object getPossibleValues() {
 		return this.possibleValues;
 	}
@@ -647,7 +622,6 @@ public class XmlTag{
 	 * 
 	 * @return the arraylist containing all tag's attributes
 	 */
-	
 	public ArrayList<XmlAttribute> getAttrArr() {
 		return attrArr;
 	}
@@ -661,7 +635,6 @@ public class XmlTag{
 	 * 
 	 * @param attrArr the attrArr to set
 	 */
-	
 	public void setAttrArr(ArrayList<XmlAttribute> attrArr) {
 		this.attrArr = attrArr;
 	}
@@ -675,7 +648,6 @@ public class XmlTag{
 	 * 
 	 * @return the selectedAttrArr
 	 */
-	
 	public ArrayList<XmlAttribute> getSelectedAttrArr() {
 		return selectedAttrArr;
 	}
@@ -689,7 +661,6 @@ public class XmlTag{
 	 * 
 	 * @param selectedAttrArr the selectedAttrArr to set
 	 */
-	
 	public void setSelectedAttrArr(ArrayList<XmlAttribute> selectedAttrArr) {
 		this.selectedAttrArr = selectedAttrArr;
 	}
@@ -703,7 +674,6 @@ public class XmlTag{
 	 * 
 	 * @return the description
 	 */
-	
 	public String getDescription() {
 		return description;
 	}
@@ -717,7 +687,6 @@ public class XmlTag{
 	 * 
 	 * @param description the description to set
 	 */
-	
 	public void setDescription(String description) {
 		this.description = description;
 	}
@@ -731,7 +700,6 @@ public class XmlTag{
 	 * 
 	 * @return the childrendArr
 	 */
-	
 	public ArrayList<XmlTag> getChildrenArr() {
 		return childrenArr;
 	}
@@ -745,7 +713,6 @@ public class XmlTag{
 	 * 
 	 * @param childrendArr the childrendArr to set
 	 */
-	
 	public void setChildrenArr(ArrayList<XmlTag> childrendArr) {
 		this.childrenArr = childrendArr;
 	}
@@ -759,7 +726,6 @@ public class XmlTag{
 	 * 
 	 * @return the maxOccurenceNumber
 	 */
-	
 	public static int getMaxOccurenceNumber() {
 		return MAX_OCCURENCE_NUMBER;
 	}
@@ -791,7 +757,6 @@ public class XmlTag{
 	 * 
 	 * @return void
 	 */
-	
 	public void freeLocalFields() {
 		this.name = null;
 		this.content = null;
@@ -814,7 +779,6 @@ public class XmlTag{
 	 * @return void
 	 * @param child the child to add
 	 */
-	
 	public void addChild(XmlTag child) {
 		if (childrenArr == null) childrenArr = new ArrayList<XmlTag>();
 		this.childrenArr.add(child);
@@ -829,7 +793,6 @@ public class XmlTag{
 	 * @return void
 	 * @param attr the attr to add
 	 */
-	
 	public void addAttr(XmlAttribute attr) {
 		if (attrArr == null) attrArr = new ArrayList<XmlAttribute>();
 		this.attrArr.add(attr);
@@ -845,7 +808,6 @@ public class XmlTag{
 	 * @return void
 	 * @param child the child to add
 	 */
-	
 	public void addSelectedChild(XmlTag child) {
 		if (selectedChildrenArr == null) selectedChildrenArr = new ArrayList<XmlTag>();
 		this.selectedChildrenArr.add(child);
@@ -859,7 +821,6 @@ public class XmlTag{
 	 * @return void
 	 * @param child the child to add
 	 */
-	
 	public void addSelectedChildAtIndex(XmlTag child, int index) {
 		if (selectedChildrenArr == null) selectedChildrenArr = new ArrayList<XmlTag>();
 		this.selectedChildrenArr.add(index , child);
@@ -874,7 +835,6 @@ public class XmlTag{
 	 * @return void
 	 * @param attr the attribute to add
 	 */
-	
 	public void addSelectedAttr(XmlAttribute attr) {
 		if (selectedAttrArr == null) selectedAttrArr = new ArrayList<XmlAttribute>();
 		this.selectedAttrArr.add(attr);
@@ -889,7 +849,6 @@ public class XmlTag{
 	 * @return void
 	 * @param attr the attribute to add
 	 */
-	
 	public void addSelectedAttrAtIndex(XmlAttribute attr,int index) {
 		if (selectedAttrArr == null) selectedAttrArr = new ArrayList<XmlAttribute>();
 		this.selectedAttrArr.add(index,attr);
@@ -903,7 +862,6 @@ public class XmlTag{
 	 * 
 	 * @param e Exception to insert
 	 */
-	
 	public void addTagAttributeExceptionArr(PDSCTagAttributeException e) {
 		if(tagAttributeExceptionArr == null) tagAttributeExceptionArr = new ArrayList<PDSCTagAttributeException>();
 		this.tagAttributeExceptionArr.add(e);
@@ -917,7 +875,6 @@ public class XmlTag{
 	 * @param child the child to remove
 	 * @return void
 	 */
-	
 	public void removeSelectedChild(XmlTag child) {
 		this.selectedChildrenArr.remove(child);
 	}
@@ -931,7 +888,6 @@ public class XmlTag{
 	 * @param attr attr the attribute to remove
 	 * @return void
 	 */
-	
 	public void removeSelectedAttr(XmlAttribute attr) {
 		this.selectedAttrArr.remove(attr);
 	}
@@ -945,7 +901,6 @@ public class XmlTag{
 	 * 
 	 * @param e
 	 */
-	
 	public void removeTagAttributeExceptionArr(PDSCTagAttributeException e) {
 		this.tagAttributeExceptionArr.remove(e);
 	}
@@ -1033,14 +988,38 @@ public class XmlTag{
 	
 	
 	
-	public String getContentTypeString() {
-		return this.contentTypeString;
+	/**
+	 * Return contetType in form of string
+	 * 
+	 * @return contetType in form of string
+	 */
+	public String getValueType() {
+		return this.valueType;
 	}
 	
 	
 	
-	public Integer getContentTypeInt() {
-		return this.contentTypeInt;
+	
+	/**
+	 * Return file 
+	 * 
+	 * @return file
+	 */
+	public File getFile() {
+		return this.file;
+	}
+	
+	
+	
+	
+	
+	/**
+	 * Set file
+	 * 
+	 * @param file to set
+	 */
+	public void setFile(File file) {
+		this.file = file;
 	}
 
 

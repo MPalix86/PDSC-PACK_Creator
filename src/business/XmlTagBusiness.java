@@ -6,6 +6,7 @@ import dao.XmlAttributeDao;
 import dao.XmlTagDao;
 import model.PDSCTagAttributeException;
 import model.Response;
+import model.UndoManager;
 import model.XmlAttribute;
 import model.XmlTag;
 import model.XmlTagConstants;
@@ -27,6 +28,93 @@ public class XmlTagBusiness {
 	
 	
 	
+	/** 
+	 * setSelecteAttributes array
+	 * 
+	 * @param tag tag on which set setSelecteAttributes
+	 * @param attrArr array to set
+	 * @param registerOperation set to true if you want to register operation for undo manager
+	 */
+	public static void setSelectedAttributesArr(XmlTag tag, ArrayList<XmlAttribute> attrArr, boolean registerOperation) {
+		tag.setSelectedAttrArr(attrArr);
+		attrArr.forEach((a) -> a.setTag(tag));
+		if(registerOperation) UndoManager.registerOperation();
+	}
+	
+	
+	
+	/**
+	 * add custom tag (custom tags are not defined in PDSC STANDARD).
+	 * 
+	 * @param tag tag on which add custom tags
+	 * @param names array containing custom tag names
+	 * @param registerOperation set to true if you want to register operation for undo manager
+	 * @param enableUserControl set to true if you want the user to be alerted if there are choices to be made
+	 */
+	public static void addCustomTags(XmlTag tag,String[] names, boolean registerOperation, boolean enableUserControl) {
+		boolean choice = true;
+		
+		/** verify if tag haven't content setted*/
+		if(tag.getContent() != null && tag.getContent().trim().length() > 0) {
+			if(enableUserControl)
+				choice = DialogUtils.yesNoWarningMessage("Following PDSC standard tags with textual content cannot have children. \n Do you want to continue ? ");
+		}
+		
+		if(choice){
+			/** reverse array */
+			names = (String[]) CustomUtils.reverseArray(names);
+			
+			for (String name : names){
+				
+				Response response = XmlTagBusiness.verifyTagFromName(name, tag);
+				
+				boolean confirmation = true ;
+				if (response.getStatus() == XmlTagConstants.MAX_REACHED) {
+					confirmation = DialogUtils.yesNoWarningMessage("Following PDSC standard : \n maximum number of children reached for tag < " + name + " > Do you want to continue ?");
+				}
+				if(confirmation) {
+					XmlTag child = (XmlTag) response.getObject();
+					if(child != null) addTagInParent(new XmlTag(child , child.getParent()) , child, tag, false, false, null);
+				}
+			}	 
+		}
+		
+		if(registerOperation) UndoManager.registerOperation();
+		
+	}
+	
+	
+	
+	/**
+	 * Add custom attributes (custom attr are not defined in PDSC STANDARD)
+	 * 
+	 * @param tag	tag on which add attributes
+	 * @param attrNames  attribute names
+	 * @param registerOperation true if you want to register opration for undo redo
+	 * @return String with error message if errors occurs, null otherwise
+	 */
+	public static String addCustomAttributes(XmlTag tag, String[] attrNames , boolean registerOperation) {
+		String errorMessage = "";
+		for (String name : attrNames){
+			
+			Response response = XmlAttributeBusiness.verifyAttributeFromName(tag, name);
+			
+			if(response.getStatus() == XmlAttribute.INVALID_NAME) errorMessage += " '" + name + "' Invalid name \n";
+			else if (response.getStatus() == XmlAttribute.ALREADY_PRESENT) errorMessage += "Attribute \" " + name  + " \" is already present \n" ;
+			else {
+				System.out.println(response.getMessage());
+				XmlAttribute attr = (XmlAttribute) response.getObject();
+				tag.addSelectedAttrAtIndex(attr, 0);
+			}
+		}
+		if(registerOperation) UndoManager.registerOperation();
+		if(!errorMessage.equals("")) return errorMessage;
+		else return null;
+	}
+
+	
+	
+	
 	/**
 	 * set content in tag 
 	 * 
@@ -35,8 +123,8 @@ public class XmlTagBusiness {
 	 * @param registerOperation set to true if you want to register operation for undo redo system
 	 */
 	public static void setTagContent(XmlTag tag , String content , boolean registerOperation) {
-		tag.setContent(content);
-		if(registerOperation) Session.getInstance().getSelectedPDSCDoc().getUndoManager().addState();
+		if(content != null && !content.trim().contentEquals("")) tag.setContent(content);
+		if(registerOperation) UndoManager.registerOperation();
 	}
 	
 	
@@ -47,9 +135,28 @@ public class XmlTagBusiness {
 	 * @param tag tag on which add attribute
 	 * @param registerOperation set to true if you want to register operation for undo redo system
 	 */
-	public static void addAttributeInTag(XmlTag tag, XmlAttribute attr, boolean registerOperation) {
-		tag.addSelectedAttr(attr);
-		if(registerOperation) Session.getInstance().getSelectedPDSCDoc().getUndoManager().addState();
+	public static void addAttributeInTag(XmlTag tag, XmlAttribute attr, boolean registerOperation, boolean enableUserControl, Integer index) {
+		boolean choice  = true;
+		
+		if (enableUserControl){
+			if(tag.getSelectedAttrArr() != null) {
+				for (int i = 0; i < tag.getSelectedAttrArr().size();  i++) {
+					XmlAttribute attr1 = tag.getSelectedAttrArr().get(i);
+					if(attr.getName().equals(attr1.getName())) {
+						choice = DialogUtils.yesNoWarningMessage("Attribute is already present ! Do you want to continue ? ");
+					}
+				}
+			}
+			
+		}
+		
+		if(choice) {
+			if(index != null) tag.addSelectedAttrAtIndex(attr, index);
+			else tag.addSelectedAttrAtIndex(attr , 0);
+			if(registerOperation) UndoManager.registerOperation();
+			attr.setTag(tag);
+		}
+		
 	}
 	
 	
@@ -165,27 +272,29 @@ public class XmlTagBusiness {
 	 * @param tag tag to add
 	 * @param parent parent in which adding tag
 	 * @param registerOperation set to true if you want to register operation for undo redo system
-	 * @param enableUserControls if you want the user to be alerted if there are choices to be made
+	 * @param enableUserControls set to true if you want the user to be alerted if there are choices to be made
 	 */
-	public static void addTagInParent(XmlTag modelTag, XmlTag parent, boolean registerOperation, boolean enableUserControls) {
+	public static void addTagInParent(XmlTag newTag, XmlTag modelTag, XmlTag parent, boolean registerOperation, boolean enableUserControls, Integer index) {
 		boolean choice = true;
 		
 		if(enableUserControls) {
-			if(modelTag.getMax() > 0 ) {
-				String message = "Followind PDSC standard, maxcimum number reached for tag < " + modelTag.getName() + " > \n Do you want to continue ? ";
+			if(modelTag != null && modelTag.getMax() <= 0 ) {
+				String message = "Followind PDSC standard, maximum number of children reached for tag < " + modelTag.getName() + " > \n Do you want to continue ? ";
 				choice = DialogUtils.yesNoWarningMessage(message);
 			}
 		}
 		
 		if(choice) {
-			XmlTag newtag = new XmlTag(modelTag,parent);
-			parent.addSelectedChild(newtag);
+			
+			if(index != null && index >= 0) parent.addSelectedChildAtIndex(newTag, index);
+			else parent.addSelectedChild(newTag);
+			newTag.setParent(parent);
 			
 			/** adjust model tag */
-			modelTag.setMax(modelTag.getMax() -1);
+			if(modelTag != null ) modelTag.setMax(modelTag.getMax() -1);
 		}
 		
-//		if(registerOperation) Session.getInstance().getSelectedPDSCDoc().getUndoManager().addState();
+		if(registerOperation) UndoManager.registerOperation();
 	}
 	
 	
@@ -231,13 +340,13 @@ public class XmlTagBusiness {
 						if(!found) {
 							/** if max child number is > 0, add child */
 							addRequiredAttributes(requiredChild , false);
-							if(requiredChild.getMax() > 0 ) XmlTagBusiness.addTagInParent(requiredChild, requiredChild.getParent(), false, false);
+							if(requiredChild.getMax() > 0 ) XmlTagBusiness.addTagInParent(new XmlTag(requiredChild, requiredChild.getParent()) ,requiredChild, requiredChild.getParent(), false, false, null);
 						}
 					}
 					else {
 						/** if max child number is > 0, add child */
 						addRequiredAttributes(requiredChild , false);
-						if(requiredChild.getMax() > 0 ) XmlTagBusiness.addTagInParent(requiredChild, requiredChild.getParent(), false, false);	
+						if(requiredChild.getMax() > 0 ) XmlTagBusiness.addTagInParent(new XmlTag(requiredChild, requiredChild.getParent()) , requiredChild, requiredChild.getParent(), false, false, null);	
 					}
 
 				}
@@ -248,7 +357,7 @@ public class XmlTagBusiness {
 		}
 		if(registerOperation) {
 			/** register operation only if changes was made */
-			if(!parentCopy.equals(parent)) Session.getInstance().getSelectedPDSCDoc().getUndoManager().addState();
+			if(!parentCopy.equals(parent)) UndoManager.registerOperation();
 		}
 	}
 	
@@ -268,7 +377,7 @@ public class XmlTagBusiness {
 				 tag.addSelectedAttr(new XmlAttribute(attr, tag));
 		}
 		
-		if(registerOperation) Session.getInstance().getSelectedPDSCDoc().getUndoManager().addState();
+		if(registerOperation) UndoManager.registerOperation();
 		
 	}
 	
@@ -321,7 +430,7 @@ public class XmlTagBusiness {
 			
 			/** adjust model tag and register operation */
 			if(modelTag != null) modelTag.setMax(modelTag.getMax() - copiesNumber);
-			if(registerOperation) Session.getInstance().getSelectedPDSCDoc().getUndoManager().addState();
+			if(registerOperation) UndoManager.registerOperation();
 		}
 	}
 	
@@ -352,12 +461,37 @@ public class XmlTagBusiness {
 			XmlTag modelTag = XmlTagUtils.findModelChildFromSelectedChildName(parent, child.getName());
 			if(modelTag != null) modelTag.setMax(modelTag.getMax() + 1);
 			parent.removeSelectedChild(child);
-			if(registerOperation) Session.getInstance().getSelectedPDSCDoc().getUndoManager().addState();
+			if(registerOperation) UndoManager.registerOperation();
 			if(!parent.getSelectedChildrenArr().contains(child)) return child;
 		}
 		
 		return null;
 		
+	}
+	
+	
+	
+	/**
+	 * Remove selected Attribute from parent
+	 * 
+	 * @param attr attr to remove
+	 * @param parent parent that contains attribute
+	 * @param registerOperation set to true if you want to register operation for undo redo system
+	 * @param enableUserControls if you want the user to be alerted if there are choices to be made
+	 */
+	public static void removeSelectedAttributeFromParent(XmlAttribute attr, XmlTag parent, boolean registerOperation, boolean enableUserControls){
+	boolean response = true;
+		
+		if(enableUserControls) {
+			if(attr.isRequired()) {
+				response = DialogUtils.yesNoWarningMessage("Following PDSC standard : \n < " + parent.getName() + "> must contain one attribute " + attr.getName() + "\n Do you want to continue ?");
+			}
+		}
+
+		if(response) {
+			parent.getSelectedAttrArr().remove(attr);
+			if(registerOperation) UndoManager.registerOperation();
+		}
 	}
 	
 	
@@ -427,7 +561,7 @@ public class XmlTagBusiness {
 				.flag(true)
 				.status(XmlTagConstants.IS_NEW_TAG)
 				.message(" tag " + childName + "is not PDSC standard tag" )
-				.object(new XmlTag(childName , false , parent , XmlTag.MAX_OCCURENCE_NUMBER , "all"))
+				.object(new XmlTag(childName , false , parent , XmlTag.MAX_OCCURENCE_NUMBER , "All"))
 				.build();
 	}
 	

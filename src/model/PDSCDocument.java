@@ -1,7 +1,6 @@
 package model;
 
 import java.io.File;
-import java.util.HashMap;
 
 import view.wizardFrame.comp.xmlForm.XmlForm;
 
@@ -11,19 +10,12 @@ public class PDSCDocument {
 	
 	private File sourcePath;
 	
-	private HashMap <XmlAttribute,String> attrPathFilesHashMap;
-	
-	private HashMap <XmlTag, String> tagPathFilesHashMap;
-	
 	private XmlTag root;
 	
 	private UndoManager undoManager;
 	
 	
 	public PDSCDocument(XmlForm form, File sourcePath, XmlTag root) {
-		
-		this.attrPathFilesHashMap = new HashMap <XmlAttribute,String>();
-		this.tagPathFilesHashMap = new HashMap <XmlTag,String>();
 		this.form = form;
 		this.sourcePath = sourcePath;
 		this.root = root;
@@ -31,20 +23,12 @@ public class PDSCDocument {
 	
 	
 	public PDSCDocument(XmlForm form, String sourcePath, XmlTag root) {
-		
-		this.attrPathFilesHashMap = new HashMap <XmlAttribute,String>();
-		this.tagPathFilesHashMap = new HashMap <XmlTag,String>();
-		
 		this.form = form;
 		this.sourcePath = new File(sourcePath);
 		this.root = root;
 	}
 	
 	public PDSCDocument(XmlForm form, File sourcePath, XmlTag root, UndoManager m) {
-		
-		this.attrPathFilesHashMap = new HashMap <XmlAttribute,String>();
-		this.tagPathFilesHashMap = new HashMap <XmlTag,String>();
-		
 		this.undoManager = m;
 		this.form = form;
 		this.sourcePath = sourcePath;
@@ -53,30 +37,10 @@ public class PDSCDocument {
 	
 	
 	public PDSCDocument(XmlForm form, String sourcePath, XmlTag root, UndoManager m) {
-		this.attrPathFilesHashMap = new HashMap <XmlAttribute,String>();
-		
 		this.undoManager = m;
 		this.form = form;
 		this.sourcePath = new File(sourcePath);
 		this.root = root;
-	}
-	
-	
-	
-	public void addAttrPath(XmlAttribute attr, String sourcePath) {
-		if(attrPathFilesHashMap.containsKey(attr)) attrPathFilesHashMap.replace(attr, sourcePath);
-		else {
-			this.attrPathFilesHashMap.put(attr , sourcePath);
-		}
-	}
-	
-	
-	
-	public void addTagPath(XmlTag tag, String sourcePath) {
-		if(tagPathFilesHashMap.containsKey(tag)) tagPathFilesHashMap.replace(tag, sourcePath);
-		else {
-			this.tagPathFilesHashMap.put(tag , sourcePath);
-		}
 	}
 	
 
@@ -110,14 +74,6 @@ public class PDSCDocument {
 	
 	public XmlTag getRoot() {
 		return this.root;
-	}
-	
-	public HashMap <XmlAttribute,String> getAttrPathFilesHashMap(){
-		return this.attrPathFilesHashMap;
-	}
-	
-	public HashMap <XmlTag,String> getTagPathFilesHashMap(){
-		return this.tagPathFilesHashMap;
 	}
 	
 	public void setUndoManager(UndoManager m) {

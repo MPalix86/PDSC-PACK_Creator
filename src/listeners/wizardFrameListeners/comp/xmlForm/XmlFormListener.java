@@ -93,34 +93,31 @@ public class XmlFormListener implements FocusListener, MouseListener{
 		/** update tag content on focus lost */
 		if(e.getSource().getClass().equals(AttributeFormTextField.class)) {
 			AttributeFormTextField textField = (AttributeFormTextField) e.getSource();
-			textField.setAttrValue();
+			XmlAttribute attr = textField.getAttribute();
+			XmlAttributeBusiness.setAttributeValue(attr, textField.getText(), true);
 			tag = textField.getAttribute().getTag();
 		}
 		else if(e.getSource().getClass().equals(AttributeFormComboBox.class)) {
 			AttributeFormComboBox comboBox = (AttributeFormComboBox) e.getSource();
-			comboBox.setAttrValue();
+			XmlAttribute attr = comboBox.getAttr();
+			XmlAttributeBusiness.setAttributeValue(attr,(String) comboBox.getSelectedItem(), true);
 			tag = comboBox.getAttr().getTag();
 		}
 		else if(e.getSource().getClass().equals(TagFormTextField.class)) {
 			TagFormTextField textField = (TagFormTextField) e.getSource();
-			textField.setTagContent();
 			tag = textField.getTag();
+			XmlTagBusiness.setTagContent(tag, textField.getText(), true);
 		}
 		else if(e.getSource().getClass().equals(TagFormTextArea.class)) {
 			TagFormTextArea textArea = (TagFormTextArea) e.getSource();
-			textArea.setTagContent();
 			tag = textArea.getTag();
+			XmlTagBusiness.setTagContent(tag, textArea.getText(), true);
 		}
 		else if(e.getSource().getClass().equals(TagFormComboBox.class)) {
 			TagFormComboBox comboBox = (TagFormComboBox) e.getSource();
-			comboBox.setTagContent();
 			tag = comboBox.getTag();
+			XmlTagBusiness.setTagContent(tag, (String)comboBox.getSelectedItem(), true);
 		}
-		
-		/**
-		 * IMPORTANT : saving state of root tag for undo redo action
-		 */
-		Session.getInstance().getSelectedPDSCDoc().getUndoManager().addState();
 		
 		
 		if(tag != null) {

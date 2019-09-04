@@ -11,6 +11,7 @@ import business.FileBusiness;
 import business.Session;
 import business.XmlTagBusiness;
 import model.PDSCDocument;
+import model.PDSCFileReader;
 import model.Response;
 import model.UndoManager;
 import model.XmlTag;
@@ -43,8 +44,10 @@ public class FileOptionListener implements ActionListener{
 					}
 					else {
 						
+						PDSCFileReader reader = new PDSCFileReader(pdscFile);
+						
 						/** reading file */
-						XmlTag root = FileBusiness.ReadPDSCFile(null,null,pdscFile);
+						XmlTag root = reader.read();
 						
 						/** creating new XmlForm */
 						XmlForm form = new XmlForm(root);
@@ -137,7 +140,7 @@ public class FileOptionListener implements ActionListener{
 				String text = FileBusiness.getDocumentPreview(doc);
 				session.getWizardFrame().showPreview(text);
 			}
-			else DialogUtils.noButtonsTemporaryMessage("No document selected", IconUtils.getWarningIcon(48), 15000, session.getWizardFrame());
+			else DialogUtils.noButtonsTemporaryMessage("No document selected", IconUtils.getWarningIcon(48), 1000, session.getWizardFrame());
 		}
 		
 		

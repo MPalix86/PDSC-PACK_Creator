@@ -5,10 +5,12 @@ import java.awt.event.ActionEvent;
 import java.io.File;
 
 import javax.swing.AbstractAction;
+import javax.swing.DefaultListCellRenderer;
 import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JSpinner;
 import javax.swing.LookAndFeel;
@@ -220,9 +222,8 @@ public class DialogUtils {
 	
 	public  static int cloneDialog() {
 		SpinnerNumberModel sModel = new SpinnerNumberModel(0, 0, 30, 1);
-		ImageIcon cloneIcon = new ImageIcon(DialogUtils.class.getClassLoader().getResource("icons/clone40.png"));
 		JSpinner spinner = new JSpinner(sModel);
-		int option = JOptionPane.showOptionDialog(null, spinner, "Clone Tag", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, cloneIcon, null, null);
+		int option = JOptionPane.showOptionDialog(null, spinner, "Clone Tag", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, IconUtils.getCloneIcon(40), null, null);
 		if (option == JOptionPane.CANCEL_OPTION) {}
 		else if (option == JOptionPane.OK_OPTION){ return (int)spinner.getValue();}
 		return -1;
@@ -288,10 +289,21 @@ public class DialogUtils {
 	
 	
 	
-	public static int intEnumJoptionPane(XmlTag parent) {
+	public static int indexTagEnumJoptionPane(XmlTag parent) {
 		JComboBox <XmlTag> jcb = new JComboBox(parent.getSelectedChildrenArr().toArray());
+		jcb.setRenderer(new DefaultListCellRenderer() {
+	            @Override
+	            public Component getListCellRendererComponent(JList list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+	                super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+	                if(value instanceof XmlTag){
+	                	XmlTag tag = (XmlTag) value;
+	                    setText("paste after element " + tag.getName());
+	                }
+	                return this;
+	            }
+	        } );
 		SquareButton addBtn = new SquareButton("Add");
-		Object[] options = { "Paste", "Cncel" };
+		Object[] options = { "Paste", "Cancel" };
 		int choice = JOptionPane.showOptionDialog(null, jcb, "Paste tag after element : ", 0,JOptionPane.INFORMATION_MESSAGE, IconUtils.FAgetClipboardIcon(48, ColorUtils.FOLDER_BROWN), options, options[0]); 
 		System.out.println("choice " + choice);
 		if(choice == 0) {
@@ -303,9 +315,9 @@ public class DialogUtils {
 	}
 	
 	
-	public static boolean CustomButtonTrueFalsePane(String message, String trueButtonMessage, String falseButtonMessage, ImageIcon icon) {
+	public static boolean CustomButtonTrueFalsePane(String title ,String message, String trueButtonMessage, String falseButtonMessage, ImageIcon icon) {
 		Object[] options = { trueButtonMessage, falseButtonMessage };
-		int value = JOptionPane.showOptionDialog (null, message, "Warning", JOptionPane.YES_NO_OPTION,JOptionPane.INFORMATION_MESSAGE, icon, options, options[0]); 
+		int value = JOptionPane.showOptionDialog (null, message, title , JOptionPane.YES_NO_OPTION,JOptionPane.INFORMATION_MESSAGE, icon, options, options[0]); 
 		if(value == 0) return true;
 		else return false;
 	

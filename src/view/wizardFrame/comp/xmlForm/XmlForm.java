@@ -13,7 +13,6 @@ import javax.swing.JPanel;
 import javax.swing.Timer;
 import javax.swing.border.EmptyBorder;
 
-import business.OSValidator;
 import listeners.wizardFrameListeners.comp.xmlForm.XmlFormListener;
 import model.XmlTag;
 import net.miginfocom.swing.MigLayout;
@@ -33,7 +32,7 @@ public class XmlForm extends JPanel{
 	private final static int LEFT_PADDING = 25;
 	
 	
-	private static int INNER_ROW_PADDIND;
+	private final static int INNER_ROW_PADDING = -13;
 
 	
 	
@@ -43,8 +42,6 @@ public class XmlForm extends JPanel{
 		this.setBorder(new EmptyBorder(0,0,0,0));
 		this.setBackground(Color.WHITE);
 		this.setLayout(new MigLayout("wrap 1" , "" , "[] 0 []"));
-		if(OSValidator.isWindows()) INNER_ROW_PADDIND = -6;
-		else INNER_ROW_PADDIND = -13;
 		this.root = root;
 		this.OpenCloseTagsLinesHashMap = new HashMap<XmlTag,Line2D>();
 		this.tagOpenRowHashMap = new HashMap<XmlTag, TagRow>();
@@ -95,7 +92,7 @@ public class XmlForm extends JPanel{
 		
 
 		/** setting calculated border */
-		openRow.setBorder(new EmptyBorder( INNER_ROW_PADDIND, leftBorder, INNER_ROW_PADDIND, 0));
+		openRow.setBorder(new EmptyBorder( INNER_ROW_PADDING, leftBorder, INNER_ROW_PADDING, 0));
 		
 		/** saving left border that represent indentation inside row */
 		openRow.setLeftBorder(leftBorder);
@@ -130,7 +127,7 @@ public class XmlForm extends JPanel{
 			rowCounter++;
 
 			/** setting calculated border */
-			closeRow.setBorder(new EmptyBorder( INNER_ROW_PADDIND, leftBorder, INNER_ROW_PADDIND, 0));
+			closeRow.setBorder(new EmptyBorder( INNER_ROW_PADDING, leftBorder, INNER_ROW_PADDING, 0));
 			
 			/** saving left border that represent indentation inside row */
 			closeRow.setLeftBorder(leftBorder);

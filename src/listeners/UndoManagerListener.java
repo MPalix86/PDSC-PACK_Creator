@@ -16,7 +16,11 @@ public class UndoManagerListener implements UndoAbleEditListener{
 	@Override
 	public void undoAbleEditHappened(UndoAbleEditEvent e) {
 		UndoManager manager = (UndoManager) e.getSource();
+		if(session.getSelectedPDSCDoc().getUndoManager().canUndo()) session.getWizardFrame().getToolBarContainer().getToolBar().enableUndo();
+		else  session.getWizardFrame().getToolBarContainer().getToolBar().disableUndo();
 		
+		if(session.getSelectedPDSCDoc().getUndoManager().canRedo()) session.getWizardFrame().getToolBarContainer().getToolBar().enableRedo();
+		else  session.getWizardFrame().getToolBarContainer().getToolBar().disableRedo();
 	}
 	
 	

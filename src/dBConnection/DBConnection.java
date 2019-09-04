@@ -64,7 +64,7 @@ public class DBConnection {
       TableRecord record = null;
       int colonne = 0;
       try {
-         Statement stmt = conn.createStatement();     // Creo lo Statement per l'esecuzione della query
+         Statement stmt = conn.createStatement();   // Creo lo Statement per l'esecuzione della query
          ResultSet rs = stmt.executeQuery(query);   // Ottengo il ResultSet dell'esecuzione della query
          ResultSetMetaData rsmd = rs.getMetaData();
          colonne = rsmd.getColumnCount();
@@ -72,11 +72,11 @@ public class DBConnection {
          while(rs.next()) {   // Creo il vettore risultato scorrendo tutto il ResultSet
         	record = new TableRecord(colonne);
     	 	for (int i=1; i<=colonne; i++) {
-    	 		record.put(rsmd.getColumnLabel(i), rs.getString(i));	
+    	 		if(rs.getString(i) == null)record.put(rsmd.getColumnLabel(i), null);
+    	 		record.put(rsmd.getColumnLabel(i), rs.getString(i));
     	 	}
-    	 	a.add( record); 
+    	 	a.add(record); 
          }
-         
          rs.close();     // Chiudo il ResultSet
          stmt.close();   // Chiudo lo Statement
       } catch (Exception e) { e.printStackTrace(); }

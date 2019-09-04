@@ -1,5 +1,7 @@
 package model;
 
+import java.io.File;
+
 /**
  * Xml attribute abstraction 
  * 
@@ -20,8 +22,10 @@ public class XmlAttribute {
 	/** attribute's obligatoriness */
 	protected boolean required;
 	
+	private String possibleValuesType;
+	
 	/** attribute's possible values */
-	protected Object possibleValues;
+	protected XmlEnum possibleValues;
 	
 	/** attribute's value */
 	protected String value ;
@@ -34,6 +38,14 @@ public class XmlAttribute {
 	
 	/** tag's owner of this attribute*/
 	protected XmlTag tag;
+	
+	/** 
+	 * Some tag can have associated source file for pack creation;
+	 * this file represent source file path on filesystem
+	 * 
+	 * NOTE: before setting control that possibleValuesType is equals to File
+	 */
+	private File file;
 	
 	
 	
@@ -59,10 +71,11 @@ public class XmlAttribute {
 	 * @param possibleValues attribute's possibleVlaues
 	 */
 	
-	public XmlAttribute(String name, boolean required, Object possibleValues,XmlTag tag) {
+	public XmlAttribute(String name, boolean required, XmlEnum possibleValues,XmlTag tag ,String possiValuesType) {
 		this.name = name;
 		this.required = required;
 		this.possibleValues = possibleValues;
+		this.possibleValuesType = possiValuesType;
 		this.tag = tag;
 	}
 	
@@ -75,16 +88,17 @@ public class XmlAttribute {
 	 * @param name attribute's name
 	 */
 	
-	public XmlAttribute(String name,XmlTag tag) {
+	public XmlAttribute(String name,XmlTag tag, String possibleValueType) {
 		this.name = name;
 		this.tag = tag;
+		this.possibleValuesType = possibleValueType;
 		this.required = false;
 	}
 	
 	
 
 	
-	public XmlAttribute(Integer attrId, Integer relId, String name, boolean required, Object possibleValues,String defaultValue,XmlNameSpace nameSpace,XmlTag tag) {
+	public XmlAttribute(Integer attrId, Integer relId, String name, boolean required, XmlEnum possibleValues,String defaultValue,XmlNameSpace nameSpace,XmlTag tag, String possibleValuesType) {
 		this.name = name;
 		this.required = required;
 		this.possibleValues = possibleValues;
@@ -93,18 +107,19 @@ public class XmlAttribute {
 		this.defaultValue = defaultValue;
 		this.attrId = attrId;
 		this.relId = relId;
+		this.possibleValuesType = possibleValuesType;
 	}
 	
 	
 	
-	public XmlAttribute(Integer attrId, String name, boolean required, Object possibleValues,String defaultValue,XmlTag tag) {
+	public XmlAttribute(Integer attrId, String name, boolean required, XmlEnum possibleValues,String defaultValue,XmlTag tag , String possibleValuesType) {
 		this.name = name;
 		this.required = required;
 		this.possibleValues = possibleValues;
 		this.tag = tag;
-		this.nameSpace = nameSpace;
 		this.defaultValue = defaultValue;
 		this.attrId = attrId;
+		this.possibleValuesType = possibleValuesType;
 	}
 	
 	
@@ -120,11 +135,12 @@ public class XmlAttribute {
 	 * @param tag tag attribute's owner (or parent)
 	 */
 	
-	public XmlAttribute(String name, boolean required, Object possibleValues, String defaultValue, XmlTag tag) {
+	public XmlAttribute(String name, boolean required, XmlEnum possibleValues, String defaultValue, XmlTag tag , String possibleValuesType) {
 		this.name = name;
 		this.required = required;
 		this.possibleValues = possibleValues;
 		this.tag = tag;
+		this.possibleValuesType = possibleValuesType;
 	}
 	
 	
@@ -145,15 +161,18 @@ public class XmlAttribute {
 		
 		if ( attr.getPossibleValues() != null ) this.possibleValues = attr.getPossibleValues();
 		if ( attr.getValue() != null) this.value = new String(attr.getValue());
-		if ( attr.getDefaultValue() != null) this.defaultValue = new String(attr.getDefaultValue());
-		if ( attr.getNameSpace() != null) this.nameSpace = new XmlNameSpace(attr.getNameSpace());
-		if ( attr.getAttrId() != null) this.attrId = attr.getAttrId();
-		if ( attr.getRelId() != null) this.relId = attr.getRelId();
+		if ( attr.getDefaultValue() != null ) this.defaultValue = new String(attr.getDefaultValue());
+		if ( attr.getNameSpace() != null ) this.nameSpace = new XmlNameSpace(attr.getNameSpace());
+		if ( attr.getAttrId() != null ) this.attrId = attr.getAttrId();
+		if ( attr.getRelId() != null ) this.relId = attr.getRelId();
+		if ( attr.getPossibleValuesType() != null ) this.possibleValuesType = attr.getPossibleValuesType();
+		if ( attr.getFile()!= null ) this.file = attr.getFile();
+		 
 		this.tag=tag;
 	}
 	
 	
-	
+
 	
 	
 	/**
@@ -218,7 +237,7 @@ public class XmlAttribute {
 	 * @return attribute's possible values
 	 */
 	
-	public Object getPossibleValues() {
+	public XmlEnum getPossibleValues() {
 		return possibleValues;
 	}
 	
@@ -232,7 +251,7 @@ public class XmlAttribute {
 	 * @param possibleValues the possibleValues to set
 	 */
 	
-	public void setPossibleValues(Object possibleValues) {
+	public void setPossibleValues(XmlEnum possibleValues) {
 		this.possibleValues = possibleValues;
 	}
 	
@@ -396,6 +415,43 @@ public class XmlAttribute {
 	
 	public void setRelId(Integer relId) {
 		this.relId = relId;
+	}
+	
+	
+	
+	
+	/**
+	 * Return possibleValuesType
+	 * 
+	 * @return possibleValuesType
+	 */
+	public String getPossibleValuesType() {
+		return this.possibleValuesType;
+	}
+	
+	
+	
+	
+	/**
+	 * Return file 
+	 * 
+	 * @return file
+	 */
+	public File getFile() {
+		return this.file;
+	}
+	
+	
+	
+	
+	
+	/**
+	 * Set file
+	 * 
+	 * @param file to set
+	 */
+	public void setFile(File file) {
+		this.file = file;
 	}
 	
 	

@@ -2,6 +2,8 @@ package business;
 
 import java.util.ArrayList;
 
+import org.jdom2.Document;
+
 import model.XmlAttribute;
 import model.XmlTag;
 
@@ -13,6 +15,32 @@ public class XmlTagUtils {
 	 * @param tag	tag to print
 	 * @param level starting indentation level (usually 0)
 	 */
+	
+	
+	
+	
+	
+	/**
+	 * Compare 2 tags, the comparison take place only of the "textual component"
+	 * of the tag. This menas that the 2 tags are first converted in xml and the 
+	 * resulting xml was compared.
+	 * 
+	 * @param tag1	tag to compare
+	 * @param tag2	tag to compare
+	 * @return	true if textual component of tags are equals
+	 */
+	public static boolean compareText (XmlTag tag1 , XmlTag tag2) {
+		Document doc1 = FileBusiness.genratePDSCDocument(tag1);
+		Document doc2 = FileBusiness.genratePDSCDocument(tag2);
+		String str1 =  FileBusiness.getDocumentPreview(doc1);
+		String str2 = FileBusiness.getDocumentPreview(doc2);
+		if(str1.equals(str2)) return true;
+		return false;
+	}
+	
+	
+	
+	
 	
 	public static void printModelTag(XmlTag tag,int level) {
 		
@@ -94,7 +122,7 @@ public class XmlTagUtils {
 			XmlTag element = children.get(0);
 			children.remove(element);
 			if(element != null && element.getName().equals(childName)) return element;
-			if( element.getChildrenArr() != null ) element.getChildrenArr().forEach((c)-> children.add(c));
+			if(element != null && element.getChildrenArr() != null ) element.getChildrenArr().forEach((c)-> children.add(c));
 		}
 		return null;
 	}
@@ -146,11 +174,13 @@ public class XmlTagUtils {
 		while(!children.isEmpty()) {
 			XmlTag element = children.get(0);
 			children.remove(element);
-			if(element.getName().equals(childName)) {	
-				childOccurrence++;
-			}
-			if( element.getSelectedChildrenArr() != null ) {
-				element.getSelectedChildrenArr().forEach((c)-> children.add(c));
+			if(element != null) {
+				if(element.getName().equals(childName)) {	
+					childOccurrence++;
+				}
+				if( element.getSelectedChildrenArr() != null ) {
+					element.getSelectedChildrenArr().forEach((c)-> children.add(c));
+				}
 			}
 		}
 		return childOccurrence;

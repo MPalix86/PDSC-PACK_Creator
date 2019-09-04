@@ -2,6 +2,8 @@ package model;
 
 import java.util.ArrayList;
 
+import business.Session;
+import business.XmlTagUtils;
 import model.interfaces.UndoAbleEditListener;
 
 /**
@@ -15,20 +17,27 @@ public class UndoManager {
 	
 	
 	/** 
+	 * S:
 	 * element with void tag which acts like a separator between new and old inserted status;
 	 * EXAMPLE : vector with 11 entry (separator = S )
 	 * 
 	 *  	| 1 2 3 4 5 6 S 7 8 9 10 | 
 	 *  
-	 *  in this way vector became cyclic placing limit on undo and redo operations.
+	 *  in this way vector became cyclic, placing limit on undo and redo operations.
 	 *  for example assume that we are in status 4. We can redo until status 6 and 
-	 *  undo until status 8.
+	 *  undo until status 7.
 	 *  adding new status cause S to move on;
 	 */
 	private Memento separator  = new Memento(new XmlTag());
 	
+	/** AarayList initial value to avoid indexOutOfBound exception */
+	private Memento filler = new Memento(new XmlTag());
+	
 	/** current root tag (the current state of the undo/redo able object ) */
 	private XmlTag root;
+	
+	/** last saved state */
+	private Memento lastSavedMemento;
 	
 	/** 
 	 * mementoArr contains all possible status of undo/redo able object.
@@ -38,6 +47,9 @@ public class UndoManager {
 	
 	/** index of current state in mementoArr */
 	private int i;
+	
+	/** index of separator in mementoArr */
+	private int s;
 	
 	/** 
 	 * array of UndoAbleEditListener to notify when undo/redo action was executed 
@@ -54,42 +66,149 @@ public class UndoManager {
 		this.mementoArr = new ArrayList<Memento>();
 		this.listeners = new ArrayList<UndoAbleEditListener>();
 		
+		for ( int j = 0; j <= MAX_SAVED_STATEMENT; j++) {
+			mementoArr.add(filler);
+		}
 		
 		this.root = root;
-		this.i = 0;
-		
-		mementoArr.add(new Memento(root));
-//		this.mementoArr.add(separator);
+		i = 0;
+		s = i + 1;
 	}
 	
 	
 	
 	
 	/**
-	 * add new state saving it into a memento
+	 * add new state saving it into a memento.
+	 * For more info uncomment all system.out.println()
+	 * 
+	 * @return void
 	 */
-	public void addState() {
-
-//		if (i > 0 && i < MAX_SAVED_STATEMENT) {
-//			XmlTag lastSavedRoot = mementoArr.get(mementoArr.size()).getStatus();
-//			if(lastSavedRoot.equals(root))  return;
-//		}
+	private void addState() {
 		
-		if(mementoArr.size() == MAX_SAVED_STATEMENT) i = 0;
+		/** 
+		 * verifying that status has really changed before saving it .
+		 * For more info on comparison see XmlTagUtils.compareText function.
+		 * uncomment all System.out.println for more info.
+		 * 
+		 * if lastSavedMemento == null => first status is being entered
+		 */
+		if(lastSavedMemento == null || !XmlTagUtils.compareText(lastSavedMemento.getStatus(), root)){
+			
+			/** adding filler between i and s only if is not the first status **/
+			if(lastSavedMemento != null) addFillers(i);
+			
+			//System.out.println("before increment : s = " + s);
+			//System.out.println("before increment : i = " + i);
+			
+			/** incrementing variable */
+			i++;
+			if(i > MAX_SAVED_STATEMENT) i = 0;
+			s = i + 1;
+			
+			//System.out.println("after increment : s = " + s);
+			//System.out.println("after increment : i = " + i);
+			
+			//System.out.print("adding memento status at index " + i + " ");
+			
+			/** setting memento stauts */
+			Memento m = new Memento(root);
+			mementoArr.set(i, m);
+			
+			/** setting lastSavedMemento */
+			if(lastSavedMemento != null)lastSavedMemento.setStatus(root);
+			else lastSavedMemento = new Memento (root);
+			
+			/** adding separator */
+			if(s > MAX_SAVED_STATEMENT) {
+				mementoArr.set(0 , separator);
+				//System.out.print("adding separator status at index 0 ");
+				 s = 0;
+			}
+			else {
+				mementoArr.set(s , separator);
+				//System.out.print("adding separator status at index " + s + " ");
+			}
+			
+			System.out.println("");
+			
+			/** notify listeners that event happened */
+			listeners.forEach((l) -> l.undoAbleEditHappened(new UndoAbleEditEvent(this)));
+		}
+	}
+	
+	
+	
+	
+	
+	/**
+	 * if undo or redo happens, rempove all status setted between i and s 
+	 * example : undo happens and i is at position 2 and s at position 6
+	 * 
+	 * | 0 1 i 3 4 5 s | 
+	 * 
+	 * in this case state 0, 1 are "undo" statement.
+	 * state 3, 4, 5 are "redo" statement.
+	 * 
+	 * so if "addState" occurs when mementoArr is in state described above, 
+	 * new statement will be added at position 4 and s will moved at position 5
+	 * 
+	 * | 0 1 2 i s 5 6 |
+	 * 
+	 * so in this situation we can undo until position 5, but the "undo statement"
+	 * are only 0 and 1;
+	 * 
+	 * to avoid this we must had "fillers" between i and s (s included) before adding new status
+	 * 
+	 * @param x current state position ( i )
+	 */
+	private void addFillers(int x) {
+		//System.out.println("filler , s is at position: " + s);
+		x++;
+		if(x > MAX_SAVED_STATEMENT) x = 0;
+		if(mementoArr.get(x) != separator) {
+			//System.out.println("Setting filler at position :" + x);
+			mementoArr.set(x, filler);
+			addFillers(x);
+		}
+		else {
+			//System.out.println("found separtor, returning");
+			
+			mementoArr.set(x, filler);
+			return;
+		}
 		
-//		if( i < mementoArr.size()) {
-//			
-//			if(mementoArr.get(i) != null) {
-//				for (int j = i; j < mementoArr.size(); j++) {
-//					mementoArr.remove(j);
-//				}
-//			}
-//			
-//		}
-
-		mementoArr.add(new Memento(root));
-		i++;
+	}
+	
+	
+	
+	
+	/**
+	 * undo function: restore the state to the previous one
+	 * For more info uncomment all system.out.println()
+	 * 
+	 * @return void;
+	 */
+	public void undo() {
+		int j = i;
+		i--;
+		if( i < 0 ) {
+			i = MAX_SAVED_STATEMENT;
+		}
+			
+		if(!mementoArr.get(i).equals(filler) && !mementoArr.get(i).equals(separator)) {
+			//System.out.print("undoing at status " + i + " ");
+			Memento m = mementoArr.get(i);
+			root.replaceWith(m.getStatus() , m.getStatus().getParent());
+		}
 		
+		else {
+			i = j;
+			//System.out.println("separator or filler found, cannot undo");
+		}
+		
+		//System.out.println("now index is " + i);
+	
 		
 		/** notify listeners that event happened */
 		listeners.forEach((l) -> l.undoAbleEditHappened(new UndoAbleEditEvent(this)));
@@ -99,43 +218,33 @@ public class UndoManager {
 	
 	
 	/**
-	 * undo function: restore the state to the previous one
-	 */
-	public void undo() {
-		if( i > 0) {
-			i--;
-			Memento m = mementoArr.get(i);
-			root.replaceWith(m.getStatus() , m.getStatus().getParent());
-			
-			for (int h = 0; h < mementoArr.size(); h++) {
-				System.out.println(mementoArr.get(h).getStatus().getName());
-			}
-			
-			/** notify listeners that event happened */
-			listeners.forEach((l) -> l.undoAbleEditHappened(new UndoAbleEditEvent(this)));
-		}
-	}
-	
-	
-	
-	
-	/**
-	 * redo function: restore the state to the next one
+	 * redo function: restore the state to the next one.
+	 * For more info uncomment all system.out.println()
+	 * 
+	 * @return void
 	 */
 	public void redo() {
-	
-		if(i < mementoArr.size() - 1) {
-			i++;
+		int  j = i;
+		i++;
+		if( i > MAX_SAVED_STATEMENT) i = 0;
+				
+		if(!mementoArr.get(i).equals(filler) && !mementoArr.get(i).equals(separator)) {
+			//System.out.print("redoing at status " + i + " ");
 			Memento m = mementoArr.get(i);
 			root.replaceWith(m.getStatus() , m.getStatus().getParent());
-			
-			System.out.println("redo");
-			System.out.println("memntoArr size : " + mementoArr.size());
-			System.out.println("i : " + i);
-			
-			/** notify listeners that event happened */
-			listeners.forEach((l) -> l.undoAbleEditHappened(new UndoAbleEditEvent(this)));
 		}
+			
+		else {
+			i = j;
+			//System.out.println("separator or filler found, cannot redo");
+		}
+			
+			
+		//System.out.println("now index is " + i);
+			
+		/** notify listeners that event happened */
+		listeners.forEach((l) -> l.undoAbleEditHappened(new UndoAbleEditEvent(this)));
+
 		
 	}
 	
@@ -148,12 +257,21 @@ public class UndoManager {
 	 * @return true if user can undo false otherwise
 	 */
 	public boolean canUndo() {
-		if (i > 0) {
-			if(mementoArr.get(i - 1) != null) {
-				return true;
-			}
+		int j = i;
+		i--;
+		
+		if( i < 0 ) i = MAX_SAVED_STATEMENT;
+			
+		if(!mementoArr.get(i).equals(filler) && !mementoArr.get(i).equals(separator)) {
+			i = j;
+			return true;
 		}
-		return false;
+		
+		else {
+			i = j;
+			return false;
+		}
+		
 	}
 	
 	
@@ -165,12 +283,19 @@ public class UndoManager {
 	 * @return true if user can redo false otherwise
 	 */
 	public boolean canRedo() {
-		if ( i < MAX_SAVED_STATEMENT) {
-			if( mementoArr.get(i) != null) {
-				return true;
-			}
+		int  j = i;
+		i++;
+		if( i > MAX_SAVED_STATEMENT) i = 0;
+				
+		if(!mementoArr.get(i).equals(filler) && !mementoArr.get(i).equals(separator)) {
+			i = j;
+			return true;
 		}
-		return false;
+			
+		else {
+			i = j;
+			return false;
+		}
 	}
 	
 	
@@ -199,6 +324,9 @@ public class UndoManager {
 	}
 	
 	
+	
+	
+	
 	/** 
 	 * Defines memento object to store information
 	 * 
@@ -215,7 +343,20 @@ public class UndoManager {
 		public XmlTag getStatus() {
 			return this.tag;
 		}
+		
+		public void setStatus(XmlTag tag) {
+			this.tag.replaceWith(tag, tag.getParent());
+		}
 	
+	}
+	
+	
+	
+	
+	
+	/** call addState (see above) on selected pdsc document */
+	public static void registerOperation() {
+		Session.getInstance().getSelectedPDSCDoc().getUndoManager().addState();
 	}
 	
 

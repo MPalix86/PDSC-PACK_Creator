@@ -7,40 +7,30 @@ import java.awt.datatransfer.Transferable;
 import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.IOException;
 
-import org.jdom2.Document;
-
-import business.FileBusiness;
-
-
-/**
- * A <code>Transferable</code> which implements the capability required
- * to transfer a <code>XmlTag</code>.
- *  
- * @author Mirco Palese
- */
-public class XmlTagSelection implements Transferable , ClipboardOwner{
+public class XmlAttributeSelection implements Transferable , ClipboardOwner{
 	
-	private static final int XML_TAG = 0;
-	private static final int XML_TAG_TO_STRING = 1;
+
+	private static final int XML_ATTR = 0;
+	private static final int XML_ATTR_TO_STRING = 1;
 	
-	public static DataFlavor xmlTagFlavor = new DataFlavor (XmlTag.class , "Xml tag");;
+	public static DataFlavor xmlAttrFlavor = new DataFlavor (XmlAttribute.class , "Xml attribute");;
 	public static DataFlavor stringFlavor = DataFlavor.stringFlavor;
 	
 	
     private static final DataFlavor[] flavors = {
-           xmlTagFlavor,
+    		xmlAttrFlavor,
            DataFlavor.stringFlavor,
         };
     
     
-    private XmlTag tag;
+    private XmlAttribute attr;
     
     /**
      * Creates a <code>Transferable</code> capable of transferring
-     * the specified <code>XmlTag</code>.
+     * the specified <code>XmlAttribute</code>.
      */
-    public XmlTagSelection(XmlTag tag) {
-    	this.tag = tag;
+    public XmlAttributeSelection(XmlAttribute attr) {
+    	this.attr = attr;
     }
     
     
@@ -96,13 +86,13 @@ public class XmlTagSelection implements Transferable , ClipboardOwner{
      */   
 	@Override
 	public Object getTransferData(DataFlavor flavor) throws UnsupportedFlavorException, IOException {
-		if (flavor.equals(flavors[XML_TAG])) {
-            return (Object) tag;
+		if (flavor.equals(flavors[XML_ATTR])) {
+            return (Object) attr;
         } 
-		else if(flavor.equals(flavors[XML_TAG_TO_STRING])) {
-			Document doc = FileBusiness.genratePDSCDocument(tag);
-			String xmlText = FileBusiness.getDocumentPreview(doc);
-			return xmlText;
+		else if(flavor.equals(flavors[XML_ATTR_TO_STRING])) {
+			String value = attr.getName();
+			if(attr.getValue()!=null) value += " = \" " + attr.getValue() + " \" "; 
+			return value;
 		}
 		else return null;
 	}

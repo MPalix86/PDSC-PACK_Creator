@@ -7,7 +7,6 @@ import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.Window;
-import java.util.ArrayList;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -33,7 +32,6 @@ public class AddAttributeFrame extends JFrame{
 	private XmlAttribute selectedAttr;
 	private XmlTag tag;
 	private JLabel selectedAttrlabel;
-	private ArrayList<XmlAttribute> addedAttr;
 	private XmlTag originalTagCopy;
 	
 	
@@ -45,15 +43,17 @@ public class AddAttributeFrame extends JFrame{
 	}
 
 	public AddAttributeFrame(XmlTag tag) {
-		this.originalTagCopy = new XmlTag(tag , tag.getParent());
-		this.tag = tag;
-		addedAttr = new ArrayList<XmlAttribute>();
 		
-		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-		this.setMinimumSize(new Dimension(600,450));
+		this.tag = tag;
+		this.originalTagCopy = new XmlTag(tag , tag.getParent());
 		
 		listener = new AddAttributeFrameListener(this);
 		bar = new AttributesListBarContainer(tag,listener);
+		
+
+		
+		this.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+		this.setMinimumSize(new Dimension(600,450));
 		
 		placeComponents();
 		centreWindow(this);
@@ -80,7 +80,7 @@ public class AddAttributeFrame extends JFrame{
 			JPanel panel1 = new JPanel(new BorderLayout());
 			panel1.setBackground(Color.WHITE);
 			
-				JLabel tagLabel = new JLabel("<html> Selected Tag : " + tag.getName() + " <br> </html>");
+				JLabel tagLabel = new JLabel("<html> Selected Element : " + tag.getName() + " <br> </html>");
 				Font labelFont = tagLabel.getFont();
 				tagLabel.setFont(new Font(labelFont.getName(),Font.PLAIN,16));
 				tagLabel.setBorder(new EmptyBorder(0,10,0,0));
@@ -96,7 +96,7 @@ public class AddAttributeFrame extends JFrame{
 				JPanel panel2 = new JPanel(new BorderLayout());
 				panel2.setBackground(Color.WHITE);
 				panel2.setBorder(new MatteBorder(0,0,1,0, ColorUtils.LIGHT_GRAY));
-					selectedAttrlabel = new JLabel("<html> <font size = 3> Add desired attrbutes for tag " + tag.getName() + 
+					selectedAttrlabel = new JLabel("<html> <font size = 3> Add desired attrbutes for Element " + tag.getName() + 
 													". Click info button for attribute description </font> <br></html>"
 													);
 					selectedAttrlabel.setBorder(new EmptyBorder(5,10,10,10));
@@ -154,10 +154,6 @@ public class AddAttributeFrame extends JFrame{
 	
 	public XmlTag geTtag() {
 		return this.tag;
-	}
-	
-	public ArrayList<XmlAttribute> getAddeAttrArr(){
-		return this.addedAttr;
 	}
 	
 	public XmlTag getOriginalTagCopy() {

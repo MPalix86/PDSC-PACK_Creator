@@ -16,6 +16,7 @@ public class Menu extends JMenuBar {
 	private JMenu window;
 	private JMenu file;
 	private JMenu document;
+	private JMenu about;
 	private MenuListener menuListener;
 	private FileOptionListener fileListener;
 	private PDSCOptionListener PdscOptionListener;
@@ -26,6 +27,7 @@ public class Menu extends JMenuBar {
 		window = new JMenu("Window");
 		file = new JMenu("File");
 		document = new JMenu("Document");
+		about = new JMenu("About");
 		
 		menuListener = new MenuListener();
 		fileListener = new FileOptionListener();
@@ -88,6 +90,11 @@ public class Menu extends JMenuBar {
 		createPack.setIcon(IconUtils.getPackIcon(16));
 		
 		
+		/******************************************** About */
+		
+		JMenuItem version = new JMenuItem("Version 0.0.1");
+		
+		
 		file.add(newPDSC);
 		file.add(openPDSCFile);
 		file.add(new JSeparator());
@@ -104,12 +111,13 @@ public class Menu extends JMenuBar {
 		document.add(new JSeparator());
 		document.add(showPreview);
 	
-		
+		about.add(version);
 		
 		
 		this.add(file);
 		this.add(window);
 		this.add(document);
+		this.add(about);
 	 }
 
 }

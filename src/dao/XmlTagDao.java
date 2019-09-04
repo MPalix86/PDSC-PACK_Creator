@@ -44,14 +44,14 @@ public class XmlTagDao {
 						"       ttr.parent_id,\n" + 
 						"       ns.prefix,\n" + 
 						"       ns.url,\n" +
-						"       tct.name as content_type_name\n" +
+						"       tpvt.name AS value_type\n" +
 						"  FROM tags_tags_relations AS ttr\n" + 
 						"       LEFT JOIN\n" + 
 						"       tags AS t ON t.id = ttr.tag_id\n" + 
 						"       LEFT JOIN\n" + 
 						"       name_space AS ns ON ns.id = ttr.name_space_id\n" + 
 						" 		LEFT JOIN \n" + 
-						"       tag_content_types as tct ON tct.type = t.content_type" +
+						"       tags_possible_values_types AS tpvt ON tpvt.id = t.possible_values_type_id\n" +
 						" WHERE ttr.parent_id =" + parent.getTagId() + " AND ttr.tag_id =" + tagId + "";
 		
 		ArrayList<TableRecord> result = conn.query(query);
@@ -76,7 +76,7 @@ public class XmlTagDao {
 	        		possibleValues,
 	        		record.get("default_content"),
 	        		nameSpace,
-	        		record.get("content_type_name")
+	        		record.get("value_type")
 	        );
 			
 		 }
@@ -117,14 +117,14 @@ public class XmlTagDao {
 						"       ttr.parent_id,\n" + 
 						"       ns.prefix,\n" + 
 						"       ns.url,\n" + 
-						"       tct.name as content_type_name" +
+						"       tpvt.name AS value_type\n" +
 						"  FROM tags_tags_relations AS ttr\n" + 
 						"       LEFT JOIN\n" + 
 						"       tags AS t ON t.id = ttr.tag_id\n" + 
 						"       LEFT JOIN\n" + 
 						"       name_space AS ns ON ns.id = ttr.name_space_id\n" + 
 						" 		LEFT JOIN \n" + 
-						"       tag_content_types as tct ON tct.type = t.content_type" +
+						"       tags_possible_values_types AS tpvt ON tpvt.id = t.possible_values_type_id" +
 						" WHERE ttr.parent_id =" + parent.getTagId() + " AND t.name = '" + name + "'";
 		
 		ArrayList<TableRecord> result = conn.query(query);
@@ -149,7 +149,7 @@ public class XmlTagDao {
 	        		possibleValues,
 	        		record.get("default_content"),
 	        		nameSpace, 
-	        		record.get("content_type_name")
+	        		record.get("value_type")
 	        );
 			
 		 }
@@ -170,14 +170,14 @@ public class XmlTagDao {
 						"       ttr.parent_id,\n" + 
 						"       ns.prefix,\n" + 
 						"       ns.url,\n" + 
-						"       tct.name as content_type_name\n" +
+						"       tpvt.name AS value_type\n" +
 						"  FROM tags_tags_relations AS ttr\n" + 
 						"       LEFT JOIN\n" + 
 						"       tags AS t ON t.id = ttr.tag_id\n" + 
 						"       LEFT JOIN\n" + 
 						"       name_space AS ns ON ns.id = ttr.name_space_id\n" + 
 						"		LEFT JOIN\n" +
-					    "       tag_content_types as tct ON tct.type = t.content_type\n" +
+					    "       tags_possible_values_types AS tpvt ON tpvt.id = t.possible_values_type_id\n" +
 						" WHERE ttr.parent_id IS NULL;";
 	
 		/** making query */
@@ -202,7 +202,7 @@ public class XmlTagDao {
         		possibleValues,
         		record.get("default_content"),
         		nameSpace,
-        		record.get("content_type_name")
+        		record.get("value_type")
         );
         
 		return tag;
@@ -254,14 +254,14 @@ public class XmlTagDao {
 						"       ttr.parent_id,\n" + 
 						"       ns.prefix,\n" + 
 						"       ns.url,\n" +
-						"       tct.name as content_type_name\n" +
+						"       tpvt.name AS value_type\n" +
 						"  FROM tags_tags_relations AS ttr\n" + 
 						"       LEFT JOIN\n" + 
 						"       tags AS t ON t.id = ttr.tag_id\n" + 
 						"       LEFT JOIN\n" + 
 						"       name_space AS ns ON ns.id = ttr.name_space_id\n" +
 						"		LEFT JOIN \n" + 
-						"       tag_content_types as tct ON tct.type = t.content_type\n" +
+						"        tags_possible_values_types AS tpvt ON tpvt.id = t.possible_values_type_id\n" +
 						" WHERE ttr.parent_id =" + parent.getTagId()  + "";
 		
 		ArrayList<TableRecord> result = conn.query(query);
@@ -288,7 +288,7 @@ public class XmlTagDao {
 		    		possibleValues,
 		    		record.get("default_content"),
 		    		nameSpace,
-		    		record.get("content_type_name")
+		    		record.get("value_type")
 		    );
 			 
 			if(tag.getName().equals("description")) childrenArr.add(0, tag);
@@ -316,14 +316,14 @@ public class XmlTagDao {
 						"       ttr.parent_id,\n" + 
 						"       ns.prefix,\n" + 
 						"       ns.url,\n" +
-						"       tct.name as content_type_name\n" +
+						"       tpvt.name AS value_type\n" +
 						"  FROM tags_tags_relations AS ttr\n" + 
 						"       LEFT JOIN\n" + 
 						"       tags AS t ON t.id = ttr.tag_id\n" + 
 						"       LEFT JOIN\n" + 
 						"       name_space AS ns ON ns.id = ttr.name_space_id\n" + 
 						"		LEFT JOIN \n" + 
-						"       tag_content_types as tct ON tct.type = t.content_type\n" +
+						"       tags_possible_values_types AS tpvt ON tpvt.id = t.possible_values_type_id\n" +
 						" WHERE ttr.parent_id =" + parent.getTagId() + " AND ttr.required = 'false'";
 		
 		ArrayList<TableRecord> result = conn.query(query);
@@ -350,7 +350,7 @@ public class XmlTagDao {
 	        		possibleValues,
 	        		record.get("default_content"),
 	        		nameSpace,
-	        		record.get("content_type_name")
+	        		record.get("value_type")
 	        );
 			
 			tag.setAttrArr(XmlAttributeDao.getInstance().getTagAttributes(tag));
@@ -364,10 +364,10 @@ public class XmlTagDao {
 	
 	
 	public XmlTag getTagFromTagId(int tagId) {
-		String query = "SELECT t.*, tct.name as content_type_name\n" + 
+		String query = "SELECT t.*, tpvt.name AS value_type\n" + 
 				" FROM  tags as t\n" + 
 				" LEFT JOIN \n" + 
-				" tag_content_types as tct ON tct.type = t.content_type\n" + 
+				" tags_possible_values_types AS tpvt ON tpvt.id = t.possible_values_type_id\n" +
 				" WHERE t.id = '" + tagId + "'";
 		
 		ArrayList<TableRecord> result = conn.query(query);
@@ -382,7 +382,7 @@ public class XmlTagDao {
 					record.get("name"),
 					null /** possible values */,
 					record.get("default_content"),
-					record.get("content_type_name")
+					record.get("value_type")
 	        );
 		}	
 		return tag;
@@ -438,18 +438,20 @@ public class XmlTagDao {
 		ArrayList<TableRecord> result = conn.query(query);
 		Iterator<TableRecord> i = result.iterator();
 		
-		if(i.hasNext()) exceptions = new ArrayList<PDSCTagAttributeException>();
-		
-		while (i.hasNext()) {
-			TableRecord record = i.next();
-			PDSCTagAttributeException exception = new PDSCTagAttributeException(
-					tag,
-					this.getTagFromTagId(Integer.parseInt(record.get("parent_id"))),
-					XmlAttributeDao.getInstance().getAttributeFromName(record.get("a_name")),
-					Integer.parseInt(record.get("exception"))
-			);
-			exceptions.add(exception);
-	    }
+		if(!result.isEmpty()) {
+			exceptions = new ArrayList<PDSCTagAttributeException>();
+			while (i.hasNext()) {
+				TableRecord record = i.next();
+				PDSCTagAttributeException exception = new PDSCTagAttributeException(
+						tag,
+						this.getTagFromTagId(Integer.parseInt(record.get("parent_id"))),
+						XmlAttributeDao.getInstance().getAttributeFromName(record.get("a_name")),
+						Integer.parseInt(record.get("exception"))
+				);
+				exceptions.add(exception);
+		    }
+		}
+
 		
 		return exceptions;
 	}

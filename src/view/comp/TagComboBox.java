@@ -16,10 +16,6 @@ public class TagComboBox extends JComboBox<String>{
 		this.setModel(new DefaultComboBoxModel(values.toArray()));
 	}
 	
-	public void setTagContent() {
-		tag.setContent((String)this.getSelectedItem());
-	}
-	
 	public XmlTag getTag() {
 		return this.tag;   
 	}

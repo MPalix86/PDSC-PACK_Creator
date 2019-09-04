@@ -3,7 +3,6 @@ package view.wizardFrame.comp.xmlForm.comp;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
-import java.util.ArrayList;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -11,12 +10,14 @@ import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 
 import business.CustomUtils;
+import business.Session;
 import listeners.wizardFrameListeners.comp.xmlForm.XmlFormListener;
 import model.XmlAttribute;
 import model.XmlNameSpace;
 import model.XmlTag;
 import net.miginfocom.swing.MigLayout;
 import view.comp.utils.ColorUtils;
+import view.comp.utils.IconUtils;
 import view.wizardFrame.comp.xmlForm.XmlForm;
 import view.wizardFrame.comp.xmlForm.comp.attributeComp.AttributeFormComboBox;
 import view.wizardFrame.comp.xmlForm.comp.attributeComp.AttributeFormTextField;
@@ -43,8 +44,7 @@ public class TagRow extends JPanel{
 	private XmlForm form;
 	private int option;
 	private int rowNumber;
-	
-	ArrayList<AttributeLabel> attrLabelArr ;
+	private Session session;
 	
 	private final static int OPEN_ROW = 0;
 	private final static int CLOSE_ROW = 1;
@@ -54,23 +54,27 @@ public class TagRow extends JPanel{
 	public TagRow(XmlTag tag, XmlForm form) {
 		this.form = form;
 		this.tag = tag;
-		attrLabelArr = new ArrayList<AttributeLabel>();
 		listener = new XmlFormListener(form);
 		this.setLayout(new MigLayout(
 					"nogrid", // Layout Constraints
 					"",       // Column constraints
 				 	"[]0[]")); // row constraints
 		this.setBackground(Color.WHITE);
+		session = Session.getInstance();
 	}
 	
 	
 	
 	public TagRow open() {
-		attrLabelArr.clear();
 		
 		option = OPEN_ROW;
 		
 		tagLabel0 = new TagLabel("<  " + tag.getName(), this.tag);
+		if(tag.getFile() != null && tag.getValueType().equals("File")) {
+			tagLabel0.setToolTipText("Source file associated: " + tag.getFile().getAbsolutePath());
+			tagLabel0.setIcon(IconUtils.FAgetFileIcon(14, ColorUtils.SYSTEM_GREEN_COLOR_DARK));
+		}		
+		else if(tag.getFile() == null && tag.getValueType().contentEquals("File")) tagLabel0.setIcon(IconUtils.FAgetFileIcon(14, ColorUtils.SYSTEM_GRAY_COLOR_DARK));
 		
 		tagLabel0.addMouseListener(listener);
 		
@@ -101,7 +105,12 @@ public class TagRow extends JPanel{
 				
 				attrLabel0 = new AttributeLabel(" " + attr.getName() + " = \" ", attr);
 				
-				attrLabelArr.add(attrLabel0);
+				if(attr.getPossibleValuesType().equals("File") && attr.getFile() != null) {
+					attrLabel0.setToolTipText("Source file associated :" + attr.getFile().getAbsolutePath());
+					attrLabel0.setIcon(IconUtils.FAgetFileIcon(14, ColorUtils.SYSTEM_GREEN_COLOR_DARK));
+				}
+				else if(attr.getPossibleValuesType().contentEquals("File") && attr.getFile() == null) attrLabel0.setIcon(IconUtils.FAgetFileIcon(14, ColorUtils.SYSTEM_GRAY_COLOR_DARK));
+			
 				
 				attrLabel0.addMouseListener(listener);
 				this.add(attrLabel0);
@@ -118,6 +127,7 @@ public class TagRow extends JPanel{
 					textField.addFocusListener(listener);
 					this.add(textField);
 				}
+				
 				/** if attribute have possible values */
 				else {
 					AttributeFormComboBox valuesComboBox = new AttributeFormComboBox(attr,this);  
@@ -156,7 +166,7 @@ public class TagRow extends JPanel{
 		}
 		
 		/** close tag */
-		if(tag.getContentTypeString().equals("void")) tagLabel1 = new TagLabel("/> ",tag);
+		if(tag.getValueType().equals("Void") && tag.getSelectedChildrenArr() == null) tagLabel1 = new TagLabel("/> ",tag);
 		else tagLabel1 = new TagLabel("> ",tag);
 		tagLabel1.addMouseListener(listener);
 		if(tag.getContent() != null && CustomUtils.thereAreMoreLinesInString(tag.getContent())) this.add(tagLabel1, "wrap");
@@ -166,7 +176,7 @@ public class TagRow extends JPanel{
 		if(tag.getSelectedChildrenArr() == null || tag.getSelectedChildrenArr().size() <= 0) {
 
 			/** if tag haven't possible values */
-			if(tag.getPossibleValues() == null && !tag.getContentTypeString().equals("void")) {
+			if(tag.getPossibleValues() == null && !tag.getValueType().equals("Void")) {
 
 				/** if tag have content set */
 				
@@ -221,7 +231,7 @@ public class TagRow extends JPanel{
 			}
 			
 			/** if tag have possible value  */
-			else if(tag.getPossibleValues() != null && !tag.getContentTypeString().equals("void")){
+			else if(tag.getPossibleValues() != null && !tag.getValueType().equals("Void")){
 				TagFormComboBox contentComboBox = new TagFormComboBox(tag,this);
 
 				if (tag.getDefaultContent() != null && tag.getContent() == null ) {
@@ -238,7 +248,7 @@ public class TagRow extends JPanel{
 				this.add(contentComboBox);
 			}
 			
-			if(!tag.getContentTypeString().equals("void")) {
+			if(!tag.getValueType().equals("Void")) {
 				tagLabel2 = new TagLabel("</  " + tag.getName() + "  > ",tag);
 				tagLabel2.addMouseListener(listener);
 				this.add(tagLabel2);

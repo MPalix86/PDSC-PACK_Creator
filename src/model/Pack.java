@@ -8,7 +8,6 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -25,8 +24,6 @@ public class Pack {
 	private String name;
 	private String vendor;
 	private String highestReleaseVersion;
-	private HashMap <XmlAttribute,String> attrPathFilesHashMap;
-	private HashMap <XmlTag,String> tagPathFilesHashMap;
 	private File choosenPath;
 	private XmlTag root;
 	private PDSCDocument PDSCDoc;
@@ -48,14 +45,12 @@ public class Pack {
 		
 		/** recovering fields from PDSCDoc */
 		this.PDSCDoc = PDSCDoc;
-		this.attrPathFilesHashMap = PDSCDoc.getAttrPathFilesHashMap();
-		this.tagPathFilesHashMap = PDSCDoc.getTagPathFilesHashMap();
 		this.root = PDSCDoc.getRoot();
 	}
 	
 	
 	
-	public Response createpack() throws IOException {
+	public Response createPack() throws IOException {
 		
 		if(choosenPath != null) {
 			
@@ -115,7 +110,7 @@ public class Pack {
 				
 				
 				/** ======================================================================================================== */
-				if(child.getName().equals("license") || child.getName().equals("doc")) {
+				if(child.getValueType().equals("File")) {
 					if(child.getContent() != null) {
 						destinationPathString += child.getContent().replace(FilenameUtils.getName(child.getContent()), "");
 						destinationFileString += child.getContent();
@@ -130,11 +125,8 @@ public class Pack {
 					File srcFile = null;
 					
 					/** if destination file has associated source file */
-					if (tagPathFilesHashMap.containsKey(child)) {
+					if (child.getFile() != null) srcFile = child.getFile() ;	
 
-						srcFile = new File( (String) tagPathFilesHashMap.get(child) ) ;	
-					}
-					
 					/** verify if file is present in opened pack */
 					else if (this.PDSCDoc.getSourcePath() != null) {
 						
@@ -188,16 +180,15 @@ public class Pack {
 				}
 				
 				
-				/** ======================================================================================================== */
-				/** if find tag file , and parent tag == files */
-				if(child.getName().equals("file")) {					
+				/** ======================================================================================================== */				
 					
-					/** keep attributes */
+				/** verify attributes */
+				if(child.getSelectedAttrArr() != null) {
 					for(int i = 0; i < child.getSelectedAttrArr().size(); i++) {
 						XmlAttribute attr = child.getSelectedAttrArr().get(i);
 						 
-						/** find attribute name */
-						if(attr.getName().equals("name")) {
+						/** find attribute with possible value type = File */
+						if(attr.getPossibleValuesType()!= null && attr.getPossibleValuesType().equals("File")) {
 							
 							if(attr.getValue() != null) {
 								destinationPathString += attr.getValue().replace(FilenameUtils.getName(attr.getValue()), "");
@@ -214,10 +205,7 @@ public class Pack {
 							File srcFile = null;
 							
 							/** if destination file has associated source file */
-							if (attrPathFilesHashMap.containsKey(attr)) {
-		
-								srcFile = new File( (String) attrPathFilesHashMap.get(attr) ) ;	
-							}
+							if (attr.getFile() != null) srcFile = attr.getFile();
 							
 							/** verify if file is present in opened pack */
 							else if (this.PDSCDoc.getSourcePath() != null) {
@@ -272,8 +260,8 @@ public class Pack {
 							writer.write(log.getText().getBytes());
 						}
 					}
-					
 				}
+
 				
 				if( child.getSelectedChildrenArr() != null ) {
 					child.getSelectedChildrenArr().forEach((c)-> children.add(c));
@@ -290,7 +278,7 @@ public class Pack {
 			writer.write(log.getText().getBytes());
 			
 			/** creating zip archive */
-			File zipFile = new File(completePathFile.toString() + ".zip");
+			File zipFile = new File(completePathFile.toString() + ".pack");
 			ZipUtil.pack(completePathFile,zipFile);
 
 			writer.close();
@@ -396,16 +384,6 @@ public class Pack {
 	
 	public void setChoosenPath(File path) {
 		this.choosenPath = path;
-	}
-	
-
-	public HashMap<XmlAttribute, String> getAttrPathFilesHashMap() {
-		return this.attrPathFilesHashMap;
-	}
-	
-
-	public void setAttrPathFilesHashMap(HashMap<XmlAttribute, String> attrPathFilesHashMap) {
-		this.attrPathFilesHashMap = attrPathFilesHashMap;
 	}
 	
 

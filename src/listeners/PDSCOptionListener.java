@@ -46,8 +46,10 @@ public class PDSCOptionListener implements ActionListener{
 					/** recovering line number */
 					int lineNumber = (int) response.getObject();
 					
+					session.getWizardFrame().setConsoleText(response.getMessage() , false);
+					
 					if(lineNumber > 0) {
-						
+						System.out.println("insert line button");
 						/** button creation for error showing */
 						TextButton lineButton  = new TextButton("Show error line", ColorUtils.SYSTEM_RED_COLOR_DARK , ColorUtils.SYSTEM_RED_COLOR_LIGHT.brighter());
 						
@@ -65,7 +67,6 @@ public class PDSCOptionListener implements ActionListener{
 						session.getWizardFrame().insertConsoleComnponent(lineButton);
 						
 					}
-					session.getWizardFrame().setConsoleText(response.getMessage() , false);
 				}
 
 				else session.getWizardFrame().setConsoleText(response.getMessage(), false);
@@ -82,7 +83,7 @@ public class PDSCOptionListener implements ActionListener{
 					Pack pack = new Pack(session.getSelectedPDSCDoc(), path);
 					
 					try {
-						Response r = pack.createpack();
+						Response r = pack.createPack();
 						int status = r.getStatus();
 						if(status == Pack.PACK_CREATED_CORRECTLY) { 
 							ArrayList<Log> logArr = ( ArrayList<Log>) r.getObject();
@@ -94,7 +95,7 @@ public class PDSCOptionListener implements ActionListener{
 								else if (l.getType() == Log.ERROR)session.getWizardFrame().setConsoleText("Error " + l.getText(), true);
 							}
 							session.getWizardFrame().setConsoleText("PACK CREATED CORRECTLY IN : " + path.getAbsolutePath(), true);
-							boolean choice = DialogUtils.CustomButtonTrueFalsePane("Pack Created Correctly", "Open folder", "Continute", IconUtils.getOkIcon(48));
+							boolean choice = DialogUtils.CustomButtonTrueFalsePane(pack.getName() , "Pack Created Correctly", "Open folder", "Continue", IconUtils.getOkIcon(48));
 							if(choice) Desktop.getDesktop().open(pack.getMainPathFile());
 						}
 						else if(status == Pack.REQUIRED_FIELDS_MISSING) {
@@ -115,7 +116,6 @@ public class PDSCOptionListener implements ActionListener{
 		
 		else if (command.equals("undo")) {
 			if(session.getSelectedPDSCDoc() == null) return;
-
 			session.getSelectedPDSCDoc().getUndoManager().undo();
 			session.getSelectedForm().UpdateView();
 		}

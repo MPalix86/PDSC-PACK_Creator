@@ -7,6 +7,7 @@ import java.awt.event.ItemListener;
 
 import business.Session;
 import business.XmlAttributeBusiness;
+import business.XmlTagBusiness;
 import business.XmlTagUtils;
 import model.XmlAttribute;
 import model.XmlTag;
@@ -41,19 +42,12 @@ public class AddAttributeFrameListener implements ActionListener , ItemListener{
 		String command = e.getActionCommand();
 		
 		if(command.equals("addAttributes")) {
-			
-			tag.setSelectedAttrArr(tagCopy.getSelectedAttrArr());
+			XmlTagBusiness.setSelectedAttributesArr(tag, tagCopy.getSelectedAttrArr(), true);
 			
 			frame.dispose();
-		
 			TagRow row = session.getSelectedForm().getTagOpenRow(tag);
 			row.update();
 			row.requestFocus();
-			
-			/**
-			 * IMPORTANT : saving state of root tag for undo redo action
-			 */
-			Session.getInstance().getSelectedPDSCDoc().getUndoManager().addState();
 		}
 		
 		else if(command.equals("showDescription")) {
@@ -76,9 +70,9 @@ public class AddAttributeFrameListener implements ActionListener , ItemListener{
 		AttributeCheckBox c = (AttributeCheckBox) e.getItem();
 		XmlAttribute attr =  c.getAttr();
 		/** if attribute was selected */
-		if(c.isSelected()) 
+		if(c.isSelected()) {
 			if(XmlTagUtils.findChildSelectedAttrFromName(tagCopy, attr.getName()) == null) tagCopy.addSelectedAttr(new XmlAttribute(attr,tagCopy));
-			
+		}	
 		else {
 			XmlAttribute selectedAttr = XmlTagUtils.findAttributeFromArrayOfAttributes(tagCopy.getSelectedAttrArr(), attr.getName());
 			tagCopy.removeSelectedAttr(selectedAttr);

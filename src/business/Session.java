@@ -12,14 +12,13 @@ public class Session {
 
 	/** last path open */
 	private static File lastDirectoryOpenPath;
-	
+
 	
 	private static Session instance;	
 	
 	/** wizardFrame instance */
 	private static WizardFrame wizardFrame;
 
-	
 	
 	/**
 	 * contains always current selected form with and all necessary information 
@@ -36,11 +35,13 @@ public class Session {
 	 */
 	private static PDSCDocument selectedPdscDoc;
 	
+	
 	/**
 	 * represent open all open document on which user is working
 	 */
 	private static ArrayList<PDSCDocument> currentWorkinPdscDoc ;
 	
+	/** LOCAL clipboard */
 	private Clipboard clipboard;
 	
 	

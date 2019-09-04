@@ -8,7 +8,6 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 
-import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -16,7 +15,6 @@ import javax.swing.JSplitPane;
 import javax.swing.border.EmptyBorder;
 
 import business.Session;
-import listeners.wizardFrameListeners.WizardFrameListener;
 import listeners.wizardFrameListeners.comp.ClosableTabbedPaneListener;
 import model.PDSCDocument;
 import view.comp.customTabbedPane.ClosableTabbedPane;
@@ -42,10 +40,6 @@ public class WizardFrame extends JFrame {
 	private static JPanel contentPane;	
 
 	private ToolBarContainer toolBarContainer;
-	
-	private JButton updatePreviewButton;
-	
-	private static WizardFrameListener listener;
 	
 	private Session session; 
 	
@@ -84,9 +78,6 @@ public class WizardFrame extends JFrame {
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setExtendedState(JFrame.MAXIMIZED_BOTH);
 		
-		/** creation of new wizard frame listener instance */
-		listener = new WizardFrameListener();
-		
 		toolBarContainer = new ToolBarContainer();
 		tagsListbarContainer = new TagsListBarContainer();
 		closableTabbedPaneCenter = new ClosableTabbedPane();
@@ -109,7 +100,8 @@ public class WizardFrame extends JFrame {
 		session.setWizardFrame(this);
 		
 		this.setVisible(true);
-		this.setMinimumSize(new Dimension(600,400));
+		this.setTitle("PDSC-PACK Creator 0.0.1");
+		this.setMinimumSize(new Dimension(800,600));
 	}
 	
 	
@@ -123,15 +115,6 @@ public class WizardFrame extends JFrame {
 		
 	
 		setBackground(Color.WHITE);
-		
-		/** hidden button to update preview */
-		updatePreviewButton = new JButton();
-		updatePreviewButton.addActionListener(listener);
-		updatePreviewButton.setActionCommand("updatePreview");
-		updatePreviewButton.setVisible(false);
-		
-		
-	
 		
 		/** contentPane initial setup */
 		contentPane = new JPanel(new BorderLayout());
@@ -210,7 +193,7 @@ public class WizardFrame extends JFrame {
 	
 	
 	/**
-	 * add validator frame in southTabContainer
+	 * add console frame in southTabContainer
 	 */
 	public void addConsolePane() {
 		boolean found = false;
@@ -333,7 +316,7 @@ public class WizardFrame extends JFrame {
 		
 		/** if is new file */
 		if(doc.getSourcePath() == null) {
-			closableTabbedPaneCenter.addTab(" Untitled   ", IconUtils.FAgetAlignLeftIcon(20,null) , formContainer , "No path" );
+			closableTabbedPaneCenter.addTab(" Untitled   ", IconUtils.FAgetFileCodeIcon(20,null) , formContainer , "No path" );
 		}
 		else {
 			
@@ -341,11 +324,11 @@ public class WizardFrame extends JFrame {
 			/**if title is already present */
 			if (tabTitleIsAlreadyPresent(doc.getSourcePath().getName())) {
 				/** insert complete path like title */
-				closableTabbedPaneCenter.addTab(doc.getSourcePath().getAbsolutePath() + "   ", IconUtils.FAgetAlignLeftIcon(20,null) , formContainer , doc.getSourcePath().getAbsolutePath());
+				closableTabbedPaneCenter.addTab(doc.getSourcePath().getAbsolutePath() + "   ", IconUtils.FAgetFileCodeIcon(20,null) , formContainer , doc.getSourcePath().getAbsolutePath());
 			}
 			else {
 				/** insert filename like name */
-				closableTabbedPaneCenter.addTab(doc.getSourcePath().getName() + "   ", IconUtils.FAgetAlignLeftIcon(20,null) , formContainer , doc.getSourcePath().getAbsolutePath());
+				closableTabbedPaneCenter.addTab(doc.getSourcePath().getName() + "   ", IconUtils.FAgetFileCodeIcon(20,null) , formContainer , doc.getSourcePath().getAbsolutePath());
 			}
 		}
 		
@@ -422,16 +405,6 @@ public class WizardFrame extends JFrame {
 	public void showPreview(String text) {
 		PreviewPaneContainer previewPane = new PreviewPaneContainer();
 		previewPane.getPreviewPane().setText(text);
-	}
-
-	
-
-	
-	/**
-	 * @return the listener
-	 */
-	public static WizardFrameListener getListener() {
-		return listener;
 	}
 	
 	

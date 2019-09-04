@@ -5,13 +5,12 @@ import java.awt.event.ActionListener;
 
 import business.Session;
 import business.XmlTagBusiness;
-import listeners.wizardFrameListeners.WizardFrameListener;
 import model.XmlTag;
 import view.comp.TagMenuItem;
-import view.tagCustomizationFrame.TagCustomizationFrame;
+import view.comp.utils.DialogUtils;
 import view.wizardFrame.comp.toolBar.ToolBar;
 
-public class ToolBarListener extends WizardFrameListener implements ActionListener {
+public class ToolBarListener implements ActionListener {
 	
 	private ToolBar toolBar;
 	
@@ -31,7 +30,11 @@ public class ToolBarListener extends WizardFrameListener implements ActionListen
 			TagMenuItem item = (TagMenuItem) e.getSource();
 			XmlTag tag = item.getTag();
 			tag = XmlTagBusiness.getCompleteTagFromTagInstance(tag);
-			new TagCustomizationFrame(new XmlTag(tag));
+			if(session.getSelectedForm() != null) {
+				XmlTagBusiness.addTagInParent(new XmlTag(tag) , tag, session.getSelectedPDSCDoc().getRoot(), true, false,null);
+				session.getSelectedForm().UpdateView();
+			}
+			else DialogUtils.warningMessage("Select document before adding tag");
 		}
 		
 		

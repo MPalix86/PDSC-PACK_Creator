@@ -9,18 +9,13 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
 
-import listeners.wizardFrameListeners.comp.previewPaneListeners.PreviewPaneContainerListener;
-
 public class PreviewPaneContainer extends JFrame{
 	
 	private PreviewPane previewPane;
 	
-	private PreviewPaneContainerListener listener;
-	
 	
 	public PreviewPaneContainer() {
 		
-		this.listener = new PreviewPaneContainerListener(this);
 		this.previewPane = new PreviewPane();
 		placeComponents();
 	}

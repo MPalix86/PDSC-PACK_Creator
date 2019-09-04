@@ -1,17 +1,9 @@
 package business;
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
 
 import javax.xml.XMLConstants;
 import javax.xml.transform.stream.StreamSource;
@@ -23,9 +15,7 @@ import org.apache.commons.io.FileUtils;
 import org.jdom2.Attribute;
 import org.jdom2.Document;
 import org.jdom2.Element;
-import org.jdom2.JDOMException;
 import org.jdom2.Namespace;
-import org.jdom2.input.SAXBuilder;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 import org.xml.sax.SAXException;
@@ -82,13 +72,6 @@ public class FileBusiness {
 		}
 		
 	}
-	
-	
-	public static boolean fileExist(String path) {
-		File temp = new File(path);
-		if(temp.exists()) return true;
-		return false;
-	}
 
 	
 	
@@ -107,50 +90,6 @@ public class FileBusiness {
 		}
 		else return "";
 	}
-	
-	
-	
-	
-	public static boolean isFilePath(String path) {
-		Pattern windowsPath = Pattern.compile("([a-zA-Z]:)?(\\\\[a-zA-Z0-9_.-]+)+\\\\?");
-		
-		Pattern linuxPath = Pattern.compile("^(.+)/([^/]+)$");
-		Matcher m = windowsPath.matcher(path);  
-		
-		if  (m.matches()) return true;
-		
-		if(path.length() > 0) {
-			if( path.substring(path.length()-1).equals("/")){
-				 path = path.substring(0, path.length() - 1);
-			}
-		}
-		
-		m = linuxPath.matcher(path);  
-		
-		if  (m.matches()) return true;
-		
-		return false;
-	}
-	
-	
-	
-	
-	 /**
-	   * Remove file information from a filename returning only its path component
-	   * 
-	   * @param filename
-	   *            The filename
-	   * @return The path information
-	   */
-	
-	  public static String pathComponent(String filename) {
-		  if(filename != null) {
-			  int i = filename.lastIndexOf(File.separator);
-		      return (i > -1) ? filename.substring(0, i) : filename;
-		  }
-	      return "";
-	  }
-	
 	  
 	  
 	  
@@ -219,203 +158,12 @@ public class FileBusiness {
 		  /** return only message */
 		 return new Response.ResponseBuilder().message(returnMessage).build();
 	 }
-	
-	
-	
-	
-	/**
-	 * Read PDSC File from file system converting every tag and attribute in XmlTag 
-	 * and XmlAttribute element. Form more details see XmlTag and XmlAttrbute class
-	 * in model folder
-	 * 
-	 * CAUTION : parentEl and xmlParent are used only for recursion;
-	 *  
-	 * 
-	 * @param parentEl 	Parameter used only for recursion set it to null;
-	 * @param xmlParent Parameter used only for recursion set it to null;
-	 * @param pdscFile	file to read
-	 * 
-	 * @return XmlTag root containing all children
-	 */
-	
-    public static XmlTag ReadPDSCFile(Element parentEl , XmlTag xmlParent , File pdscFile ) {
-
-    	SAXBuilder builder = new SAXBuilder();
-    	try {
-    		/** parentEl = root in this case */
-    		if(pdscFile != null && parentEl  == null && xmlParent == null) {
-			
-				
-				Document document = (Document) builder.build(pdscFile);
-				parentEl = document.getRootElement();
-				xmlParent = new XmlTag(parentEl.getName() , true , null , 1 , "all");	
-				
-				for(int i = 0; i < parentEl.getNamespacesIntroduced().size(); i++) {
-					Namespace namespace = parentEl.getNamespacesIntroduced().get(i);
-					XmlNameSpace xmlNamespace = new XmlNameSpace(namespace.getPrefix() , namespace.getURI());
-					xmlParent.setNameSpace(xmlNamespace);
-				}
-				
-				
-				List<Attribute> attrList = parentEl.getAttributes();
-				for(int j = 0; j < attrList.size(); j++) {	
-					Attribute attr = attrList.get(j);
-					Response r = XmlAttributeBusiness.verifyAttributeFromName(xmlParent, attr.getName());
-					XmlAttribute xmlAttr = (XmlAttribute) r.getObject();
-					xmlAttr.setValue(attr.getValue());
-					xmlAttr.setTag(xmlParent);
-					if(xmlAttr != null) xmlParent.addSelectedAttr(xmlAttr);
-					
-					if(!attr.getNamespacePrefix().equals("")) {
-						Namespace namespace = attr.getNamespace();
-						XmlNameSpace xmlNamespace = new XmlNameSpace(attr.getNamespacePrefix() , namespace.getURI());
-						xmlAttr.setNameSpace(xmlNamespace);
-					}
-				}
-			
-    		}
-		
-    		else {
-				//System.out.println("i'm out of the root\n");
-    			XmlTag xmlChild = new XmlTag();
-    			
-    			/** recovering parent id that is mandatory for others query */
-    			Integer parentId = XmlTagBusiness.getTagIdFromTagName(xmlParent.getName());
-    			
-    			if(parentId != null) xmlParent.setTagId(parentId);
-    				
-    			xmlChild = XmlTagBusiness.getCompleteTagFromNameAndParent(parentEl.getName(), xmlParent);
-				
-				/** if find tag in standard with dependencies */
-				if(xmlChild != null) {
-	    			
-	    			if(parentEl.getText().trim().length() > 0) xmlChild.setContent(parentEl.getText().trim());
-					
-					xmlParent.addSelectedChild(xmlChild);
-				
-					xmlChild.setMax(xmlChild.getMax() - 1);
-					
-				}
-				
-				else {
-					
-	    			xmlChild = new XmlTag(parentEl.getName() , false , xmlParent , XmlTag.MAX_OCCURENCE_NUMBER, "all");
-					
-					/** recovering parent id that is mandatory for others query */
-	    			Integer childId = XmlTagBusiness.getTagIdFromTagName(parentEl.getName());
-	    			
-	    			xmlChild.setTagId(childId);
-	    			
-	    			if(childId != null) xmlChild = XmlTagBusiness.getCompleteTagFromTagInstance(xmlChild);
-	    			
-	    			if(parentEl.getText().trim().length() > 0)  xmlChild.setContent(parentEl.getText().trim());
-
-					xmlParent.addSelectedChild(xmlChild);
-					}
-				
-				XmlTag modelChild = XmlTagUtils.findModelChildFromSelectedChildName(xmlParent, xmlChild.getName());
-				
-				if(modelChild != null) {
-
-					modelChild.setMax(modelChild.getMax() - 1);
-				}
-					
-					for(int i = 0; i < parentEl.getNamespacesIntroduced().size(); i++) {
-						Namespace namespace = parentEl.getNamespace();
-						XmlNameSpace xmlNamespace = new XmlNameSpace(namespace.getPrefix() , namespace.getURI());
-						xmlParent.setNameSpace(xmlNamespace);
-					}
-					
-					
-					List<Attribute> attrList = parentEl.getAttributes();
-					for(int j = 0; j < attrList.size(); j++) {	
-						Attribute attr = attrList.get(j);
-						Response r = XmlAttributeBusiness.verifyAttributeFromName(xmlParent, attr.getName());
-						XmlAttribute xmlAttr = (XmlAttribute) r.getObject();
-						if(xmlAttr != null) {
-							xmlAttr.setValue(attr.getValue());
-							xmlAttr.setTag(xmlChild);
-							xmlChild.addSelectedAttr(xmlAttr);
-						}
-						
-						for(int i = 0; i < attr.getNamespacesIntroduced().size(); i++) {
-							Namespace namespace = attr.getNamespace();
-							XmlNameSpace xmlNamespace = new XmlNameSpace(namespace.getPrefix() , namespace.getURI());
-							xmlAttr.setNameSpace(xmlNamespace);
-						}
-					}
-					
-					xmlParent = xmlChild;		
-    			}
-		
-				if( parentEl.getChildren() != null) {
-					List<Element> children = parentEl .getChildren();
-					
-					/** iterating trough selected children */
-					for(int i = 0; i < children.size(); i++) {
-						
-						Element child = children.get(i);		
-						ReadPDSCFile(child, xmlParent , null);
-					}
-				}
-	  } catch (IOException io) {
-
-	  } catch (JDOMException jdomex) {
-
-	  }
-	 
-	  return xmlParent;
-	
-	}
-    
-    
-    
-    
-    /**
-     * Zip Directory or single file
-     * 
-     * @param fileToZip
-     * @param fileName
-     * @param zipOut
-     * @param extension
-     * @throws IOException
-     */
-    public static void zipFile(File fileToZip, String fileName, ZipOutputStream zipOut) throws IOException {
-        if (fileToZip.isHidden()) {
-            return;
-        }
-        if (fileToZip.isDirectory()) {
- 
-            if (fileName.endsWith("/")) {
-                zipOut.putNextEntry(new ZipEntry(fileToZip.toString()));
-                zipOut.closeEntry();
-            } else {
-                zipOut.putNextEntry(new ZipEntry(fileToZip.toString() + "/"));
-                zipOut.closeEntry();
-            }
-            File[] children = fileToZip.listFiles();
-            for (File childFile : children) {
-                zipFile(childFile, fileName + "/" + childFile.getName(), zipOut);
-            }
-            return;
-        }
-   
-        FileInputStream fis = new FileInputStream(fileToZip);
-        ZipEntry zipEntry = new ZipEntry(fileName);
-        zipOut.putNextEntry(zipEntry);
-        byte[] bytes = new byte[1024];
-        int length;
-        while ((length = fis.read(bytes)) >= 0) {
-            zipOut.write(bytes, 0, length);
-        }
-        fis.close();
-    }
    
    
    
    
 	
-
+	//--------------------------------------------------------------------------
 	public static Document genratePDSCDocument(XmlTag root) {
 		Document doc = new Document();	
 		XmlTag xmlTag = root;
@@ -498,39 +246,7 @@ public class FileBusiness {
 			}
 		}
 	}
-	
-	
-	
-	
- 
-	
-	
-	
-	public static void readPDSCRegex(Document doc) throws IOException {
-		File file = new File("dsad/dssdada/dsas/");
-		BufferedReader reader = new BufferedReader(new FileReader(file));
-		StringBuilder stringBuilder = new StringBuilder();
-		String inputLine;
-		while ((inputLine = reader.readLine()) != null) {
-		    stringBuilder.append(inputLine);
-		}
-		String pageContent = stringBuilder.toString();
-		Pattern pattern = Pattern.compile("<(?!!)(?!/)\\s*([a-zA-Z0-9]+)(.*?)>");
-		Matcher matcher = pattern.matcher(pageContent);
-		while (matcher.find()) {
-		    String tagName = matcher.group(1);
-		    String attributes = matcher.group(2);
-		    System.out.println("tag name: " + tagName);
-		    System.out.println("     rest of the tag: " + attributes);
-		    Pattern attributePattern = Pattern.compile("(\\S+)=['\"]{1}([^>]*?)['\"]{1}");
-		    Matcher attributeMatcher = attributePattern.matcher(attributes);
-		    while(attributeMatcher.find()) {
-		        String attributeName = attributeMatcher.group(1);
-		        String attributeValue = attributeMatcher.group(2);
-		        System.out.println("         attribute name: " + attributeName + "    value: " + attributeValue);
-		    }
-		}
-	}
+	//--------------------------------------------------------------------------
 
 	
 
