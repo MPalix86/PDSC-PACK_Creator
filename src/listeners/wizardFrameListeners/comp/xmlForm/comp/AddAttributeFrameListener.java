@@ -43,7 +43,7 @@ public class AddAttributeFrameListener implements ActionListener , ItemListener{
 		
 		if(command.equals("addAttributes")) {
 			XmlTagBusiness.setSelectedAttributesArr(tag, tagCopy.getSelectedAttrArr(), true);
-			
+
 			frame.dispose();
 			TagRow row = session.getSelectedForm().getTagOpenRow(tag);
 			row.update();
@@ -53,7 +53,7 @@ public class AddAttributeFrameListener implements ActionListener , ItemListener{
 		else if(command.equals("showDescription")) {
 			AttributeButton b = (AttributeButton) e.getSource();
 			XmlAttribute attr = b.getAttribute();
-			String description = XmlAttributeBusiness.getAttrDescription(attr);
+			String description = XmlAttributeBusiness.getAttributeDescription(attr, attr.getTag());
 			if(description != null) frame.updateDescription(attr.getName() , description);
 			else frame.updateDescription(attr.getName() , "NO DESCRIPTION AVAILABLE FOR THIS ATTRIBUTE");
 		}
@@ -71,11 +71,12 @@ public class AddAttributeFrameListener implements ActionListener , ItemListener{
 		XmlAttribute attr =  c.getAttr();
 		/** if attribute was selected */
 		if(c.isSelected()) {
-			if(XmlTagUtils.findChildSelectedAttrFromName(tagCopy, attr.getName()) == null) tagCopy.addSelectedAttr(new XmlAttribute(attr,tagCopy));
+			if(XmlTagUtils.findChildSelectedAttrFromName(tagCopy, attr.getName()) == null) XmlTagBusiness.addAttributeInTag(tagCopy, new XmlAttribute(attr,attr.getTag()), false, true, null);
+			System.out.println(attr.getName() + " " + attr.getValue());
 		}	
 		else {
 			XmlAttribute selectedAttr = XmlTagUtils.findAttributeFromArrayOfAttributes(tagCopy.getSelectedAttrArr(), attr.getName());
-			tagCopy.removeSelectedAttr(selectedAttr);
+			XmlTagBusiness.removeSelectedAttributeFromParent( selectedAttr , tagCopy, false, false);
 		}	
 	}
 }

@@ -69,15 +69,15 @@ public class XmlFormListener implements FocusListener, MouseListener{
 			if( openRow != null) openRow.highlightBckGround(null);
 			
 			
-			String tagDescription = "TAG : " + tag.getName() + "\n";
+			String tagDescription = "TAG : <" + tag.getName() + ">\n";
 			if(XmlTagBusiness.getTagDescription(tag) == null) tagDescription += "No description found for tag " + tag.getName() + "\n\n";
-			else tagDescription += tagDescription + XmlTagBusiness.getTagDescription(tag);
+			else tagDescription += XmlTagBusiness.getTagDescription(tag);
 			
 			if(attr != null) {
 				String attrDescription = "ATTRIBUTE : " + attr.getName() + "\n" ;
-				if( XmlAttributeBusiness.getAttributeDescription(attr) == null) attrDescription += "No description found for attribute " + attr.getName();
-				else attrDescription += XmlAttributeBusiness.getAttributeDescription(attr);
-				Session.getInstance().getWizardFrame().setDescriptionText(tagDescription + attrDescription);
+				if( XmlAttributeBusiness.getAttributeDescription(attr , tag) == null) attrDescription += "No description found for attribute " + attr.getName() + "\n\n";
+				else attrDescription += XmlAttributeBusiness.getAttributeDescription(attr , tag) + "\n\n";
+				Session.getInstance().getWizardFrame().setDescriptionText(attrDescription + tagDescription);
 			}
 			else Session.getInstance().getWizardFrame().setDescriptionText(tagDescription);
 		}

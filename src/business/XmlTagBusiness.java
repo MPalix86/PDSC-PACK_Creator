@@ -12,7 +12,7 @@ import model.XmlTag;
 import model.XmlTagConstants;
 import view.comp.utils.DialogUtils;
 
-public class XmlTagBusiness {
+public class XmlTagBusiness{
 	private static XmlTagBusiness instance;
 	
 
@@ -90,7 +90,7 @@ public class XmlTagBusiness {
 	 * 
 	 * @param tag	tag on which add attributes
 	 * @param attrNames  attribute names
-	 * @param registerOperation true if you want to register opration for undo redo
+	 * @param registerOperation true if you want to register operation for undo redo
 	 * @return String with error message if errors occurs, null otherwise
 	 */
 	public static String addCustomAttributes(XmlTag tag, String[] attrNames , boolean registerOperation) {
@@ -102,8 +102,8 @@ public class XmlTagBusiness {
 			if(response.getStatus() == XmlAttribute.INVALID_NAME) errorMessage += " '" + name + "' Invalid name \n";
 			else if (response.getStatus() == XmlAttribute.ALREADY_PRESENT) errorMessage += "Attribute \" " + name  + " \" is already present \n" ;
 			else {
-				System.out.println(response.getMessage());
 				XmlAttribute attr = (XmlAttribute) response.getObject();
+				attr.setTag(tag);
 				tag.addSelectedAttrAtIndex(attr, 0);
 			}
 		}
@@ -152,7 +152,7 @@ public class XmlTagBusiness {
 		
 		if(choice) {
 			if(index != null) tag.addSelectedAttrAtIndex(attr, index);
-			else tag.addSelectedAttrAtIndex(attr , 0);
+			else tag.addSelectedAttr(attr);
 			if(registerOperation) UndoManager.registerOperation();
 			attr.setTag(tag);
 		}
@@ -176,12 +176,14 @@ public class XmlTagBusiness {
 	
 	public static void adjustTagAttributeException(XmlTag tag) {
 		
-		//System.out.println(" verifying consistency exceptions for tag " + tag.getName());
+		//System.out.print(" verifying consistency exceptions for tag " + tag.getName() + " ");
 		
 		/** verify consistency of all required parameters*/
-		if(tag.getTagAttributeExceptionArr() == null || tag.getTagAttributeExceptionArr().size() <= 0) return ;
+		if(tag.getTagAttributeExceptionArr() == null) return ;
 		if(tag.getParent() == null) return ;
 		if(tag.getAttrArr() == null || tag.getAttrArr().size() <= 0) return ;
+		
+		//System.out.println(" consistency passed for tag " + tag.getName());
 		
 		/** for each exception */
 		for (int j = 0; j < tag.getTagAttributeExceptionArr().size(); j++) {
@@ -194,11 +196,8 @@ public class XmlTagBusiness {
 			
 			/** if tags aren't the same return */
 			if(!tag.getName().equals(exception.getTag().getName())) return;
-				
-			/** if parents aren't the same return */
-			if(!tag.getParent().getName().equals(exception.getParent().getName())) return ;
 			
-			//System.out.println("name and parent control passed: verifying if exception for attr : " + exception.getAttribute().getName() + " is present in attrArr ");
+			//System.out.println("name and parent control passed , verifying if exception for attr : " + exception.getAttribute().getName() + " is present in attrArr ");
 			
 			/** for each attr */
 			for (int i = 0; i < tag.getAttrArr().size(); i ++) {
@@ -211,7 +210,7 @@ public class XmlTagBusiness {
 					
 					//System.out.println("ok exception is present in attrArr");
 					
-					/** if this tag contains attribute change flag to true */
+					/** if this tag contains attribute, change flag to true */
 					foundException = true;
 					
 					/**
@@ -259,6 +258,15 @@ public class XmlTagBusiness {
 					/** adding attribute */
 					tag.getAttrArr().add(new XmlAttribute(exception.getAttribute() , tag));
 				}
+				
+				/**
+				 * if parent aren't the same and tag are the same and exception was not found
+				 * re-add attribute in tag
+				 */
+				if(!tag.getParent().getName().equals(exception.getParent().getName()) && tag.getName().equals(exception.getTag().getName())) {
+					tag.getAttrArr().add(new XmlAttribute(exception.getAttribute(),tag));
+				}
+				
 			}
 			
 		}
@@ -285,10 +293,12 @@ public class XmlTagBusiness {
 		}
 		
 		if(choice) {
-			
+			newTag.setParent(parent);
+			adjustTagAttributeException(newTag);
 			if(index != null && index >= 0) parent.addSelectedChildAtIndex(newTag, index);
 			else parent.addSelectedChild(newTag);
-			newTag.setParent(parent);
+			
+			
 			
 			/** adjust model tag */
 			if(modelTag != null ) modelTag.setMax(modelTag.getMax() -1);
@@ -319,23 +329,23 @@ public class XmlTagBusiness {
 		children.add(parent);
 		while(!children.isEmpty()) {
 			XmlTag element = children.get(0);
-			//System.out.println("analyzing " +  element.getName());
+			System.out.println("analyzing " +  element.getName());
 			children.remove(element);
 			ArrayList <XmlTag> requiredChildren = new ArrayList<XmlTag>(XmlTagUtils.getRequiredChildren(element));
 			if(!requiredChildren.isEmpty()) {
-				//System.out.println(element.getName() + " has dependencies");
+				System.out.println(element.getName() + " has dependencies");
 				for(int i = 0; i < requiredChildren.size(); i++) {
 					XmlTag requiredChild = requiredChildren.get(i);
-					//System.out.println("check if there is the denpendency :  "  + requiredChild.getName());
+					System.out.println("check if there is the denpendency :  "  + requiredChild.getName());
 					boolean found = false;
 					if(element.getSelectedChildrenArr() != null) {
 						//System.out.println("let's see if " +  requiredChild.getName() + " is present in selected children of " +element.getName());
 						for(int j = 0; j < element.getSelectedChildrenArr().size(); j++) {
 							XmlTag selectedChild = element.getSelectedChildrenArr().get(j);
-							//System.out.println("analizyng selected child " + selectedChild.getName());
+							System.out.println("analizyng selected child " + selectedChild.getName());
 							
 							if(requiredChild.getName().equals(selectedChild.getName())) found = true;
-							if( found ) /*System.out.println(selectedChild .getName() + " found ");*/break;
+							if( found ) System.out.println(selectedChild .getName() + " found ");break;
 						}
 						if(!found) {
 							/** if max child number is > 0, add child */
@@ -350,7 +360,7 @@ public class XmlTagBusiness {
 					}
 
 				}
-			}else {/*System.out.println(element.getName() + " has no dependencies");*/}
+			}else {System.out.println(element.getName() + " has no dependencies");}
 			if( element.getSelectedChildrenArr() != null ) {
 				element.getSelectedChildrenArr().forEach((c)-> children.add(c));
 			}
@@ -583,6 +593,10 @@ public class XmlTagBusiness {
 	public static XmlTag getRoot() {
 		XmlTag root = XmlTagDao.getInstance().getRootTag();
 		root.setAttrArr(XmlAttributeDao.getInstance().getTagAttributes(root));
+		root.setTagAttributeExceptionArr(XmlTagDao.getInstance().getTagAttributeExceptionArr(root));
+		root.setParent(root);
+		XmlTagBusiness.adjustTagAttributeException(root);
+		
 		return root; 
 		
 	}
@@ -616,6 +630,7 @@ public class XmlTagBusiness {
 	public static XmlTag getCompleteTagFromNameAndParent(String name , XmlTag parent) {
 		XmlTag tag = XmlTagDao.getInstance().getTagFromNameAndParent(name, parent);
 		if(tag != null) return getCompleteTagFromTagInstance(tag);
+		//else System.out.println("il tag è null " + name + " parent " + parent.getName());
 		return null;
 	}
 	
@@ -643,7 +658,8 @@ public class XmlTagBusiness {
 		
 		/** verifying tag attribute exception */
 		tag.setTagAttributeExceptionArr(XmlTagDao.getInstance().getTagAttributeExceptionArr(tag));
-		if(tag.getTagAttributeExceptionArr() != null ) adjustTagAttributeException(tag);
+		XmlTagBusiness.adjustTagAttributeException(tag);
+		
 		
 		ArrayList<XmlTag> childrenArr = XmlTagDao.getInstance().getChildrenArrFromTag(tag);
 		tag.setChildrenArr(childrenArr);
@@ -653,7 +669,8 @@ public class XmlTagBusiness {
 			for(int i = 0; i < childrenArr.size(); i++) {		
 				XmlTag child = childrenArr.get(i);	
 				/** recursion */
-				getCompleteTagFromTagInstance(child);
+				if(!child.getName().equals(tag.getName()))getCompleteTagFromTagInstance(child);
+				
 			}
 		}
 		
@@ -681,7 +698,6 @@ public class XmlTagBusiness {
 		tag.setPossibleValues(XmlTagDao.getInstance().getTagPossibleValues(tag));
 		
 		tag.setTagAttributeExceptionArr(XmlTagDao.getInstance().getTagAttributeExceptionArr(tag));
-		if(tag.getTagAttributeExceptionArr() != null ) adjustTagAttributeException(tag);
 		
 		ArrayList<XmlTag> childrenArr = XmlTagDao.getInstance().getChildrenArrFromTag(tag);
 		tag.setChildrenArr(childrenArr);
@@ -736,7 +752,7 @@ public class XmlTagBusiness {
 	 * return tag description
 	 */
 	public static String getTagDescription(XmlTag tag) {
-		return XmlTagDao.getInstance().getTagDescriptionFromTagName(tag);
+		return XmlTagDao.getInstance().getTagDescriptionFromTagAndParent(tag, tag.getParent());
 	}
 	
 	

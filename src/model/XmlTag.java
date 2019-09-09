@@ -181,7 +181,6 @@ public class XmlTag{
 			tag.getSelectedAttrArr().forEach((a)-> this.selectedAttrArr.add(new XmlAttribute(a,this)));
 		}
 		
-		
 		if(tag.getChildrenArr() != null) {
 			
 			this.childrenArr = new ArrayList<XmlTag>(); 
@@ -196,6 +195,14 @@ public class XmlTag{
 			
 			/** for each selected children add new instance inside selectedchildrendArr */
 			tag.getSelectedChildrenArr().forEach((c)-> this.selectedChildrenArr.add(new XmlTag(c, this)));
+		}
+		
+		if(tag.getTagAttributeExceptionArr() != null) {
+			
+			this.tagAttributeExceptionArr = new ArrayList<PDSCTagAttributeException>(); 
+			
+			/** for each selected attribute add new instance inside attrArr */
+			tag.getTagAttributeExceptionArr().forEach((e)-> this.tagAttributeExceptionArr.add(new PDSCTagAttributeException(e)));
 		}
 	
 		if(tag.getParent() != null) this.parent = null ;
@@ -269,6 +276,14 @@ public class XmlTag{
 			/** for each selected children add new instance inside selectedchildrendArr */
 			tag.getSelectedChildrenArr().forEach((c)-> this.selectedChildrenArr.add(new XmlTag(c, this)));
 		}
+		
+		if(tag.getTagAttributeExceptionArr() != null) {
+			
+			this.tagAttributeExceptionArr = new ArrayList<PDSCTagAttributeException>(); 
+			
+			/** for each selected attribute add new instance inside attrArr */
+			tag.getTagAttributeExceptionArr().forEach((e)-> this.tagAttributeExceptionArr.add(new PDSCTagAttributeException(e)));
+		}
 	
 		if(tag.getParent() != null) this.parent = parent ;
 		
@@ -340,6 +355,14 @@ public class XmlTag{
 			
 			/** for each selected children add new instance inside selectedchildrendArr */
 			tag.getSelectedChildrenArr().forEach((c)-> this.selectedChildrenArr.add(new XmlTag(c, this)));
+		}
+		
+		if(tag.getTagAttributeExceptionArr() != null) {
+			
+			this.tagAttributeExceptionArr = new ArrayList<PDSCTagAttributeException>(); 
+			
+			/** for each selected attribute add new instance inside attrArr */
+			tag.getTagAttributeExceptionArr().forEach((e)-> this.tagAttributeExceptionArr.add(new PDSCTagAttributeException(e)));
 		}
 	
 		if(tag.getParent() != null) this.parent = parent ;

@@ -88,10 +88,10 @@ public class XmlAttribute {
 	 * @param name attribute's name
 	 */
 	
-	public XmlAttribute(String name,XmlTag tag, String possibleValueType) {
+	public XmlAttribute(String name,XmlTag tag, String possibleValuesType) {
 		this.name = name;
 		this.tag = tag;
-		this.possibleValuesType = possibleValueType;
+		this.possibleValuesType = possibleValuesType;
 		this.required = false;
 	}
 	

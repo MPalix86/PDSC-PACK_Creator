@@ -110,7 +110,6 @@ public class TagRow extends JPanel{
 					attrLabel0.setIcon(IconUtils.FAgetFileIcon(14, ColorUtils.SYSTEM_GREEN_COLOR_DARK));
 				}
 				else if(attr.getPossibleValuesType().contentEquals("File") && attr.getFile() == null) attrLabel0.setIcon(IconUtils.FAgetFileIcon(14, ColorUtils.SYSTEM_GRAY_COLOR_DARK));
-			
 				
 				attrLabel0.addMouseListener(listener);
 				this.add(attrLabel0);

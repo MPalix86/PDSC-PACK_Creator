@@ -55,9 +55,8 @@ public class ClipboardListener implements FlavorListener , ActionListener{
 			else if (command.equals("cutTag")) {
 				XmlTagSelection xmlTagSelection = new XmlTagSelection(tag);
 				session.getClipboard().setContents(xmlTagSelection, null);
-				tag.getParent().removeSelectedChild(tag);
+				XmlTagBusiness.removeSelectedChildFromParent(tag, tag.getParent(), true, true);
 				session.getSelectedForm().UpdateView();
-				//System.out.println("tag cutted in clipboard " + tag.getName() + " " + tag.getParent().getName());
 			}
 			
 			else if (command.equals("pasteFirst")) {
@@ -114,7 +113,7 @@ public class ClipboardListener implements FlavorListener , ActionListener{
 				}
 				if(index > 0) {
 					XmlTag modelTag = XmlTagUtils.findModelChildFromSelectedChildName(tag, tagToPaste.getName());
-					XmlTagBusiness.addTagInParent(tagToPaste, modelTag, tag, true, true,0);
+					XmlTagBusiness.addTagInParent(tagToPaste, modelTag, tag, true, true,index);
 					session.getSelectedPDSCDoc().getUndoManager().registerOperation();
 					session.getSelectedForm().UpdateView();
 				}

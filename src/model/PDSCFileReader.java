@@ -14,6 +14,8 @@ import org.jdom2.input.SAXBuilder;
 import business.XmlAttributeBusiness;
 import business.XmlTagBusiness;
 import business.XmlTagUtils;
+import dao.XmlAttributeDao;
+import dao.XmlTagDao;
 
 public class PDSCFileReader {
 	private File file;
@@ -38,10 +40,15 @@ public class PDSCFileReader {
 				
 				Document document = (Document) builder.build(file);
 				parentEl = document.getRootElement();
-				xmlParent = new XmlTag(parentEl.getName() , true , null , 1 , "all");	
-				
+				xmlParent = new XmlTag(parentEl.getName().trim() , true , null , 1 , "all");
+				xmlParent.setTagId(1);
+				xmlParent.setAttrArr(XmlAttributeDao.getInstance().getTagAttributes(xmlParent));
+				xmlParent.setTagAttributeExceptionArr(XmlTagDao.getInstance().getTagAttributeExceptionArr(xmlParent));
+				xmlParent.setParent(xmlParent);
+				XmlTagBusiness.adjustTagAttributeException(xmlParent);
 				addNameSpaces(parentEl, xmlParent);
 				addSelectedAttributes(parentEl, xmlParent);
+				
     		}
 		
     		else {
@@ -51,25 +58,24 @@ public class PDSCFileReader {
     			/** recovering parent id that is mandatory for others query */
     			Integer parentId = XmlTagBusiness.getTagIdFromTagName(xmlParent.getName());
     			
-    			if(parentId != null) xmlParent.setTagId(parentId);
+    			if(parentId == null) {
+    				//System.out.println("non ho trovato l'id del tag " + xmlParent.getName());
+    				parentId = -1;
+    			}
+    			xmlParent.setTagId(parentId);
     			
-    			xmlChild = XmlTagBusiness.getCompleteTagFromNameAndParent(parentEl.getName(), xmlParent);
+    			xmlChild = XmlTagBusiness.getCompleteTagFromNameAndParent(parentEl.getName().trim(), xmlParent);
+    			
 				
 				/** if find tag in standard with dependencies */
 				if(xmlChild != null) {
-	    			
 	    			if(parentEl.getText().trim().length() > 0) xmlChild.setContent(parentEl.getText().trim());
-					
-					xmlParent.addSelectedChild(xmlChild);
-				
-					xmlChild.setMax(xmlChild.getMax() - 1);
 					
 					if(xmlChild.getValueType() != null && xmlChild.getValueType().equals("File")){
 						File f = null;
 						String filePathWithoutName =  file.toString().replace(file.getName(), "");	
 						if(xmlChild.getContent() != null) f = new File(filePathWithoutName + "/" + xmlChild.getContent());
 						if( f != null && f.exists() ) {
-							System.out.println("setto il file per il tag" + xmlChild.getName());
 							xmlChild.setFile(f);
 						}
 					}
@@ -78,26 +84,28 @@ public class PDSCFileReader {
 				
 				else {
 					
-	    			xmlChild = new XmlTag(parentEl.getName() , false , xmlParent , XmlTag.MAX_OCCURENCE_NUMBER, "all");
+	    			xmlChild = new XmlTag(parentEl.getName() , false , xmlParent , XmlTag.MAX_OCCURENCE_NUMBER, "All");
 					
-					/** recovering parent id that is mandatory for others query */
+					/** recovering id that is mandatory for others query */
 	    			Integer childId = XmlTagBusiness.getTagIdFromTagName(parentEl.getName());
 	    			
-	    			xmlChild.setTagId(childId);
 	    			
-	    			if(childId != null) xmlChild = XmlTagBusiness.getCompleteTagFromTagInstance(xmlChild);
+	    			if(childId == null) childId = 0;
+	    			else {
+	    				xmlChild.setTagId(childId);
+	    				xmlChild = XmlTagBusiness.getCompleteTagFromTagInstance(xmlChild);
+	    			}
 	    			
 	    			if(parentEl.getText().trim().length() > 0)  xmlChild.setContent(parentEl.getText().trim());
-
-					xmlParent.addSelectedChild(xmlChild);
 				}
 				
+				
+				/** adding child in parent */
 				XmlTag modelChild = XmlTagUtils.findModelChildFromSelectedChildName(xmlParent, xmlChild.getName());
 				
-				if(modelChild != null) {
-
-					modelChild.setMax(modelChild.getMax() - 1);
-				}
+				if(modelChild != null) XmlTagBusiness.addTagInParent(xmlChild, modelChild, xmlParent, false, false, null);
+    			
+				else XmlTagBusiness.addTagInParent(xmlChild, null, xmlParent, false, false, null);
 				
 				addNameSpaces(parentEl, xmlChild);
 				addSelectedAttributes(parentEl, xmlChild);
@@ -116,7 +124,7 @@ public class PDSCFileReader {
 				}
 			}
     	} catch (IOException io) { } catch (JDOMException jdomex) {}
-	 
+    	
 	  return xmlParent;
 	}
 	
@@ -137,9 +145,7 @@ public class PDSCFileReader {
 			XmlAttribute xmlAttr = (XmlAttribute) r.getObject();
 			if(xmlAttr != null) {
 				xmlAttr.setValue(attr.getValue());
-				xmlAttr.setTag(tag);
-				tag.addSelectedAttr(xmlAttr);
-				
+				XmlTagBusiness.addAttributeInTag(tag, xmlAttr, false, false, null);			
 				
 				if(xmlAttr.getPossibleValuesType() != null && xmlAttr.getPossibleValuesType().equals("File")){
 					File f = null;

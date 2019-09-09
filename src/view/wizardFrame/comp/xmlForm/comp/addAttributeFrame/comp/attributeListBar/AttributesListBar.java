@@ -60,9 +60,17 @@ public class AttributesListBar extends JPanel{
   		    	AttributeCheckBox checkBox = new AttributeCheckBox(attr);
   		    	checkBox.addItemListener(listener);
   		    	checkBox.setForeground(ColorUtils.ATTR_COLOR);
+  		    	
   		    	if(attr.isRequired()) {
   		    		checkBox.setText(attr.getName() + " *");
   		    		checkBox.setSelected(true);
+  		    	}
+  		    	
+  		    	if(tag.getSelectedAttrArr() != null) {
+  		    		for (int j = 0; j < tag.getSelectedAttrArr().size(); j++) {
+  		    			XmlAttribute selectedAttr = tag.getSelectedAttrArr().get(j);
+  		    			if(selectedAttr.getName().equals(attr.getName())) checkBox.setSelected(true);
+  		    		}
   		    	}
   		    	 
   		    	

@@ -26,8 +26,8 @@ public class PDSCTagAttributeException {
 	/**
 	 * The exception.
 	 * 
-	 *  0 = tag must not contains attribute
-	 *  1 = tag must containns attribute
+	 *  0 = tag must not contain attribute
+	 *  1 = tag must contain attribute
 	 */
 	private Integer exception;
 	
@@ -37,6 +37,13 @@ public class PDSCTagAttributeException {
 		this.parent = parent;
 		this.attr = attr;
 		this.exception = exception;
+	}
+	
+	public PDSCTagAttributeException(PDSCTagAttributeException e) {
+		if(e.getAttribute() != null) this.attr = e.getAttribute();
+		if(e.getException() != null) this.exception = e.getException();
+		if(e.getParent() != null) this.parent = e.getParent();
+		if(e.getTag() != null) this.tag = e.getTag();
 	}
 	
 	

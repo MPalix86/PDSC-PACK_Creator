@@ -38,13 +38,12 @@ public class XmlTagDao {
 						"       ttr.tag_id as tag_id,\n" + 
 						"       t.name,\n" + 
 						"       t.default_content,\n" + 
-						"       t.possible_values_type_id,\n" + 
+						"       tpvt.name AS content_type,\n" + 
 						"       ttr.max_occurrence,\n" + 
 						"       ttr.required,\n" + 
 						"       ttr.parent_id,\n" + 
 						"       ns.prefix,\n" + 
 						"       ns.url,\n" +
-						"       tpvt.name AS value_type\n" +
 						"  FROM tags_tags_relations AS ttr\n" + 
 						"       LEFT JOIN\n" + 
 						"       tags AS t ON t.id = ttr.tag_id\n" + 
@@ -76,7 +75,7 @@ public class XmlTagDao {
 	        		possibleValues,
 	        		record.get("default_content"),
 	        		nameSpace,
-	        		record.get("value_type")
+	        		record.get("content_type")
 	        );
 			
 		 }
@@ -111,22 +110,21 @@ public class XmlTagDao {
 						"       ttr.tag_id as tag_id,\n" + 
 						"       t.name,\n" + 
 						"       t.default_content,\n" + 
-						"       t.possible_values_type_id,\n" + 
+						"       tpvt.name AS content_type,\n" +
 						"       ttr.max_occurrence,\n" + 
 						"       ttr.required,\n" + 
 						"       ttr.parent_id,\n" + 
 						"       ns.prefix,\n" + 
-						"       ns.url,\n" + 
-						"       tpvt.name AS value_type\n" +
+						"       ns.url\n" + 
 						"  FROM tags_tags_relations AS ttr\n" + 
 						"       LEFT JOIN\n" + 
 						"       tags AS t ON t.id = ttr.tag_id\n" + 
 						"       LEFT JOIN\n" + 
 						"       name_space AS ns ON ns.id = ttr.name_space_id\n" + 
 						" 		LEFT JOIN \n" + 
-						"       tags_possible_values_types AS tpvt ON tpvt.id = t.possible_values_type_id" +
-						" WHERE ttr.parent_id =" + parent.getTagId() + " AND t.name = '" + name + "'";
+						"       tags_possible_values_types AS tpvt ON tpvt.id = ttr.content_type_id" +
 		
+						" WHERE ttr.parent_id =" + parent.getTagId() + " AND t.name = '" + name + "'";
 		ArrayList<TableRecord> result = conn.query(query);
 		Iterator<TableRecord> i = result.iterator();
 		
@@ -149,7 +147,7 @@ public class XmlTagDao {
 	        		possibleValues,
 	        		record.get("default_content"),
 	        		nameSpace, 
-	        		record.get("value_type")
+	        		record.get("content_type")
 	        );
 			
 		 }
@@ -164,21 +162,20 @@ public class XmlTagDao {
 						"       ttr.id as rel_id, \n" + 
 						"       t.name,\n" + 
 						"       t.default_content,\n" + 
-						"       t.possible_values_type_id,\n" + 
+						"       tpvt.name AS content_type,\n" + 
 						"       ttr.max_occurrence,\n" + 
 						"       ttr.required,\n" + 
 						"       ttr.parent_id,\n" + 
 						"       ns.prefix,\n" + 
-						"       ns.url,\n" + 
-						"       tpvt.name AS value_type\n" +
+						"       ns.url\n" + 
 						"  FROM tags_tags_relations AS ttr\n" + 
 						"       LEFT JOIN\n" + 
 						"       tags AS t ON t.id = ttr.tag_id\n" + 
 						"       LEFT JOIN\n" + 
 						"       name_space AS ns ON ns.id = ttr.name_space_id\n" + 
 						"		LEFT JOIN\n" +
-					    "       tags_possible_values_types AS tpvt ON tpvt.id = t.possible_values_type_id\n" +
-						" WHERE ttr.parent_id IS NULL;";
+					    "       tags_possible_values_types AS tpvt ON tpvt.id = ttr.content_type_id\n" +
+						" WHERE ttr.parent_id = 1 AND ttr.tag_id = 1;";
 	
 		/** making query */
 		ArrayList<TableRecord> result = conn.query(query);
@@ -197,12 +194,12 @@ public class XmlTagDao {
 				Integer.parseInt(record.get("rel_id")),
 				record.get("name"),
         		Boolean.parseBoolean(record.get("required")),
-        		null/** parent */,
+        		null,
         		Integer.parseInt(record.get("max_occurrence")),
         		possibleValues,
         		record.get("default_content"),
         		nameSpace,
-        		record.get("value_type")
+        		record.get("content_type")
         );
         
 		return tag;
@@ -217,10 +214,11 @@ public class XmlTagDao {
 	public XmlEnum getTagPossibleValues(XmlTag tag) {
 		XmlEnum possibleValues = null;
 		String query = "SELECT tpv.value\n" + 
-						"  FROM tags_possible_values AS tpv\n" + 
-						"       LEFT JOIN\n" + 
-						"       tags AS t ON tpv.type_id = t.possible_values_type_id\n" + 
-						" WHERE t.id =" + tag.getTagId() + ""; 		
+				"  FROM tags_possible_values AS tpv\n" + 
+				"       LEFT JOIN\n" + 
+				"       tags_tags_relations AS ttr ON tpv.type_id = ttr.content_type_id\n" + 
+				" WHERE ttr.tag_id = " + tag.getTagId() + " AND \n" + 
+				"       ttr.parent_id = " + tag.getParent().getTagId() + ""; 		
 		
 		ArrayList<TableRecord> result = conn.query(query);
 		Iterator<TableRecord> i = result.iterator();
@@ -248,20 +246,19 @@ public class XmlTagDao {
 						"       ttr.tag_id as tag_id,\n" + 
 						"       t.name,\n" + 
 						"       t.default_content,\n" + 
-						"       t.possible_values_type_id,\n" + 
+						"       tpvt.name AS content_type,\n" + 
 						"       ttr.max_occurrence,\n" + 
 						"       ttr.required,\n" + 
 						"       ttr.parent_id,\n" + 
 						"       ns.prefix,\n" + 
-						"       ns.url,\n" +
-						"       tpvt.name AS value_type\n" +
+						"       ns.url\n" +
 						"  FROM tags_tags_relations AS ttr\n" + 
 						"       LEFT JOIN\n" + 
 						"       tags AS t ON t.id = ttr.tag_id\n" + 
 						"       LEFT JOIN\n" + 
 						"       name_space AS ns ON ns.id = ttr.name_space_id\n" +
 						"		LEFT JOIN \n" + 
-						"        tags_possible_values_types AS tpvt ON tpvt.id = t.possible_values_type_id\n" +
+						"        tags_possible_values_types AS tpvt ON tpvt.id = ttr.content_type_id\n" +
 						" WHERE ttr.parent_id =" + parent.getTagId()  + "";
 		
 		ArrayList<TableRecord> result = conn.query(query);
@@ -288,12 +285,10 @@ public class XmlTagDao {
 		    		possibleValues,
 		    		record.get("default_content"),
 		    		nameSpace,
-		    		record.get("value_type")
+		    		record.get("content_type")
 		    );
 			 
-			if(tag.getName().equals("description")) childrenArr.add(0, tag);
-			if(tag.getName().equals("doc")) childrenArr.add(1, tag);
-			else  childrenArr.add(tag);
+			childrenArr.add(tag);
 			
 		}
 		return childrenArr;
@@ -310,20 +305,19 @@ public class XmlTagDao {
 						"       ttr.tag_id as tag_id,\n" + 
 						"       t.name,\n" + 
 						"       t.default_content,\n" + 
-						"       t.possible_values_type_id,\n" + 
+						"       tpvt.name AS content_type,\n" + 
 						"       ttr.max_occurrence,\n" + 
 						"       ttr.required,\n" + 
 						"       ttr.parent_id,\n" + 
 						"       ns.prefix,\n" + 
-						"       ns.url,\n" +
-						"       tpvt.name AS value_type\n" +
+						"       ns.url\n" +
 						"  FROM tags_tags_relations AS ttr\n" + 
 						"       LEFT JOIN\n" + 
 						"       tags AS t ON t.id = ttr.tag_id\n" + 
 						"       LEFT JOIN\n" + 
 						"       name_space AS ns ON ns.id = ttr.name_space_id\n" + 
 						"		LEFT JOIN \n" + 
-						"       tags_possible_values_types AS tpvt ON tpvt.id = t.possible_values_type_id\n" +
+						"       tags_possible_values_types AS tpvt ON tpvt.id = ttr.content_type_id\n" +
 						" WHERE ttr.parent_id =" + parent.getTagId() + " AND ttr.required = 'false'";
 		
 		ArrayList<TableRecord> result = conn.query(query);
@@ -350,7 +344,7 @@ public class XmlTagDao {
 	        		possibleValues,
 	        		record.get("default_content"),
 	        		nameSpace,
-	        		record.get("value_type")
+	        		record.get("content_type")
 	        );
 			
 			tag.setAttrArr(XmlAttributeDao.getInstance().getTagAttributes(tag));
@@ -364,10 +358,8 @@ public class XmlTagDao {
 	
 	
 	public XmlTag getTagFromTagId(int tagId) {
-		String query = "SELECT t.*, tpvt.name AS value_type\n" + 
+		String query = "SELECT t.*\n" + 
 				" FROM  tags as t\n" + 
-				" LEFT JOIN \n" + 
-				" tags_possible_values_types AS tpvt ON tpvt.id = t.possible_values_type_id\n" +
 				" WHERE t.id = '" + tagId + "'";
 		
 		ArrayList<TableRecord> result = conn.query(query);
@@ -382,7 +374,7 @@ public class XmlTagDao {
 					record.get("name"),
 					null /** possible values */,
 					record.get("default_content"),
-					record.get("value_type")
+					"All" /** content_type */
 	        );
 		}	
 		return tag;
@@ -394,26 +386,18 @@ public class XmlTagDao {
 	
 	
 	
-	public String getTagDescription(XmlTag tag) {
+	public String getTagDescriptionFromTagAndParent(XmlTag tag, XmlTag parent) {
 		String description = null;
-		String query =  "Select * From tags AS t WHere t.name ='" + tag.getTagId() + "'";
-		
-		ArrayList<TableRecord> result = conn.query(query);
-		Iterator<TableRecord> i = result.iterator();
-		
-		while (i.hasNext()) {
-			TableRecord record = i.next();
-			description = record.get("description");
-	    }
-		return description;
-	}
-	
-	
-	
-	
-	public String getTagDescriptionFromTagName(XmlTag tag) {
-		String description = null;
-		String query =  "Select * From tags AS t WHere t.name ='" + tag.getName() + "'";
+		String query =  "SELECT ttr.description,\n" + 
+				"       t1.name AS parent_name,\n" + 
+				"       t2.name AS tag_name\n" + 
+				"  FROM tags_tags_relations AS ttr\n" + 
+				"       LEFT JOIN\n" + 
+				"       tags AS t1 ON t1.id = ttr.parent_id\n" + 
+				"       LEFT JOIN\n" + 
+				"       tags AS t2 ON t2.id = ttr.tag_id\n" + 
+				" WHERE t1.name = '" + parent.getName() + "' AND \n" + 
+				"       t2.name = '" + tag.getName() + "';";
 		
 		ArrayList<TableRecord> result = conn.query(query);
 		Iterator<TableRecord> i = result.iterator();

@@ -43,28 +43,27 @@ public class XmlAttributeDao {
 		String possibleValuesType = null;
 		
 		String query =  "SELECT atr.id AS rel_id,\n" + 
-						"       atr.attribute_id,\n" + 
-						"       a.name,\n" + 
-						"       a.default_value,\n" + 
-						"       a.possible_values_type_id,\n" + 
-						"       atr.required,\n" + 
-						"       ns.prefix,\n" + 
-						"       ns.url,\n" + 
-						"       apvt.name AS possible_values_type\n" + 
-						"  FROM attributes AS a\n" + 
-						"       LEFT JOIN\n" + 
-						"       attributes_tags_relations AS atr ON a.id = atr.attribute_id\n" + 
-						"       LEFT JOIN\n" + 
-						"       name_space AS ns ON atr.name_space_id = ns.id\n" + 
-						"       LEFT JOIN\n" + 
-						"       attributes_possible_values_types AS apvt ON apvt.id = a.possible_values_type_id\n" + 
-						" WHERE atr.tag_id =" + parent.getTagId() + "\n" + 
-						" ORDER BY a.name;";
+				"       atr.attribute_id,\n" + 
+				"       a.name,\n" + 
+				"       a.default_value,\n" + 
+				"       atr.required,\n" + 
+				"       ns.prefix,\n" + 
+				"		apvt.name as value_type,\n" + 
+				"       ns.url\n" + 
+				"  FROM attributes AS a\n" + 
+				"       LEFT JOIN\n" + 
+				"       attributes_tags_relations AS atr ON a.id = atr.attribute_id\n" + 
+				"       LEFT JOIN\n" + 
+				"       name_space AS ns ON atr.name_space_id = ns.id\n" + 
+				"       LEFT JOIN\n" + 
+				"       attributes_possible_values_types AS apvt ON apvt.id = atr.value_type_id \n" + 
+				" WHERE atr.tag_id = " + parent.getTagId() + "\n" + 
+				" ORDER BY a.name;";
 		
 		ArrayList<TableRecord> result = conn.query(query);
 		Iterator<TableRecord> i = result.iterator();
 		
-		if(i.hasNext()) attrArr = new ArrayList<XmlAttribute>();
+		if(!result.isEmpty()) 	attrArr = new ArrayList<XmlAttribute>();
 		while (i.hasNext()) {
 			TableRecord record = i.next();
 			attrId 				= Integer.parseInt(record.get("attribute_id"));
@@ -72,15 +71,13 @@ public class XmlAttributeDao {
 			name 				= record.get("name");
 			defaultValue 		= record.get("default_value");
 			required 			= Boolean.parseBoolean(record.get("required"));
-			possibleValuesType	= record.get("possible_values_type");
+			possibleValuesType	= record.get("value_type");
+			if(possibleValuesType == null)  possibleValuesType = "String";
 			
 			
 			if(record.get("prefix") != null && record.get("url") != null) nameSpace = new XmlNameSpace(record.get("prefix"), record.get("url"));
 			else nameSpace = null;
-			if(record.get("possible_values_type_id") != null) {
-				possibleValues = getAttrPossibleValuesFromAttrId(attrId);
-			}
-			else possibleValues = null;
+			possibleValues = getAttrPossibleValuesFromAttrIdAndTagId(attrId, parent.getTagId());
 			
 			XmlAttribute attr = new XmlAttribute(attrId,relId,name,required,possibleValues,defaultValue,nameSpace,parent,possibleValuesType);
 			attrArr.add(attr);
@@ -91,12 +88,13 @@ public class XmlAttributeDao {
 
 	
 	
-	public XmlEnum getAttrPossibleValuesFromAttrId(int id) {
+	public XmlEnum getAttrPossibleValuesFromAttrIdAndTagId(int attrId, int tagId) {
 		XmlEnum possibleValues = null;
 		String query =  "SELECT apv.value\n" + 
-						"  FROM attributes AS a\n" + 
-						"  LEFT JOIN attributes_possible_values as apv ON a.possible_values_type_id = apv.type_id\n" + 
-						"WHERE a.id =" + id + "";
+				"  		FROM attributes_possible_values AS apv\n" + 
+				"       LEFT JOIN\n" + 
+				"       attributes_tags_relations AS atr ON atr.value_type_id = apv.type_id\n" + 
+				"   WHERE atr.attribute_id = " + attrId + " AND atr.tag_id =" + tagId + ";";
 		
 		ArrayList<TableRecord> result = conn.query(query);
 		Iterator<TableRecord> i = result.iterator();
@@ -115,13 +113,16 @@ public class XmlAttributeDao {
 	
 	
 	
-	public XmlEnum getAttrPossibleValuesFromAttrName(String name) {
-		
+	public XmlEnum getAttrPossibleValuesFromAttrNameAndTag(String name, XmlTag tag) {
 		XmlEnum possibleValues = null;
-		String query =  "SELECT apv.value\n" + 
-						"  FROM attributes AS a\n" + 
-						"  LEFT JOIN attributes_possible_values as apv ON a.possible_values_type_id = apv.type_id\n" + 
-						"WHERE a.name = '" + name + "'";
+		String query =  "SELECT apv.value \n" + 
+				"  		FROM attributes_possible_values AS apv\n" + 
+				"       LEFT JOIN\n" + 
+				"       attributes_tags_relations AS atr ON atr.value_type_id = apv.type_id\n" + 
+				"       LEFT JOIN\n" + 
+				"       attributes as a ON a.id = atr.attribute_id\n" + 
+				" 		WHERE a.name = '" + name + "' AND \n" + 
+				"       atr.tag_id =  " + tag.getTagId() + "";
 		
 		ArrayList<TableRecord> result = conn.query(query);
 		Iterator<TableRecord> i = result.iterator();
@@ -142,26 +143,17 @@ public class XmlAttributeDao {
 	}
 	
 	
-	
-	
-	public String getAttrDescription(XmlAttribute attr) {
+	public String getAttrDescriptionFromAttrAndParent(XmlAttribute attr, XmlTag parent) {
 		String description = null;
-		String query =  "Select a.description From attributes AS a WHere a.id =" + attr.getAttrId() + "";
-		
-		ArrayList<TableRecord> result = conn.query(query);
-		Iterator<TableRecord> i = result.iterator();
-		
-		while (i.hasNext()) {
-			TableRecord record = i.next();
-			description = record.get("description");
-	    }
-		return description;
-	}
-	
-	
-	public String getAttrDescriptionFromAttrName(XmlAttribute attr) {
-		String description = null;
-		String query =  "Select a.description From attributes AS a WHere a.name ='" + attr.getName() + "'";
+		String query =  "SELECT atr.description,\n" + 
+				"      	 	a.name AS attr_name,\n" + 
+				"        	t.name AS tag_name\n" + 
+				"  		FROM attributes_tags_relations AS atr\n" + 
+				"       	LEFT JOIN\n" + 
+				"        	attributes AS a ON a.id = atr.attribute_id\n" + 
+				"        	LEFT JOIN\n" + 
+				"        	tags AS t ON t.id = atr.tag_id\n" + 
+				" 		 WHERE a.name = '" + attr.getName() + "' AND t.name = '" + parent.getName() + "'";
 		
 		ArrayList<TableRecord> result = conn.query(query);
 		Iterator<TableRecord> i = result.iterator();
@@ -182,9 +174,8 @@ public class XmlAttributeDao {
 		XmlAttribute attr = null;
 		String possibleValuesType = null;
 		
-		String query = 	"SELECT a.* , apvt.name AS valueType\n" + 
+		String query = 	"SELECT a.* \n" + 
 						"  FROM attributes AS a\n" + 
-						"  LEFT JOIN attributes_possible_values_types AS apvt ON apvt.id = a.possible_values_type_id\n" + 
 						"WHERE a.name = '"+ name +"'";
 			
 
@@ -196,7 +187,7 @@ public class XmlAttributeDao {
 			attrId 				= Integer.parseInt(record.get("id"));
 			defaultValue		= record.get("default_value");
 			name 				= record.get("name");
-			possibleValuesType  = record.get("possible_values_type");
+			possibleValuesType  = "String";
 	    }
 		
 		if(!result.isEmpty())  attr = new XmlAttribute(attrId,name,required,possibleValues,defaultValue,null, possibleValuesType);

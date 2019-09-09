@@ -33,10 +33,7 @@ public class XmlAttributeBusiness {
 	}
 	
 
-	
-	
-	
-	
+
 	public static Response verifyAttributeFromName(XmlTag tag, String attrName) {
 
 		XmlAttribute newAttr = null;
@@ -86,13 +83,14 @@ public class XmlAttributeBusiness {
 								.build();
 					}
 				}
-			}				
+			}	
+			
 					
 			/** check if attribute is PDSC standard attribute in general */
-			newAttr = XmlAttributeBusiness.getAttributeWithPossibleValuesFromName(attrName);
+			newAttr = XmlAttributeBusiness.getAttributeWithPossibleValuesFromNameAndTag(attrName , tag);
 			
 			if(newAttr != null) {
-				//System.out.println(" PDSC standard does not provide the attribute + " + newAttr.getName() + " for tag " + tag.getName());
+				//System.out.println(" PDSC standard does not provide the attribute " + newAttr.getName() + " for tag " + tag.getName());
 				return new Response.ResponseBuilder()
 						.flag(true)
 						.status(XmlAttribute.IS_GENRAL_PDSC)
@@ -103,6 +101,7 @@ public class XmlAttributeBusiness {
 		}
 		
 		newAttr =  new XmlAttribute(attrName, tag, "All");
+		//System.out.println("attribute is new");
 		return 	new Response.ResponseBuilder()
 				.flag(true)
 				.status(XmlAttribute.IS_NEW)
@@ -114,24 +113,20 @@ public class XmlAttributeBusiness {
 
 	
 	
-	public static XmlAttribute getAttributeWithPossibleValuesFromName(String name) {
+	public static XmlAttribute getAttributeWithPossibleValuesFromNameAndTag(String name, XmlTag parent) {
 		XmlAttribute attr = XmlAttributeDao.getInstance().getAttributeFromName(name);
 		
 		if(attr != null) {
-			XmlEnum possibleValues = XmlAttributeDao.getInstance().getAttrPossibleValuesFromAttrName(attr.getName());
+			XmlEnum possibleValues = XmlAttributeDao.getInstance().getAttrPossibleValuesFromAttrNameAndTag(attr.getName(), parent);
 			attr.setPossibleValues(possibleValues);
 		}
 		return attr;
 	}
 	
-	public static String getAttrDescription(XmlAttribute attr) {
-		return XmlAttributeDao.getInstance().getAttrDescription(attr);
-	}
-	
 
 	
-	public static String getAttributeDescription(XmlAttribute attr) {
-		String description = XmlAttributeDao.getInstance().getAttrDescriptionFromAttrName(attr);
+	public static String getAttributeDescription(XmlAttribute attr, XmlTag parent) {
+		String description = XmlAttributeDao.getInstance().getAttrDescriptionFromAttrAndParent(attr , parent);
 		return description;
 	}
 

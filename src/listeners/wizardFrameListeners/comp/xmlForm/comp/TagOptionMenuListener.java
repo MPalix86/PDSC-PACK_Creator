@@ -86,7 +86,7 @@ public class TagOptionMenuListener implements ActionListener{
 		}
 		
 		else if(command.equals("addRequiredChildren")) {
-			XmlTagBusiness.addRequiredChildren(tag.getParent(), true);
+			XmlTagBusiness.addRequiredChildren(tag, true);
 			session.getSelectedForm().UpdateView();
 		}
 
