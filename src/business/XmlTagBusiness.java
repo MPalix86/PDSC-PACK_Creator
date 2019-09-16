@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import dao.XmlAttributeDao;
 import dao.XmlTagDao;
 import model.PDSCTagAttributeException;
+import model.PDSCTagChildrenException;
 import model.Response;
 import model.UndoManager;
 import model.XmlAttribute;
@@ -93,14 +94,16 @@ public class XmlTagBusiness{
 	 * @param registerOperation true if you want to register operation for undo redo
 	 * @return String with error message if errors occurs, null otherwise
 	 */
-	public static String addCustomAttributes(XmlTag tag, String[] attrNames , boolean registerOperation) {
+	public static void addCustomAttributes(XmlTag tag, String[] attrNames , boolean registerOperation) {
 		String errorMessage = "";
 		for (String name : attrNames){
 			
 			Response response = XmlAttributeBusiness.verifyAttributeFromName(tag, name);
 			
 			if(response.getStatus() == XmlAttribute.INVALID_NAME) errorMessage += " '" + name + "' Invalid name \n";
-			else if (response.getStatus() == XmlAttribute.ALREADY_PRESENT) errorMessage += "Attribute \" " + name  + " \" is already present \n" ;
+			else if (response.getStatus() == XmlAttribute.ALREADY_PRESENT) {
+				errorMessage += "Attribute \" " + name  + " \" is already present \n" ;
+			}
 			else {
 				XmlAttribute attr = (XmlAttribute) response.getObject();
 				attr.setTag(tag);
@@ -108,8 +111,8 @@ public class XmlTagBusiness{
 			}
 		}
 		if(registerOperation) UndoManager.registerOperation();
-		if(!errorMessage.equals("")) return errorMessage;
-		else return null;
+		if(errorMessage != null && !errorMessage.equals("")) DialogUtils.warningMessage(errorMessage);
+		else;
 	}
 
 	
@@ -174,22 +177,19 @@ public class XmlTagBusiness{
 	 * @return void
 	 */
 	
-	public static void adjustTagAttributeException(XmlTag tag) {
+	public static void adjustTagAttributeException(XmlTag tag, XmlTag parent) {
 		
-		//System.out.print(" verifying consistency exceptions for tag " + tag.getName() + " ");
+//		for (int i = 0 ; i < 50 ; i++) {System.out.println("\n");}
+//		System.out.print(" verifying consistency exceptions for tag " + tag.getName() + " ");
 		
 		/** verify consistency of all required parameters*/
 		if(tag.getTagAttributeExceptionArr() == null) return ;
-		if(tag.getParent() == null) return ;
-		if(tag.getAttrArr() == null || tag.getAttrArr().size() <= 0) return ;
+		if(parent == null) return ;
 		
-		//System.out.println(" consistency passed for tag " + tag.getName());
+//		System.out.println(" consistency passed for tag " + tag.getName());
 		
 		/** for each exception */
 		for (int j = 0; j < tag.getTagAttributeExceptionArr().size(); j++) {
-			
-			/** flag to know if attribute is present in tag */
-			boolean foundException = false;
 			
 			/** recovering exception */
 			PDSCTagAttributeException exception = tag.getTagAttributeExceptionArr().get(j);
@@ -197,76 +197,153 @@ public class XmlTagBusiness{
 			/** if tags aren't the same return */
 			if(!tag.getName().equals(exception.getTag().getName())) return;
 			
-			//System.out.println("name and parent control passed , verifying if exception for attr : " + exception.getAttribute().getName() + " is present in attrArr ");
+//			System.out.println("verifying attr: " + exception.getAttribute().getName());
 			
 			/** for each attr */
-			for (int i = 0; i < tag.getAttrArr().size(); i ++) {
+			if(tag.getAttrArr() != null) {
+				for (int i = 0; i < tag.getAttrArr().size(); i ++) {
 
-				/** recovering attribute */
-				XmlAttribute attr = tag.getAttrArr().get(i);
-				
-				/** if attributes coincides */
-				if(attr.getName().equals(exception.getAttribute().getName())) {
+					/** recovering attribute */
+					XmlAttribute attr = tag.getAttrArr().get(i);
 					
-					//System.out.println("ok exception is present in attrArr");
-					
-					/** if this tag contains attribute, change flag to true */
-					foundException = true;
-					
-					/**
-					 *  verify exception.
-					 * 
-					 *  0 = tag must not contains attribute
-					 *  1 = tag must contains attribute
-					 */
-					if(exception.getException() == 0) {
+					/** if attributes coincides */
+					if(attr.getName().equals(exception.getAttribute().getName())) {
 						
-						//System.out.println("removing attr");
+//						System.out.println("ok attributes coicides " + attr.getName());
 						
-						tag.getAttrArr().remove(attr);
-						
-						/** removing attribute from selectedAttrArr */
-						if(tag.getSelectedAttrArr() != null && tag.getSelectedAttrArr().size() > 0) {
+						/**
+						 *  verify exception.
+						 * 
+						 *  0 = tag must not contains attribute
+						 *  1 = tag must contains attribute
+						 */
+						if(exception.getException() == 0) {
+//							System.out.println("exception parent : " + exception.getParent().getName() + " tag parent : " + tag.getParent().getName());
 							
-							/** for each attr in selectedAttrArr */
-							for (int h = 0; h < tag.getSelectedAttrArr().size(); h ++) {
+							if (!parent.getName().equals(exception.getParent().getName())) {
+								//System.out.println("parent not coincides " + exception.getParent().getName());
+								break;
+							}
+							
+//							System.out.println("parent coincides, removing attr :" + attr.getName());
+							
+							tag.getAttrArr().remove(attr);
+							
+							/** removing attribute from selectedAttrArr */
+							if(tag.getSelectedAttrArr() != null && tag.getSelectedAttrArr().size() > 0) {
 								
-								/** recovering selectedAttr */
-								XmlAttribute selectedAttr = tag.getSelectedAttrArr().get(h);
-								
-								/** if selectedAttr coincides with exceptioAttr, remove it*/
-								if(selectedAttr.getName().equals(exception.getAttribute().getName())) {
+								/** for each attr in selectedAttrArr */
+								for (int h = 0; h < tag.getSelectedAttrArr().size(); h ++) {
 									
-									tag.getSelectedAttrArr().remove(selectedAttr);
+									/** recovering selectedAttr */
+									XmlAttribute selectedAttr = tag.getSelectedAttrArr().get(h);
+									
+									/** if selectedAttr coincides with exceptioAttr, remove it*/
+									if(selectedAttr.getName().equals(exception.getAttribute().getName())) {
+//										System.out.println(selectedAttr.getName() + " = " + exception.getAttribute().getName() + " removing attr from selectedAttrArr " + attr.getName());
+										tag.getSelectedAttrArr().remove(selectedAttr);
+									}
 								}
 							}
 						}
 					}
 				}
 			}
+			if(exception.getException() == 1) {
+//				System.out.println("exception == 1, adding attribute");
+				
+				/** adding attribute */
+				XmlAttribute newAttr = new XmlAttribute(exception.getAttribute() , tag);
+				if(tag.getAttrArr() == null ) tag.setAttrArr(new ArrayList<XmlAttribute>());
+				tag.getAttrArr().add(newAttr);
+			}
 			
-			/** if attrException is not present in tag */
-			if(!foundException) {
-				/**
-				 *  verify exception.
-				 * 
-				 *  0 = tag must not contains attribute
-				 *  1 = tag must contains attribute
-				 */
-				if(exception.getException() == 1) {
+		}
+	}
+	
+	
+	
+	
+
+	public static void adjustTagChildrenException(XmlTag tag, XmlTag parent) {
+		
+//		for (int i = 0 ; i < 50 ; i++) {System.out.println("\n");}
+//		System.out.print(" verifying consistency exceptions for tag " + tag.getName() + " ");
+		
+		/** verify consistency of all required parameters*/
+		if(tag.getTagChildrenExceptionArr() == null) return ;
+		if(parent == null) return ;
+		
+//		System.out.println(" consistency passed for tag " + tag.getName());
+		
+		/** for each exception */
+		for (int j = 0; j < tag.getTagChildrenExceptionArr().size(); j++) {
+			
+			/** recovering exception */
+			PDSCTagChildrenException exception = tag.getTagChildrenExceptionArr().get(j);
+			
+			/** if tags aren't the same return */
+			if(!tag.getName().equals(exception.getTag().getName())) return;
+			
+//			System.out.println("verifying child: " + exception.getChild.getName());
+			
+			/** for each child */
+			if(tag.getChildrenArr() != null) {
+				for (int i = 0; i < tag.getChildrenArr().size(); i ++) {
+
+					/** recovering child */
+					XmlTag child = tag.getChildrenArr().get(i);
 					
-					/** adding attribute */
-					tag.getAttrArr().add(new XmlAttribute(exception.getAttribute() , tag));
+					/** if children coincides */
+					if(child.getName().equals(exception.getChild().getName())) {
+						
+//						System.out.println("ok childrend coincides " + child.getName());
+						
+						/**
+						 *  verify exception.
+						 * 
+						 *  0 = tag must not contains attribute
+						 *  1 = tag must contains attribute
+						 */
+						if(exception.getException() == 0) {
+//							System.out.println("exception parent : " + exception.getParent().getName() + " tag parent : " + tag.getParent().getName());
+							
+							if (!parent.getName().equals(exception.getParent().getName())) {
+								//System.out.println("parent not coincides " + exception.getParent().getName());
+								break;
+							}
+							
+//							System.out.println("parent coincides, removing child :" + child.getName());
+							
+							tag.getChildrenArr().remove(child);
+							
+							/** removing child from selectedChildrenArr */
+							if(tag.getSelectedChildrenArr() != null && tag.getSelectedChildrenArr().size() > 0) {
+								
+								/** for each child in selectedChildrenArr */
+								for (int h = 0; h < tag.getSelectedChildrenArr().size(); h ++) {
+									
+									/** recovering selectedChild */
+									XmlTag selectedChild = tag.getSelectedChildrenArr().get(h);
+									
+									/** if selectedChild coincides with exceptioAttr, remove it*/
+									if(selectedChild.getName().equals(exception.getChild().getName())) {
+//										System.out.println(selectedChild.getName() + " = " + exception.getChild().getName() + " removing child from selectedChildArr " + attr.getName());
+										tag.getSelectedChildrenArr().remove(selectedChild);
+									}
+								}
+							}
+						}
+					}
 				}
+			}
+			if(exception.getException() == 1) {
+//				System.out.println("exception == 1, adding attribute");
 				
-				/**
-				 * if parent aren't the same and tag are the same and exception was not found
-				 * re-add attribute in tag
-				 */
-				if(!tag.getParent().getName().equals(exception.getParent().getName()) && tag.getName().equals(exception.getTag().getName())) {
-					tag.getAttrArr().add(new XmlAttribute(exception.getAttribute(),tag));
-				}
-				
+				/** adding child */
+				XmlTag newChild = new XmlTag(exception.getChild() , tag);
+				if(tag.getChildrenArr() == null ) tag.setChildrenArr(new ArrayList<XmlTag>());
+				tag.getChildrenArr().add(newChild);
 			}
 			
 		}
@@ -285,6 +362,18 @@ public class XmlTagBusiness{
 	public static void addTagInParent(XmlTag newTag, XmlTag modelTag, XmlTag parent, boolean registerOperation, boolean enableUserControls, Integer index) {
 		boolean choice = true;
 		
+		/** it is possible that some exception removed some foundamentals attribute for this tag, so we ned to restore attrArr (for copy paste)*/
+		newTag.setAttrArr(XmlAttributeDao.getInstance().getTagAttributes(newTag));
+		
+		/** reset and recovering tag attribute exception for this parent */
+		newTag.setTagAttributeExceptionArr(null);
+		newTag.setTagAttributeExceptionArr(XmlTagDao.getInstance().getTagAttributeExceptionArr(newTag, parent));
+		newTag.setTagChildrenExceptionArr(null);
+		newTag.setTagChildrenExceptionArr(XmlTagDao.getInstance().getTagChildrenExceptionArr(newTag, parent));
+		
+		
+		
+		
 		if(enableUserControls) {
 			if(modelTag != null && modelTag.getMax() <= 0 ) {
 				String message = "Followind PDSC standard, maximum number of children reached for tag < " + modelTag.getName() + " > \n Do you want to continue ? ";
@@ -293,18 +382,48 @@ public class XmlTagBusiness{
 		}
 		
 		if(choice) {
+			
+			/** adding tag */
 			newTag.setParent(parent);
-			adjustTagAttributeException(newTag);
 			if(index != null && index >= 0) parent.addSelectedChildAtIndex(newTag, index);
 			else parent.addSelectedChild(newTag);
 			
+			/** adjusting attributes exception */
+			XmlTagBusiness.adjustTagAttributeException(newTag,parent);
+			/** adjusting children exception */
+			XmlTagBusiness.adjustTagChildrenException(newTag, parent);
 			
+			/** if exceptions remove all attributes or child from tag , resetting array to null */
+			if(newTag.getAttrArr() != null && newTag.getAttrArr().isEmpty()) newTag.setAttrArr(null);
+			if(newTag.getChildrenArr() != null && newTag.getChildrenArr().isEmpty()) newTag.setChildrenArr(null);
 			
 			/** adjust model tag */
 			if(modelTag != null ) modelTag.setMax(modelTag.getMax() -1);
 		}
 		
 		if(registerOperation) UndoManager.registerOperation();
+	}
+	
+	
+	
+	
+	/**
+	 * paste passed tag in passed parent
+	 * 
+	 * Same as addTagInParent above with the difference that attrArr is restored before pasting.
+	 * This because for some previous exception some foundamental attributes for this tag may not be there
+	 * so we need to restore attrArr to verify another time attribute exception
+	 */
+	public static void pasteTagInParent(XmlTag newTag, XmlTag modelTag, XmlTag parent, boolean registerOperation, boolean enableUserControls, Integer index) {
+		
+		/** it is possible that some exception removed some foundamentals attribute for this tag, so we ned to restore attrArr (for copy paste)*/
+		newTag.setAttrArr(XmlAttributeDao.getInstance().getTagAttributes(newTag));
+		
+		/** it is possible that some exception removed some foundamentals child for this tag, so we ned to restore childArr (for copy paste)*/
+		newTag.setChildrenArr(XmlTagDao.getInstance().getChildrenArrFromTag(newTag));
+		
+		addTagInParent(newTag, modelTag, parent , true, true, index);
+		
 	}
 	
 	
@@ -329,20 +448,20 @@ public class XmlTagBusiness{
 		children.add(parent);
 		while(!children.isEmpty()) {
 			XmlTag element = children.get(0);
-			System.out.println("analyzing " +  element.getName());
+//			System.out.println("analyzing " +  element.getName());
 			children.remove(element);
 			ArrayList <XmlTag> requiredChildren = new ArrayList<XmlTag>(XmlTagUtils.getRequiredChildren(element));
 			if(!requiredChildren.isEmpty()) {
-				System.out.println(element.getName() + " has dependencies");
+//				System.out.println(element.getName() + " has dependencies");
 				for(int i = 0; i < requiredChildren.size(); i++) {
 					XmlTag requiredChild = requiredChildren.get(i);
-					System.out.println("check if there is the denpendency :  "  + requiredChild.getName());
+//					System.out.println("check if there is the denpendency :  "  + requiredChild.getName());
 					boolean found = false;
 					if(element.getSelectedChildrenArr() != null) {
 						//System.out.println("let's see if " +  requiredChild.getName() + " is present in selected children of " +element.getName());
 						for(int j = 0; j < element.getSelectedChildrenArr().size(); j++) {
 							XmlTag selectedChild = element.getSelectedChildrenArr().get(j);
-							System.out.println("analizyng selected child " + selectedChild.getName());
+//							System.out.println("analizyng selected child " + selectedChild.getName());
 							
 							if(requiredChild.getName().equals(selectedChild.getName())) found = true;
 							if( found ) System.out.println(selectedChild .getName() + " found ");break;
@@ -360,7 +479,7 @@ public class XmlTagBusiness{
 					}
 
 				}
-			}else {System.out.println(element.getName() + " has no dependencies");}
+			}else {/**System.out.println(element.getName() + " has no dependencies");*/}
 			if( element.getSelectedChildrenArr() != null ) {
 				element.getSelectedChildrenArr().forEach((c)-> children.add(c));
 			}
@@ -412,6 +531,7 @@ public class XmlTagBusiness{
 
 		
 		if(tag.getParent() != null && copiesNumber > 0) {
+			System.out.println("ok");
 			
 			parent = tag.getParent();
 			XmlTag modelTag = XmlTagUtils.findModelChildFromSelectedChildName(parent, tag.getName());
@@ -423,16 +543,17 @@ public class XmlTagBusiness{
 				if( (modelTag != null && modelTag.getMax() >= copiesNumber) || modelTag == null) choice = true;
 				
 				else {
-					if(modelTag != null && modelTag.getMax() == 0) 	choice = DialogUtils.yesNoWarningMessage("<html><p><span style=\"font-size: 14pt; color: #333333;\"> "
-																						+ " Maximum number of children reached for tag  " + tag.getName() + 
-																						" <br> do you want to continue ?</span></p></html>");
-					else choice = DialogUtils.yesNoWarningMessage("You can make at least : " + tag.getMax() + " copy for tag <" + tag.getName() + " > \n do you want to continue ?");
+					if(modelTag != null && modelTag.getMax() <= 0) 	choice = DialogUtils.yesNoWarningMessage("<html><p><span style=\"font-size: 14pt; color: #333333;\"> "
+																						+ " Maximum number of children reached for element  <" + tag.getName() + 
+																						"> <br> do you want to continue ?</span></p></html>");
+					else choice = DialogUtils.yesNoWarningMessage("You can make at most : " + tag.getMax() + " copy for tag <" + tag.getName() + " > \n do you want to continue ?");
 				}
 			}
 			
 			/** Cone tag */
 			if(choice) {
 				for (int i = 0; i < copiesNumber ; i++) {
+					System.out.println("faccio la copia");
 					clone = new XmlTag(tag,tag.getParent());
 					parent.addSelectedChild(clone);	
 				}
@@ -593,9 +714,10 @@ public class XmlTagBusiness{
 	public static XmlTag getRoot() {
 		XmlTag root = XmlTagDao.getInstance().getRootTag();
 		root.setAttrArr(XmlAttributeDao.getInstance().getTagAttributes(root));
-		root.setTagAttributeExceptionArr(XmlTagDao.getInstance().getTagAttributeExceptionArr(root));
+		root.setTagAttributeExceptionArr(XmlTagDao.getInstance().getTagAttributeExceptionArr(root , root));
 		root.setParent(root);
-		XmlTagBusiness.adjustTagAttributeException(root);
+		root.setChildrenArr(XmlTagDao.getInstance().getChildrenArrFromTag(root));
+		XmlTagBusiness.adjustTagAttributeException(root, root);
 		
 		return root; 
 		
@@ -612,7 +734,7 @@ public class XmlTagBusiness{
 	 */
 	
 	public static  ArrayList<XmlTag> getNotRequiredChildren(XmlTag parent) {
-		return XmlTagDao.getInstance().getNotRequiredChildrenFromTag(parent);
+		return XmlTagDao.getInstance().getAllChildrenFromTag(parent);
 	}
 	
 	
@@ -656,11 +778,6 @@ public class XmlTagBusiness{
 		tag.setAttrArr(XmlAttributeDao.getInstance().getTagAttributes(tag));
 		tag.setPossibleValues(XmlTagDao.getInstance().getTagPossibleValues(tag));
 		
-		/** verifying tag attribute exception */
-		tag.setTagAttributeExceptionArr(XmlTagDao.getInstance().getTagAttributeExceptionArr(tag));
-		XmlTagBusiness.adjustTagAttributeException(tag);
-		
-		
 		ArrayList<XmlTag> childrenArr = XmlTagDao.getInstance().getChildrenArrFromTag(tag);
 		tag.setChildrenArr(childrenArr);
 		
@@ -696,8 +813,6 @@ public class XmlTagBusiness{
 
 		tag.setAttrArr(XmlAttributeDao.getInstance().getTagAttributes(tag));
 		tag.setPossibleValues(XmlTagDao.getInstance().getTagPossibleValues(tag));
-		
-		tag.setTagAttributeExceptionArr(XmlTagDao.getInstance().getTagAttributeExceptionArr(tag));
 		
 		ArrayList<XmlTag> childrenArr = XmlTagDao.getInstance().getChildrenArrFromTag(tag);
 		tag.setChildrenArr(childrenArr);
@@ -752,7 +867,19 @@ public class XmlTagBusiness{
 	 * return tag description
 	 */
 	public static String getTagDescription(XmlTag tag) {
-		return XmlTagDao.getInstance().getTagDescriptionFromTagAndParent(tag, tag.getParent());
+		String description = XmlTagDao.getInstance().getTagDescriptionFromTagAndParent(tag, tag.getParent());
+		
+		/** 
+		 * if description == null,it possible that attribute for this tag is an exception 
+		 * (see PDSCTagAttributeException class).
+		 * in this case description is located in tags_attributes_exception table
+		 */
+		
+		if( description == null || description.trim().length() == 0) {
+			System.out.println("daje co sta descrizione");
+			description = XmlTagDao.getInstance().getTagDescriptionFromTagChildrenExceptions(tag, tag.getParent());
+		}
+		return description;
 	}
 	
 	

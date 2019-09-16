@@ -26,10 +26,65 @@ public class PDSCTagAttributeException {
 	/**
 	 * The exception.
 	 * 
-	 *  0 = tag must not contain attribute
-	 *  1 = tag must contain attribute
+	 *  0 = only and only if tag is "tagX" and his parent his "tagY", "tagX" must NOT contain attribute 
+	 *  1 = only and only if tag is "tagX" and his parent his "tagY", "tagX" must contain attribute
 	 */
 	private Integer exception;
+	
+	/** 
+	 * attribute's description 
+	 * 
+	 * Note that description it only make sense if exception is 1, if value of 
+	 * exception is 0 description will be completely ignored
+	 * 
+	 * this value is stored in tag_attr_exception table
+	 * but is not saved in this class. it Is sav ed directly in attribute during query.
+	 * For more details see XmlTagDao.getTagAttributeExceptionArr
+	 */
+	private String description;
+
+	
+	/**
+	 * required
+	 * 
+	 * Note that required it only make sense if exception is 1
+	 * exception is 0 required will be completely ignored.
+	 * 
+	 * this value is stored in tag_attr_exception table
+	 * but is not saved in this class. it Is sav ed directly in attribute during query.
+	 * For more details see XmlTagDao.getTagAttributeExceptionArr
+	 * 
+	 * default value is false
+	 */
+	private boolean required;
+	
+	
+	/**
+	 * valueType
+	 * 
+	 * Note that valueType it only make sense if exception is 1
+	 * exception is 0 required will be completely ignored. 
+	 *
+ 	 * this value is stored in tag_attr_exception table
+	 * but is not saved in this class. it Is sav ed directly in attribute during query.
+	 * For more details see XmlTagDao.getTagAttributeExceptionArr
+	 */
+	private String valueType;
+	
+	
+	
+	
+	/**
+	 * possibleValues
+	 * 
+	 * Note that possibleValues it only make sense if exception is 1
+	 * exception is 0 required will be completely ignored. 
+	 *
+ 	 * this value is stored in tag_attr_exception table
+	 * but is not saved in this class. it Is saved directly in attribute during query.
+	 * For more details see XmlTagDao.getTagAttributeExceptionArr
+	 */
+	private XmlEnum possibleValues;
 	
 	
 	public PDSCTagAttributeException(XmlTag tag, XmlTag parent, XmlAttribute attr, Integer exception) {
@@ -97,4 +152,9 @@ public class PDSCTagAttributeException {
 	public Integer getException() {
 		return this.exception;
 	}
+	
+	
+	
+	
+	
 }

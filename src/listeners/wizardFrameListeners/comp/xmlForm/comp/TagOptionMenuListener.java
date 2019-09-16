@@ -2,6 +2,8 @@ package listeners.wizardFrameListeners.comp.xmlForm.comp;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.File;
 
 import org.apache.commons.io.FilenameUtils;
@@ -16,7 +18,7 @@ import view.wizardFrame.comp.xmlForm.comp.TagRow;
 import view.wizardFrame.comp.xmlForm.comp.addAttributeFrame.AddAttributeFrame;
 import view.wizardFrame.comp.xmlForm.comp.tagComp.TagOptionMenu;
 
-public class TagOptionMenuListener implements ActionListener{
+public class TagOptionMenuListener implements ActionListener , MouseListener{
 	
 	private Session session = Session.getInstance();
 	private TagOptionMenu menu;
@@ -53,7 +55,11 @@ public class TagOptionMenuListener implements ActionListener{
 			XmlTag newTag = new XmlTag(child, child.getParent());
 			XmlTagBusiness.addTagInParent(newTag, child, child.getParent(), true, true, null);
 			session.getSelectedForm().UpdateView();
-			if(child.getAttrArr() != null) new AddAttributeFrame(newTag);
+			TagRow row = session.getSelectedForm().getTagOpenRow(newTag);
+			if(row != null ) row.highlightBckGround(null);
+			AddAttributeFrame frame = null;
+			if(child.getAttrArr() != null) frame = new AddAttributeFrame(newTag);
+			if (frame != null) frame.requestFocusInWindow();
 		}
 
 		
@@ -120,4 +126,37 @@ public class TagOptionMenuListener implements ActionListener{
 
 			
 		}
+
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		TagMenuItem item = (TagMenuItem) e.getSource();
+		XmlTag tag = item.getTag();
+		String description = " ELEMENT : <" + tag.getName() + ">\n" + XmlTagBusiness.getTagDescription(tag);
+		session.getWizardFrame().addDescriptionPane();
+		session.getWizardFrame().setDescriptionText(description);
+	}
+
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
 	}

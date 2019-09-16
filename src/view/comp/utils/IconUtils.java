@@ -101,6 +101,12 @@ public class IconUtils {
 		return IconFontSwing.buildIcon(FontAwesome.PLUS_CIRCLE, size, c);
 	}
 	
+	public static Icon FAgetLinkIcon(int size , Color c) {
+		if (c == null) c = ICON_COLOR;
+		IconFontSwing.register(FontAwesome.getIconFont());
+		return IconFontSwing.buildIcon(FontAwesome.LINK, size, c);
+	}
+	
 	public static Icon FAgetFloppyIcon(int size , Color c) {
 		if (c == null) c = ICON_COLOR;
 		IconFontSwing.register(FontAwesome.getIconFont());

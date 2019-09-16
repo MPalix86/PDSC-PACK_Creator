@@ -190,17 +190,23 @@ public class Pack {
 						/** find attribute with possible value type = File */
 						if(attr.getPossibleValuesType()!= null && attr.getPossibleValuesType().equals("File")) {
 							
+							System.out.println("attr is : " + attr.getName());
+							
 							if(attr.getValue() != null) {
-								destinationPathString += attr.getValue().replace(FilenameUtils.getName(attr.getValue()), "");
-								destinationFileString += attr.getValue();
+								destinationPathString = completePathString + attr.getValue().replace(FilenameUtils.getName(attr.getValue()), "");
+								destinationFileString = completePathString + attr.getValue();
 							}
 							
 							/** recovering path only without file */
-							File destinationPath = new File(destinationPathString);
+							File destinationPath = null;
+								 destinationPath = new File(destinationPathString);
 							
 							/** recovering path with file */
-							File destinationFile = new File(destinationFileString);
+							File destinationFile = null;
+								 destinationFile = new File(destinationFileString);
 							
+							System.out.println("destinationPath : " + destinationPathString);
+							System.out.println("destinationFile : " + destinationFileString);
 							
 							File srcFile = null;
 							

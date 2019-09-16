@@ -43,9 +43,9 @@ public class PDSCFileReader {
 				xmlParent = new XmlTag(parentEl.getName().trim() , true , null , 1 , "all");
 				xmlParent.setTagId(1);
 				xmlParent.setAttrArr(XmlAttributeDao.getInstance().getTagAttributes(xmlParent));
-				xmlParent.setTagAttributeExceptionArr(XmlTagDao.getInstance().getTagAttributeExceptionArr(xmlParent));
+				xmlParent.setTagAttributeExceptionArr(XmlTagDao.getInstance().getTagAttributeExceptionArr(xmlParent , xmlParent));
 				xmlParent.setParent(xmlParent);
-				XmlTagBusiness.adjustTagAttributeException(xmlParent);
+				XmlTagBusiness.adjustTagAttributeException(xmlParent, xmlParent);
 				addNameSpaces(parentEl, xmlParent);
 				addSelectedAttributes(parentEl, xmlParent);
 				

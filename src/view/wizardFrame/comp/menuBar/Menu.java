@@ -6,6 +6,8 @@ import javax.swing.JMenuItem;
 import javax.swing.JSeparator;
 import javax.swing.border.MatteBorder;
 
+import business.ConstantVariable;
+import listeners.ContactListener;
 import listeners.FileOptionListener;
 import listeners.PDSCOptionListener;
 import listeners.wizardFrameListeners.comp.MenuListener;
@@ -92,7 +94,11 @@ public class Menu extends JMenuBar {
 		
 		/******************************************** About */
 		
-		JMenuItem version = new JMenuItem("Version 0.0.1");
+		JMenuItem version = new JMenuItem("Version " + ConstantVariable.programVersion);
+		JMenuItem PDSCLink = new JMenuItem("Pack Description Fomrat (PDSC) ...");
+		PDSCLink.setIcon(IconUtils.FAgetLinkIcon(16, null));
+		PDSCLink.addActionListener(new ContactListener());
+		PDSCLink.setActionCommand("showPDSCStandard");
 		
 		
 		file.add(newPDSC);
@@ -112,6 +118,7 @@ public class Menu extends JMenuBar {
 		document.add(showPreview);
 	
 		about.add(version);
+		about.add(PDSCLink);
 		
 		
 		this.add(file);

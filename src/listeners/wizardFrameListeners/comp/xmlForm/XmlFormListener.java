@@ -69,7 +69,7 @@ public class XmlFormListener implements FocusListener, MouseListener{
 			if( openRow != null) openRow.highlightBckGround(null);
 			
 			
-			String tagDescription = "TAG : <" + tag.getName() + ">\n";
+			String tagDescription = "ELEMENT : <" + tag.getName() + ">\n";
 			if(XmlTagBusiness.getTagDescription(tag) == null) tagDescription += "No description found for tag " + tag.getName() + "\n\n";
 			else tagDescription += XmlTagBusiness.getTagDescription(tag);
 			

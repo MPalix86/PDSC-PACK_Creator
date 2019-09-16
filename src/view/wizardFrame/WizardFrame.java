@@ -14,6 +14,7 @@ import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.border.EmptyBorder;
 
+import business.ConstantVariable;
 import business.Session;
 import listeners.wizardFrameListeners.comp.ClosableTabbedPaneListener;
 import model.PDSCDocument;
@@ -100,7 +101,7 @@ public class WizardFrame extends JFrame {
 		session.setWizardFrame(this);
 		
 		this.setVisible(true);
-		this.setTitle("PDSC-PACK Creator 0.0.1");
+		this.setTitle(ConstantVariable.programName + " " + ConstantVariable.programVersion);
 		this.setMinimumSize(new Dimension(800,600));
 	}
 	

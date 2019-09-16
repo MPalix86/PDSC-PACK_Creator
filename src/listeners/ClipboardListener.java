@@ -74,7 +74,7 @@ public class ClipboardListener implements FlavorListener , ActionListener{
 						e1.printStackTrace();
 					}
 					XmlTag modelTag = XmlTagUtils.findModelChildFromSelectedChildName(tag, tagToPaste.getName());
-					if(tagToPaste != null) XmlTagBusiness.addTagInParent(tagToPaste, modelTag, tag, true, true,0);
+					if(tagToPaste != null) XmlTagBusiness.pasteTagInParent(tagToPaste, modelTag, tag, true, true,0);
 					tagToPaste.setRequired(false);
 		
 				}
@@ -113,8 +113,7 @@ public class ClipboardListener implements FlavorListener , ActionListener{
 				}
 				if(index > 0) {
 					XmlTag modelTag = XmlTagUtils.findModelChildFromSelectedChildName(tag, tagToPaste.getName());
-					XmlTagBusiness.addTagInParent(tagToPaste, modelTag, tag, true, true,index);
-					session.getSelectedPDSCDoc().getUndoManager().registerOperation();
+					XmlTagBusiness.pasteTagInParent(tagToPaste, modelTag, tag, true, true,index);
 					session.getSelectedForm().UpdateView();
 				}
 			}

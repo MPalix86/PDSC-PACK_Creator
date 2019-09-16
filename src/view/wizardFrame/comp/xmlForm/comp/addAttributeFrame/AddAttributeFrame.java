@@ -96,7 +96,7 @@ public class AddAttributeFrame extends JFrame{
 				JPanel panel2 = new JPanel(new BorderLayout());
 				panel2.setBackground(Color.WHITE);
 				panel2.setBorder(new MatteBorder(0,0,1,0, ColorUtils.LIGHT_GRAY));
-					selectedAttrlabel = new JLabel("<html> <font size = 3> Add desired attrbutes for Element " + tag.getName() + 
+					selectedAttrlabel = new JLabel("<html> <font size = 3> Add desired Attributes for Element " + tag.getName() + 
 													". Click info button for attribute description </font> <br></html>"
 													);
 					selectedAttrlabel.setBorder(new EmptyBorder(5,10,10,10));

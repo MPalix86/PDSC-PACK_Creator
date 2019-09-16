@@ -12,6 +12,7 @@ public class DescriptionPane extends JPanel{
 	
 	public DescriptionPane() {
 		textArea = new JTextArea();
+		textArea.setLineWrap(true);
 		textArea.setBorder(new EmptyBorder(10,0,0,0));
 		textArea.setEditable(false);
 		this.setBackground(Color.WHITE);

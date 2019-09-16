@@ -225,7 +225,11 @@ public class DialogUtils {
 		JSpinner spinner = new JSpinner(sModel);
 		int option = JOptionPane.showOptionDialog(null, spinner, "Clone Tag", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, IconUtils.getCloneIcon(40), null, null);
 		if (option == JOptionPane.CANCEL_OPTION) {}
-		else if (option == JOptionPane.OK_OPTION){ return (int)spinner.getValue();}
+		else if (option == JOptionPane.OK_OPTION){ 
+			System.out.println("premuto ok" + (int) spinner.getValue());
+			
+			return (int)spinner.getValue();
+			}
 		return -1;
 	}
 	

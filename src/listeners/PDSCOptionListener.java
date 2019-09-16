@@ -47,7 +47,7 @@ public class PDSCOptionListener implements ActionListener{
 					int lineNumber = (int) response.getObject();
 					
 					session.getWizardFrame().setConsoleText(response.getMessage() , false);
-					
+					session.getWizardFrame().addConsolePane();
 					if(lineNumber > 0) {
 						System.out.println("insert line button");
 						/** button creation for error showing */

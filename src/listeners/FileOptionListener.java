@@ -10,6 +10,7 @@ import org.jdom2.Document;
 import business.FileBusiness;
 import business.Session;
 import business.XmlTagBusiness;
+import business.XmlTagUtils;
 import model.PDSCDocument;
 import model.PDSCFileReader;
 import model.Response;
@@ -147,16 +148,18 @@ public class FileOptionListener implements ActionListener{
 		else if(command.equals("createNewPDSC")) {
 			XmlTag root = XmlTagBusiness.getRoot();
 			
-			root.addSelectedChild(XmlTagBusiness.getCompleteTagFromNameAndParent("vendor", root));	
-			root.addSelectedChild(XmlTagBusiness.getCompleteTagFromNameAndParent("name", root));
-			root.addSelectedChild(XmlTagBusiness.getCompleteTagFromNameAndParent("description", root));
-			root.addSelectedChild(XmlTagBusiness.getCompleteTagFromNameAndParent("license", root));
-			root.addSelectedChild(XmlTagBusiness.getCompleteTagFromNameAndParent("url", root));
+			
+			XmlTagBusiness.addTagInParent(XmlTagBusiness.getCompleteTagFromNameAndParent("vendor", root), XmlTagUtils.findModelChildFromSelectedChildName(root, "vendor"), root, false, false, null);
+			XmlTagBusiness.addTagInParent(XmlTagBusiness.getCompleteTagFromNameAndParent("name", root), XmlTagUtils.findModelChildFromSelectedChildName(root, "name"), root, false, false, null);
+			XmlTagBusiness.addTagInParent(XmlTagBusiness.getCompleteTagFromNameAndParent("description", root), XmlTagUtils.findModelChildFromSelectedChildName(root, "description"), root, false, false, null);
+			XmlTagBusiness.addTagInParent(XmlTagBusiness.getCompleteTagFromNameAndParent("license", root), XmlTagUtils.findModelChildFromSelectedChildName(root, "license"), root, false, false, null);
+			XmlTagBusiness.addTagInParent(XmlTagBusiness.getCompleteTagFromNameAndParent("url", root), XmlTagUtils.findModelChildFromSelectedChildName(root, "url"), root, false, false, null);
 			XmlTag releases  = XmlTagBusiness.getCompleteTagFromNameAndParent("releases", root);
-			XmlTag release = XmlTagBusiness.getCompleteTagFromNameAndParent("release", releases);
-			XmlTagBusiness.addRequiredAttr(release);
-			releases.addSelectedChild(release);
-			root.addSelectedChild(releases);
+			XmlTag release  = XmlTagBusiness.getCompleteTagFromNameAndParent("release", releases);
+			XmlTagBusiness.addRequiredAttributes(release, false);
+			XmlTagBusiness.addTagInParent(releases, XmlTagUtils.findModelChildFromSelectedChildName(root, "releases"), root, false, false, null);
+			XmlTagBusiness.addTagInParent(release, XmlTagUtils.findModelChildFromSelectedChildName(releases, "release"), releases, false, false, null);
+			
 			
 			/** creating new XmlForm */
 			XmlForm form = new XmlForm(root);

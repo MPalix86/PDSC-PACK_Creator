@@ -23,7 +23,7 @@ public class ContactListener implements ActionListener{
 		}
 		
 		else if(command.equals("facebookSite")) {
-			System.out.println("apro l'url");
+			
 			try {
 				CustomUtils.openWebpage(new URL("https://www.facebook.com/STMicroelectronics.NV"));
 			} catch (MalformedURLException e1) {
@@ -32,7 +32,7 @@ public class ContactListener implements ActionListener{
 		}
 		
 		else if(command.equals("twitterSite")) {
-			System.out.println("apro l'url");
+		
 			try {
 				CustomUtils.openWebpage(new URL("https://twitter.com/st_world"));
 			} catch (MalformedURLException e1) {
@@ -41,9 +41,17 @@ public class ContactListener implements ActionListener{
 		}
 		
 		else if(command.equals("youtubeSite")) {
-			System.out.println("apro l'url");
+			
 			try {
 				CustomUtils.openWebpage(new URL("https://www.youtube.com/c/STMicroelectronics"));
+			} catch (MalformedURLException e1) {
+				e1.printStackTrace();
+			}
+		}
+		
+		else if (command.equals("showPDSCStandard")) {
+			try {
+				CustomUtils.openWebpage(new URL("https://www.keil.com/pack/doc/CMSIS/Pack/html/packFormat.html"));
 			} catch (MalformedURLException e1) {
 				e1.printStackTrace();
 			}

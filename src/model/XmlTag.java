@@ -117,6 +117,9 @@ public class XmlTag{
 	private ArrayList <PDSCTagAttributeException> tagAttributeExceptionArr;
 	
 	
+	/** contains child that in certain condition can have exception in this tag */
+	private ArrayList<PDSCTagChildrenException> tagChildrenExceptionArr;
+	
 	/** general max occurrence number */
 	public final static int MAX_OCCURENCE_NUMBER = 1000;
 		
@@ -145,9 +148,9 @@ public class XmlTag{
 		this.valueType = valueType;
 	}
 	
-	
-	
-	
+
+
+
 	public XmlTag(String name, Object possibleValues, String defaultContent, String valueType) {
 		this.name = name;
 		this.possibleValues = possibleValues;	
@@ -204,6 +207,15 @@ public class XmlTag{
 			/** for each selected attribute add new instance inside attrArr */
 			tag.getTagAttributeExceptionArr().forEach((e)-> this.tagAttributeExceptionArr.add(new PDSCTagAttributeException(e)));
 		}
+		
+		if(tag.getTagChildrenExceptionArr() != null) {
+			
+			this.tagChildrenExceptionArr = new ArrayList<PDSCTagChildrenException>(); 
+			
+			/** for each selected attribute add new instance inside attrArr */
+			tag.getTagChildrenExceptionArr().forEach((e)-> this.tagChildrenExceptionArr.add(new PDSCTagChildrenException(e)));
+		}
+		
 	
 		if(tag.getParent() != null) this.parent = null ;
 		
@@ -284,6 +296,14 @@ public class XmlTag{
 			/** for each selected attribute add new instance inside attrArr */
 			tag.getTagAttributeExceptionArr().forEach((e)-> this.tagAttributeExceptionArr.add(new PDSCTagAttributeException(e)));
 		}
+		
+		if(tag.getTagChildrenExceptionArr() != null) {
+			
+			this.tagChildrenExceptionArr = new ArrayList<PDSCTagChildrenException>(); 
+			
+			/** for each selected attribute add new instance inside attrArr */
+			tag.getTagChildrenExceptionArr().forEach((e)-> this.tagChildrenExceptionArr.add(new PDSCTagChildrenException(e)));
+		}
 	
 		if(tag.getParent() != null) this.parent = parent ;
 		
@@ -363,6 +383,14 @@ public class XmlTag{
 			
 			/** for each selected attribute add new instance inside attrArr */
 			tag.getTagAttributeExceptionArr().forEach((e)-> this.tagAttributeExceptionArr.add(new PDSCTagAttributeException(e)));
+		}
+		
+		if(tag.getTagChildrenExceptionArr() != null) {
+			
+			this.tagChildrenExceptionArr = new ArrayList<PDSCTagChildrenException>(); 
+			
+			/** for each selected attribute add new instance inside attrArr */
+			tag.getTagChildrenExceptionArr().forEach((e)-> this.tagChildrenExceptionArr.add(new PDSCTagChildrenException(e)));
 		}
 	
 		if(tag.getParent() != null) this.parent = parent ;
@@ -955,6 +983,29 @@ public class XmlTag{
 	}
 	
 	
+	/**
+	 * set tagChildrenExceptionArr
+	 * 
+	 * @param tagChildrenExceptionArr to set
+	 */
+	public void setTagChildrenExceptionArr(ArrayList<PDSCTagChildrenException> tagChildrenExceptionArr) {
+		this.tagChildrenExceptionArr = tagChildrenExceptionArr;
+	}
+	
+	
+	
+	
+	
+	/** 
+	 *  Retrurn tagChildrenExceptionArr
+	 * 
+	 * @return tagChildrenExceptionArr
+	 */
+	public ArrayList<PDSCTagChildrenException> getTagChildrenExceptionArr(){
+		return this.tagChildrenExceptionArr;
+	}
+	
+	
 	
 	
 	
@@ -1046,6 +1097,14 @@ public class XmlTag{
 	}
 
 
+	
+	
+	/**
+	 * @param valueType the valueType to set
+	 */
+	public void setValueType(String valueType) {
+		this.valueType = valueType;
+	}
 
 
 

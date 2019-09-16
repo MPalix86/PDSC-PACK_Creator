@@ -13,9 +13,6 @@ public class XmlAttribute {
 	/** attribute id (id of attributes table on db ) */
 	private Integer attrId;
 	
-	/** attribute relId (id of attributes_tags_relations table on db ) */
-	private Integer relId;
-	
 	/** attribute's name */
 	private String name;
 	
@@ -98,7 +95,7 @@ public class XmlAttribute {
 	
 
 	
-	public XmlAttribute(Integer attrId, Integer relId, String name, boolean required, XmlEnum possibleValues,String defaultValue,XmlNameSpace nameSpace,XmlTag tag, String possibleValuesType) {
+	public XmlAttribute(Integer attrId, String name, boolean required, XmlEnum possibleValues,String defaultValue,XmlNameSpace nameSpace,XmlTag tag, String possibleValuesType) {
 		this.name = name;
 		this.required = required;
 		this.possibleValues = possibleValues;
@@ -106,7 +103,6 @@ public class XmlAttribute {
 		this.nameSpace = nameSpace;
 		this.defaultValue = defaultValue;
 		this.attrId = attrId;
-		this.relId = relId;
 		this.possibleValuesType = possibleValuesType;
 	}
 	
@@ -164,7 +160,6 @@ public class XmlAttribute {
 		if ( attr.getDefaultValue() != null ) this.defaultValue = new String(attr.getDefaultValue());
 		if ( attr.getNameSpace() != null ) this.nameSpace = new XmlNameSpace(attr.getNameSpace());
 		if ( attr.getAttrId() != null ) this.attrId = attr.getAttrId();
-		if ( attr.getRelId() != null ) this.relId = attr.getRelId();
 		if ( attr.getPossibleValuesType() != null ) this.possibleValuesType = attr.getPossibleValuesType();
 		if ( attr.getFile()!= null ) this.file = attr.getFile();
 		 
@@ -390,33 +385,6 @@ public class XmlAttribute {
 	public void setAttrId(Integer attrId) {
 		this.attrId = attrId;
 	}
-
-
-
-
-	/**
-	 * Return relId
-	 * 
-	 * @return the relId
-	 */
-	
-	public Integer getRelId() {
-		return relId;
-	}
-
-
-
-
-	/**
-	 * Set relID
-	 * 
-	 * @param relId the relId to set
-	 */
-	
-	public void setRelId(Integer relId) {
-		this.relId = relId;
-	}
-	
 	
 	
 	
@@ -427,6 +395,18 @@ public class XmlAttribute {
 	 */
 	public String getPossibleValuesType() {
 		return this.possibleValuesType;
+	}
+	
+	
+	
+	
+	/**
+	 * set possibleValuesType
+	 * 
+	 * @param s possibleValuesType
+	 */
+	public void setPossibleValuesType(String s) {
+		this.possibleValuesType = s;
 	}
 	
 	
@@ -453,6 +433,10 @@ public class XmlAttribute {
 	public void setFile(File file) {
 		this.file = file;
 	}
+
+	
+	
+
 	
 	
 	

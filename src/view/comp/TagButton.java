@@ -1,6 +1,11 @@
 package view.comp;
 
+import java.awt.Cursor;
+import java.awt.Insets;
+
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
 
 import model.XmlTag;
 import view.comp.utils.ColorUtils;
@@ -10,7 +15,7 @@ import view.comp.utils.ColorUtils;
  * 
  * @author mircopalese
  */
-public class TagButton extends SquareButton{
+public class TagButton extends JButton{
 	
 	private XmlTag	tag;
 	
@@ -23,7 +28,7 @@ public class TagButton extends SquareButton{
 	 */
 	
 	public TagButton(XmlTag tag ) {
-		super("< " + tag.getName() + " >");
+		setCursor(new Cursor(Cursor.HAND_CURSOR));
 		super.setForeground(ColorUtils.TAG_COLOR);
 		this.tag = tag;
 		
@@ -33,8 +38,8 @@ public class TagButton extends SquareButton{
 	
 	
 	public TagButton(XmlTag tag , String text ) {
-		
-		super(text);
+		setCursor(new Cursor(Cursor.HAND_CURSOR));
+		this.setText(text);
 		this.tag = tag;
 		
 	}
@@ -68,8 +73,20 @@ public class TagButton extends SquareButton{
 	
 	
 	
-	public TagButton toIconButton(ImageIcon icon) {
-		super.toIconButton(icon);
+   public TagButton toIconButton(ImageIcon icon) {
+		setContentAreaFilled(false);
+		setBorderPainted(false);
+		setMargin(new Insets(0,0,0,0));
+		setIcon(icon);
 		return this;
-	}
+    }
+   
+   
+   public TagButton toIconButton(Icon icon) {
+		setContentAreaFilled(false);
+		setBorderPainted(false);
+		setMargin(new Insets(0,0,0,0));
+		setIcon(icon);
+		return this;
+    }
 }

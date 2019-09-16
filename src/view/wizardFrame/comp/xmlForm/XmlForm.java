@@ -13,6 +13,7 @@ import javax.swing.JPanel;
 import javax.swing.Timer;
 import javax.swing.border.EmptyBorder;
 
+import business.OSValidator;
 import listeners.wizardFrameListeners.comp.xmlForm.XmlFormListener;
 import model.XmlTag;
 import net.miginfocom.swing.MigLayout;
@@ -32,13 +33,15 @@ public class XmlForm extends JPanel{
 	private final static int LEFT_PADDING = 25;
 	
 	
-	private final static int INNER_ROW_PADDING = -13;
+	private static int INNER_ROW_PADDING ;
 
 	
 	
 	
 	public XmlForm(XmlTag root) {
-		
+		if(OSValidator.isMac()) INNER_ROW_PADDING = -13;
+		else if(OSValidator.isWindows()) INNER_ROW_PADDING = - 7;
+		else INNER_ROW_PADDING = - 13;
 		this.setBorder(new EmptyBorder(0,0,0,0));
 		this.setBackground(Color.WHITE);
 		this.setLayout(new MigLayout("wrap 1" , "" , "[] 0 []"));

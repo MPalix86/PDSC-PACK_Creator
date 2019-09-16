@@ -51,13 +51,13 @@ public class TagOptionMenu extends JPopupMenu {
 		JMenu pasteMenu = new JMenu("Paste");
 		pasteMenu.setIcon(IconUtils.FAgetClipboardIcon(16, ColorUtils.FOLDER_BROWN));
 		if ((clipboard.getContents(null) != null )) {
-			TagMenuItem pasteFirsrItem = new TagMenuItem("Paste" , tag);
+			TagMenuItem pasteFirsrItem = new TagMenuItem("Paste At First Position" , tag);
 			pasteFirsrItem.addActionListener(clipboardListener);
 			pasteFirsrItem.setActionCommand("pasteFirst");
 			pasteFirsrItem.setIcon(IconUtils.FAgetClipboardIcon(16, ColorUtils.FOLDER_BROWN));
 			pasteFirsrItem.setIcon(null);
 			
-			TagMenuItem pasteAtPositionItem = new TagMenuItem("Paste At Position" , tag);
+			TagMenuItem pasteAtPositionItem = new TagMenuItem("Paste At Position ..." , tag);
 			pasteAtPositionItem.addActionListener(clipboardListener);
 			pasteAtPositionItem.setActionCommand("pasteAtPosition");
 			pasteAtPositionItem.setIcon(IconUtils.FAgetClipboardIcon(16, ColorUtils.FOLDER_BROWN));
@@ -107,6 +107,7 @@ public class TagOptionMenu extends JPopupMenu {
 					
 					childMenuItem.addActionListener(listener);
 					childMenuItem.setActionCommand("addTag");
+					childMenuItem.addMouseListener(listener);
 					addTagMenu.add(childMenuItem);
 				}
 				addTagMenu.add(addTagMenu);

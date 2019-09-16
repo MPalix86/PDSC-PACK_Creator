@@ -74,7 +74,7 @@ public class TagRow extends JPanel{
 			tagLabel0.setToolTipText("Source file associated: " + tag.getFile().getAbsolutePath());
 			tagLabel0.setIcon(IconUtils.FAgetFileIcon(14, ColorUtils.SYSTEM_GREEN_COLOR_DARK));
 		}		
-		else if(tag.getFile() == null && tag.getValueType().contentEquals("File")) tagLabel0.setIcon(IconUtils.FAgetFileIcon(14, ColorUtils.SYSTEM_GRAY_COLOR_DARK));
+		else if(tag.getFile() == null && tag.getValueType().equals("File")) tagLabel0.setIcon(IconUtils.FAgetFileIcon(14, ColorUtils.SYSTEM_GRAY_COLOR_DARK));
 		
 		tagLabel0.addMouseListener(listener);
 		

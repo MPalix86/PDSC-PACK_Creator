@@ -1,18 +1,18 @@
 package view.wizardFrame.comp.tagsListBar;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.util.ArrayList;
 
-import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import business.XmlTagBusiness;
 import listeners.wizardFrameListeners.comp.TagListBarListener;
 import model.XmlTag;
+import net.miginfocom.swing.MigLayout;
+import view.comp.TagButton;
 import view.comp.utils.ColorUtils;
+import view.comp.utils.IconUtils;
 import view.wizardFrame.comp.tagsListBar.comp.TagListBarButton;
 
 /**
@@ -37,7 +37,7 @@ public class TagsListBar extends JPanel{
 	private void placeComponents() {
 
 		this.setBorder(new EmptyBorder(0,0,0,0));
-		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+		this.setLayout(new MigLayout("wrap 2"));
 		this.setBackground(Color.WHITE);
 
 		XmlTag root = XmlTagBusiness.getRoot();
@@ -45,19 +45,21 @@ public class TagsListBar extends JPanel{
 		
 	  	for(int i = 0; i < rootChildren.size(); i++) {
 	  		XmlTag tag = rootChildren.get(i);
-	  		
-	  		JPanel panel = new JPanel(new BorderLayout());
-	    	panel.setMaximumSize(new Dimension(300,30));
 	    	
 	    	TagListBarButton btn = new TagListBarButton( "< " + tag.getName() + " >"  ,  tag);
 	        btn.setForeground(ColorUtils.TAG_COLOR);
-	      
+	        
+	        TagButton descriptionButton = new TagButton(tag).toIconButton(IconUtils.FAgetInfoCircleIcon(18, null));
+	        descriptionButton.setToolTipText("Click here for tag description");
+	        descriptionButton.addActionListener(listener);
+	        descriptionButton.setActionCommand("showDescription");
 	        
 	        btn.addActionListener(listener);
 			btn.setActionCommand("addRootChild");
 	        
-	    	panel.add(btn);
-	    	this.add(panel);	
+	    	this.add(btn);
+	    	this.add(descriptionButton);
+	    		
 	    }
 	}
 		
