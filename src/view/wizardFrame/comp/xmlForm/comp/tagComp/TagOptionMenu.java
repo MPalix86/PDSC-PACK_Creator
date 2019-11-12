@@ -7,14 +7,14 @@ import javax.swing.JPopupMenu;
 import javax.swing.JSeparator;
 
 import business.Session;
-import business.XmlTagUtils;
+import business.utils.XmlTagUtils;
 import listeners.ClipboardListener;
 import listeners.wizardFrameListeners.comp.xmlForm.comp.TagOptionMenuListener;
-import model.XmlAttributeSelection;
-import model.XmlTag;
+import model.xml.XmlAttributeSelection;
+import model.xml.XmlTag;
 import view.comp.TagMenuItem;
 import view.comp.utils.ColorUtils;
-import view.comp.utils.IconUtils;
+import view.comp.utils.IconsUtils;
 
 public class TagOptionMenu extends JPopupMenu {
 	
@@ -31,36 +31,35 @@ public class TagOptionMenu extends JPopupMenu {
 		clipboard = Session.getInstance().getClipboard();
 		this.tag = tag;
 		
-		
 		//----------------------------------------------------------------------
 		TagMenuItem deleteTagItem = new TagMenuItem("Delete",tag);
 		deleteTagItem.addActionListener(listener);
 		deleteTagItem.setActionCommand("deleteTag");
-		deleteTagItem.setIcon(IconUtils.getTrashIcon(16));
+		deleteTagItem.setIcon(IconsUtils.getTrashIcon(16));
 		
 		TagMenuItem copyItem = new TagMenuItem("Copy" , tag);
 		copyItem.addActionListener(clipboardListener);
 		copyItem.setActionCommand("copyTag");
-		copyItem.setIcon(IconUtils.getCopyIcon(16));
+		copyItem.setIcon(IconsUtils.getCopyIcon(16));
 		
 		TagMenuItem cutItem = new TagMenuItem("Cut" , tag);
 		cutItem.addActionListener(clipboardListener);
 		cutItem.setActionCommand("cutTag");
-		cutItem.setIcon(IconUtils.getCutIcon(16));
+		cutItem.setIcon(IconsUtils.getCutIcon(16));
 		
 		JMenu pasteMenu = new JMenu("Paste");
-		pasteMenu.setIcon(IconUtils.FAgetClipboardIcon(16, ColorUtils.FOLDER_BROWN));
+		pasteMenu.setIcon(IconsUtils.FAgetClipboardIcon(16, ColorUtils.FOLDER_BROWN));
 		if ((clipboard.getContents(null) != null )) {
 			TagMenuItem pasteFirsrItem = new TagMenuItem("Paste At First Position" , tag);
 			pasteFirsrItem.addActionListener(clipboardListener);
 			pasteFirsrItem.setActionCommand("pasteFirst");
-			pasteFirsrItem.setIcon(IconUtils.FAgetClipboardIcon(16, ColorUtils.FOLDER_BROWN));
+			pasteFirsrItem.setIcon(IconsUtils.FAgetClipboardIcon(16, ColorUtils.FOLDER_BROWN));
 			pasteFirsrItem.setIcon(null);
 			
 			TagMenuItem pasteAtPositionItem = new TagMenuItem("Paste At Position ..." , tag);
 			pasteAtPositionItem.addActionListener(clipboardListener);
 			pasteAtPositionItem.setActionCommand("pasteAtPosition");
-			pasteAtPositionItem.setIcon(IconUtils.FAgetClipboardIcon(16, ColorUtils.FOLDER_BROWN));
+			pasteAtPositionItem.setIcon(IconsUtils.FAgetClipboardIcon(16, ColorUtils.FOLDER_BROWN));
 			pasteAtPositionItem.setIcon(null);
 			if(clipboard.getContents(null).getClass().equals(XmlAttributeSelection.class) || tag.getSelectedChildrenArr() ==  null) pasteAtPositionItem.setEnabled(false);
 			
@@ -72,25 +71,25 @@ public class TagOptionMenu extends JPopupMenu {
 		TagMenuItem cloneItem = new TagMenuItem("Clone" , tag);
 		cloneItem.addActionListener(listener);
 		cloneItem.setActionCommand("cloneTag");
-		cloneItem.setIcon(IconUtils.getCloneIcon(16));
+		cloneItem.setIcon(IconsUtils.getCloneIcon(16));
 		
 		
 		//----------------------------------------------------------------------
 		TagMenuItem addAttributeItem = new TagMenuItem("Add/Remove Attributes",tag);
 		addAttributeItem.addActionListener(listener);
 		addAttributeItem.setActionCommand("addAttribute");
-		addAttributeItem.setIcon(IconUtils.FAgetPencilIcon(16, ColorUtils.ATTR_COLOR.brighter()));
+		addAttributeItem.setIcon(IconsUtils.FAgetPencilIcon(16, ColorUtils.ATTR_COLOR.brighter()));
 		if(tag.getAttrArr() == null || tag.getAttrArr().size() == 0) addAttributeItem.setEnabled(false);
 			
 		TagMenuItem addCustomAttributeItem = new TagMenuItem("Add Custom Attribute",tag);
 		addCustomAttributeItem.addActionListener(listener);
 		addCustomAttributeItem.setActionCommand("addCustomAttribute");
-		addCustomAttributeItem.setIcon(IconUtils.FAgetPlusIcon(16, ColorUtils.ATTR_COLOR.brighter()));
+		addCustomAttributeItem.setIcon(IconsUtils.FAgetPlusIcon(16, ColorUtils.ATTR_COLOR.brighter()));
 		
 		TagMenuItem AddReuquiredChildredItem = new TagMenuItem("Add All Required Elements",tag);
 		AddReuquiredChildredItem.addActionListener(listener);
 		AddReuquiredChildredItem.setActionCommand("addRequiredChildren");
-		AddReuquiredChildredItem.setIcon(IconUtils.getStructureIcon(16));
+		AddReuquiredChildredItem.setIcon(IconsUtils.getStructureIcon(16));
 		if(!XmlTagUtils.dependencyCheck(tag)) AddReuquiredChildredItem.setEnabled(false);
 		
 		
@@ -121,7 +120,7 @@ public class TagOptionMenu extends JPopupMenu {
 		TagMenuItem addCustomTagItem = new TagMenuItem("Add Custom Element",tag);
 		addCustomTagItem.addActionListener(listener);
 		addCustomTagItem.setActionCommand("addCustomTag");
-		addCustomTagItem.setIcon(IconUtils.FAgetPlusIcon(16, ColorUtils.TAG_COLOR_BRIGHTER));
+		addCustomTagItem.setIcon(IconsUtils.FAgetPlusIcon(16, ColorUtils.TAG_COLOR_BRIGHTER));
 		if(tag.getContent() != null && tag.getContent().trim().length() > 0) addCustomTagItem.setEnabled(false);
 		
 		
@@ -129,17 +128,27 @@ public class TagOptionMenu extends JPopupMenu {
 			TagMenuItem addPathItem = new TagMenuItem("Select File",tag);
 			addPathItem.addActionListener(listener);
 			addPathItem.setActionCommand("addPath");
-			addPathItem.setIcon(IconUtils.FAgetFolderOpenIcon(16, ColorUtils.FOLDER_BROWN));
+			addPathItem.setIcon(IconsUtils.FAgetFolderOpenIcon(16, ColorUtils.FOLDER_BROWN));
 			add(addPathItem);
 			
 			TagMenuItem removePathItem = new TagMenuItem("Remove file",tag);
 			removePathItem.addActionListener(listener);
 			removePathItem.setActionCommand("removePath");
-			removePathItem.setIcon(IconUtils.removeFileIcon(16));
+			removePathItem.setIcon(IconsUtils.removeFileIcon(16));
 			add(removePathItem);
 			if(tag.getFile() == null) removePathItem.setEnabled(false);
 			add(new JSeparator());
 			
+		}
+		
+		
+		if(tag.getValueType().equals("FilesContainer")) {
+			TagMenuItem addFilesItem = new TagMenuItem("Select Multiple Files",tag);
+			addFilesItem.addActionListener(listener);
+			addFilesItem.setActionCommand("addFiles");
+			addFilesItem.setIcon(IconsUtils.FAgetFolderOpenIcon(16, ColorUtils.FOLDER_BROWN));
+			add(addFilesItem);
+			add(new JSeparator());
 		}
 		
 		

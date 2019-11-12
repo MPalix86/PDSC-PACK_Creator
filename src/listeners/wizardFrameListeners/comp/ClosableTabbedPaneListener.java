@@ -6,7 +6,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 import business.Session;
-import model.PDSCDocument;
+import model.PDSC.PDSCDocument;
 import view.comp.customTabbedPane.ClosableTabbedPane;
 import view.comp.customTabbedPane.ClosableTabbedPane.TabCloseListener;
 import view.wizardFrame.comp.xmlForm.XmlForm;

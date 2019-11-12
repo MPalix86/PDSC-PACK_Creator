@@ -2,7 +2,7 @@ package view.comp;
 
 import javax.swing.JCheckBox;
 
-import model.XmlAttribute;
+import model.xml.XmlAttribute;
 
 public class AttributeCheckBox extends JCheckBox{
 	private XmlAttribute attr;

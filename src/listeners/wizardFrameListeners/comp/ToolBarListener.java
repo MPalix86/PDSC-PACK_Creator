@@ -4,8 +4,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import business.Session;
-import business.XmlTagBusiness;
-import model.XmlTag;
+import business.TagManager;
+import mao.XmlTagMao;
+import model.xml.XmlTag;
 import view.comp.TagMenuItem;
 import view.comp.utils.DialogUtils;
 import view.wizardFrame.comp.toolBar.ToolBar;
@@ -29,10 +30,10 @@ public class ToolBarListener implements ActionListener {
 		if(command == "addRootChild") {
 			TagMenuItem item = (TagMenuItem) e.getSource();
 			XmlTag tag = item.getTag();
-			tag = XmlTagBusiness.getCompleteTagFromTagInstance(tag);
+			tag = XmlTagMao.getCompleteTagFromTagInstance(tag);
 			if(session.getSelectedForm() != null) {
-				XmlTagBusiness.addTagInParent(new XmlTag(tag) , tag, session.getSelectedPDSCDoc().getRoot(), true, false,null);
-				session.getSelectedForm().UpdateView();
+				TagManager.addTagInParent(new XmlTag(tag) , tag, session.getSelectedPDSCDoc().getRoot(), true, false, true, null);
+				session.getSelectedForm().repaintView();
 			}
 			else DialogUtils.warningMessage("Select document before adding tag");
 		}

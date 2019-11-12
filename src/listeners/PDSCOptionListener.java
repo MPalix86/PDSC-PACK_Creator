@@ -7,17 +7,20 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import org.apache.commons.io.FilenameUtils;
 import org.jdom2.Document;
 
-import business.FileBusiness;
 import business.Session;
+import business.utils.PDSCDocumentUtils;
+import business.utils.XmlTagUtils;
 import model.Log;
-import model.Pack;
 import model.Response;
+import model.PDSC.PDSCConstants;
+import model.PDSC.Pack;
 import view.comp.TextButton;
 import view.comp.utils.ColorUtils;
 import view.comp.utils.DialogUtils;
-import view.comp.utils.IconUtils;
+import view.comp.utils.IconsUtils;
 
 public class PDSCOptionListener implements ActionListener{
 	
@@ -36,40 +39,59 @@ public class PDSCOptionListener implements ActionListener{
 		
 		if(command.equals("validateXSD")) {
 			if(session.getSelectedPDSCDoc() != null) {
-				Document doc = FileBusiness.genratePDSCDocument(session.getSelectedForm().getRoot());
-				Response response = FileBusiness.validateXMLSchema(doc);
 				
+				Document doc = XmlTagUtils.getJDomDocumentFromXmlTag(session.getSelectedRoot());
 				
-				/** response.getObject() contains line number error */
-				if(response.getObject() != null) {
-					
-					/** recovering line number */
-					int lineNumber = (int) response.getObject();
-					
-					session.getWizardFrame().setConsoleText(response.getMessage() , false);
-					session.getWizardFrame().addConsolePane();
-					if(lineNumber > 0) {
-						System.out.println("insert line button");
-						/** button creation for error showing */
-						TextButton lineButton  = new TextButton("Show error line", ColorUtils.SYSTEM_RED_COLOR_DARK , ColorUtils.SYSTEM_RED_COLOR_LIGHT.brighter());
-						
-						/** button listener */
-						lineButton.addActionListener(new ActionListener() { 
-							  public void actionPerformed(ActionEvent e) {
-								  
-								/** making row blink */
-								System.out.println(lineNumber);
-							    session.getSelectedForm().lineFocusBlink(lineNumber, ColorUtils.LIGHT_GRAY, 5);
-							  } 
-							} );
-						
-						/** insert text and button in validator */
-						session.getWizardFrame().insertConsoleComnponent(lineButton);
-						
+				File xsd = session.getSelectedPDSCDoc().getXsdFile();
+				if(xsd == null)
+					try {
+						String docName = "Untitled";
+						if(session.getSelectedPDSCDoc().getSourcePath() != null) docName = session.getSelectedPDSCDoc().getSourcePath().toString();
+						DialogUtils.okMessage("There isn't xsd file associated with this document.\n Click OK to select and associate an xsd file to \"" + docName + "\"", "XSD assciation" , IconsUtils.FAgetFileCodeIcon(40, ColorUtils.SYSTEM_GRAY_COLOR_DARK));
+						xsd = DialogUtils.showChooseFileFrame(new File(System.getProperty("user.home")) , true);
+					} catch (Exception e1) {							
+						e1.printStackTrace();
 					}
+				if(xsd != null) {
+					if(FilenameUtils.getExtension(xsd.getAbsolutePath()).equals("xsd")) {
+						
+						session.getSelectedPDSCDoc().setXsdFile(xsd);
+						Response response = PDSCDocumentUtils.validatePDSCDocumentWithXMLSchema(doc, session.getSelectedPDSCDoc().getXsdFile());
+						
+						/** response.getObject() contains line number error */
+						if(response.getObject() != null) {
+							
+							/** recovering line number */
+							int lineNumber = (int) response.getObject();
+							
+							session.getWizardFrame().setConsoleText(response.getMessage() , false);
+							session.getWizardFrame().addConsolePane();
+							if(lineNumber > 0) {
+								/** button creation for error showing */
+								TextButton lineButton  = new TextButton("Show error line", ColorUtils.SYSTEM_RED_COLOR_DARK , ColorUtils.SYSTEM_RED_COLOR_LIGHT.brighter());
+								
+								/** button listener */
+								lineButton.addActionListener(new ActionListener() { 
+									  public void actionPerformed(ActionEvent e) {
+										  
+										/** making row blink */
+										System.out.println(lineNumber);
+									    session.getSelectedForm().lineFocusBlink(lineNumber, ColorUtils.LIGHT_GRAY, 5);
+									  } 
+									} );
+								
+								/** insert text and button in validator */
+								session.getWizardFrame().insertConsoleComnponent(lineButton);
+							}
+						}
+						
+						else session.getWizardFrame().setConsoleText(response.getMessage(), false);
+					}
+					
+					else DialogUtils.warningMessage("Select xsd document");
+	
 				}
 
-				else session.getWizardFrame().setConsoleText(response.getMessage(), false);
 			}
 			else DialogUtils.warningMessage("No document selected");
 		}
@@ -95,10 +117,10 @@ public class PDSCOptionListener implements ActionListener{
 								else if (l.getType() == Log.ERROR)session.getWizardFrame().setConsoleText("Error " + l.getText(), true);
 							}
 							session.getWizardFrame().setConsoleText("PACK CREATED CORRECTLY IN : " + path.getAbsolutePath(), true);
-							boolean choice = DialogUtils.CustomButtonTrueFalsePane(pack.getName() , "Pack Created Correctly", "Open folder", "Continue", IconUtils.getOkIcon(48));
+							boolean choice = DialogUtils.CustomButtonsTrueFalsePane(pack.getName() , "Pack Created Correctly", "Open folder", "Continue", IconsUtils.getOkIcon(48));
 							if(choice) Desktop.getDesktop().open(pack.getMainPathFile());
 						}
-						else if(status == Pack.REQUIRED_FIELDS_MISSING) {
+						else if(status == PDSCConstants.REQUIRED_FIELDS_MISSING) {
 							DialogUtils.warningMessage("Required Fields missing");
 						}
 						else DialogUtils.warningMessage("Some Error Occurred");
@@ -114,16 +136,18 @@ public class PDSCOptionListener implements ActionListener{
 		
 		
 		
+		
+		
 		else if (command.equals("undo")) {
 			if(session.getSelectedPDSCDoc() == null) return;
 			session.getSelectedPDSCDoc().getUndoManager().undo();
-			session.getSelectedForm().UpdateView();
+			session.getSelectedForm().repaintView();
 		}
 		
 		else if (command.equals("redo")) {
 			if(session.getSelectedPDSCDoc() == null) return;
 			session.getSelectedPDSCDoc().getUndoManager().redo();
-			session.getSelectedForm().UpdateView();
+			session.getSelectedForm().repaintView();
 		}
 		
 	}

@@ -7,7 +7,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
 
-import model.XmlTag;
+import model.xml.XmlTag;
 
 public class XmlFormContainer extends JPanel{
 	private XmlForm formPanel;

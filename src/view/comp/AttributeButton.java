@@ -2,7 +2,7 @@ package view.comp;
 
 import javax.swing.ImageIcon;
 
-import model.XmlAttribute;
+import model.xml.XmlAttribute;
 
 public class AttributeButton extends SquareButton{
 	private XmlAttribute attr;

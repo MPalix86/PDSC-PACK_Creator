@@ -16,5 +16,6 @@
 	<classpathentry kind="lib" path="/Users/mircopalese/eclipse-workspace/PDSC/libraries/jackson-databind-2.9.9.jar"/>
 	<classpathentry kind="lib" path="/Users/mircopalese/eclipse-workspace/PDSC/libraries/jackson-core-2.9.9.jar"/>
 	<classpathentry kind="lib" path="/Users/mircopalese/eclipse-workspace/PDSC/libraries/jackson-annotations-2.9.9.jar"/>
+	<classpathentry kind="lib" path="/Users/mircopalese/eclipse-workspace/PDSC/libraries/tika-app-1.22.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

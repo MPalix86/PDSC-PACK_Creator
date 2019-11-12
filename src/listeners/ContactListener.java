@@ -5,7 +5,7 @@ import java.awt.event.ActionListener;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import business.CustomUtils;
+import business.utils.CustomUtils;
 
 public class ContactListener implements ActionListener{
 
@@ -49,7 +49,7 @@ public class ContactListener implements ActionListener{
 			}
 		}
 		
-		else if (command.equals("showPDSCStandard")) {
+		else if (command.equals("PDSCStandard")) {
 			try {
 				CustomUtils.openWebpage(new URL("https://www.keil.com/pack/doc/CMSIS/Pack/html/packFormat.html"));
 			} catch (MalformedURLException e1) {

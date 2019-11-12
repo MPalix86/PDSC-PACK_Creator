@@ -12,7 +12,7 @@ import javax.swing.border.MatteBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import model.XmlTag;
+import model.xml.XmlTag;
 import view.comp.TagTextField;
 import view.comp.utils.ColorUtils;
 import view.wizardFrame.comp.xmlForm.comp.TagRow;

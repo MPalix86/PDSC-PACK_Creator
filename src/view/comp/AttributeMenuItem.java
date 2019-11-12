@@ -2,7 +2,7 @@ package view.comp;
 
 import javax.swing.JMenuItem;
 
-import model.XmlAttribute;
+import model.xml.XmlAttribute;
 
 public class AttributeMenuItem extends JMenuItem{
 	

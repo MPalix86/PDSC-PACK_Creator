@@ -1,23 +1,31 @@
 package view.wizardFrame.comp.xmlForm.comp;
 
+import java.awt.BasicStroke;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.dnd.DnDConstants;
+import java.awt.dnd.DragSource;
+import java.awt.dnd.DropTarget;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
+import javax.swing.TransferHandler;
 import javax.swing.border.EmptyBorder;
 
-import business.CustomUtils;
-import business.Session;
-import listeners.wizardFrameListeners.comp.xmlForm.XmlFormListener;
-import model.XmlAttribute;
-import model.XmlNameSpace;
-import model.XmlTag;
+import business.utils.CustomUtils;
+import listeners.DnDListenerTagLabel;
+import listeners.DnDListenerTagRow;
+import listeners.wizardFrameListeners.comp.xmlForm.comp.TagRowComponentListener;
+import model.xml.XmlAttribute;
+import model.xml.XmlNameSpace;
+import model.xml.XmlTag;
 import net.miginfocom.swing.MigLayout;
 import view.comp.utils.ColorUtils;
-import view.comp.utils.IconUtils;
+import view.comp.utils.IconsUtils;
 import view.wizardFrame.comp.xmlForm.XmlForm;
 import view.wizardFrame.comp.xmlForm.comp.attributeComp.AttributeFormComboBox;
 import view.wizardFrame.comp.xmlForm.comp.attributeComp.AttributeFormTextField;
@@ -31,8 +39,7 @@ import view.wizardFrame.comp.xmlForm.comp.tagComp.TagLabel;
 
 public class TagRow extends JPanel{
 	
-	XmlFormListener listener;
-	
+	private TagRowComponentListener listener;
 	private XmlTag tag;
 	private AttributeLabel attrLabel0;
 	private TagLabel tagLabel0;
@@ -40,42 +47,54 @@ public class TagRow extends JPanel{
 	private TagLabel tagLabel2;
 	private TagFormTextArea tagTextArea ;
 	private TagFormTextField tagTextField ;
-	private int leftBorder;
 	private XmlForm form;
+	private boolean backGrounIsHighlighted = false;
 	private int option;
 	private int rowNumber;
-	private Session session;
 	
-	private final static int OPEN_ROW = 0;
-	private final static int CLOSE_ROW = 1;
+	public final static int OPEN_ROW = 0;
+	public final static int CLOSE_ROW = 1;
 	
 	
 
-	public TagRow(XmlTag tag, XmlForm form) {
+	public TagRow(XmlTag tag, XmlForm form, int option) {
+		this.option = option;
 		this.form = form;
 		this.tag = tag;
-		listener = new XmlFormListener(form);
+		listener = new TagRowComponentListener(form);
 		this.setLayout(new MigLayout(
 					"nogrid", // Layout Constraints
 					"",       // Column constraints
 				 	"[]0[]")); // row constraints
 		this.setBackground(Color.WHITE);
-		session = Session.getInstance();
+		DropTarget dt = new DropTarget(this, DnDConstants.ACTION_COPY, new DnDListenerTagRow(),
+				true, null);
+		
+		if(option == OPEN_ROW) open();
+		else close();
 	}
 	
 	
 	
-	public TagRow open() {
-		
-		option = OPEN_ROW;
+	private TagRow open() {
 		
 		tagLabel0 = new TagLabel("<  " + tag.getName(), this.tag);
+		tagLabel0.setTransferHandler(new TransferHandler("ciao"));
+		
+		DragSource ds = new DragSource();
+		ds.createDefaultDragGestureRecognizer(tagLabel0,
+				DnDConstants.ACTION_MOVE, new DnDListenerTagLabel());
+		
+		
 		if(tag.getFile() != null && tag.getValueType().equals("File")) {
 			tagLabel0.setToolTipText("Source file associated: " + tag.getFile().getAbsolutePath());
-			tagLabel0.setIcon(IconUtils.FAgetFileIcon(14, ColorUtils.SYSTEM_GREEN_COLOR_DARK));
+			tagLabel0.setIcon(IconsUtils.FAgetFileIcon(14, ColorUtils.SYSTEM_GREEN_COLOR_DARK));
 		}		
-		else if(tag.getFile() == null && tag.getValueType().equals("File")) tagLabel0.setIcon(IconUtils.FAgetFileIcon(14, ColorUtils.SYSTEM_GRAY_COLOR_DARK));
-		
+		else if(tag.getFile() == null && tag.getValueType().equals("File")) tagLabel0.setIcon(IconsUtils.FAgetFileIcon(14, ColorUtils.SYSTEM_GRAY_COLOR_DARK));
+//		else if(tag.getValueType().equals("FilesContainer")) {
+//			tagLabel0.setToolTipText("Select multiple files ");
+//			tagLabel0.setIcon(IconsUtils.getMultipleFilesIcon(14));
+//		}
 		tagLabel0.addMouseListener(listener);
 		
 		this.add(tagLabel0);
@@ -107,9 +126,9 @@ public class TagRow extends JPanel{
 				
 				if(attr.getPossibleValuesType().equals("File") && attr.getFile() != null) {
 					attrLabel0.setToolTipText("Source file associated :" + attr.getFile().getAbsolutePath());
-					attrLabel0.setIcon(IconUtils.FAgetFileIcon(14, ColorUtils.SYSTEM_GREEN_COLOR_DARK));
+					attrLabel0.setIcon(IconsUtils.FAgetFileIcon(14, ColorUtils.SYSTEM_GREEN_COLOR_DARK));
 				}
-				else if(attr.getPossibleValuesType().contentEquals("File") && attr.getFile() == null) attrLabel0.setIcon(IconUtils.FAgetFileIcon(14, ColorUtils.SYSTEM_GRAY_COLOR_DARK));
+				else if(attr.getPossibleValuesType().contentEquals("File") && attr.getFile() == null) attrLabel0.setIcon(IconsUtils.FAgetFileIcon(14, ColorUtils.SYSTEM_GRAY_COLOR_DARK));
 				
 				attrLabel0.addMouseListener(listener);
 				this.add(attrLabel0);
@@ -129,7 +148,7 @@ public class TagRow extends JPanel{
 				
 				/** if attribute have possible values */
 				else {
-					AttributeFormComboBox valuesComboBox = new AttributeFormComboBox(attr,this);  
+					AttributeFormComboBox valuesComboBox = new AttributeFormComboBox(attr,this);	
 					
 					/** if attribute have possible values and attributes have no value set */
 					if (attr.getDefaultValue() != null && attr.getValue() == null ) {
@@ -152,6 +171,7 @@ public class TagRow extends JPanel{
 					
 					
 					valuesComboBox.addFocusListener(listener);
+					valuesComboBox.addActionListener(listener);
 					this.add(valuesComboBox);
 				}
 				
@@ -249,6 +269,9 @@ public class TagRow extends JPanel{
 			
 			if(!tag.getValueType().equals("Void")) {
 				tagLabel2 = new TagLabel("</  " + tag.getName() + "  > ",tag);
+				DragSource ds1 = new DragSource();
+				ds1.createDefaultDragGestureRecognizer(tagLabel2,
+						DnDConstants.ACTION_MOVE, new DnDListenerTagLabel());
 				tagLabel2.addMouseListener(listener);
 				this.add(tagLabel2);
 			}
@@ -257,16 +280,29 @@ public class TagRow extends JPanel{
 		return this;
 	}
 	
-
-	/** generate close tag row */
-	public TagRow close() {
-		option = CLOSE_ROW;
+	
+	
+	
+	
+	/** 
+	 * generate close tag row 
+	 */
+	private TagRow close() {
 		tagLabel2 = new TagLabel("</  " + tag.getName() + "  >",tag);
 		tagLabel2.addMouseListener(listener);
+		DragSource ds = new DragSource();
+		ds.createDefaultDragGestureRecognizer(tagLabel2,
+				DnDConstants.ACTION_MOVE, new DnDListenerTagLabel());
 		this.add(tagLabel2);
 		return this;
 	}
-
+	
+	
+	
+	
+	/**
+	 * set tag labels Brighter
+	 */
 	public void setTagLabelBrighter() {
 		if (tagLabel0 != null) tagLabel0.setForeground(ColorUtils.TAG_COLOR_BRIGHTER);
 		if (tagLabel1 != null) tagLabel1.setForeground(ColorUtils.TAG_COLOR_BRIGHTER);
@@ -274,12 +310,20 @@ public class TagRow extends JPanel{
 	}
 	
 	
-
+	
+	
+	/**
+	 * Unset tagLabel brighter
+	 */
 	public void unsetTagLabelBrighter() {
 		if (tagLabel0 != null) tagLabel0.setForeground(ColorUtils.TAG_COLOR);
 		if (tagLabel1 != null) tagLabel1.setForeground(ColorUtils.TAG_COLOR);
 		if (tagLabel2 != null) tagLabel2.setForeground(ColorUtils.TAG_COLOR);
 	}
+	
+	
+	
+	
 	
 	/** 
 	 * used when switching from TagTextField and tagTextArea and vice versa
@@ -289,6 +333,9 @@ public class TagRow extends JPanel{
 		if(tagTextArea != null) tagTextArea.requestFocusInWindow();
 		if(tagTextField != null) tagTextField.requestFocusInWindow();
 	}
+	
+	
+	
 	
 	
 	/** 
@@ -312,8 +359,10 @@ public class TagRow extends JPanel{
 	
 	
 	
+	
+	
 	/**
-	 * update row
+	 * Remove all elements and repaint the interface.
 	 */
 	public void update(){
 		this.removeAll();
@@ -324,6 +373,13 @@ public class TagRow extends JPanel{
 	}
 	
 	
+	
+	
+	/**
+	 * Highlight background of this row
+	 * 
+	 * @param bg = color background, set to null for default color
+	 */
 	public void highlightBckGround(Color bg) {
 		if (bg == null) bg = new Color(200,221,242);
 		this.setBackground(bg);
@@ -332,10 +388,16 @@ public class TagRow extends JPanel{
 		}
 		/** tagtextArea is not recognized like Component*/
 		if(tagTextArea != null) tagTextArea.setBackground(bg);
+		
+		this.backGrounIsHighlighted = true;
 	}
 	
 	
 	
+	
+	/**
+	 * remove Bacground color for tag row and its components
+	 */
 	public void unsetHighlightBackGround() {
 		this.setBackground(ColorUtils.WHITE);
 		for (Component comp : this.getComponents()) {
@@ -343,10 +405,16 @@ public class TagRow extends JPanel{
 		}
 		/** tagtextArea is not recognized like Component*/
 		if(tagTextArea != null) tagTextArea.setBackground(Color.WHITE);
+		
+		this.backGrounIsHighlighted = false;
 	}
 	
 	
 	
+	
+	/**
+	 * hide all components in row
+	 */
 	public void hideComp() {
 		for (Component comp : this.getComponents()) {
 			comp.setVisible(false);
@@ -357,6 +425,40 @@ public class TagRow extends JPanel{
 	
 	
 	
+	
+	public void adjustTagLabel() {
+		if(tag.getSelectedChildrenArr() != null) {
+			if(this.tagLabel2 != null) {
+			this.tagLabel2.setVisible(false);
+			}
+				
+			if(this.tagTextField != null) {
+				this.tagTextField.setVisible(false);
+			}
+			if(this.tagTextArea != null) {
+				this.tagTextArea.setVisible(false);
+			}
+		}
+		else {
+			if(this.tagLabel2 != null) {
+			this.tagLabel2.setVisible(true);
+			}
+				
+			if(this.tagTextField != null) {
+				this.tagTextField.setVisible(true);
+			}
+			if(this.tagTextArea != null) {
+				this.tagTextArea.setVisible(true);
+			}
+		}
+
+	}
+	
+	
+	
+	/**
+	 * show all components in row
+	 */
 	public void showComp() {
 		for (Component comp : this.getComponents()) {
 			comp.setVisible(true);
@@ -367,6 +469,12 @@ public class TagRow extends JPanel{
 	
 	
 	
+	
+	/** 
+	 * Change foreground color for all components in row
+	 * 
+	 * @param c color to set
+	 */
 	public void setForeground(Color c) {
 		for (Component comp : this.getComponents()) {
 			comp.setForeground(c);
@@ -376,7 +484,9 @@ public class TagRow extends JPanel{
 	}
 	
 	
-	
+	/**
+	 * reset default foreground color for all components
+	 */
 	public void setDefaultForeground() {
 		for (Component comp : this.getComponents()) {
 			if(comp.getClass().equals(AttributeFormTextField.class)) 		comp.setForeground(ColorUtils.ATTR_VALUE_COLOR);
@@ -393,6 +503,13 @@ public class TagRow extends JPanel{
 		revalidate();
 	}
 	
+	
+	
+	
+	
+	/**
+	 * request focus on row
+	 */
 	public void requestFocus() {
 		boolean focusSetted = false;
 		for (Component comp : this.getComponents()) {
@@ -411,16 +528,26 @@ public class TagRow extends JPanel{
 		repaint();
 		revalidate();
 	}
-
+	
+	
+	
+	
+	
 	
 	
 	/**
-	 * @return the leftBorder
+	 * Draw Horizontal line 
 	 */
-	public int getLeftBorder() {
-		return leftBorder;
+	public void drawHorizontalLine(Color c , int x1, int y1, int x2, int y2, int stroke) {
+		if(c == null) c = ColorUtils.SYSTEM_GREEN_COLOR_DARK;
+		  Graphics g = this.getGraphics();
+		  Graphics2D g2 = (Graphics2D) g;
+		  g2.setColor(c);
+		  g2.setStroke(new BasicStroke(stroke));
+		  //draw a line (starting x,y; ending x,y)
+		  g2.drawLine(x1, y1, x2, y2);
 	}
-	
+
 	
 	/**
 	 * @return the leftBorder
@@ -428,15 +555,21 @@ public class TagRow extends JPanel{
 	public TagFormTextArea getTagTextArea() {
 		return this.tagTextArea;
 	}
-
-
-
-	/**
-	 * @param leftBorder the leftBorder to set
-	 */
-	public void setLeftBorder(int leftBorder) {
-		this.leftBorder = leftBorder;
+	
+	public XmlTag getTag() {
+		return this.tag;
 	}
+	
+	
+	public TagLabel getTagLabel0() {
+		return this.tagLabel0;
+	}
+	
+	
+	public boolean isBackGroundHiglighted() {
+		return this.backGrounIsHighlighted;
+	}
+	
 	
 	
 	
@@ -445,13 +578,16 @@ public class TagRow extends JPanel{
 	}
 	
 	
+	
 	public int getRowNumber() {
 		return this.rowNumber;
 	}
 	
-	public XmlTag getTag() {
-		return this.tag;
+	public boolean isOpen() {
+		if(option == this.OPEN_ROW) return true;
+		return false;
 	}
+	
 	
 
 }

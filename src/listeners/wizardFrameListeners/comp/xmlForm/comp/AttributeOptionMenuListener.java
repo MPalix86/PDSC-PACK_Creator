@@ -7,11 +7,11 @@ import java.io.File;
 import org.apache.commons.io.FilenameUtils;
 
 import business.Session;
-import business.XmlAttributeBusiness;
-import business.XmlTagBusiness;
-import model.XmlAttribute;
-import model.XmlEnum;
-import model.XmlTag;
+import business.XmlAttributeManager;
+import business.TagManager;
+import model.xml.XmlAttribute;
+import model.xml.XmlEnum;
+import model.xml.XmlTag;
 import view.comp.AttributeMenuItem;
 import view.comp.utils.DialogUtils;
 import view.wizardFrame.comp.xmlForm.comp.TagRow;
@@ -29,7 +29,7 @@ public class AttributeOptionMenuListener implements ActionListener{
 		
 		
 		if(command.equals("deleteAttribute")) {
-			XmlTagBusiness.removeSelectedAttributeFromParent(attr, tag, true, true);
+			TagManager.removeSelectedAttributeFromParent(attr, tag, true, true);
 			
 		}
 		
@@ -38,9 +38,9 @@ public class AttributeOptionMenuListener implements ActionListener{
 			if(file != null) {
 				if(attr.getValue()!= null) {
 					String value = attr.getValue().replace(FilenameUtils.getName(attr.getValue()), "") + file.getName() ;
-					XmlAttributeBusiness.setAttributeValue(attr, value, true);
+					XmlAttributeManager.setAttributeValue(attr, value, true);
 				}
-				else XmlAttributeBusiness.setAttributeValue(attr, file.getName(), true);
+				else XmlAttributeManager.setAttributeValue(attr, file.getName(), true);
 				attr.setFile(file);
 			}
 				

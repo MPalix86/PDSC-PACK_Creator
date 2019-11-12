@@ -3,14 +3,37 @@ package model;
 import java.util.ArrayList;
 
 
-
+/** 
+ * response object. Some function needs to return different data, 
+ * of different types. This class allows you to specify more information in a 
+ * return statement.
+ * 
+ * 
+ * @author mircopalese
+ */
 public class Response {
+	
+	/** simple boolen flag, usually used for a check */
 	private boolean flag;
+	
+	/** message depending on the context */
 	private String message;
+	
+	/** int that representing status depending on the context */
 	private int status;
+	
+	/** object that depending on the context */
 	private Object object;
+	
+	/**array list of object depending on the context */
 	private ArrayList<Object> arrObject;
 	
+	
+	/**
+	 * Builder pattern
+	 * 
+	 * @param builder
+	 */
 	private Response(ResponseBuilder builder) {
 		this.flag = builder.flag;
 		this.message = builder.message;

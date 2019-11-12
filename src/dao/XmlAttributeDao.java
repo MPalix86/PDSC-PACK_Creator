@@ -5,11 +5,18 @@ import java.util.Iterator;
 
 import dBConnection.DBConnection;
 import dBConnection.TableRecord;
-import model.XmlAttribute;
-import model.XmlEnum;
-import model.XmlNameSpace;
-import model.XmlTag;
+import model.xml.XmlAttribute;
+import model.xml.XmlEnum;
+import model.xml.XmlNameSpace;
+import model.xml.XmlTag;
 
+/**
+ * DAO = Data access objects 
+ * Used to query data base
+ * 
+ * @author mircopalese
+ *
+ */
 public class XmlAttributeDao {
 	private static DBConnection conn;
 	private static XmlAttributeDao instance;
@@ -132,7 +139,7 @@ public class XmlAttributeDao {
 				"       attributes_possible_values_types AS apvt ON apvt.id = atr.value_type_id\n" + 
 				" WHERE atr.tag_id = " + tag.getTagId() +" AND atr.parent_tag_id = " + tag.getParent().getTagId() + " AND a.id = " + attrId + " " +
 				" ORDER BY a.name COLLATE NOCASE ASC ";
-		System.out.println(query);
+		
 		
 		ArrayList<TableRecord> result = conn.query(query);
 		Iterator<TableRecord> i = result.iterator();
@@ -346,7 +353,37 @@ public class XmlAttributeDao {
 		return attr;
 	}
 	
+	
+	public int getAttributeValueTypeIdFromAttr(XmlAttribute attr){
+		String query = 	"SELECT atr.id FROM attributes_possible_values_types AS atr WHERE atr.name = '" + attr.getPossibleValuesType() + "';";
+		int id = 0;
 
+		ArrayList<TableRecord> result = conn.query(query);
+		Iterator<TableRecord> i = result.iterator();
+		
+		while (i.hasNext()) {
+			TableRecord record 	= i.next();
+			id		= Integer.parseInt(record.get("id"));
+	    }
+			
+		return id;
+	}
+	
+	
+	public void InsertAttributeInTag(int attribute_id, int tag_id) {
+		String query = 	"INSERT INTO attributes_tags_relations ('attribute_id' ,'tag_id','value_type_id','required') "
+				+ "VALUES (" + attribute_id + "," + tag_id + ",15, 'false' );";
+		int result = conn.insert(query);
+		System.out.println(result);
+	}
+
+	
+	
+	public int InsertNewAttribute(String name) {
+		String query = 	"INSERT INTO attributes ('name')  VALUES ('"+name+"')";
+		int result = conn.insert(query);
+		return result;
+	}
 	
 
 }

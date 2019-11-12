@@ -2,26 +2,35 @@ package view.comp.utils;
 
 import java.awt.Component;
 import java.awt.event.ActionEvent;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.io.File;
 
 import javax.swing.AbstractAction;
 import javax.swing.DefaultListCellRenderer;
+import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JList;
 import javax.swing.JOptionPane;
+import javax.swing.JSeparator;
 import javax.swing.JSpinner;
+import javax.swing.JTextField;
 import javax.swing.LookAndFeel;
 import javax.swing.SpinnerNumberModel;
 import javax.swing.Timer;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
+import javax.swing.filechooser.FileView;
 
 import business.Session;
-import model.XmlTag;
-import view.comp.SquareButton;
+import business.TagManager;
+import model.Response;
+import model.xml.XmlAttribute;
+import model.xml.XmlTag;
+import view.comp.AttributeCheckBox;
 
 public class DialogUtils {
 	private Session session;
@@ -79,7 +88,7 @@ public class DialogUtils {
 	 * @return chosen path 
 	 */
 	
-	public static File showChooseFileFrame() {
+	public static File showChooseFileFrame(File directoryToOpen, boolean setTraversable) {
 		
 		/** setting up fileChooser */
 		JFileChooser fileChooser = null;
@@ -89,16 +98,33 @@ public class DialogUtils {
 		 
 	    try {
 	        UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-	        fileChooser = new JFileChooser();
+	        fileChooser = new JFileChooser(directoryToOpen);
+	        if(!setTraversable) {
+	 	        fileChooser.setFileView(new FileView() {
+	 	            @Override
+	 	            public Boolean isTraversable(File f) {
+	 	                 return directoryToOpen.equals(f);
+	 	            }
+	 	        });
+	        }
+	       
 	     
 	    } catch (IllegalAccessException | UnsupportedLookAndFeelException | InstantiationException | ClassNotFoundException e) {}
 	   
 	    
 		fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
 		
-		if(Session.getInstance().getLastDirectoryOpenPath() != null) {
-			fileChooser.setCurrentDirectory(Session.getInstance().getLastDirectoryOpenPath());
+		if(directoryToOpen == null) {
+			if(Session.getInstance().getLastDirectoryOpenPath() != null) {
+				/** 
+				 * LastDirectoryOpenPath is used to to open the " next file chooser " in  LastDirectoryOpenPath directly.
+				 * set it only if setTraversable is true to avoid security issue and to avoid user's access to non traversable
+				 * folder in future.
+				 */
+				if(setTraversable)fileChooser.setCurrentDirectory(Session.getInstance().getLastDirectoryOpenPath());
+			}
 		}
+	
 		
 		/** handling user's choice */
 		int val = fileChooser.showOpenDialog(null);
@@ -123,6 +149,105 @@ public class DialogUtils {
 		else if(val == JFileChooser.CANCEL_OPTION) {}
 		return null;
 	}
+	
+	
+	
+	
+	/**
+	 * Same as function above but without any folder to pen
+	 * in this case starts from home (~) or last open directory
+	 *
+	 * @return chosen path 
+	 */
+	
+	public static File showChooseFileFrame() {
+		
+		/** setting up fileChooser */
+		JFileChooser fileChooser = null;
+		
+		LookAndFeel previousLF = UIManager.getLookAndFeel();
+		
+		 
+	    try {
+	        UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+	        fileChooser = new JFileChooser();
+	     
+	    } catch (IllegalAccessException | UnsupportedLookAndFeelException | InstantiationException | ClassNotFoundException e) {}
+	   
+	    
+		fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+		
+		if(Session.getInstance().getLastDirectoryOpenPath() != null) {
+			fileChooser.setCurrentDirectory(Session.getInstance().getLastDirectoryOpenPath());
+		}
+
+		/** handling user's choice */
+		int val = fileChooser.showOpenDialog(null);
+		
+		 try {
+				UIManager.setLookAndFeel(previousLF);
+			} catch (UnsupportedLookAndFeelException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		 
+		 
+		if(val == JFileChooser.APPROVE_OPTION) {
+			File destinationPath = fileChooser.getSelectedFile();
+			Session.getInstance().setLastDirectoryOpenPath(destinationPath);
+			return destinationPath;
+		}
+		else if(val == JFileChooser.ERROR_OPTION) {  
+			JOptionPane.showMessageDialog(null, "Some error occurred", "Error", JOptionPane.ERROR_MESSAGE);
+			return null;
+		}
+		else if(val == JFileChooser.CANCEL_OPTION) {}
+		return null;
+	}
+	
+	
+	
+	
+	public static File[] showChooseMultipleFilesFrame() {
+
+		JFileChooser chooser = null;
+		
+		
+		LookAndFeel previousLF = UIManager.getLookAndFeel();
+		
+		 
+	    try {
+	        UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+	        chooser = new JFileChooser();
+	        chooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
+	        chooser.setMultiSelectionEnabled(true);
+			chooser.showOpenDialog(null);
+	     
+	    } catch (IllegalAccessException | UnsupportedLookAndFeelException | InstantiationException | ClassNotFoundException e) {}
+	  
+	    
+	
+		
+		if(Session.getInstance().getLastDirectoryOpenPath() != null) {
+			if(chooser  != null) chooser.setCurrentDirectory(Session.getInstance().getLastDirectoryOpenPath());
+		}
+		
+		 try {
+				UIManager.setLookAndFeel(previousLF);
+		} 
+		 catch (UnsupportedLookAndFeelException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+		}
+		 
+
+		 
+		File[] files = chooser.getSelectedFiles();
+		 
+		return files;
+		 
+	}
+	
 	
 	
 	
@@ -179,9 +304,8 @@ public class DialogUtils {
 	 */
 	
 	public static boolean yesNoWarningMessage(String message) {
-		ImageIcon icon = new ImageIcon (DialogUtils.class.getClassLoader().getResource("icons/warning48.png"));
 		Object[] options = { "YES", "NO" };
-		int value = JOptionPane.showOptionDialog (null, message, "Warning", JOptionPane.YES_NO_OPTION,JOptionPane.INFORMATION_MESSAGE, icon, options, options[0]); 
+		int value = JOptionPane.showOptionDialog (null, message, "Warning", JOptionPane.YES_NO_OPTION,JOptionPane.INFORMATION_MESSAGE, IconsUtils.getWarningIcon(40), options, options[0]); 
 		if(value == 0) return true;
 		else return false;
 	}
@@ -197,7 +321,7 @@ public class DialogUtils {
 	 */
 	
 	public static void warningMessage(String message) {
-		ImageIcon icon = new ImageIcon (DialogUtils.class.getClassLoader().getResource("icons/warning48.png"));
+		ImageIcon icon = IconsUtils.getWarningIcon(40);
 		Object[] options = { "OK"};
 		JOptionPane.showOptionDialog (null, message, "Warning", JOptionPane.OK_OPTION, JOptionPane.INFORMATION_MESSAGE, icon, options, options[0]); 
 	}
@@ -207,8 +331,7 @@ public class DialogUtils {
 	
 
 	public static String showInputDialog(String title, String fieldLabelText) {
-        ImageIcon icon = new ImageIcon("src/images/turtle32.png");
-        String n = (String)JOptionPane.showInputDialog(null, fieldLabelText, title, JOptionPane.QUESTION_MESSAGE, icon, null, null);
+        String n = (String)JOptionPane.showInputDialog(null, fieldLabelText, title, JOptionPane.QUESTION_MESSAGE, null, null, null);
         return n;
 	}
 	
@@ -223,7 +346,7 @@ public class DialogUtils {
 	public  static int cloneDialog() {
 		SpinnerNumberModel sModel = new SpinnerNumberModel(0, 0, 30, 1);
 		JSpinner spinner = new JSpinner(sModel);
-		int option = JOptionPane.showOptionDialog(null, spinner, "Clone Tag", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, IconUtils.getCloneIcon(40), null, null);
+		int option = JOptionPane.showOptionDialog(null, spinner, "Clone Tag", JOptionPane.OK_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE, IconsUtils.getCloneIcon(40), null, null);
 		if (option == JOptionPane.CANCEL_OPTION) {}
 		else if (option == JOptionPane.OK_OPTION){ 
 			System.out.println("premuto ok" + (int) spinner.getValue());
@@ -243,8 +366,25 @@ public class DialogUtils {
 	 * @return void
 	 */
 	
-	public static void okMessage(String message, String title) {
-		ImageIcon icon = new ImageIcon (DialogUtils.class.getClassLoader().getResource("icons/ok40.png"));
+	public static void okMessage(String message, String title, ImageIcon icon) {
+		Object[] options = { "OK"};
+		JOptionPane.showOptionDialog (null, message, title, JOptionPane.OK_OPTION,
+				 JOptionPane.INFORMATION_MESSAGE,
+				 icon, options, options[0]); 
+	
+	}
+	
+	
+	
+	
+	/**
+	 * Show option pane warning message with only "ok" option
+	 * 
+	 * @param message	message to show inside option pane
+	 * @return void
+	 */
+	
+	public static void okMessage(String message, String title, Icon icon) {
 		Object[] options = { "OK"};
 		JOptionPane.showOptionDialog (null, message, title, JOptionPane.OK_OPTION,
 				 JOptionPane.INFORMATION_MESSAGE,
@@ -306,9 +446,8 @@ public class DialogUtils {
 	                return this;
 	            }
 	        } );
-		SquareButton addBtn = new SquareButton("Add");
 		Object[] options = { "Paste", "Cancel" };
-		int choice = JOptionPane.showOptionDialog(null, jcb, "Paste tag after element : ", 0,JOptionPane.INFORMATION_MESSAGE, IconUtils.FAgetClipboardIcon(48, ColorUtils.FOLDER_BROWN), options, options[0]); 
+		int choice = JOptionPane.showOptionDialog(null, jcb, "Paste tag after element : ", 0,JOptionPane.INFORMATION_MESSAGE, IconsUtils.FAgetClipboardIcon(48, ColorUtils.FOLDER_BROWN), options, options[0]); 
 		System.out.println("choice " + choice);
 		if(choice == 0) {
 			int index =  jcb.getSelectedIndex();
@@ -319,7 +458,7 @@ public class DialogUtils {
 	}
 	
 	
-	public static boolean CustomButtonTrueFalsePane(String title ,String message, String trueButtonMessage, String falseButtonMessage, ImageIcon icon) {
+	public static boolean CustomButtonsTrueFalsePane(String title ,String message, String trueButtonMessage, String falseButtonMessage, ImageIcon icon) {
 		Object[] options = { trueButtonMessage, falseButtonMessage };
 		int value = JOptionPane.showOptionDialog (null, message, title , JOptionPane.YES_NO_OPTION,JOptionPane.INFORMATION_MESSAGE, icon, options, options[0]); 
 		if(value == 0) return true;
@@ -327,6 +466,77 @@ public class DialogUtils {
 	
 	}
 	
+	
+	
+	public static int CustomButtonsMessagePane(String title ,String message, Object[] horizontalElements, String falseButtonMessage, ImageIcon icon) {
+		int value = -1;
+		value = JOptionPane.showOptionDialog (null, message, title , JOptionPane.YES_NO_OPTION,JOptionPane.INFORMATION_MESSAGE, icon, horizontalElements, horizontalElements[0]); 
+		return value;
+	
+	}
+	
+	
+	
+	public static int AddCustomAttribute(String title ,String message,Object[] options , ImageIcon icon) {
+		int value = JOptionPane.showOptionDialog (null, message, title , JOptionPane.YES_NO_OPTION,JOptionPane.INFORMATION_MESSAGE, icon, options, options[0]); 
+		return value;
+	
+	}
+	
+	
+	
+	public static Response multipleFilesTagSettingsDialog(XmlTag tag, String title ,String message,ImageIcon icon) {
+		
+		int size = tag.getAttrArr().size();
+		Object[] options = new Object[size + 5] ;
+		options[0] = "Select desired attributes for tag <file> \n";
+		options[1] = new JSeparator();
+		if(tag.getAttrArr() != null) {
+			for (int i = 0; i < tag.getAttrArr().size(); i++) {
+				XmlAttribute attr = tag.getAttrArr().get(i);
+				AttributeCheckBox c = new AttributeCheckBox(attr);
+				options[i + 2] = c;
+				c.setForeground(ColorUtils.ATTR_COLOR);
+				c.addItemListener(new ItemListener() {
+
+					@Override
+					public void itemStateChanged(ItemEvent e) {
+						AttributeCheckBox c = (AttributeCheckBox) e.getItem();
+						XmlAttribute attr =  c.getAttr();
+						/** if attribute was selected */
+						if(c.isSelected()) {
+							if(!tag.containsAttr(attr)) TagManager.addAttributeInTag(tag, new XmlAttribute(attr, attr.getTag()), false, false, null);
+						}	
+						else {
+							if(tag.containsAttr(attr)) TagManager.removeSelectedAttributeFromParent(attr, tag, false, false);
+						}
+						
+					}
+					
+				});
+				
+				if(attr.isRequired()) c.setSelected(true);
+	
+			}
+		}
+		JTextField f = new JTextField();
+		options[size + 2] = new JSeparator();
+		options[size + 3] = "\nInsert common path to all files\n";
+		options[size + 4] = f;
+		Object[] buttons = { "Select Files", "cancel"};
+		int val = JOptionPane.showOptionDialog (null, options, title , JOptionPane.YES_NO_OPTION,JOptionPane.PLAIN_MESSAGE, icon, buttons, buttons); 
+		return new Response.ResponseBuilder().status(val).message(f.getText()).build();
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+
 	
 
 

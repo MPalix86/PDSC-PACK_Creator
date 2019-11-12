@@ -14,12 +14,12 @@ import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.border.EmptyBorder;
 
-import business.ConstantVariable;
 import business.Session;
 import listeners.wizardFrameListeners.comp.ClosableTabbedPaneListener;
-import model.PDSCDocument;
+import model.GlobalVariables;
+import model.PDSC.PDSCDocument;
 import view.comp.customTabbedPane.ClosableTabbedPane;
-import view.comp.utils.IconUtils;
+import view.comp.utils.IconsUtils;
 import view.wizardFrame.comp.console.Console;
 import view.wizardFrame.comp.console.ConsoleContainer;
 import view.wizardFrame.comp.descriptionPane.DescriptionPaneContainer;
@@ -101,7 +101,7 @@ public class WizardFrame extends JFrame {
 		session.setWizardFrame(this);
 		
 		this.setVisible(true);
-		this.setTitle(ConstantVariable.programName + " " + ConstantVariable.programVersion);
+		this.setTitle(GlobalVariables.programName + " " + GlobalVariables.programVersion);
 		this.setMinimumSize(new Dimension(800,600));
 	}
 	
@@ -125,13 +125,13 @@ public class WizardFrame extends JFrame {
 
 		
 		if (session.getSelectedForm() == null ) {
-			closableTabbedPaneCenter.addTab(" Overview   ",IconUtils.FAgetPlusCircleIcon(20,null),new OverviewPane());
+			closableTabbedPaneCenter.addTab(" Overview   ",IconsUtils.FAgetPlusCircleIcon(20,null),new OverviewPane());
 		}
 
 		
 		
-		closableTabbedPaneSouth.addTab(" Console   ", IconUtils.getScreeIcon(20), consoleContainer);
-		closableTabbedPaneSouth.addTab(" Description   ", IconUtils.FAgetInfoCircleIcon(20,null), this.descriptionPaneContainer);
+		closableTabbedPaneSouth.addTab(" Console   ", IconsUtils.getScreeIcon(20), consoleContainer);
+		closableTabbedPaneSouth.addTab(" Description   ", IconsUtils.FAgetInfoCircleIcon(20,null), this.descriptionPaneContainer);
 		
 		splitPane = new JSplitPane(JSplitPane.VERTICAL_SPLIT,closableTabbedPaneCenter, closableTabbedPaneSouth);	
 		splitPane.setResizeWeight(0.8); 
@@ -229,7 +229,7 @@ public class WizardFrame extends JFrame {
 		
 		
 		if(!found && !tabContainerFound) {
-			closableTabbedPaneSouth.addTab(" Console   ", IconUtils.getScreeIcon(20), consoleContainer);
+			closableTabbedPaneSouth.addTab(" Console   ", IconsUtils.getScreeIcon(20), consoleContainer);
 			closableTabbedPaneSouth.setSelectedComponent(consoleContainer);
 			splitPane.add(closableTabbedPaneSouth);
 			splitPane.repaint();
@@ -237,7 +237,7 @@ public class WizardFrame extends JFrame {
 		
 		
 		if(!found && tabContainerFound) {
-			closableTabbedPaneSouth.addTab(" Console   ", IconUtils.getScreeIcon(20), consoleContainer);
+			closableTabbedPaneSouth.addTab(" Console   ", IconsUtils.getScreeIcon(20), consoleContainer);
 			closableTabbedPaneSouth.setSelectedComponent(consoleContainer);
 			splitPane.repaint();
 		}
@@ -248,7 +248,7 @@ public class WizardFrame extends JFrame {
 	
 	
 	public void addOverviewPane() {
-		closableTabbedPaneCenter.addTab(" Overview   ",IconUtils.FAgetPlusCircleIcon(20,null),new OverviewPane());
+		closableTabbedPaneCenter.addTab(" Overview   ",IconsUtils.FAgetPlusCircleIcon(20,null),new OverviewPane());
 	}
 	
 	
@@ -291,7 +291,7 @@ public class WizardFrame extends JFrame {
 		}
 		
 		if(!descriptionPaneFound && !tabContainerFound) {
-			closableTabbedPaneSouth.addTab(" Description   ", IconUtils.FAgetInfoCircleIcon(20,null), this.descriptionPaneContainer);
+			closableTabbedPaneSouth.addTab(" Description   ", IconsUtils.FAgetInfoCircleIcon(20,null), this.descriptionPaneContainer);
 			splitPane.add(closableTabbedPaneSouth);
 			closableTabbedPaneSouth.setSelectedComponent(descriptionPaneContainer);
 			splitPane.repaint();
@@ -299,7 +299,7 @@ public class WizardFrame extends JFrame {
 		
 		
 		if(!descriptionPaneFound && tabContainerFound) {
-			closableTabbedPaneSouth.addTab(" Description   ", IconUtils.FAgetInfoCircleIcon(20,null), this.descriptionPaneContainer);
+			closableTabbedPaneSouth.addTab(" Description   ", IconsUtils.FAgetInfoCircleIcon(20,null), this.descriptionPaneContainer);
 			closableTabbedPaneSouth.setSelectedComponent(descriptionPaneContainer);
 			splitPane.repaint();
 		}
@@ -317,7 +317,7 @@ public class WizardFrame extends JFrame {
 		
 		/** if is new file */
 		if(doc.getSourcePath() == null) {
-			closableTabbedPaneCenter.addTab(" Untitled   ", IconUtils.FAgetFileCodeIcon(20,null) , formContainer , "No path" );
+			closableTabbedPaneCenter.addTab(" Untitled   ", IconsUtils.FAgetFileCodeIcon(20,null) , formContainer , "No path" );
 		}
 		else {
 			
@@ -325,11 +325,11 @@ public class WizardFrame extends JFrame {
 			/**if title is already present */
 			if (tabTitleIsAlreadyPresent(doc.getSourcePath().getName())) {
 				/** insert complete path like title */
-				closableTabbedPaneCenter.addTab(doc.getSourcePath().getAbsolutePath() + "   ", IconUtils.FAgetFileCodeIcon(20,null) , formContainer , doc.getSourcePath().getAbsolutePath());
+				closableTabbedPaneCenter.addTab(doc.getSourcePath().getAbsolutePath() + "   ", IconsUtils.FAgetFileCodeIcon(20,null) , formContainer , doc.getSourcePath().getAbsolutePath());
 			}
 			else {
 				/** insert filename like name */
-				closableTabbedPaneCenter.addTab(doc.getSourcePath().getName() + "   ", IconUtils.FAgetFileCodeIcon(20,null) , formContainer , doc.getSourcePath().getAbsolutePath());
+				closableTabbedPaneCenter.addTab(doc.getSourcePath().getName() + "   ", IconsUtils.FAgetFileCodeIcon(20,null) , formContainer , doc.getSourcePath().getAbsolutePath());
 			}
 		}
 		
@@ -403,6 +403,12 @@ public class WizardFrame extends JFrame {
 	}
 	
 	
+	
+	/**
+	 * Create new fram with pdsc preview
+	 * 
+	 * @param text
+	 */
 	public void showPreview(String text) {
 		PreviewPaneContainer previewPane = new PreviewPaneContainer();
 		previewPane.getPreviewPane().setText(text);

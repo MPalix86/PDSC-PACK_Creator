@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
 
-import model.XmlTag;
+import model.xml.XmlTag;
 
 public class TagComboBox extends JComboBox<String>{
 	private XmlTag tag;

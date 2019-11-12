@@ -9,13 +9,13 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import listeners.wizardFrameListeners.comp.xmlForm.comp.AddAttributeFrameListener;
-import model.XmlAttribute;
-import model.XmlTag;
+import model.xml.XmlAttribute;
+import model.xml.XmlTag;
 import net.miginfocom.swing.MigLayout;
 import view.comp.AttributeButton;
 import view.comp.AttributeCheckBox;
 import view.comp.utils.ColorUtils;
-import view.comp.utils.IconUtils;
+import view.comp.utils.IconsUtils;
 
 
 public class AttributesListBar extends JPanel{
@@ -76,7 +76,7 @@ public class AttributesListBar extends JPanel{
   		    	
   		    	panel1.add(checkBox);
   		        
-  		        AttributeButton showDescriptionButton = (AttributeButton) new AttributeButton(attr).toIconButton(IconUtils.FAgetInfoCircleIcon(20,null));
+  		        AttributeButton showDescriptionButton = (AttributeButton) new AttributeButton(attr).toIconButton(IconsUtils.FAgetInfoCircleIcon(20,null));
   		        showDescriptionButton.addActionListener(listener);
   		        showDescriptionButton.setActionCommand("showDescription");
   		        

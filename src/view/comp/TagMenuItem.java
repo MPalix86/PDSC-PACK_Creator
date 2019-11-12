@@ -2,7 +2,7 @@ package view.comp;
 
 import javax.swing.JMenuItem;
 
-import model.XmlTag;
+import model.xml.XmlTag;
 
 public class TagMenuItem extends JMenuItem {
 	

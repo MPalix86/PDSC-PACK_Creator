@@ -9,7 +9,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import business.Session;
-import model.XmlAttribute;
+import model.xml.XmlAttribute;
 import view.comp.AttributeTextField;
 import view.comp.utils.ColorUtils;
 import view.wizardFrame.comp.xmlForm.comp.TagRow;

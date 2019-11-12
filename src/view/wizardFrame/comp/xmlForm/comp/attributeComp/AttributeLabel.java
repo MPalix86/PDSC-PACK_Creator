@@ -2,7 +2,7 @@ package view.wizardFrame.comp.xmlForm.comp.attributeComp;
 
 import javax.swing.JLabel;
 
-import model.XmlAttribute;
+import model.xml.XmlAttribute;
 import view.comp.utils.ColorUtils;
 
 public class AttributeLabel extends JLabel{

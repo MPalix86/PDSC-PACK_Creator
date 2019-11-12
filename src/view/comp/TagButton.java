@@ -7,7 +7,7 @@ import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
-import model.XmlTag;
+import model.xml.XmlTag;
 import view.comp.utils.ColorUtils;
 
 /**

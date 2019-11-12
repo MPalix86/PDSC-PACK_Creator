@@ -8,10 +8,12 @@ import java.io.File;
 
 import org.apache.commons.io.FilenameUtils;
 
-import business.CustomUtils;
 import business.Session;
-import business.XmlTagBusiness;
-import model.XmlTag;
+import business.TagManager;
+import business.utils.CustomUtils;
+import mao.XmlTagMao;
+import model.Response;
+import model.xml.XmlTag;
 import view.comp.TagMenuItem;
 import view.comp.utils.DialogUtils;
 import view.wizardFrame.comp.xmlForm.comp.TagRow;
@@ -35,30 +37,32 @@ public class TagOptionMenuListener implements ActionListener , MouseListener{
 		XmlTag tag = item.getTag();
 		
 		if(command.equals("deleteTag")) {
-			XmlTagBusiness.removeSelectedChildFromParent(tag, tag.getParent(), true, true);
-			session.getSelectedForm().UpdateView();
+			long a = System.nanoTime();
+			TagManager.removeSelectedChildFromParent(tag, tag.getParent(), true, true);
+			session.getSelectedForm().repaintView();
+			long b = System.nanoTime();
+			long c = (b - a)/1000000;
+			System.out.println("deleteTag " + c);
 		}
 		
 		
 		
 		else if(command.equals("cloneTag")) {
 			int copiesNumber = DialogUtils.cloneDialog();
-			XmlTagBusiness.cloneTag(tag, copiesNumber, true, true);
-			session.getSelectedForm().UpdateView();
+			TagManager.cloneTag(tag, copiesNumber, true, true);
+			session.getSelectedForm().repaintView();
 
 		}
 		
 		else if(command.equals("addTag")) {			
-			
 			TagMenuItem tagMenuItem = (TagMenuItem) e.getSource();
 			XmlTag child = tagMenuItem.getTag();
 			XmlTag newTag = new XmlTag(child, child.getParent());
-			XmlTagBusiness.addTagInParent(newTag, child, child.getParent(), true, true, null);
-			session.getSelectedForm().UpdateView();
-			TagRow row = session.getSelectedForm().getTagOpenRow(newTag);
-			if(row != null ) row.highlightBckGround(null);
+			TagManager.addTagInParent(newTag, child, child.getParent(), true, true, true, null);
+			session.getSelectedForm().repaintView();
+			session.getSelectedForm().highlightComponetBckGround(newTag,null);
 			AddAttributeFrame frame = null;
-			if(child.getAttrArr() != null) frame = new AddAttributeFrame(newTag);
+			if(newTag.getAttrArr() != null) frame = new AddAttributeFrame(newTag);
 			if (frame != null) frame.requestFocusInWindow();
 		}
 
@@ -76,9 +80,9 @@ public class TagOptionMenuListener implements ActionListener , MouseListener{
 			if(file != null) {
 				if(tag.getContent()!= null) {
 					String value =  tag.getContent().replace(FilenameUtils.getName(tag.getContent()), "") + file.getName();
-					XmlTagBusiness.setTagContent(tag, value, true);
+					TagManager.setTagContent(tag, value, true);
 				}
-				else XmlTagBusiness.setTagContent(tag, file.getName(), true);
+				else TagManager.setTagContent(tag, file.getName(), true);
 				tag.setFile(file);
 				session.getSelectedForm().getTagOpenRow(tag).update();
 				
@@ -92,8 +96,9 @@ public class TagOptionMenuListener implements ActionListener , MouseListener{
 		}
 		
 		else if(command.equals("addRequiredChildren")) {
-			XmlTagBusiness.addRequiredChildren(tag, true);
-			session.getSelectedForm().UpdateView();
+			TagManager.addRequiredChildren(tag, true);
+			session.getSelectedForm().repaintView();
+			session.getSelectedForm().highlightComponetBckGround(tag, null);
 		}
 
 		
@@ -102,8 +107,29 @@ public class TagOptionMenuListener implements ActionListener , MouseListener{
 			
 			String attrNames = DialogUtils.showInputDialog("Add Custom Attribute", "Add one or more attributes separated by space \n attr1 attr2 ...");
 			if (attrNames != null){
+//				boolean val = DialogUtils.CustomButtonTrueFalsePane("Update DB", "Do you want to add this attribute in DB", "Add", "Cancel", null);
+//				
 				String[] names = CustomUtils.separateText(attrNames, " ");	
-				XmlTagBusiness.addCustomAttributes(tag, names, true);
+				
+//				if(val) {
+//					for(String name : names) {
+//						XmlAttribute attr = XmlAttributeDao.getInstance().getAttributeFromName(name);
+//						if(attr != null) {
+//							System.out.println(attr.getAttrId());
+//							XmlAttributeDao.getInstance().InsertAttributeInTag(attr.getAttrId(), tag.getTagId());
+//						}
+//						else {
+//							int attrId = XmlAttributeDao.getInstance().InsertNewAttribute(name);
+//							if(attrId != 0) {
+//								XmlAttributeDao.getInstance().InsertAttributeInTag(attrId, tag.getTagId());
+//							}
+//						}
+//						tag.addAttr(attr);
+//					}
+//				}
+				
+				
+				TagManager.addCustomAttributes(tag, names, true);
 				TagRow row = session.getSelectedForm().getTagOpenRow(tag);
 				row.update();
 				row.requestFocus();
@@ -113,19 +139,41 @@ public class TagOptionMenuListener implements ActionListener , MouseListener{
 
 		
 		else if(command.equals("addCustomTag")) {
+			
 			String tagNames = DialogUtils.showInputDialog("Add Custom Element", "Add one or more custom elements separated by space \n el1 el2 ...");
 			if(tagNames != null && tagNames.trim() != "") {
 				String[] names = CustomUtils.separateText(tagNames, " ");
-				XmlTagBusiness.addCustomTags(tag, names, true, true);
-				session.getSelectedForm().UpdateView();
+				TagManager.addCustomTags(tag, names, true, true);
+				session.getSelectedForm().repaintView();
 				
 			}
 			
 		}
 		
+		
+		
+		
+		else if(command.equals("addFiles")) {
+			if(tag.getValueType().equals("FilesContainer")) {
+				XmlTag tagFile = XmlTagMao.getCompleteTagFromNameAndParent("file", tag);
+				Response r = DialogUtils.multipleFilesTagSettingsDialog(tagFile, "Customize <file>", "message", null);
+				int status = r.getStatus();
+				if(status == 0) {
+					String path = r.getMessage();
+					File[] listOfFiles = DialogUtils.showChooseMultipleFilesFrame();
+					if(listOfFiles != null) {
+						System.out.println("Non funziona");
+						TagManager.addMultipleFiles(tag, tagFile, listOfFiles, path, true);
+						session.getSelectedForm().repaintView();
+					}
+				}
+			}	
+
+		}
+		
 
 			
-		}
+	}
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
@@ -149,7 +197,7 @@ public class TagOptionMenuListener implements ActionListener , MouseListener{
 	public void mouseEntered(MouseEvent e) {
 		TagMenuItem item = (TagMenuItem) e.getSource();
 		XmlTag tag = item.getTag();
-		String description = " ELEMENT : <" + tag.getName() + ">\n" + XmlTagBusiness.getTagDescription(tag);
+		String description = " ELEMENT : <" + tag.getName() + ">\n" + XmlTagMao.getTagDescription(tag);
 		session.getWizardFrame().addDescriptionPane();
 		session.getWizardFrame().setDescriptionText(description);
 	}

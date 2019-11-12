@@ -7,15 +7,15 @@ import javax.swing.JPopupMenu;
 import javax.swing.JToolBar;
 
 import business.Session;
-import business.XmlTagBusiness;
 import listeners.FileOptionListener;
 import listeners.PDSCOptionListener;
 import listeners.wizardFrameListeners.comp.ToolBarListener;
-import model.XmlTag;
+import mao.XmlTagMao;
+import model.xml.XmlTag;
 import view.comp.DropDownButton;
 import view.comp.SquareButton;
 import view.comp.TagMenuItem;
-import view.comp.utils.IconUtils;
+import view.comp.utils.IconsUtils;
 
 /**
  *  Menu bar creation
@@ -69,42 +69,42 @@ public class ToolBar extends JToolBar{
 	 */
 	private void placeComponents() {
 
-		createPackButton = new SquareButton().toIconButton(IconUtils.getPackIcon(20));
+		createPackButton = new SquareButton().toIconButton(IconsUtils.getPackIcon(20));
 		createPackButton.addActionListener(PdscOptionListener);
 		createPackButton.setActionCommand("createPack");
 		createPackButton.setToolTipText("Export Pack");
 	
 
 	
-		showHideTagsListButton = new SquareButton().toIconButton(IconUtils.getHideChildrenListIcon(20));
+		showHideTagsListButton = new SquareButton().toIconButton(IconsUtils.getHideChildrenListIcon(20));
 		showHideTagsListButton.addActionListener(listener);
 		showHideTagsListButton.setToolTipText("Hide tags list");
 		showHideTagsListButton.setActionCommand("showHideTagsListBar");
 		
 
 
-		SquareButton validateXsd = new SquareButton().toIconButton(IconUtils.getPlayIcon(20));
+		SquareButton validateXsd = new SquareButton().toIconButton(IconsUtils.getPlayIcon(20));
 		validateXsd.setToolTipText("Validate with XSD");
 		validateXsd.addActionListener(PdscOptionListener);
 		validateXsd.setActionCommand("validateXSD");
 		
-		SquareButton saveButton = new SquareButton().toIconButton(IconUtils.getSaveIcon(24));
+		SquareButton saveButton = new SquareButton().toIconButton(IconsUtils.getSaveIcon(24));
 		saveButton.setToolTipText("Save current PDSC");
 		saveButton.addActionListener(fileOptionListener);
 		saveButton.setActionCommand("savePDSC");
 		
-		SquareButton saveAsButton = new SquareButton().toIconButton(IconUtils.getSaveAsIcon(24));
+		SquareButton saveAsButton = new SquareButton().toIconButton(IconsUtils.getSaveAsIcon(24));
 		saveAsButton.setToolTipText("Save PDSC as");
 		saveAsButton.addActionListener(fileOptionListener);
 		saveAsButton.setActionCommand("savePDSCAs");
 		
-		redo = new SquareButton().toIconButton(IconUtils.getRedoIcon(20));
+		redo = new SquareButton().toIconButton(IconsUtils.getRedoIcon(20));
 		redo.setToolTipText("Redo");
 		redo.addActionListener(PdscOptionListener);
 		redo.setActionCommand("redo");
 		redo.setEnabled(false);
 		
-		undo = new SquareButton().toIconButton(IconUtils.getUndoIcon(20));
+		undo = new SquareButton().toIconButton(IconsUtils.getUndoIcon(20));
 		undo.setToolTipText("Undo");
 		undo.addActionListener(PdscOptionListener);
 		undo.setActionCommand("undo");
@@ -134,8 +134,8 @@ public class ToolBar extends JToolBar{
 	
 	private void generateTagsMenu() {
 		
-		XmlTag root = XmlTagBusiness.getRoot();
-		ArrayList<XmlTag> rootChildren = XmlTagBusiness.getNotRequiredChildren(root);
+		XmlTag root = XmlTagMao.getRoot();
+		ArrayList<XmlTag> rootChildren = XmlTagMao.getNotRequiredChildren(root);
 		
 		JPopupMenu tagsMenu = new JPopupMenu();
 		
@@ -148,7 +148,7 @@ public class ToolBar extends JToolBar{
 	        tagsMenu.add(menuItem);
 	    }
 	    
-		dropDownTagsButton = new DropDownButton(tagsMenu,IconUtils.getChildrenListIArrowIcon(35));
+		dropDownTagsButton = new DropDownButton(tagsMenu,IconsUtils.getChildrenListIArrowIcon(35));
 
 	}
 	
@@ -156,7 +156,7 @@ public class ToolBar extends JToolBar{
 	
 	/** change imageIcon (show) tag list bar */
 	public void setShowIconShowHideTagsListButton() {
-		ImageIcon showTagsIcon = IconUtils.getShowChildrenListIcon(20);
+		ImageIcon showTagsIcon = IconsUtils.getShowChildrenListIcon(20);
 		showHideTagsListButton.setIcon(showTagsIcon);
 		showHideTagsListButton.setToolTipText("Show tags list");
 		showHideTagsListButton.repaint();
@@ -166,7 +166,7 @@ public class ToolBar extends JToolBar{
 	
 	/** change imageIcon (hide) tag list bar */
 	public void setHideIconShowHideTagsListButton() {
-		ImageIcon hideTagsIcon = IconUtils.getHideChildrenListIcon(20);
+		ImageIcon hideTagsIcon = IconsUtils.getHideChildrenListIcon(20);
 		showHideTagsListButton.setIcon(hideTagsIcon);
 		showHideTagsListButton.setToolTipText("Hide tags list");
 		showHideTagsListButton.repaint();

@@ -2,7 +2,7 @@ package view.comp;
 
 import javax.swing.JTextField;
 
-import model.XmlAttribute;
+import model.xml.XmlAttribute;
 
 public class AttributeTextField extends JTextField{
 	protected XmlAttribute attr;

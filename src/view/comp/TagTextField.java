@@ -2,7 +2,7 @@ package view.comp;
 
 import javax.swing.JTextField;
 
-import model.XmlTag;
+import model.xml.XmlTag;
 
 public class TagTextField extends JTextField {
 	protected XmlTag tag;

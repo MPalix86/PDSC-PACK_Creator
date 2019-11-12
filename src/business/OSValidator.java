@@ -1,5 +1,6 @@
 package business;
 
+/** OS recognizer class */
 public class OSValidator {
 
 	private static String OS = System.getProperty("os.name").toLowerCase();

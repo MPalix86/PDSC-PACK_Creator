@@ -12,7 +12,7 @@ import listeners.FileOptionListener;
 import net.miginfocom.swing.MigLayout;
 import view.comp.TextButton;
 import view.comp.utils.ColorUtils;
-import view.comp.utils.IconUtils;
+import view.comp.utils.IconsUtils;
 
 public class OverviewPane extends JPanel{
 	
@@ -33,31 +33,31 @@ public class OverviewPane extends JPanel{
 		TextButton openFileButton = new TextButton ("Open PDSC file from file system ...");
 		openFileButton.addActionListener(filelistener);
 		openFileButton.setActionCommand("openPDSCFile");
-		openFileButton.setIcon(IconUtils.FAgetFolderOpenIcon(20, ColorUtils.FOLDER_BROWN));
+		openFileButton.setIcon(IconsUtils.FAgetFolderOpenIcon(20, ColorUtils.FOLDER_BROWN));
 		
 		TextButton newFileButton = new TextButton ("Create new PDSC file");
-		newFileButton.setIcon(IconUtils.getNewDocumentIcon(20));
+		newFileButton.setIcon(IconsUtils.getNewDocumentIcon(20));
 		newFileButton.addActionListener(filelistener);
 		newFileButton.setActionCommand("createNewPDSC");
 		
 		
 		
-		TextButton stLabel = new TextButton(IconUtils.getStLogoIcon(60));
+		TextButton stLabel = new TextButton(IconsUtils.getStLogoIcon(60));
 		stLabel.addActionListener(contactListener);
 		stLabel.setActionCommand("stSite");
 		stLabel.setToolTipText("Go to ST web site");
 		
-		TextButton facebook = new TextButton(IconUtils.getFacebookIcon(30));
+		TextButton facebook = new TextButton(IconsUtils.getFacebookIcon(30));
 		facebook.addActionListener(contactListener);
 		facebook.setActionCommand("facebookSite");
 		facebook.setToolTipText("Go to ST Facebook Profile");
 		
-		TextButton twitter = new TextButton(IconUtils.getTwitterIcon(35));
+		TextButton twitter = new TextButton(IconsUtils.getTwitterIcon(35));
 		twitter.addActionListener(contactListener);
 		twitter.setActionCommand("twitterSite");
 		twitter.setToolTipText("Go to ST Twitter Profile");
 		
-		TextButton youtube = new TextButton(IconUtils.getYoututbeIcon(45));
+		TextButton youtube = new TextButton(IconsUtils.getYoututbeIcon(45));
 		youtube.addActionListener(contactListener);
 		youtube.setActionCommand("youtubeSite");
 		youtube.setToolTipText("Go to ST Youtube Channel");

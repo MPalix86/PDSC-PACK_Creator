@@ -1,9 +1,9 @@
 package listeners;
 
 import business.Session;
-import model.UndoAbleEditEvent;
 import model.UndoManager;
 import model.interfaces.UndoAbleEditListener;
+import model.interfaces.events.UndoAbleEditEvent;
 
 public class UndoManagerListener implements UndoAbleEditListener{
 	

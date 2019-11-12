@@ -10,7 +10,7 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.border.MatteBorder;
 
 import listeners.wizardFrameListeners.comp.xmlForm.comp.AddAttributeFrameListener;
-import model.XmlTag;
+import model.xml.XmlTag;
 import view.comp.utils.ColorUtils;
 
 

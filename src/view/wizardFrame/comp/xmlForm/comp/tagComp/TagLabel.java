@@ -2,7 +2,7 @@ package view.wizardFrame.comp.xmlForm.comp.tagComp;
 
 import javax.swing.JLabel;
 
-import model.XmlTag;
+import model.xml.XmlTag;
 import view.comp.utils.ColorUtils;
 
 public class TagLabel extends JLabel{

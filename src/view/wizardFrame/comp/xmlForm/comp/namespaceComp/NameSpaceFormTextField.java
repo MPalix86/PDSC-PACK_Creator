@@ -10,7 +10,7 @@ import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
 import business.Session;
-import model.XmlNameSpace;
+import model.xml.XmlNameSpace;
 import view.comp.utils.ColorUtils;
 import view.wizardFrame.comp.xmlForm.comp.TagRow;
 

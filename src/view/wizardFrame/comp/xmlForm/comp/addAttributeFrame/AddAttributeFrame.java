@@ -16,8 +16,8 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.MatteBorder;
 
 import listeners.wizardFrameListeners.comp.xmlForm.comp.AddAttributeFrameListener;
-import model.XmlAttribute;
-import model.XmlTag;
+import model.xml.XmlAttribute;
+import model.xml.XmlTag;
 import view.comp.SquareButton;
 import view.comp.utils.ColorUtils;
 import view.wizardFrame.comp.xmlForm.comp.addAttributeFrame.comp.attributeListBar.AttributesListBarContainer;

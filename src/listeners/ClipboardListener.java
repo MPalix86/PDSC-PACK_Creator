@@ -9,12 +9,12 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 
 import business.Session;
-import business.XmlTagBusiness;
-import business.XmlTagUtils;
-import model.XmlAttribute;
-import model.XmlAttributeSelection;
-import model.XmlTag;
-import model.XmlTagSelection;
+import business.TagManager;
+import business.utils.XmlTagUtils;
+import model.xml.XmlAttribute;
+import model.xml.XmlAttributeSelection;
+import model.xml.XmlTag;
+import model.xml.XmlTagSelection;
 import view.comp.AttributeMenuItem;
 import view.comp.TagMenuItem;
 import view.comp.utils.DialogUtils;
@@ -32,7 +32,7 @@ public class ClipboardListener implements FlavorListener , ActionListener{
 
 	@Override
 	public void flavorsChanged(FlavorEvent e) {
-		//System.out.println("status of clipboard changed");
+		System.out.println("status of clipboard changed");
 	}
 
 	@Override
@@ -49,34 +49,42 @@ public class ClipboardListener implements FlavorListener , ActionListener{
 			if(command.equals("copyTag")) {
 				XmlTagSelection xmlTagSelection = new XmlTagSelection(tag);
 				session.getClipboard().setContents(xmlTagSelection, null);
-				//System.out.println("tag copied in clipboard " + tag.getName());
 			}
 			
 			else if (command.equals("cutTag")) {
 				XmlTagSelection xmlTagSelection = new XmlTagSelection(tag);
 				session.getClipboard().setContents(xmlTagSelection, null);
-				XmlTagBusiness.removeSelectedChildFromParent(tag, tag.getParent(), true, true);
-				session.getSelectedForm().UpdateView();
+				TagManager.removeSelectedChildFromParent(tag, tag.getParent(), true, true);
+				session.getSelectedForm().repaintView();
 			}
 			
 			else if (command.equals("pasteFirst")) {
 				
-				/** if paste Tag */
 				if(clipboard.getContents(null).getClass().equals(XmlTagSelection.class)) {
 					XmlTagSelection xmlTagSelection = (XmlTagSelection) clipboard.getContents(null);
 					XmlTag tagInClipboard = null;
 					XmlTag tagToPaste = null;
-					
 					try {
 						tagInClipboard = (XmlTag) xmlTagSelection.getTransferData(XmlTagSelection.xmlTagFlavor);
-						tagToPaste = new XmlTag(tagInClipboard);
+						tagToPaste = tagInClipboard;
+						
 					} catch (UnsupportedFlavorException | IOException e1) {
 						e1.printStackTrace();
 					}
 					XmlTag modelTag = XmlTagUtils.findModelChildFromSelectedChildName(tag, tagToPaste.getName());
-					if(tagToPaste != null) XmlTagBusiness.pasteTagInParent(tagToPaste, modelTag, tag, true, true,0);
-					tagToPaste.setRequired(false);
-		
+					
+					/** if root contains tag in clipboard, we have to paste copied tag */
+					if(session.getSelectedRoot().containsChild(tagInClipboard)) {
+						tagToPaste = new XmlTag(tagInClipboard);
+						
+					}
+					/** if root not contains tag in clipboard user cutted tag */
+					else {
+						tagToPaste = tagInClipboard;
+					}
+					if(tagToPaste != null) TagManager.pasteTagInParent(tagToPaste, modelTag, tag, true, true,0);
+					session.getSelectedForm().repaintView();
+					
 				}
 				
 				/** if paste attribute */
@@ -92,10 +100,11 @@ public class ClipboardListener implements FlavorListener , ActionListener{
 						e1.printStackTrace();
 					}
 					attrToPaste.setRequired(false);
-					XmlTagBusiness.addAttributeInTag(tag, attrToPaste, true, true, 0);
+					TagManager.addAttributeInTag(tag, attrToPaste, true, true, 0);
+					
+					session.getSelectedForm().getTagOpenRow(tag).update();
 				}
 				
-				session.getSelectedForm().UpdateView();
 			}
 			
 			
@@ -113,8 +122,8 @@ public class ClipboardListener implements FlavorListener , ActionListener{
 				}
 				if(index > 0) {
 					XmlTag modelTag = XmlTagUtils.findModelChildFromSelectedChildName(tag, tagToPaste.getName());
-					XmlTagBusiness.pasteTagInParent(tagToPaste, modelTag, tag, true, true,index);
-					session.getSelectedForm().UpdateView();
+					TagManager.pasteTagInParent(tagToPaste, modelTag, tag, true, true,index);
+					session.getSelectedForm().repaintView();
 				}
 			}
 			
@@ -139,7 +148,7 @@ public class ClipboardListener implements FlavorListener , ActionListener{
 				AttributeMenuItem attrItem =  (AttributeMenuItem) e.getSource();
 				XmlAttribute attr = attrItem.getAttr();
 				XmlAttributeSelection xmlAttrSelection = new XmlAttributeSelection(attr);
-				XmlTagBusiness.removeSelectedAttributeFromParent(attr, attr.getTag(), true, true);
+				TagManager.removeSelectedAttributeFromParent(attr, attr.getTag(), true, true);
 				session.getClipboard().setContents(xmlAttrSelection, null);
 				session.getSelectedForm().getTagOpenRow(attr.getTag()).update();
 			}

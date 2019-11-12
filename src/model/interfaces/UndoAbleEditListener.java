@@ -1,6 +1,6 @@
 package model.interfaces;
 
-import model.UndoAbleEditEvent;
+import model.interfaces.events.UndoAbleEditEvent;
 
 public interface UndoAbleEditListener {
 	public void undoAbleEditHappened(UndoAbleEditEvent e);

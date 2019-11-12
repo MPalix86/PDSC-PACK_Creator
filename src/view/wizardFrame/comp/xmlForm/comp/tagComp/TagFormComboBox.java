@@ -3,7 +3,7 @@ package view.wizardFrame.comp.xmlForm.comp.tagComp;
 import java.awt.event.FocusEvent;
 import java.awt.event.FocusListener;
 
-import model.XmlTag;
+import model.xml.XmlTag;
 import view.comp.TagComboBox;
 import view.wizardFrame.comp.xmlForm.comp.TagRow;
 

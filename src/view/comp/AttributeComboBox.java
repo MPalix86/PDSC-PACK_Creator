@@ -3,10 +3,11 @@ package view.comp;
 import java.util.ArrayList;
 
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.JComboBox;
 
-import model.XmlAttribute;
+import model.xml.XmlAttribute;
 
-public class AttributeComboBox extends CustomComboBox<String> {
+public class AttributeComboBox extends JComboBox<String> {
 	protected XmlAttribute attr;
 	
 	public AttributeComboBox(XmlAttribute attr) {
@@ -15,9 +16,15 @@ public class AttributeComboBox extends CustomComboBox<String> {
 		this.setModel(new DefaultComboBoxModel(values.toArray()));
 	}
 	
-	public void setAttrValue() {
-		attr.setValue((String)this.getSelectedItem());
+  public boolean containsItem(Object o) {
+	int itemCount = getItemCount();
+	for (int i = 0 ; i < itemCount ; i ++) {
+		if(o.equals(this.getItemAt(i))) {
+			return true;
+		}
 	}
+	return false;
+}
 	
 	public XmlAttribute  getAttr() {
 		return this.attr;

@@ -11,8 +11,8 @@ import javax.swing.border.MatteBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 
-import business.CustomUtils;
-import model.XmlTag;
+import business.utils.CustomUtils;
+import model.xml.XmlTag;
 import view.comp.utils.ColorUtils;
 import view.wizardFrame.comp.xmlForm.comp.TagRow;
  

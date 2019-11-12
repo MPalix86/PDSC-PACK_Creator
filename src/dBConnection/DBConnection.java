@@ -11,11 +11,17 @@ import java.util.ArrayList;
 import java.util.Properties;
 
 public class DBConnection {
-
-   private static boolean connesso;    // Flag che indica se la connessione Ë attiva o meno
-   private static DBConnection instance; //istanza statica della classe
+	
+   /** flag to indicate status of connection */
+   private static boolean connesso;    
+   
+   /** static instance of the class for singleton pattern */
+   private static DBConnection instance;
+   
+   /** connection */
    private static Connection conn;
 
+   /** singleton */
    public static synchronized DBConnection getInstance() {
 	   if(instance == null)
 		   instance = new DBConnection();
@@ -35,29 +41,13 @@ public class DBConnection {
 	   return instance;
    }
    
-   // Apre la connessione con il Database
-   public static boolean open(String server, String nomeDB, String nomeUtente, String pwdUtente) {
-	  if(connesso) return true;
-      try {
-         // Carico il driver JDBC per la connessione con il database MySQL
-         Class.forName("com.mysql.jdbc.Driver");
-         conn = DriverManager.getConnection("jdbc:mysql://"+server+"/" + nomeDB + "?user=" + nomeUtente + "&password=" + pwdUtente);
-         connesso=true;
-         System.out.println("Got DB Connection.");
-         
-      } catch (Exception e) {
-    	  e.printStackTrace(); 
-     }
-      return connesso;
-   }
-   
    
 
-   /* 
-    * Esegue una query di selezione dati sul Database
-    * query: una stringa che rappresenta un'istruzione SQL di tipo SELECT da eseguire
-    * colonne: il numero di colonne di cui sar‡ composta la tupla del risultato
-    * restituisce un ArrayList contenente tutte le tuple del risultato
+   /**
+    * query on db
+    * 
+    * @param query query to execute on db
+    * @return result of the query
     */
    public ArrayList<TableRecord> query(String query) {
       ArrayList<TableRecord> a = null;
@@ -86,10 +76,8 @@ public class DBConnection {
 
    
    /*
-    *  Esegue una query di aggiornamento sul Database
-    *  query: una stringa che rappresenta un'istuzione SQL di tipo UPDATE o DELETE da eseguire
-    *  ritorna un il numero di record aggiornati se l'esecuzione Ë andata a buon fine, 0 se c'Ë stata un'eccezione o non sono stati
-       aggiornati record
+ 	* execute update query on db;
+ 	* @param query
     */
    public int update(String query) {
 	   int affected_rows=0;
@@ -104,19 +92,21 @@ public class DBConnection {
       return affected_rows;
    }
    
-   /*
-    *  Esegue una query di inserimento sul Database
-    *  query: una stringa che rappresenta un'istuzione SQL di tipo INSERT da eseguire
-    *  ritorna un l'id del record aggiunto se l'esecuzione Ë andata a buon fine, 0 se c'Ë stata un'eccezione o non sono stati
-       aggiunti record alla tabella
+   
+   
+   
+   /**
+    * execute insert query on db
+    * 
+    * @param query
+    * @return
     */
    public int insert(String query) {
 	  int lastid=0;
       try {
          Statement stmt = conn.createStatement();
          stmt.executeUpdate(query);
-         ResultSet rs = stmt.executeQuery("SELECT last_insert_id() AS last_id ");
-         rs.next();
+         ResultSet rs = stmt.executeQuery("SELECT last_insert_rowid() AS last_id ");
          lastid = Integer.parseInt(rs.getString("last_id"));
          stmt.close();
       } catch (Exception e) {
@@ -125,6 +115,10 @@ public class DBConnection {
       }
       return lastid;
    }
+   
+   
+   
+   
    
    private static Properties getConnParameters(String xml_file_name){
 	   Properties props = new Properties();
@@ -139,10 +133,9 @@ public class DBConnection {
 	   return props;
    }
    
-   /*
-    * Esegue l'escape di una stringa per evitare l'SQL injection
-    *  Bisogna usarlo per ogni stringa nelle query SQL
-    */
+   
+   
+ 
    public static String escape(String s){
 	    int length = s.length();
 	    int newLength = length;
@@ -188,9 +181,9 @@ public class DBConnection {
 	    return sb.toString();
 	  }
 
-   /*
-    *  Chiude la connessione con il Database
-    */
+   
+   
+   
    private void close() {
       try {
          conn.close();

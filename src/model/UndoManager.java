@@ -3,8 +3,10 @@ package model;
 import java.util.ArrayList;
 
 import business.Session;
-import business.XmlTagUtils;
+import business.utils.XmlTagUtils;
 import model.interfaces.UndoAbleEditListener;
+import model.interfaces.events.UndoAbleEditEvent;
+import model.xml.XmlTag;
 
 /**
  * Class that implements undo redo;
@@ -14,6 +16,8 @@ import model.interfaces.UndoAbleEditListener;
  */
 
 public class UndoManager {
+	
+	private static Session session;
 	
 	
 	/** 
@@ -93,7 +97,7 @@ public class UndoManager {
 		 * 
 		 * if lastSavedMemento == null => first status is being entered
 		 */
-		if(lastSavedMemento == null || !XmlTagUtils.compareText(lastSavedMemento.getStatus(), root)){
+		if(lastSavedMemento == null || !XmlTagUtils.compareTagText(root, this.lastSavedMemento.getStatus())){		
 			
 			/** adding filler between i and s only if is not the first status **/
 			if(lastSavedMemento != null) addFillers(i);
@@ -101,8 +105,8 @@ public class UndoManager {
 			//System.out.println("before increment : s = " + s);
 			//System.out.println("before increment : i = " + i);
 			
-			/** incrementing variable */
-			i++;
+			/** incrementing variable only if lastsaved memento != null => is not first insert */
+			if(lastSavedMemento != null) i++;
 			if(i > MAX_SAVED_STATEMENT) i = 0;
 			s = i + 1;
 			
@@ -112,12 +116,9 @@ public class UndoManager {
 			//System.out.print("adding memento status at index " + i + " ");
 			
 			/** setting memento stauts */
-			Memento m = new Memento(root);
-			mementoArr.set(i, m);
+			mementoArr.set(i, new Memento(root));
 			
-			/** setting lastSavedMemento */
-			if(lastSavedMemento != null)lastSavedMemento.setStatus(root);
-			else lastSavedMemento = new Memento (root);
+			lastSavedMemento = new Memento (root);
 			
 			/** adding separator */
 			if(s > MAX_SAVED_STATEMENT) {
@@ -130,11 +131,12 @@ public class UndoManager {
 				//System.out.print("adding separator status at index " + s + " ");
 			}
 			
-			System.out.println("");
+			//System.out.println("");
 			
 			/** notify listeners that event happened */
 			listeners.forEach((l) -> l.undoAbleEditHappened(new UndoAbleEditEvent(this)));
 		}
+		//printUndoManager();
 	}
 	
 	
@@ -172,7 +174,7 @@ public class UndoManager {
 			addFillers(x);
 		}
 		else {
-			//System.out.println("found separtor, returning");
+			//System.out.println("found separator, returning");
 			
 			mementoArr.set(x, filler);
 			return;
@@ -337,7 +339,7 @@ public class UndoManager {
 		private XmlTag tag;
 		
 		public Memento(XmlTag tag) {
-			this.tag = new XmlTag(tag);
+			this.tag = new XmlTag(tag, tag.getParent());
 		}
 		
 		public XmlTag getStatus() {
@@ -356,7 +358,24 @@ public class UndoManager {
 	
 	/** call addState (see above) on selected pdsc document */
 	public static void registerOperation() {
-		Session.getInstance().getSelectedPDSCDoc().getUndoManager().addState();
+		session = Session.getInstance();
+		if(session != null && session.getSelectedPDSCDoc() != null)
+			session.getSelectedPDSCDoc().getUndoManager().addState();
+	}
+	
+	
+	
+	
+	private void printUndoManager() {
+		String arr = "";
+		for (int i = 0; i < this.mementoArr.size(); i++) {
+			Memento status  = mementoArr.get(i);
+			
+			if (status.equals(separator)) arr += " s |";
+			else if(status.getStatus().getName() == null) arr += " f |";
+			else arr += " r |";
+		}
+		System.out.println(arr);
 	}
 	
 

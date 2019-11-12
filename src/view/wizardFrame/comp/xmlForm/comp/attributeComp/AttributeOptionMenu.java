@@ -7,10 +7,10 @@ import javax.swing.JSeparator;
 import business.Session;
 import listeners.ClipboardListener;
 import listeners.wizardFrameListeners.comp.xmlForm.comp.AttributeOptionMenuListener;
-import model.XmlAttribute;
+import model.xml.XmlAttribute;
 import view.comp.AttributeMenuItem;
 import view.comp.utils.ColorUtils;
-import view.comp.utils.IconUtils;
+import view.comp.utils.IconsUtils;
 import view.wizardFrame.comp.xmlForm.comp.TagRow;
 
 public class AttributeOptionMenu extends JPopupMenu{
@@ -30,20 +30,20 @@ public class AttributeOptionMenu extends JPopupMenu{
 		AttributeMenuItem deleteAttrItem = new AttributeMenuItem("Delete",attr);
 		deleteAttrItem.addActionListener(listener);
 		deleteAttrItem.setActionCommand("deleteAttribute");
-		deleteAttrItem.setIcon(IconUtils.getTrashIcon(16));
+		deleteAttrItem.setIcon(IconsUtils.getTrashIcon(16));
 		
 		
 		if (attr.getPossibleValuesType() != null && attr.getPossibleValuesType().equals("File")) {
 			AttributeMenuItem addPathItem = new AttributeMenuItem("Select File",attr);
 			addPathItem.addActionListener(listener);
 			addPathItem.setActionCommand("addPath");
-			addPathItem.setIcon(IconUtils.FAgetFolderOpenIcon(16, ColorUtils.FOLDER_BROWN));
+			addPathItem.setIcon(IconsUtils.FAgetFolderOpenIcon(16, ColorUtils.FOLDER_BROWN));
 			add(addPathItem);
 			
 			AttributeMenuItem removeFileItem = new AttributeMenuItem("Remove File",attr);
 			removeFileItem.addActionListener(listener);
 			removeFileItem.setActionCommand("removePath");
-			removeFileItem.setIcon(IconUtils.removeFileIcon(16));
+			removeFileItem.setIcon(IconsUtils.removeFileIcon(16));
 			add(removeFileItem);	
 			if(attr.getFile() == null) removeFileItem.setEnabled(false);
 			
@@ -62,12 +62,12 @@ public class AttributeOptionMenu extends JPopupMenu{
 		AttributeMenuItem copyItem = new AttributeMenuItem("Copy" , attr);
 		copyItem.addActionListener(clipboardListener);
 		copyItem.setActionCommand("copyAttr");
-		copyItem.setIcon(IconUtils.getCopyIcon(16));
+		copyItem.setIcon(IconsUtils.getCopyIcon(16));
 		
 		AttributeMenuItem cutItem = new AttributeMenuItem("Cut" , attr);
 		cutItem.addActionListener(clipboardListener);
 		cutItem.setActionCommand("cutAttr");
-		cutItem.setIcon(IconUtils.getCutIcon(16));
+		cutItem.setIcon(IconsUtils.getCutIcon(16));
 		
 		
 		add(deleteAttrItem);

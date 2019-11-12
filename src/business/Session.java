@@ -4,7 +4,9 @@ import java.awt.datatransfer.Clipboard;
 import java.io.File;
 import java.util.ArrayList;
 
-import model.PDSCDocument;
+import model.PDSC.PDSCConditionsChecker;
+import model.PDSC.PDSCDocument;
+import model.xml.XmlTag;
 import view.wizardFrame.WizardFrame;
 import view.wizardFrame.comp.xmlForm.XmlForm;;
 
@@ -22,9 +24,9 @@ public class Session {
 	
 	/**
 	 * contains always current selected form with and all necessary information 
-	 * on wich user is working.
+	 * on which user is working.
 	 * On This variable are based many function like "save file" in Menu ,
-	 * "add root children in XmlForm class", ecc ecc.
+	 * ecc ecc.
 	 * 
 	 * IMPORTANT :
 	 * set to null before creation of new xmlForm, and after creation update it;
@@ -37,7 +39,7 @@ public class Session {
 	
 	
 	/**
-	 * represent open all open document on which user is working
+	 * represent all open document on which user is working
 	 */
 	private static ArrayList<PDSCDocument> currentWorkinPdscDoc ;
 	
@@ -90,6 +92,11 @@ public class Session {
 	
 	public PDSCDocument getSelectedPDSCDoc() {
 		return this.selectedPdscDoc;
+	}
+	
+	
+	public XmlTag getSelectedRoot() {
+		return this.getSelectedPDSCDoc().getRoot();
 	}
 	
 	
@@ -166,6 +173,11 @@ public class Session {
 	
 	public Clipboard getClipboard() {
 		return this.clipboard;
+	}
+	
+	
+	public PDSCConditionsChecker getSelectedPDSCConditionsChecker () {
+		return this.getSelectedPDSCDoc().getPDSCConditionsChecker();
 	}
 	
 	

@@ -6,11 +6,11 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 
 import business.Session;
-import business.XmlAttributeBusiness;
-import business.XmlTagBusiness;
-import business.XmlTagUtils;
-import model.XmlAttribute;
-import model.XmlTag;
+import business.TagManager;
+import business.utils.XmlTagUtils;
+import mao.XmlAttributeMao;
+import model.xml.XmlAttribute;
+import model.xml.XmlTag;
 import view.comp.AttributeButton;
 import view.comp.AttributeCheckBox;
 import view.wizardFrame.comp.xmlForm.comp.TagRow;
@@ -42,18 +42,21 @@ public class AddAttributeFrameListener implements ActionListener , ItemListener{
 		String command = e.getActionCommand();
 		
 		if(command.equals("addAttributes")) {
-			XmlTagBusiness.setSelectedAttributesArr(tag, tagCopy.getSelectedAttrArr(), true);
+			TagManager.setSelectedAttributesArr(tag, tagCopy.getSelectedAttrArr(), true);
 
 			frame.dispose();
 			TagRow row = session.getSelectedForm().getTagOpenRow(tag);
-			row.update();
-			row.requestFocus();
+			if(row != null) {
+				row.update();
+				row.requestFocus();
+			}
+			
 		}
 		
 		else if(command.equals("showDescription")) {
 			AttributeButton b = (AttributeButton) e.getSource();
 			XmlAttribute attr = b.getAttribute();
-			String description = XmlAttributeBusiness.getAttributeDescription(attr, attr.getTag());
+			String description = XmlAttributeMao.getAttributeDescription(attr, attr.getTag());
 			if(description != null) frame.updateDescription(attr.getName() , description);
 			else frame.updateDescription(attr.getName() , "NO DESCRIPTION AVAILABLE FOR THIS ATTRIBUTE");
 		}
@@ -71,12 +74,12 @@ public class AddAttributeFrameListener implements ActionListener , ItemListener{
 		XmlAttribute attr =  c.getAttr();
 		/** if attribute was selected */
 		if(c.isSelected()) {
-			if(XmlTagUtils.findChildSelectedAttrFromName(tagCopy, attr.getName()) == null) XmlTagBusiness.addAttributeInTag(tagCopy, new XmlAttribute(attr,attr.getTag()), false, true, null);
+			if(XmlTagUtils.findChildSelectedAttrFromName(tagCopy, attr.getName()) == null) TagManager.addAttributeInTag(tagCopy, new XmlAttribute(attr,attr.getTag()), false, true, null);
 			System.out.println(attr.getName() + " " + attr.getValue());
 		}	
 		else {
 			XmlAttribute selectedAttr = XmlTagUtils.findAttributeFromArrayOfAttributes(tagCopy.getSelectedAttrArr(), attr.getName());
-			XmlTagBusiness.removeSelectedAttributeFromParent( selectedAttr , tagCopy, false, false);
+			TagManager.removeSelectedAttributeFromParent( selectedAttr , tagCopy, false, false);
 		}	
 	}
 }

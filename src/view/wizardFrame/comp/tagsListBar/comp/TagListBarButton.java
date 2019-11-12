@@ -1,6 +1,6 @@
 package view.wizardFrame.comp.tagsListBar.comp;
 
-import model.XmlTag;
+import model.xml.XmlTag;
 import view.comp.SquareButton;
 
 public class TagListBarButton extends SquareButton{

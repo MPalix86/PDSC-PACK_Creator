@@ -1,5 +1,10 @@
 package model;
 
+/**
+ * Abstraction of log
+ * 
+ * @author mircopalese
+ */
 public class Log {
 	
 	private int type;
@@ -10,20 +15,33 @@ public class Log {
 	public final static int  ERROR = 1;
 	public final static int  MESSAGE = 2;
 	
+	
+	
 	public Log(int type , String text) {
 		this.type = type;
 		this.text = text;
 	}
 	
+	
+	
+
 	public Log(Log log) {
 		this.type = log.getType();
 		if(log.getText() != null) this.text = log.getText();
 	}
 
+	
+	
+	
 	public Log(String text ,int type ) {
 		this.type = type;
 		this.text = text;
 	}
+	
+	
+	
+	
+	
 	/**
 	 * @return the type
 	 */
@@ -31,6 +49,10 @@ public class Log {
 		return type;
 	}
 
+	
+	
+	
+	
 	/**
 	 * @param type the type to set
 	 */
@@ -38,6 +60,11 @@ public class Log {
 		this.type = type;
 	}
 
+	
+	
+	
+	
+	
 	/**
 	 * @return the text
 	 */
@@ -45,6 +72,11 @@ public class Log {
 		return text;
 	}
 
+	
+	
+	
+	
+	
 	/**
 	 * @param text the text to set
 	 */

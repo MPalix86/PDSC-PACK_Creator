@@ -6,13 +6,20 @@ import java.util.Iterator;
 
 import dBConnection.DBConnection;
 import dBConnection.TableRecord;
-import model.PDSCTagAttributeException;
-import model.PDSCTagChildrenException;
-import model.XmlAttribute;
-import model.XmlEnum;
-import model.XmlNameSpace;
-import model.XmlTag;
+import model.PDSC.PDSCTagAttributeException;
+import model.PDSC.PDSCTagChildrenException;
+import model.xml.XmlAttribute;
+import model.xml.XmlEnum;
+import model.xml.XmlNameSpace;
+import model.xml.XmlTag;
 
+/**
+ * DAO = Data access objects 
+ * Used to query data base
+ * 
+ * @author mircopalese
+ *
+ */
 public class XmlTagDao {
 	private static DBConnection conn;
 	private static XmlTagDao instance;
@@ -34,26 +41,25 @@ public class XmlTagDao {
 	public XmlTag getTagFromIdAndParent(int tagId , XmlTag parent) throws SQLException {
 		XmlTag tag = null;
 		
-		String query = "--GET SELECT TAG FROM TAGID AND PARENT\n" + 
-						"  SELECT t.id as tag_id,\n" + 
-						"       ttr.id as rel_id, \n" + 
-						"       ttr.tag_id as tag_id,\n" + 
-						"       t.name,\n" + 
-						"       t.default_content,\n" + 
-						"       tpvt.name AS content_type,\n" + 
-						"       ttr.max_occurrence,\n" + 
-						"       ttr.required,\n" + 
-						"       ttr.parent_id,\n" + 
-						"       ns.prefix,\n" + 
-						"       ns.url,\n" +
-						"  FROM tags_tags_relations AS ttr\n" + 
-						"       LEFT JOIN\n" + 
-						"       tags AS t ON t.id = ttr.tag_id\n" + 
-						"       LEFT JOIN\n" + 
-						"       name_space AS ns ON ns.id = ttr.name_space_id\n" + 
-						" 		LEFT JOIN \n" + 
-						"       tags_possible_values_types AS tpvt ON tpvt.id = t.possible_values_type_id\n" +
-						" WHERE ttr.parent_id =" + parent.getTagId() + " AND ttr.tag_id =" + tagId + "";
+		String query = "SELECT t.id as tag_id,\n" + 
+				"       ttr.id as rel_id, \n" + 
+				"       ttr.tag_id as tag_id,\n" + 
+				"       t.name,\n" + 
+				"       t.default_content,\n" + 
+				"       tpvt.name AS content_type,\n" + 
+				"       ttr.max_occurrence,\n" + 
+				"       ttr.required,\n" + 
+				"       ttr.parent_id,\n" + 
+				"       ns.prefix,\n" + 
+				"       ns.url\n" + 
+				"  FROM tags_tags_relations AS ttr\n" + 
+				"       LEFT JOIN\n" + 
+				"       tags AS t ON t.id = ttr.tag_id\n" + 
+				"       LEFT JOIN\n" + 
+				"       name_space AS ns ON ns.id = ttr.name_space_id\n" + 
+				"       LEFT JOIN \n" + 
+				"       tags_possible_values_types AS tpvt ON tpvt.id = ttr.content_type_id\n" + 
+				" WHERE ttr.parent_id = " + parent.getTagId() + " AND ttr.tag_id = " + tagId + "";
 		
 		ArrayList<TableRecord> result = conn.query(query);
 		Iterator<TableRecord> i = result.iterator();
@@ -92,11 +98,14 @@ public class XmlTagDao {
 		
 		ArrayList<TableRecord> result = conn.query(query);
 		Iterator<TableRecord> i = result.iterator();
-
-		 while(i.hasNext()){
-			TableRecord record = i.next();
-			return Integer.parseInt(record.get("id"));
-		 }
+		
+		if(!result.isEmpty()) {
+			 while(i.hasNext()){
+				TableRecord record = i.next();
+				return Integer.parseInt(record.get("id"));
+			}
+		}
+		
 		return null;
 	}
 	
@@ -157,7 +166,6 @@ public class XmlTagDao {
 	}
 	
 	
-	
 	public XmlTag getRootTag()  {
 		/** query */
 		String query = 	"  SELECT t.id as tag_id,\n" + 
@@ -215,6 +223,7 @@ public class XmlTagDao {
 	
 	public XmlEnum getTagPossibleValues(XmlTag tag) {
 		XmlEnum possibleValues = null;
+		if(tag.getParent() == null) return null ;
 		String query = "SELECT tpv.value\n" + 
 				"  FROM tags_possible_values AS tpv\n" + 
 				"       LEFT JOIN\n" + 

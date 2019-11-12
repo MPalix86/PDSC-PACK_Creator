@@ -2,7 +2,7 @@ package view.wizardFrame.comp.xmlForm.comp.namespaceComp;
 
 import javax.swing.JLabel;
 
-import model.XmlNameSpace;
+import model.xml.XmlNameSpace;
 import view.comp.utils.ColorUtils;
 
 public class NameSpaceLabel extends JLabel{

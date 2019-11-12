@@ -4,7 +4,7 @@ import java.awt.Color;
 
 import javax.swing.border.EmptyBorder;
 
-import model.PDSCDocument;
+import model.PDSC.PDSCDocument;
 import view.wizardFrame.comp.previewPane.xmlEditor.TextLineNumber;
 import view.wizardFrame.comp.previewPane.xmlEditor.XmlTextPane;
 
