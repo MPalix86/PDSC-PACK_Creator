@@ -29,4 +29,5 @@ PDSC-PACK Creator is a Java program for PDSC file and CMSIS pack creation follow
   
  ### Releases history:
   - 25/07/2019  PDSC PACK Creator 0.0.1   ( first alpha "stable" version )
-  - 13/09/2019  PDSC PACK Creator 0.0.2   
+  - 13/09/2019  PDSC PACK Creator 0.0.2
+  - 12/11/2019  PDSC PACK Creator 0.0.3   

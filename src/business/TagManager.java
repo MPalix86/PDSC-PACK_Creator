@@ -437,6 +437,7 @@ public class TagManager{
 	 * Add passed tag in passed parent
 	 * 
 	 * @param tag tag to add
+	 * @param modelTag used for take trace of max instance of newTag in parent
 	 * @param parent parent in which adding tag
 	 * @param registerOperation set to true if you want to register operation for undo redo system
 	 * @param enableUserControls set to true if you want the user to be alerted if there are choices to be made
@@ -444,15 +445,18 @@ public class TagManager{
 	 * @param index specify index or set to null 
 	 */
 	public static void addTagInParent(XmlTag newTag, XmlTag modelTag, XmlTag parent, boolean registerOperation, boolean enableUserControls, boolean notifyListener, Integer index) {
+		
+		/** used only when enableUserControls is set to true. */
 		boolean choice = true;
 		
-		/** it is possible that some exception removed some foundamental attribute for this tag, so we ned to restore attrArr (for copy paste drag and drop ecc...)*/
+		/** it is possible that some exception removed some fundamental attribute for this tag, so we need to restore attrArr (for copy paste drag and drop ecc...)*/
 		newTag.setAttrArr(XmlAttributeDao.getInstance().getTagAttributes(newTag));
+		newTag.setChildrenArr(XmlTagDao.getInstance().getAllChildrenFromTag(newTag));
 		
-		/** reset and recovering tag attribute exception for this parent */
+		/** tagAttributeException and tagChildrenException depend on parent, so you need to reset and recovering exceptions arrays for this specific parent */
 		newTag.setTagAttributeExceptionArr(null);
-		newTag.setTagAttributeExceptionArr(XmlTagDao.getInstance().getTagAttributeExceptionArr(newTag, parent));
 		newTag.setTagChildrenExceptionArr(null);
+		newTag.setTagAttributeExceptionArr(XmlTagDao.getInstance().getTagAttributeExceptionArr(newTag, parent));
 		newTag.setTagChildrenExceptionArr(XmlTagDao.getInstance().getTagChildrenExceptionArr(newTag, parent));
 		
 		
@@ -470,12 +474,15 @@ public class TagManager{
 			if(index != null && index >= 0) parent.addSelectedChildAtIndex(newTag, index);
 			else parent.addSelectedChild(newTag);
 			
-			/** adjusting attributes exception */
+			/** adjusting attributes exception, therefore removing (or adding) attribute that represent an exception for this tag with this parent */
 			TagManager.adjustTagAttributeException(newTag,parent);
-			/** adjusting children exception */
+			/** adjusting children exception, therefore removing (or adding) tag that represent an exception for this tag with this parent */
 			TagManager.adjustTagChildrenException(newTag, parent);
 			
-			/** if exceptions remove all attributes or child from tag , resetting array to null */
+			/** 
+			 * if exceptions remove all attributes or child from tag, the arrays must be reset to null. If an array have no children o attributes it's important
+			 * to be null or some checks may fail  
+			 */
 			if(newTag.getAttrArr() != null && newTag.getAttrArr().isEmpty()) newTag.setAttrArr(null);
 			if(newTag.getChildrenArr() != null && newTag.getChildrenArr().isEmpty()) newTag.setChildrenArr(null);
 			
