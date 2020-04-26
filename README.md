@@ -6,7 +6,7 @@ Mirco Palese
 Silvio Lucio Oliva 
   - System Research & Applications (SRA) – ST Lecce (Italy)
 
-PDSC-PACK Creator is a Java program for PDSC file and CMSIS pack creation following CMSIS-Pack Standard (by ARM)
+PDSC-PACK Creator is a Java application for PDSC file and CMSIS pack creation following CMSIS-Pack Standard (by ARM)
 
 ### Main features include:
   - Easy to use PDSC document creator and reader
